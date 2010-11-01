@@ -98,6 +98,15 @@ StPicoEvent::StPicoEvent(StMuEvent* ev, StBTofHeader *header, float *Q)
 
     mSpaceCharge = ev->runInfo().spaceCharge();
 
+    // BBC ADC (Hiroshi)
+    StBbcTriggerDetector bbc = ev->bbcTriggerDetector() ;
+    for(UInt_t i=0;i<bbc.numberOfPMTs();i++){
+      const UInt_t eastWest = (i<24) ? 0 : 1 ; // East:0-23, West:24-47
+      const UInt_t pmtId    = i%24 ;           // pmtId:0-23
+
+      if( eastWest == 0 ) mBbcAdcEast[pmtId] = bbc.adc(i) ;
+      else                mBbcAdcWest[pmtId] = bbc.adc(i) ;
+    }
 
     mQx_ran_1 = Q[0];
     mQy_ran_1 = Q[1];

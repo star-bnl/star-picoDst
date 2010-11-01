@@ -117,6 +117,10 @@ protected: //these are written out
   UShort_t mZdcSmdWestHorizontal[8];
   UShort_t mZdcSmdWestVertical[8];
   Float_t mSpaceCharge;
+
+  // BBC ADC for q-vectors (Hiroshi)
+  UShort_t mBbcAdcEast[24] ; /// BBC East ADC: 0-23
+  UShort_t mBbcAdcWest[24] ; /// BBC West ADC: 24-47
   
   Float_t mQx;
   Float_t mQy;
