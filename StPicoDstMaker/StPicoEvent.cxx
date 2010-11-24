@@ -7,6 +7,7 @@
 #include "StMuDSTMaker/COMMON/StMuDst.h" 
 #include "StMuDSTMaker/COMMON/StMuTrack.h" 
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
+#include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
 #include "StBTofHeader.h"
 
 ClassImp(StPicoEvent)
@@ -14,8 +15,12 @@ ClassImp(StPicoEvent)
 StPicoEvent::StPicoEvent()
 {}
 
-StPicoEvent::StPicoEvent(StMuEvent* ev, StBTofHeader *header, float *Q)
+//StPicoEvent::StPicoEvent(StMuEvent* ev, StBTofHeader *header, float *Q)
+StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
 {
+  StMuEvent* ev = muDst.event() ;
+  StBTofHeader* header = muDst.btofHeader() ;
+
   mRunId = ev->runNumber();
   mEventId = ev->eventNumber();
   mFillId = ev->runInfo().beamFillNumber(blue);
@@ -47,6 +52,20 @@ StPicoEvent::StPicoEvent(StMuEvent* ev, StBTofHeader *header, float *Q)
     mNT0 = (UShort_t)(header->nTzero());
     mVzVpd = (fabs(header->vpdVz()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (UShort_t)(floor(header->vpdVz()*100.));
   }
+
+  mbTofTrayMultiplicity = ev->btofTrayMultiplicity() ;
+  mNumberOfGlobalTracks = muDst.numberOfGlobalTracks() ;
+
+  StMuPrimaryVertex* pv = muDst.primaryVertex() ;
+  if(pv){
+    mRanking = pv->ranking() ;
+    mNBEMCMatch = pv->nBEMCMatch() ;
+  }
+  else{
+    mRanking = -999.;
+    mNBEMCMatch = 0;
+  }
+
 
     //Nov.10, 2008, Na
     StZdcTriggerDetector &ZDC = ev->zdcTriggerDetector();

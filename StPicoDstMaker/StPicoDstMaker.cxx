@@ -721,7 +721,8 @@ void StPicoDstMaker::fillEvent() {
   }
 
   int counter = mPicoArrays[picoEvent]->GetEntries();
-  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(mMuEvent, mBTofHeader, Q);
+//  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(mMuEvent, mBTofHeader, Q);
+  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(*mMuDst, Q);
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillV0() {

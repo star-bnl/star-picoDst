@@ -21,6 +21,7 @@ class StPicoTrack : public TObject {
             
   Int_t   id() const             { return (Int_t)mId; }
   Float_t chi2() const           { return (Float_t)mChi2/1000.; }
+  Float_t chi2prob() const       { return (Float_t)mChi2Prob/1000.;}
   StThreeVectorF gMom() const    { return mGMomentum; }
   StThreeVectorF pMom() const    { return mPMomentum; }
   StThreeVectorF origin() const  { return mOrigin; }
@@ -55,6 +56,7 @@ class StPicoTrack : public TObject {
  protected:
   UShort_t mId;               // track Id
   UShort_t mChi2;             // chi2*1000
+  UShort_t mChi2Prob;         // chi2prob*1000
   StThreeVectorF mGMomentum;  // Global momentum
   StThreeVectorF mPMomentum;  // primary momentum, (0.,0.,0.) if none
   UChar_t  mFlowFlag;         // 1 - tpc EP, 2 - ftpc EP, 0 - none

@@ -31,8 +31,14 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
   mId        = (UShort_t)t->id();
   mChi2      = (t->chi2()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(t->chi2()*1000.));
   mGMomentum = t->helix().momentum(B*kilogauss);
-  if(p) mPMomentum = p->p();
-  else mPMomentum.set(0.,0.,0.);
+  if(p) {
+    mPMomentum = p->p();
+    mChi2Prob  = (p->chi2prob()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(p->chi2prob()*1000.));
+  }
+  else{
+    mPMomentum.set(0.,0.,0.);
+    mChi2Prob = Pico::USHORTMAX ;
+  }
   mOrigin    = t->helix().origin();
   int q      = t->charge();
   mGDca      = (t->dcaGlobal().mag()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(t->dcaGlobal().mag()*1000.));
@@ -103,6 +109,7 @@ void StPicoTrack::Clear(const Option_t* opt)
 {
   mId = 0;
   mChi2 = Pico::USHORTMAX;
+  mChi2Prob = Pico::USHORTMAX;
   mGMomentum.set(0.,0.,0.);
   mPMomentum.set(0.,0.,0.);
   mFlowFlag = 0;

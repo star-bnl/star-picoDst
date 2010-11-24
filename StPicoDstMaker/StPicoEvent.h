@@ -1,7 +1,8 @@
 #ifndef StPicoEvent_hh
 #define StPicoEvent_hh
 
-class StMuEvent;
+class StMuDst;
+//class StMuEvent;
 class TClonesArray;
 class StMuPrimaryVertex;
 class StPicoDst;
@@ -14,7 +15,8 @@ class StPicoEvent : public TObject {
 public:
   StPicoEvent();
   ~StPicoEvent();
-  StPicoEvent(StMuEvent*, StBTofHeader*, float*);
+  StPicoEvent(const StMuDst& muDst, const Float_t* Q) ;
+//  StPicoEvent(StMuEvent*, StBTofHeader*, float*);
   void Clear(const Option_t*) {}
   
   Int_t    runId() const            { return mRunId; }
@@ -54,6 +56,15 @@ public:
   Float_t zdcWestRate() const { return mZdcWestRate; }
   
   Float_t spaceCharge() const { return mSpaceCharge; }
+
+  UShort_t btofTrayMultiplicity() const { return mbTofTrayMultiplicity ; }
+  UShort_t numberOfGlobalTracks() const { return mNumberOfGlobalTracks ; }
+
+  Float_t ranking() const { return mRanking ; }
+  UShort_t nBEMCMatch() const { return mNBEMCMatch ; }
+
+  UShort_t bbcAdcEast(const Int_t i) { return mBbcAdcEast[i]; }
+  UShort_t bbcAdcWest(const Int_t i) { return mBbcAdcWest[i]; }
 
   TVector2 Q() const         { return TVector2(mQx,mQy); }
   TVector2 Q_ran_1() const   { return TVector2(mQx_ran_1,mQy_ran_1); }
@@ -117,6 +128,13 @@ protected: //these are written out
   UShort_t mZdcSmdWestHorizontal[8];
   UShort_t mZdcSmdWestVertical[8];
   Float_t mSpaceCharge;
+
+  UShort_t mbTofTrayMultiplicity ; // BTOF tray multiplicity
+  UShort_t mNumberOfGlobalTracks ; // # of global tracks
+
+  // From StMuPrimaryVertex
+  Float_t mRanking ;
+  UShort_t mNBEMCMatch ;
 
   // BBC ADC for q-vectors (Hiroshi)
   UShort_t mBbcAdcEast[24] ; /// BBC East ADC: 0-23
