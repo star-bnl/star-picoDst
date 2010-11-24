@@ -14,7 +14,7 @@
 #include "TH1D.h"
 #include "TBranch.h"
 #include "TRandom3.h"
-
+#include "TRandom.h"
 #include "StMuDSTMaker/COMMON/StMuDstMaker.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
@@ -627,6 +627,21 @@ void StPicoDstMaker::fillEvent() {
   Float_t Q[40];
   for(int i=0;i<40;i++) Q[i] = 0.;
   Int_t nTracks = mPicoArrays[picoTrack]->GetEntries();
+
+  int Fcount = 0, Ecount = 0, Wcount = 0;
+
+  for(int i=0;i<nTracks;i++) {
+	  StPicoTrack *t = (StPicoTrack *)mPicoArrays[picoTrack]->UncheckedAt(i);
+	  if(!t) continue;
+	  if(!t->flowFlag()) continue;
+	  if(t->flowFlag()==tpcFlow)  Fcount++;
+
+  }
+  int iTrack[Fcount], Scount = Fcount/2 -1;
+  for(int q=0;q<Fcount;q++) iTrack[q] = q;
+  random_shuffle(iTrack,iTrack+Fcount);
+  Fcount = 0;
+
   for(int i=0;i<nTracks;i++) {
     StPicoTrack *t = (StPicoTrack *)mPicoArrays[picoTrack]->UncheckedAt(i);
     if(!t) continue;
@@ -635,15 +650,17 @@ void StPicoDstMaker::fillEvent() {
     int q = t->charge();
     float eta = t->pMom().pseudoRapidity();
     TVector2 Qi = t->Qi();
-    float r = gRandom->Rndm();  // randomly dividing events
     if(t->flowFlag()==tpcFlow) {
-      if(r<0.5) {               // random subevent
-        Q[0] += Qi.X();
-        Q[1] += Qi.Y();
+      if(iTrack[Fcount] > Scount) {               // random subevent
+         Q[0] += Qi.X();
+         Q[1] += Qi.Y();
+         Ecount++;
       } else {
-        Q[2] += Qi.X();
-        Q[3] += Qi.Y();
+         Q[2] += Qi.X();
+         Q[3] += Qi.Y();
+         Wcount++;
       }
+      Fcount++;      
       if(q>0) {                 // charge subevent
         Q[4] += Qi.X();
         Q[5] += Qi.Y();
@@ -658,68 +675,10 @@ void StPicoDstMaker::fillEvent() {
         Q[10] += Qi.X();
         Q[11] += Qi.Y();
       }
-    }
-    if(t->flowFlag()==ftpcFlow) {
-      if(r<0.5) {               // random subevent
-        Q[12] += Qi.X();
-        Q[13] += Qi.Y();
-      } else {
-        Q[14] += Qi.X();
-        Q[15] += Qi.Y();
-      }
-      if(q>0) {                 // charge subevent
-        Q[16] += Qi.X();
-        Q[17] += Qi.Y();
-      } else {
-        Q[18] += Qi.X();
-        Q[19] += Qi.Y();
-      }
-      if(eta>+2.) {            // eta subevent
-        Q[20] += Qi.X();
-        Q[21] += Qi.Y();
-      } else if (eta<-2.) {
-        Q[22] += Qi.X();
-        Q[23] += Qi.Y();
-      }
-      if(eta>+2.) {            // West Ftpc
-        if(r<0.5) {            // random subevent
-          Q[24] += Qi.X();
-          Q[25] += Qi.Y();
-        } else {
-          Q[26] += Qi.X();
-          Q[27] += Qi.Y();
-        }
-      }
-      if(eta<-2.) {            // East Ftpc
-        if(r<0.5) {            // random subevent
-          Q[28] += Qi.X();
-          Q[29] += Qi.Y();
-        } else {
-          Q[30] += Qi.X();
-          Q[31] += Qi.Y();
-        }
-      }
-      if(eta>+2.) {
-        if(q>0) {
-          Q[32] += Qi.X();
-          Q[33] += Qi.Y();
-        } else {
-          Q[34] += Qi.X();
-          Q[35] += Qi.Y();
-        }
-      }
-      if(eta<-2.) {
-        if(q>0) {
-          Q[36] += Qi.X();
-          Q[37] += Qi.Y();
-        } else {
-          Q[38] += Qi.X();
-          Q[39] += Qi.Y();
-        }
-      }
+    
+      
     }
   }
-
   int counter = mPicoArrays[picoEvent]->GetEntries();
 //  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(mMuEvent, mBTofHeader, Q);
   new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(*mMuDst, Q);

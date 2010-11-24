@@ -145,43 +145,6 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
     mQx_eta_neg = Q[10];
     mQy_eta_neg = Q[11];
 
-    mQx_Ftpc_ran_1 = Q[12];
-    mQy_Ftpc_ran_1 = Q[13]; 
-    mQx_Ftpc_ran_2 = Q[14];
-    mQy_Ftpc_ran_2 = Q[15];
-
-    mQx_Ftpc = mQx_Ftpc_ran_1 + mQx_Ftpc_ran_2;
-    mQy_Ftpc = mQy_Ftpc_ran_1 + mQy_Ftpc_ran_2;
- 
-    mQx_Ftpc_chg_pos = Q[16];
-    mQy_Ftpc_chg_pos = Q[17];
-    mQx_Ftpc_chg_neg = Q[18];
-    mQy_Ftpc_chg_neg = Q[19];
- 
-    mQx_Ftpc_West = Q[20];
-    mQy_Ftpc_West = Q[21];
-    mQx_Ftpc_East = Q[22];
-    mQy_Ftpc_East = Q[23];
- 
-    mQx_Ftpc_West_ran_1 = Q[24];
-    mQy_Ftpc_West_ran_1 = Q[25];
-    mQx_Ftpc_West_ran_2 = Q[26];
-    mQy_Ftpc_West_ran_2 = Q[27];
-
-    mQx_Ftpc_East_ran_1 = Q[28];
-    mQy_Ftpc_East_ran_1 = Q[29];
-    mQx_Ftpc_East_ran_2 = Q[30];
-    mQy_Ftpc_East_ran_2 = Q[31];
-
-    mQx_Ftpc_West_chg_pos = Q[32];
-    mQy_Ftpc_West_chg_pos = Q[33];
-    mQx_Ftpc_West_chg_neg = Q[34];
-    mQy_Ftpc_West_chg_neg = Q[35];
-
-    mQx_Ftpc_East_chg_pos = Q[36];
-    mQy_Ftpc_East_chg_pos = Q[37];
-    mQx_Ftpc_East_chg_neg = Q[38];
-    mQy_Ftpc_East_chg_neg = Q[39];
     
 }
 

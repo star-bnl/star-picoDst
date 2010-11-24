@@ -74,23 +74,6 @@ public:
   TVector2 Q_eta_pos() const { return TVector2(mQx_eta_pos,mQy_eta_pos); }
   TVector2 Q_eta_neg() const { return TVector2(mQx_eta_neg,mQy_eta_neg); }
     
-  TVector2 Q_Ftpc() const         { return TVector2(mQx_Ftpc,mQy_Ftpc); }
-  TVector2 Q_Ftpc_ran_1() const   { return TVector2(mQx_Ftpc_ran_1,mQy_Ftpc_ran_1); }
-  TVector2 Q_Ftpc_ran_2() const   { return TVector2(mQx_Ftpc_ran_2,mQy_Ftpc_ran_2); }
-  TVector2 Q_Ftpc_chg_pos() const { return TVector2(mQx_Ftpc_chg_pos,mQy_Ftpc_chg_pos); }
-  TVector2 Q_Ftpc_chg_neg() const { return TVector2(mQx_Ftpc_chg_neg,mQy_Ftpc_chg_neg); }
-
-  TVector2 Q_Ftpc_West() const         { return TVector2(mQx_Ftpc_West,mQy_Ftpc_West); }
-  TVector2 Q_Ftpc_West_ran_1() const   { return TVector2(mQx_Ftpc_West_ran_1,mQy_Ftpc_West_ran_1); }
-  TVector2 Q_Ftpc_West_ran_2() const   { return TVector2(mQx_Ftpc_West_ran_2,mQy_Ftpc_West_ran_2); }
-  TVector2 Q_Ftpc_West_chg_pos() const { return TVector2(mQx_Ftpc_West_chg_pos,mQy_Ftpc_West_chg_pos); }
-  TVector2 Q_Ftpc_West_chg_neg() const { return TVector2(mQx_Ftpc_West_chg_neg,mQy_Ftpc_West_chg_neg); }
-
-  TVector2 Q_Ftpc_East() const         { return TVector2(mQx_Ftpc_East,mQy_Ftpc_East); }
-  TVector2 Q_Ftpc_East_ran_1() const   { return TVector2(mQx_Ftpc_East_ran_1,mQy_Ftpc_East_ran_1); }
-  TVector2 Q_Ftpc_East_ran_2() const   { return TVector2(mQx_Ftpc_East_ran_2,mQy_Ftpc_East_ran_2); }
-  TVector2 Q_Ftpc_East_chg_pos() const { return TVector2(mQx_Ftpc_East_chg_pos,mQy_Ftpc_East_chg_pos); }
-  TVector2 Q_Ftpc_East_chg_neg() const { return TVector2(mQx_Ftpc_East_chg_neg,mQy_Ftpc_East_chg_neg); }
   
 protected: //these are written out
   Int_t          mRunId;           // run number
@@ -142,8 +125,6 @@ protected: //these are written out
   
   Float_t mQx;
   Float_t mQy;
-  Float_t mQx_Ftpc;
-  Float_t mQy_Ftpc;
   
   Float_t mQx_ran_1;
   Float_t mQy_ran_1;
@@ -160,40 +141,6 @@ protected: //these are written out
   Float_t mQx_eta_neg;
   Float_t mQy_eta_neg;
 
-  Float_t mQx_Ftpc_ran_1;
-  Float_t mQy_Ftpc_ran_1;
-  Float_t mQx_Ftpc_ran_2;
-  Float_t mQy_Ftpc_ran_2;
-  
-  Float_t mQx_Ftpc_chg_pos;
-  Float_t mQy_Ftpc_chg_pos;
-  Float_t mQx_Ftpc_chg_neg;
-  Float_t mQy_Ftpc_chg_neg;
-  
-  Float_t mQx_Ftpc_West;
-  Float_t mQy_Ftpc_West;
-  Float_t mQx_Ftpc_East;
-  Float_t mQy_Ftpc_East;
-
-  Float_t mQx_Ftpc_West_ran_1;
-  Float_t mQy_Ftpc_West_ran_1;
-  Float_t mQx_Ftpc_West_ran_2;
-  Float_t mQy_Ftpc_West_ran_2;
-
-  Float_t mQx_Ftpc_East_ran_1;
-  Float_t mQy_Ftpc_East_ran_1;
-  Float_t mQx_Ftpc_East_ran_2;
-  Float_t mQy_Ftpc_East_ran_2;
-
-  Float_t mQx_Ftpc_West_chg_pos;
-  Float_t mQy_Ftpc_West_chg_pos;
-  Float_t mQx_Ftpc_West_chg_neg;
-  Float_t mQy_Ftpc_West_chg_neg;
-
-  Float_t mQx_Ftpc_East_chg_pos;
-  Float_t mQy_Ftpc_East_chg_pos;
-  Float_t mQx_Ftpc_East_chg_neg;
-  Float_t mQy_Ftpc_East_chg_neg;
 
   friend class StPicoDst;
   friend class StPicoDstMaker;
