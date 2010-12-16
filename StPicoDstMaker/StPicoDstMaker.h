@@ -20,6 +20,7 @@ class StPicoCut;
 
 #include "StPicoConstants.h"
 #include "StPicoArrays.h"
+#include "StEmcRawHit.h"
 #include <vector>
 #include <utility>
 #include <string>
@@ -44,6 +45,7 @@ class StPicoDstMaker : public StMaker {
 
    void setRunNumber(Int_t);              
    void setCreatingPhiWgt(Bool_t);
+   void setProdMode(Int_t);
    /// Returns null pointer if no StPicoDst
    StPicoDst *picoDst();
    /// In read mode, returns pointer to the chain of .picoDst.root files
@@ -73,6 +75,7 @@ class StPicoDstMaker : public StMaker {
    void setBranchAddresses(TChain*);
    void clearIndices();
 
+   void buildEmcIndex();
    void initEmc();
    void finishEmc();
    
@@ -96,16 +99,19 @@ class StPicoDstMaker : public StMaker {
    Int_t phiBin(int, StMuTrack *, float);
    void  addPhiWeight(StMuTrack *, float, float*);
    Int_t centrality(int);   
-   bool getBEMC(StMuTrack *, int*, int*, float*, float*, int*);
+   bool getBEMC(StMuTrack *, int*, int*, float*, float*, int*, int*);
    
    enum ioMode {ioRead, ioWrite};
-   
+   // production modes for different data sets
+   enum prodMode {minbias, central, ht};
+    
    StMuDst*   mMuDst;
    StMuEvent* mMuEvent;
    StBTofHeader*    mBTofHeader;
    StEmcCollection* mEmcCollection;
    StEmcPosition*   mEmcPosition;
    StEmcGeom*       mEmcGeom[4];
+   StEmcRawHit*     mEmcIndex[4800];
    StPicoDst* mPicoDst;
    StPicoCut* mPicoCut;
    Int_t      mCentrality;
@@ -113,6 +119,7 @@ class StPicoDstMaker : public StMaker {
 
    Int_t      mIoMode;         //! I/O mode:  0: - write,   1: - read
    Bool_t     mCreatingPhiWgt; //! creating phi weight files
+   Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht
 
    TString   mInputFileName;        //! *.list - MuDst or picoDst
    TString   mOutputFileName;       //! FileName
@@ -158,4 +165,5 @@ inline void StPicoDstMaker::setCompression(int comp) { mCompression = comp;}
 inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
 inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
 inline void StPicoDstMaker::setCreatingPhiWgt(bool val) { mCreatingPhiWgt = val; }
+inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
 #endif

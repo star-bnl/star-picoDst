@@ -33,7 +33,7 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
 
   int triggerId = 0;
   for(int i=0;i<nTrigger;i++) {
-    if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerId[i])) triggerId |= (1 << i);;
+    if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerId[i])) triggerId |= (1 << i);
   }
   mTriggerWord = (UShort_t)triggerId;
 
@@ -50,7 +50,7 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
     mNVpdHitsEast = (UChar_t)(header->numberOfVpdHits(east));
     mNVpdHitsWest = (UChar_t)(header->numberOfVpdHits(west));
     mNT0 = (UShort_t)(header->nTzero());
-    mVzVpd = (fabs(header->vpdVz()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (UShort_t)(floor(header->vpdVz()*100.));
+    mVzVpd = (fabs(header->vpdVz()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (UShort_t)(TMath::Nint(header->vpdVz()*100.));
   }
 
   mbTofTrayMultiplicity = ev->btofTrayMultiplicity() ;

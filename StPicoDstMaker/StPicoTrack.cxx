@@ -22,27 +22,29 @@ StPicoTrack::StPicoTrack()
 /////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------------------------------
 StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowFlag, double B,
-                         int id, int adc0, float* e, float* dist, int* nhit)
+                         int id, int adc0, float* e, float* dist, int* nhit, int* ntow)
 {
   Clear();
   if(!t || t->type()!=global || (p && ( p->type()!=primary || p->id()!=t->id() ) ) ) {
     LOG_WARN << " Bad StPicoTrack constructor ...... Check!" << endm;
   } else {
   mId        = (UShort_t)t->id();
-  mChi2      = (t->chi2()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(t->chi2()*1000.));
+  mChi2      = (t->chi2()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(t->chi2()*1000.));
   mGMomentum = t->helix().momentum(B*kilogauss);
   if(p) {
     mPMomentum = p->p();
-    mChi2Prob  = (p->chi2prob()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(p->chi2prob()*1000.));
-  }
-  else{
+    mChi2Prob  = (p->chi2prob()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(p->chi2prob()*1000.));
+  } else {
     mPMomentum.set(0.,0.,0.);
     mChi2Prob = Pico::USHORTMAX ;
   }
-  mOrigin    = t->helix().origin();
+  StThreeVectorF o = t->helix().origin();
+  mOriginX   = (fabs(o.x()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(o.x()*100.));
+  mOriginY   = (fabs(o.y()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(o.y()*100.));
+  mOriginZ   = (fabs(o.z()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(o.z()*100.));
   int q      = t->charge();
-  mGDca      = (t->dcaGlobal().mag()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(t->dcaGlobal().mag()*1000.));
-  mDedx      = (t->dEdx()*1e6*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(t->dEdx()*1e6*1000.));
+  mGDca      = (t->dcaGlobal().mag()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(t->dcaGlobal().mag()*1000.));
+  mDedx      = (t->dEdx()*1e6*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(t->dEdx()*1e6*1000.));
   int flag = t->flag();
   if(flag/100<7) { // TPC tracks
     mNHitsFit  = (UChar_t)(t->nHitsFit(kTpcId)*q);
@@ -57,10 +59,10 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
     }
   }
   mNHitsDedx = (Char_t)(t->nHitsDedx());
-  mNSigmaPion     = (fabs(t->nSigmaPion()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(floor(t->nSigmaPion()*100.));
-  mNSigmaKaon     = (fabs(t->nSigmaKaon()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(floor(t->nSigmaKaon()*100.));
-  mNSigmaProton   = (fabs(t->nSigmaProton()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(floor(t->nSigmaProton()*100.));
-  mNSigmaElectron = (fabs(t->nSigmaElectron()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(floor(t->nSigmaElectron()*100.));
+  mNSigmaPion     = (fabs(t->nSigmaPion()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->nSigmaPion()*100.));
+  mNSigmaKaon     = (fabs(t->nSigmaKaon()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->nSigmaKaon()*100.));
+  mNSigmaProton   = (fabs(t->nSigmaProton()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->nSigmaProton()*100.));
+  mNSigmaElectron = (fabs(t->nSigmaElectron()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->nSigmaElectron()*100.));
 
   // Flow analysis
   mFlowFlag = (UChar_t)(flowFlag);
@@ -81,22 +83,40 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
   StMuBTofHit *btofHit = (StMuBTofHit *)t->tofHit();
   if(btofHit) {
     int tray = btofHit->tray(); int module = btofHit->module(); int cell = btofHit->cell();
-    mBTofCellId = (Short_t)((tray-1)*192+(module-1)*6+(cell-1));
-    mBTof       = t->btofPidTraits().timeOfFlight();
-    mBTofBeta   = (p) ? p->btofPidTraits().beta() : -999.;
-    mBTofHitPos = t->btofPidTraits().position();
+    float tof = t->btofPidTraits().timeOfFlight();
+    float beta = (p) ? p->btofPidTraits().beta() : -999.;
+    StThreeVectorF pos = t->btofPidTraits().position();
+    mBTofCellId  = (Short_t)((tray-1)*192+(module-1)*6+(cell-1));
+    mBTofMatchFlag = (UChar_t)(t->btofPidTraits().matchFlag());
+    if(tof<0) { mBTof = 0; }
+    else { mBTof = (tof*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(tof*1000.)); }
+    if(beta<0) { mBTofBeta = 0; }
+    else { mBTofBeta = (beta*20000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(beta*20000.)); }
+    mBTofHitPosX = (fabs(pos.x()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(pos.x()*100.));
+    mBTofHitPosY = (fabs(pos.y()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(pos.y()*100.)); 
+    mBTofHitPosZ = (fabs(pos.z()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(pos.z()*100.)); 
+    mBTofYLocal  = (fabs(t->btofPidTraits().yLocal())*1000.>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->btofPidTraits().yLocal()*1000.));
+    mBTofZLocal  = (fabs(t->btofPidTraits().zLocal())*1000.>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->btofPidTraits().zLocal()*1000.));
   }
 
   // EMC - filled in a separated function
   mBEMCId       = (id>Pico::SHORTMAX) ? -1 : (Short_t)id;
   mBTOWADC0     = (adc0>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)adc0;
-  mBTOWE0       = (e[0]*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(e[0]*1000.));
-  mBTOWE3       = (e[1]*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(e[1]*1000.));
-  mBTOWE        = (e[2]*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(floor(e[2]*1000.));
-  mBEMCDistZ    = (fabs(dist[0]*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(floor(dist[0]*100.));
-  mBEMCDistPhi  = (fabs(dist[1]*10000.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(floor(dist[1]*10000.));
-  mBSMDNEta     = (nhit[0]>Pico::UCHARMAX) ? Pico::UCHARMAX : (UChar_t)(floor(nhit[0]));
-  mBSMDNPhi     = (nhit[1]>Pico::UCHARMAX) ? Pico::UCHARMAX : (UChar_t)(floor(nhit[1]));
+  mBTOWE0       = (e[0]*1000.>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(e[0]*1000.));
+  mBTOWE        = (e[1]*1000.>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(e[1]*1000.));
+  mBEMCDistZ    = (fabs(dist[0]*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(dist[0]*100.));
+  mBEMCDistPhi  = (fabs(dist[1]*10000.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(dist[1]*10000.));
+  mBSMDNEta     = (nhit[0]>Pico::UCHARMAX) ? Pico::UCHARMAX : (UChar_t)(nhit[0]);
+  mBSMDNPhi     = (nhit[1]>Pico::UCHARMAX) ? Pico::UCHARMAX : (UChar_t)(nhit[1]);
+
+  mBTOWId       = (ntow[0]<=0 || ntow[0]>4800) ? -1 : (Short_t)ntow[0];
+  mBTOWId23     = (ntow[1]<0 || ntow[1]>=9 || ntow[2]<0 || ntow[2]>=9) ? -1 : (Char_t)(ntow[1]*10+ntow[2]);
+  mBTOWE1       = (e[2]*1000.>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(e[2]*1000.));
+  mBTOWE2       = (e[3]*1000.>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(e[3]*1000.));
+  mBTOWE3       = (e[4]*1000.>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(e[4]*1000.));
+  mBTOWDistEta  = (fabs(dist[2]*10000.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(dist[2]*10000.));
+  mBTOWDistPhi  = (fabs(dist[3]*10000.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(dist[3]*10000.));
+
   }// end if
 }
 
@@ -115,45 +135,67 @@ void StPicoTrack::Clear(const Option_t* opt)
   mFlowFlag = 0;
   mQXi = 0.;
   mQYi = 0.;
-  mOrigin.set(0.,0.,0.);
+  mOriginX = 0;
+  mOriginY = 0;
+  mOriginZ = 0;
   mGDca = Pico::USHORTMAX;
   mDedx = 0;
-  mNHitsFit = 0;
-  mNHitsMax = 0;
+  mNHitsFit  = 0;
+  mNHitsMax  = 0;
   mNHitsDedx = 0;
-  mNSigmaPion = Pico::SHORTMAX;
-  mNSigmaKaon = Pico::SHORTMAX;
-  mNSigmaProton = Pico::SHORTMAX;
+  mNSigmaPion     = Pico::SHORTMAX;
+  mNSigmaKaon     = Pico::SHORTMAX;
+  mNSigmaProton   = Pico::SHORTMAX;
   mNSigmaElectron = Pico::SHORTMAX;
 
-  mBTofCellId = -1;
-  mBTof = -999.;
-  mBTofBeta = -999.;
-  mBTofHitPos.set(0.,0.,0.);
+  mBTofCellId  = -1;
+  mBTofMatchFlag = 0;
+  mBTof        = 0;
+  mBTofBeta    = 0;
+  mBTofYLocal  = Pico::SHORTMAX;
+  mBTofZLocal  = Pico::SHORTMAX;
+  mBTofHitPosX = 0;
+  mBTofHitPosY = 0;
+  mBTofHitPosZ = 0;
 
   mBEMCId       = -1;
   mBTOWADC0     = 0;
-  mBTOWE0       = 0;
-  mBTOWE3       = 0;
-  mBTOWE        = 0;
+  mBTOWE0       = -1*Pico::SHORTMAX;
+  mBTOWE        = -1*Pico::SHORTMAX;
   mBEMCDistZ    = Pico::SHORTMAX;
   mBEMCDistPhi  = Pico::SHORTMAX;
   mBSMDNEta = 0;
   mBSMDNPhi = 0;
+
+  mBTOWId       = -1;
+  mBTOWId23	= -1;
+  mBTOWE1       = -1*Pico::SHORTMAX;
+  mBTOWE2       = -1*Pico::SHORTMAX;
+  mBTOWE3       = -1*Pico::SHORTMAX;
+  mBTOWDistEta  = Pico::SHORTMAX;
+  mBTOWDistPhi  = Pico::SHORTMAX;
 }
 //----------------------------------------------------------------------------------
-void StPicoTrack::Print(Option_t *option) const {
-/*
-  LOG_INFO << "id=" << id() << " flowflag=" << flowFlag() << " chi2=" << chi2() << " dca=" << dca() << endm;
-  LOG_INFO << "gMom=" << gMom() << endm;
-  LOG_INFO << "pMom=" << pMom() << endm;
-  LOG_INFO << "Origin=" << origin() << endm;
-  LOG_INFO << "Q vector=" << mQXi << " " << mQYi << endm;
-  LOG_INFO << " nHitsFit = " << nHitsFit() << " nHitsdEdx = " << nHitsDedx() << endm;
-  LOG_INFO << " nSigma Pi/K/P/E = " << nSigmaPion() << "/" << nSigmaKaon() << "/" << nSigmaProton() << "/" << nSigmaElectron() << endm;
-  LOG_INFO << " BTOF cellId = " << btofCellId() << " tof = " << btof() << " beta = " << btofBeta() << endm;
-*/
-  LOG_INFO << " BEMC Id = " << id() << "BTOW ADC0 = " << adc0() << " energy0 = " << e0() << " e = " << e() << endm;
-  LOG_INFO << " BEMC distz = " << zDist() << " distphi = " << phiDist() << endm;
-  LOG_INFO << " BSMD nEta/nPhi = " << nEta() << "/" << nPhi() << endm;
+void StPicoTrack::Print(const Char_t *option) const {
+  if(strcmp(option,"tpc")==0 || strcmp(option,"")==0) {
+    LOG_INFO << "id=" << id() << " flowflag=" << flowFlag() << " chi2=" << chi2() << " dca=" << dca() << endm;
+    LOG_INFO << "gMom=" << gMom() << endm;
+    LOG_INFO << "pMom=" << pMom() << endm;
+    LOG_INFO << "Origin=" << origin() << endm;
+    LOG_INFO << "Q vector=" << mQXi << " " << mQYi << endm;
+    LOG_INFO << " nHitsFit = " << nHitsFit() << " nHitsdEdx = " << nHitsDedx() << endm;
+    LOG_INFO << " nSigma Pi/K/P/E = " << nSigmaPion() << "/" << nSigmaKaon() << "/" << nSigmaProton() << "/" << nSigmaElectron() << endm;
+  }
+  if(strcmp(option,"tof")==0 || strcmp(option,"")==0) {
+    LOG_INFO << " BTOF cellId = " << btofCellId() << " tof = " << btof() << " beta = " << btofBeta() << endm;
+    LOG_INFO << " BTOF match = " << btofMatchFlag() << " yLocal/zLocal " << btofYLocal() << " " << btofZLocal() << endm;
+  }
+  if(strcmp(option,"emc")==0 || strcmp(option,"")==0) {
+    LOG_INFO << " BEMC Id = " << bemcId() << " BTOW ADC0 = " << adc0() << " energy0 = " << e0() << " e = " << e() << endm;
+    LOG_INFO << " BEMC distz = " << zDist() << " distphi = " << phiDist() << endm;
+    LOG_INFO << " BSMD nEta/nPhi = " << nEta() << "/" << nPhi() << endm;
+    LOG_INFO << " BTOW Id = " << btowId() << " tower Id 2/3 = " << btowId2() << " " << btowId3() << endm;
+    LOG_INFO << " BTOW energy = " << e1() << " " << e2() << " " << e3() << endm;
+    LOG_INFO << " BTOW position to center = " << etaTowDist() << " " << phiTowDist() << endm;
+  }
 }

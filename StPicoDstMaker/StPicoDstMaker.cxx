@@ -30,6 +30,8 @@
 //StEmc
 #include "StEmcCollection.h"
 #include "StEmcCluster.h"
+#include "StEmcDetector.h"
+#include "StEmcModule.h"
 #include "StEmcClusterCollection.h"
 #include "StEmcPoint.h"
 #include "StEmcRawHit.h"
@@ -56,7 +58,7 @@ const char* StPicoDstMaker::mEW[nEW*nDet] = {"EE","EW","WE","WW","FarWest","West
 
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(1), mCreatingPhiWgt(0),
+  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(1), mCreatingPhiWgt(0), mProdMode(0),
   mOutputFile(0), mPhiWgtFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
 {
@@ -73,6 +75,8 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mPhiTestFileName="";
   mEventCounter=0;
 
+  memset(mEmcIndex, 0, sizeof(mEmcIndex));
+
   for(int i=0;i<nCen+1;i++) {
     for(int j=0;j<nEW*nDet;j++)      mPhiWgtHist[i][j] = 0;
     for(int j=0;j<nEW*nDet*nPhi;j++) mPhiWeightRead[i][j] = 1.;
@@ -80,9 +84,9 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(mode), mCreatingPhiWgt(0),
+  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(mode), mCreatingPhiWgt(0), mProdMode(0),
   mOutputFile(0), mPhiWgtFile(0),
-  mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4) 
+  mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
 {
   assignArrays();
   streamerOff();
@@ -105,6 +109,8 @@ StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name)
     mInputFileName = fileName;
   }
   mEventCounter=0;
+
+  memset(mEmcIndex, 0, sizeof(mEmcIndex));
 
   for(int i=0;i<nCen+1;i++) {
     for(int j=0;j<nEW*nDet;j++)      mPhiWgtHist[i][j] = 0;
@@ -272,6 +278,9 @@ Int_t StPicoDstMaker::openRead() {
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::openWrite() {
+
+  if(mProdMode==minbias || mProdMode==ht) {  // use phi weight files for mb and ht data
+
   char name[100];
   sprintf(name,"%d.flowPhiWgt.inv.root", mRunNumber);
   mPhiWgtFileName=name;
@@ -309,7 +318,18 @@ void StPicoDstMaker::openWrite() {
     mPhiWgtFile = new TFile(mPhiTestFileName.Data(),"RECREATE");
     LOG_INFO << " Test file: " << mPhiTestFileName.Data() << " created." << endm;
     DeclareHistos();
+  } // end if mPhiWgtFile
 
+  } else {
+
+    mCreatingPhiWgt = kFALSE;
+    LOG_INFO<<"*********************************************************************************************************"<<endm;
+    LOG_INFO<<"** This production mode doesn't require the phi weight files. Start to produce the picoDst directly... **"<<endm;
+    LOG_INFO<<"*********************************************************************************************************"<<endm;
+
+  }
+
+  if(!mCreatingPhiWgt) {
     mOutputFile = new TFile(mOutputFileName.Data(),"RECREATE");
     LOG_INFO << " Output file: " << mOutputFileName.Data() << " created." << endm;
     mOutputFile->SetCompressionLevel(mCompression);
@@ -336,11 +356,27 @@ void StPicoDstMaker::initEmc() {
   }
 }
 //-----------------------------------------------------------------------
+void StPicoDstMaker::buildEmcIndex() {
+  StEmcDetector *mEmcDet = mMuDst->emcCollection()->detector(kBarrelEmcTowerId);
+  memset(mEmcIndex, 0, sizeof(mEmcIndex));
+  for (size_t iMod=1; iMod<=mEmcDet->numberOfModules(); ++iMod) {
+    StSPtrVecEmcRawHit& modHits = mEmcDet->module(iMod)->hits();
+    for (size_t iHit=0; iHit<modHits.size(); ++iHit) {
+      StEmcRawHit* rawHit = modHits[iHit];
+      unsigned int softId = rawHit->softId(1); 
+      if (mEmcGeom[0]->checkId(softId)==0) { // OK
+        mEmcIndex[softId-1] = rawHit;
+      }
+    }
+  }
+}
+//-----------------------------------------------------------------------
 void StPicoDstMaker::finishEmc() {
   if(mEmcPosition) delete mEmcPosition;
   for(int i=0;i<4;i++) {
     mEmcGeom[i] = 0;
   }
+  //mEmcDet = 0;
 }
 ///-----------------------------------------------------------------------
 void StPicoDstMaker::DeclareHistos() {
@@ -378,7 +414,7 @@ void StPicoDstMaker::closeRead() {
 //_____________________________________________________________________________
 void StPicoDstMaker::closeWrite() {
   if(mIoMode==ioWrite) {
-    if(mPhiWgtFile->IsOpen()) {
+    if(mPhiWgtFile && mPhiWgtFile->IsOpen()) {
       mPhiWgtFile->cd();
       WriteHistos();
       mPhiWgtFile->Close();
@@ -421,6 +457,7 @@ Int_t StPicoDstMaker::MakeWrite() {
   if(!mMuEvent) {
     LOG_WARN << " No MuEvent " << endm; return kStWarn;
   }
+  buildEmcIndex();
   mBTofHeader = mMuDst->btofHeader();
   mEmcCollection = mMuDst->emcCollection();
 
@@ -436,12 +473,12 @@ Int_t StPicoDstMaker::MakeWrite() {
 
     if(!mCreatingPhiWgt) {
       fillEvent();
-      fillV0();
+      if(mProdMode==minbias) fillV0();  // only fill V0 branches for minbias data
     }
 
-//    mPicoDst->printTracks();
+    if(Debug()) mPicoDst->printTracks();
 
-    FillHistograms(mCentrality, mPhiWeightWrite);
+    if(mProdMode!=central) FillHistograms(mCentrality, mPhiWeightWrite);  // central data, not fill the phi weight anymore
     if(!mCreatingPhiWgt) {
       mTTree->Fill(); THack::IsTreeWritable(mTTree);
     }
@@ -482,11 +519,10 @@ void StPicoDstMaker::fillTracks() {
     float phi_wgt_read = 1.;
     if(iPhi>=0) phi_wgt_read = mPhiWeightRead[mCentrality][iPhi];
 
-    int id; int adc0; float e[3]; float dist[2]; int nhit[2];
-    getBEMC(gTrk, &id, &adc0, e, dist, nhit);
-
+    int id; int adc0; float e[5]; float dist[4]; int nhit[2]; int ntow[3];
+    getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
     int counter = mPicoArrays[picoTrack]->GetEntries();
-    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, phi_wgt_read, flowFlag, mBField, id, adc0, e, dist, nhit);
+    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, phi_wgt_read, flowFlag, mBField, id, adc0, e, dist, nhit, ntow);
 //    continue;
     if(iPhi>=nEW*nDet*nPhi) {
       cout << " flowFlag = " << flowFlag << " eta=" << pTrk->eta() << " q=" << pTrk->charge() << " vz=" << Vz << endl;
@@ -496,10 +532,12 @@ void StPicoDstMaker::fillTracks() {
   }
 }
 //-----------------------------------------------------------------------
-bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float *d, int *nep) {
+bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float *d, int *nep, int *towid) {
   *id = -1; *adc = 0;
-  for(int i=0;i<3;i++) ene[i] = 0.;
-  for(int i=0;i<2;i++) { d[i] = 1.e9; nep[i] = 0; }
+  for(int i=0;i<5;i++) { ene[i] = 0.; }
+  for(int i=0;i<4;i++) { d[i] = 1.e9; }
+  for(int i=0;i<2;i++) { nep[i] = 0; }
+  for(int i=0;i<3;i++) { towid[i] = -1; }
 
   if(!mEmcCollection) {
 //    LOG_WARN << " No Emc Collection for this event " << endm;
@@ -518,16 +556,20 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
     okBSMDE = mEmcPosition->projTrack(&positionBSMDE, &momentumBSMDE, t, bFld, mEmcGeom[2]->Radius());
     okBSMDP = mEmcPosition->projTrack(&positionBSMDP, &momentumBSMDP, t, bFld, mEmcGeom[3]->Radius());
   }
-  if(!ok || !okBSMDE || !okBSMDP) {
+//  if(!ok || !okBSMDE || !okBSMDP) {
+  if(!ok) {
     LOG_WARN << " Projection failed for this track ... " << endm;
     return kFALSE;
   }
 
+  if(ok && okBSMDE && okBSMDP) {
+
   Int_t mod, eta, sub;
   StSPtrVecEmcPoint& bEmcPoints = mEmcCollection->barrelPoints();
+  int index=0;
   float mindist=1.e9;
   mEmcGeom[0]->getBin(positionBSMDP.phi(), positionBSMDE.pseudoRapidity(), mod, eta, sub); //project on SMD plan
-  for(StSPtrVecEmcPointIterator it = bEmcPoints.begin(); it != bEmcPoints.end(); it++) {
+  for(StSPtrVecEmcPointIterator it = bEmcPoints.begin(); it != bEmcPoints.end(); it++, index++) {
     bool associated=false;
     StPtrVecEmcCluster& bEmcClusters = (*it)->cluster(kBarrelEmcTowerId);
     if(bEmcClusters.size()==0 ) continue;
@@ -552,7 +594,8 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
     StPtrVecEmcCluster& smdpClusters = (*it)->cluster(kBarrelSmdPhiStripId);
 
     if(associated) {
-      ene[2] = ene[2] + (*it)->energy(); //use point's energy, not tower cluster's energy
+      *id = index;
+      ene[1] = ene[1] + (*it)->energy(); //use point's energy, not tower cluster's energy
 
       float deltaphi=(*it)->position().phi()-positionBSMDP.phi();
       if(deltaphi>=TMath::Pi()) deltaphi=deltaphi-TMath::TwoPi();
@@ -562,7 +605,6 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
       float pointz=(*it)->position().z();
       float deltaz=pointz-positionBSMDE.z();
       if(sqrt(deltaphi*deltaphi*rsmdp*rsmdp+deltaz*deltaz)<mindist) {
-        *id = (*it)->id();
         d[1]=deltaphi;
         d[0]=deltaz;
         if(smdeClusters.size()>=1) nep[0]=smdeClusters[0]->nHits();
@@ -571,11 +613,72 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
       }
     }//associated
   }
-  if(ene[2]>1.e-3) {
-//    cout << " energy = " << ene[0] << " " << ene[2] << " dist = " << d[0] << " " << d[1] << " nep = " << nep[0] << " " << nep[1] << endl;
-    return kTRUE;
+
+  } // end if (ok && okBSMDE && okBSMDP)
+
+  //Get BEMC tower energy from matched tower + 2 nearest towers
+
+  int towerId;
+  int localTowerId = -1;
+  int localId1 = -1;
+  int localId2 = -1;
+  double energy1 = 0, energy2 = 0;
+  double energyTemp;
+  double dist1 = 1000, dist2 = 1000;
+  double distTemp;
+  Float_t etaTemp, phiTemp;
+
+  mEmcGeom[0]->getId(position.phi(),position.pseudoRapidity(),towerId);
+  for(int ieta=-1;ieta<2;ieta++){
+    for(int iphi=-1;iphi<2;iphi++){
+      localTowerId++;//loops from 0 to 8
+      int nextTowerId = mEmcPosition->getNextTowerId(towerId, ieta, iphi);
+      if(nextTowerId < 1 || nextTowerId > 4800) continue;
+      StEmcRawHit* emcHit = mEmcIndex[nextTowerId-1];
+      if (emcHit==0) continue;
+      if (emcHit->energy()<0.2) continue; // don't include any noise tower
+      if(ieta==0&&iphi==0) {
+        mEmcGeom[0]->getEta(nextTowerId, etaTemp);
+        mEmcGeom[0]->getPhi(nextTowerId, phiTemp);
+        ene[2] = emcHit->energy();
+        d[2] = position.pseudoRapidity() - etaTemp; 
+        d[3] = position.phi() - phiTemp; 
+      }
+      else {
+        energyTemp = emcHit->energy();
+        mEmcGeom[0]->getEta(nextTowerId, etaTemp);
+        mEmcGeom[0]->getPhi(nextTowerId, phiTemp);
+        distTemp = sqrt((etaTemp-position.pseudoRapidity())*(etaTemp-position.pseudoRapidity()) + (phiTemp-position.phi())*(phiTemp-position.phi()));
+        if(distTemp < dist1) {
+          dist2 = dist1;
+          dist1 = distTemp;
+	  energy2 = energy1;
+          energy1 = energyTemp;
+          localId1 = localTowerId;
+        }
+        else if(distTemp < dist2){
+          dist2 = distTemp;
+          energy2 = energyTemp;
+          localId2 = localTowerId;
+        }
+      }
+    }
   }
-  else return kFALSE;
+  towid[0] = towerId;
+  ene[3] = energy1;//closest tower
+  towid[1] = localId1;
+  ene[4] = energy2;//2nd closest tower
+  towid[2] = localId2;
+
+  if(Debug()) {
+//  if(1) {
+    cout << " ====== BEMC results ====== " << endl;
+    cout << " Energy = " << ene[0] << " " << ene[1] << " " << ene[2] << " " << ene[3] << " " << ene[4] << endl;
+    cout << " BSMD = " << nep[0] << " " << nep[1] << endl;
+    cout << " TowerId = " << towid[0] << " " << towid[1] << " " << towid[2] << endl;
+  }
+
+  return kTRUE;
 }
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::phiBin(int flag, StMuTrack *p, float vz) {
