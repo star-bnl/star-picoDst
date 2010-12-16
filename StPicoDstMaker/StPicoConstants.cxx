@@ -11,8 +11,9 @@ ClassImp(Pico)
    UChar_t  Pico::UCHARMAX  = 255;
    Char_t   Pico::CHARMAX   = 127;
 
-   Int_t Pico::mCent_Year10_200GeV[nCen] ={14,30,56,94,146,217,312,431,510};
-   Int_t Pico::mCent_Year10_39GeV[nCen] ={8,16,29,51,82,126,186,266,317};
+   Int_t Pico::mCent_Year10_200GeV[nCen] ={10,21,41,72,118,182,266,375,441}; // Run10 very preliminary
+//   Int_t Pico::mCent_Year10_200GeV[nCen] ={14,30,56,94,146,217,312,431,510}; // Run4
+   Int_t Pico::mCent_Year10_39GeV[nCen] ={7,15,28,50,81,125,185,265,316}; // Run10 39 GeV
 
   // event selectioin
    Int_t Pico::mTriggerId[nTrigger] = {280001,280002};

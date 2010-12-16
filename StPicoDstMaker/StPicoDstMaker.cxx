@@ -826,7 +826,7 @@ void StPicoDstMaker::fillV0() {
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::centrality(int refMult) {
   for(int i=0;i<nCen;i++) {
-    if(refMult < Pico::mCent_Year10_39GeV[i]) {
+    if(refMult <= Pico::mCent_Year10_200GeV[i]) {
       return i;
     }
   }
