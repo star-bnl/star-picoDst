@@ -359,10 +359,12 @@ void StPicoDstMaker::initEmc() {
 void StPicoDstMaker::buildEmcIndex() {
   StEmcDetector *mEmcDet = mMuDst->emcCollection()->detector(kBarrelEmcTowerId);
   memset(mEmcIndex, 0, sizeof(mEmcIndex));
+  if(!mEmcDet) return;
   for (size_t iMod=1; iMod<=mEmcDet->numberOfModules(); ++iMod) {
     StSPtrVecEmcRawHit& modHits = mEmcDet->module(iMod)->hits();
     for (size_t iHit=0; iHit<modHits.size(); ++iHit) {
       StEmcRawHit* rawHit = modHits[iHit];
+      if(!rawHit) continue;
       unsigned int softId = rawHit->softId(1); 
       if (mEmcGeom[0]->checkId(softId)==0) { // OK
         mEmcIndex[softId-1] = rawHit;
@@ -457,9 +459,9 @@ Int_t StPicoDstMaker::MakeWrite() {
   if(!mMuEvent) {
     LOG_WARN << " No MuEvent " << endm; return kStWarn;
   }
-  buildEmcIndex();
   mBTofHeader = mMuDst->btofHeader();
   mEmcCollection = mMuDst->emcCollection();
+  if(mEmcCollection) buildEmcIndex();
 
   clearIndices();
 
@@ -541,7 +543,7 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
 
   if(!mEmcCollection) {
 //    LOG_WARN << " No Emc Collection for this event " << endm;
-    return kFALSE;;
+    return kFALSE;
   }
 
   StThreeVectorD position, momentum;
