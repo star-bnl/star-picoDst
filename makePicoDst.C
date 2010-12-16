@@ -8,7 +8,7 @@ class StMuDstMaker;
 
 
 StChain *chain;
-void makePicoDst(const Int_t runnumber=11100044, const Char_t *inputFile="st_physics_11100044_raw_1010001.MuDst.root", const bool creatingPhiWgt = kFALSE)
+void makePicoDst(const Int_t runnumber=11037016, const Char_t *inputFile="st_physics_11037016_raw_5010002.MuDst.root", const bool creatingPhiWgt = kFALSE, const int prodMod = 0)
 {
         Int_t nEvents = 10000000;
 //	Int_t nEvents = 50;	
@@ -91,6 +91,7 @@ void makePicoDst(const Int_t runnumber=11100044, const Char_t *inputFile="st_phy
 	
 	StPicoDstMaker *picoMaker = new StPicoDstMaker(1,inputFile,"picoDst");
         picoMaker->setRunNumber(runnumber);
+        picoMaker->setProdMode(prodMod); // 0-mb, 1-central, 2-ht
 
 	chain->Init();
 	cout<<"chain->Init();"<<endl;
