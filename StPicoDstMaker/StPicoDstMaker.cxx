@@ -279,7 +279,7 @@ Int_t StPicoDstMaker::openRead() {
 //-----------------------------------------------------------------------
 void StPicoDstMaker::openWrite() {
 
-  if(mProdMode==minbias || mProdMode==ht) {  // use phi weight files for mb and ht data
+  if(mProdMode==minbias2) {  // use phi weight files for mb2 production
 
   char name[100];
   sprintf(name,"%d.flowPhiWgt.inv.root", mRunNumber);
@@ -475,12 +475,12 @@ Int_t StPicoDstMaker::MakeWrite() {
 
     if(!mCreatingPhiWgt) {
       fillEvent();
-      if(mProdMode==minbias) fillV0();  // only fill V0 branches for minbias data
+      if(mProdMode==minbias || mProdMode==minbias2) fillV0();  // only fill V0 branches for minbias data
     }
 
     if(Debug()) mPicoDst->printTracks();
 
-    if(mProdMode!=central) FillHistograms(mCentrality, mPhiWeightWrite);  // central data, not fill the phi weight anymore
+    if(mProdMode==minbias2) FillHistograms(mCentrality, mPhiWeightWrite);  // central data, not fill the phi weight anymore
     if(!mCreatingPhiWgt) {
       mTTree->Fill(); THack::IsTreeWritable(mTTree);
     }

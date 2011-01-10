@@ -103,7 +103,7 @@ class StPicoDstMaker : public StMaker {
    
    enum ioMode {ioRead, ioWrite};
    // production modes for different data sets
-   enum prodMode {minbias, central, ht};
+   enum prodMode {minbias, central, ht, minbias2};
     
    StMuDst*   mMuDst;
    StMuEvent* mMuEvent;
@@ -119,7 +119,7 @@ class StPicoDstMaker : public StMaker {
 
    Int_t      mIoMode;         //! I/O mode:  0: - write,   1: - read
    Bool_t     mCreatingPhiWgt; //! creating phi weight files
-   Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht
+   Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation
 
    TString   mInputFileName;        //! *.list - MuDst or picoDst
    TString   mOutputFileName;       //! FileName
