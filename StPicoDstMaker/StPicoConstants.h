@@ -29,7 +29,7 @@
      nV0      = 2,
      ks       = 0,
      lambda   = 1,
-     nTrigger = 2
+     nTrigger = 4
   };
 
 

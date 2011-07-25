@@ -16,9 +16,10 @@ ClassImp(Pico)
    Int_t Pico::mCent_Year10_39GeV[nCen] ={7,15,28,50,81,125,185,265,316}; // Run10 39 GeV
 
   // event selectioin
-   Int_t Pico::mTriggerId[nTrigger] = {280001,280002};
-   Float_t Pico::mVzMax = 40;
-   Int_t Pico::mRefMultMin = 8;                    // >=
+//   Int_t Pico::mTriggerId[nTrigger] = {280001,280002};
+   Int_t Pico::mTriggerId[nTrigger] = {260001,260011,260021,260031};
+   Float_t Pico::mVzMax = 100;
+   Int_t Pico::mRefMultMin = 1;                    // >=
 
   // track selection
    Float_t Pico::mPtMin = 0.1;
