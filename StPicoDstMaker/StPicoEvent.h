@@ -73,7 +73,15 @@ public:
   TVector2 Q_chg_neg() const { return TVector2(mQx_chg_neg,mQy_chg_neg); }
   TVector2 Q_eta_pos() const { return TVector2(mQx_eta_pos,mQy_eta_pos); }
   TVector2 Q_eta_neg() const { return TVector2(mQx_eta_neg,mQy_eta_neg); }
-    
+
+// other user's functions
+  int      year() const;
+  int      day() const;
+  float    energy() const;
+  bool     isMinBias() const;
+  bool     isMBSlow() const;
+  bool     isCentral() const;
+  bool     isHT() const;    
   
 protected: //these are written out
   Int_t          mRunId;           // run number
