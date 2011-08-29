@@ -29,7 +29,9 @@
      nV0      = 2,
      ks       = 0,
      lambda   = 1,
-     nTrigger = 4
+     nTrigger = 9  // 7.7, 11.5 GeV (Run10)
+//     nTrigger = 3  // 39 GeV (Run10)
+//     nTrigger = 4  // 200 GeV (Run10)
   };
 
 
@@ -46,10 +48,13 @@ public:
   
   static Int_t mCent_Year10_200GeV[nCen];// ={14,30,56,94,146,217,312,431,510};
   static Int_t mCent_Year10_39GeV[nCen];// ={8,16,29,51,82,126,186,266,317};
+  static Int_t mCent_Year10_11_5GeV[nCen];
+  static Int_t mCent_Year10_7_7GeV[nCen];
     
   // event selectioin
   static Int_t mTriggerId[nTrigger];// = {280001,280002};
   static Float_t mVzMax;// = 40;
+  static Float_t mVrMax;// = 2;
   static Int_t mRefMultMin;// = 8;                    // >=
   
   // track selection

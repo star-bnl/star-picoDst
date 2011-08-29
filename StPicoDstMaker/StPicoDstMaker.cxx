@@ -475,12 +475,13 @@ Int_t StPicoDstMaker::MakeWrite() {
 
     if(!mCreatingPhiWgt) {
       fillEvent();
-      if(mProdMode==minbias || mProdMode==minbias2) fillV0();  // only fill V0 branches for minbias data
+      // Do not fill v0 for 39 GeV
+//      if(mProdMode==minbias || mProdMode==minbias2) fillV0();  // only fill V0 branches for minbias data
     }
 
     if(Debug()) mPicoDst->printTracks();
 
-    if(mProdMode==minbias2) FillHistograms(mCentrality, mPhiWeightWrite);  // central data, not fill the phi weight anymore
+//    if(mProdMode==minbias2) FillHistograms(mCentrality, mPhiWeightWrite);  // central data, not fill the phi weight anymore
     if(!mCreatingPhiWgt) {
       mTTree->Fill(); THack::IsTreeWritable(mTTree);
     }
@@ -828,7 +829,8 @@ void StPicoDstMaker::fillV0() {
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::centrality(int refMult) {
   for(int i=0;i<nCen;i++) {
-    if(refMult <= Pico::mCent_Year10_200GeV[i]) {
+//    if(refMult <= Pico::mCent_Year10_39GeV[i]) {
+    if(refMult <= Pico::mCent_Year10_7_7GeV[i]) {
       return i;
     }
   }

@@ -14,11 +14,24 @@ ClassImp(Pico)
    Int_t Pico::mCent_Year10_200GeV[nCen] ={10,21,41,72,118,182,266,375,441}; // Run10 very preliminary
 //   Int_t Pico::mCent_Year10_200GeV[nCen] ={14,30,56,94,146,217,312,431,510}; // Run4
    Int_t Pico::mCent_Year10_39GeV[nCen] ={7,15,28,50,81,125,185,265,316}; // Run10 39 GeV
+   Int_t Pico::mCent_Year10_11_5GeV[nCen] ={7,14,26,44,70,105,153,184,221}; // Run10 11.5 GeV
+   Int_t Pico::mCent_Year10_7_7GeV[nCen] ={6,12,22,37,58,87,128,154,185}; // Run10 7.7 GeV
 
   // event selectioin
-//   Int_t Pico::mTriggerId[nTrigger] = {280001,280002};
-   Int_t Pico::mTriggerId[nTrigger] = {260001,260011,260021,260031};
+   Int_t Pico::mTriggerId[nTrigger] = {
+     290001,290004,  // mb
+     290003,         // mb-slow-bbc
+     290501,         // ht-11
+     290053, 290054, // vpd-tac
+     290002,         // vpd-tac-slow
+     290070,         // tof-150-fast
+     290060          // tof-150-slow
+   }; // 7.7
+//   Int_t Pico::mTriggerId[nTrigger] = {310004,310014}; // 11.5
+//   Int_t Pico::mTriggerId[nTrigger] = {280001,280002,280501}; // 39
+//   Int_t Pico::mTriggerId[nTrigger] = {260001,260011,260021,260031}; // 200
    Float_t Pico::mVzMax = 100;
+   Float_t Pico::mVrMax =   2;
    Int_t Pico::mRefMultMin = 1;                    // >=
 
   // track selection

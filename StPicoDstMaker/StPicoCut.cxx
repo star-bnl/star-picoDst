@@ -36,6 +36,16 @@ bool StPicoCut::passEvent( StMuEvent *ev )
     return kFALSE;
   }
 
+  const Float_t vx = pVertex.x() ;
+  const Float_t vy = pVertex.y() ;
+  if(sqrt(vx*vx+vy*vy)>Pico::mVrMax){
+//    LOG_INFO << "StPicoCut::passEvent  vr-vertex out of range, vr = " << sqrt(vx*vx+vy*vy)
+//      << ",  vx = " << vx
+//      << ",  vy = " << vy
+//      << endm;
+    return kFALSE ;
+  }
+
   bool isTrg = kFALSE;
   for(int i=0;i<nTrigger;i++) {
     if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerId[i])){
