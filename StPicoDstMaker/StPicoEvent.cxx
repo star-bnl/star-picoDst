@@ -170,6 +170,8 @@ float StPicoEvent::energy() const
     else if(day()<=112) return 39.;
     else if(day()<=147) return 7.7;
     else return 11.5;
+  } else if(year()==2011) {
+    if(day()>=112&&day()<=122) return 19.6;
   }
   return 0.0;
 }
@@ -189,7 +191,12 @@ bool StPicoEvent::isMinBias() const  // continue to be updated
     } else {
       return kTRUE;
     }
+  } else if(year()==2011) {
+    if(fabs(energy()-19.6)<1.e-4) {
+      return ( mTriggerWord & 0x7 );
+    }
   }
+
   return kFALSE;
 }
 
@@ -207,6 +214,10 @@ bool StPicoEvent::isMBSlow() const  // continue to be updated
       return ( mTriggerWord>>2 & 0x1 );
     } else {
       return kFALSE;
+    }
+  } else if(year()==2011) {
+    if(fabs(energy()-19.6)<1.e-4) {
+      return ( mTriggerWord>>3 & 0x7 );
     }
   }
   return kFALSE;
@@ -233,6 +244,10 @@ bool StPicoEvent::isHT() const    // continue to be updated
       return ( mTriggerWord>>2 & 0x1 );
     } else if(fabs(energy()-7.7)<1.e-4) {
       return ( mTriggerWord>>3 & 0x1 );
+    }
+  } else if(year()==2011) {
+    if(fabs(energy()-19.6)<1.e-4) {
+      return ( mTriggerWord>>6 & 0x1 );
     }
   }
   return kFALSE;
