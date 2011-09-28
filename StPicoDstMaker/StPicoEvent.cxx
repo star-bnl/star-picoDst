@@ -182,14 +182,14 @@ bool StPicoEvent::isMinBias() const  // continue to be updated
   if(year()==2010) {
     if(fabs(energy()-200.)<1.e-4) {
       return kTRUE;      // 200 GeV, minbias stored in a separated output, always true
+    } else if(fabs(energy()-62.4)<1.e-4) {
+      return ( mTriggerWord & 0x7 );
     } else if(fabs(energy()-39.)<1.e-4) {
       return ( mTriggerWord & 0x1 );
     } else if(fabs(energy()-11.5)<1.e-4) {
       return ( mTriggerWord & 0x3 );
     } else if(fabs(energy()-7.7)<1.e-4) {
       return ( mTriggerWord & 0x3 );
-    } else {
-      return kTRUE;
     }
   } else if(year()==2011) {
     if(fabs(energy()-19.6)<1.e-4) {
@@ -206,14 +206,14 @@ bool StPicoEvent::isMBSlow() const  // continue to be updated
   if(year()==2010) {
     if(fabs(energy()-200.)<1.e-4) {
       return kFALSE;     // no mbslow data produced yet
+    } else if(fabs(energy()-62.4)<1.e-4) {
+      return ( mTriggerWord>>3 & 0x1 );
     } else if(fabs(energy()-39.)<1.e-4) {
       return ( mTriggerWord>>1 & 0x1 );
     } else if(fabs(energy()-11.5)<1.e-4) {
       return ( mTriggerWord>>2 & 0x3 );
     } else if(fabs(energy()-7.7)<1.e-4) {
       return ( mTriggerWord>>2 & 0x1 );
-    } else {
-      return kFALSE;
     }
   } else if(year()==2011) {
     if(fabs(energy()-19.6)<1.e-4) {
@@ -229,6 +229,8 @@ bool StPicoEvent::isCentral() const  // continue to be updated
   if(year()==2010) { 
     if(fabs(energy()-200.)<1.e-4) {
       return kTRUE;      // 200 GeV, central stored in a separated output, always true
+    } else if(fabs(energy()-62.4)<1.e-4) {
+      return ( mTriggerWord>>4 & 0x1 );
     }
   }
   return kFALSE;
@@ -240,6 +242,8 @@ bool StPicoEvent::isHT() const    // continue to be updated
   if(year()==2010) {
     if(fabs(energy()-200.)<1.e-4) {
       return kFALSE;      // 200 GeV, no HT data so far
+    } else if(fabs(energy()-62.4)<1.e-4) {
+      return ( mTriggerWord>>5 & 0xF );
     } else if(fabs(energy()-39.)<1.e-4) {
       return ( mTriggerWord>>2 & 0x1 );
     } else if(fabs(energy()-7.7)<1.e-4) {
@@ -250,5 +254,27 @@ bool StPicoEvent::isHT() const    // continue to be updated
       return ( mTriggerWord>>6 & 0x1 );
     }
   }
+  return kFALSE;
+}
+
+bool StPicoEvent::isHT11() const    // continue to be updated
+{
+  if(!isHT()) return kFALSE;
+  if(year()==2010) {
+    if(fabs(energy()-62.4)<1.e-4) {
+      return ( mTriggerWord>>5 & 0x7 );
+    }
+  }
+  return kFALSE;
+}
+
+bool StPicoEvent::isHT15() const    // continue to be updated
+{
+  if(!isHT()) return kFALSE;
+  if(year()==2010) {
+    if(fabs(energy()-62.4)<1.e-4) {
+      return ( mTriggerWord>>8 & 0x1 );
+    }
+  }  
   return kFALSE;
 }

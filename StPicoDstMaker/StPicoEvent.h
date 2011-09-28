@@ -82,6 +82,8 @@ public:
   bool     isMBSlow() const;
   bool     isCentral() const;
   bool     isHT() const;    
+  bool     isHT11() const;
+  bool     isHT15() const;
   
 protected: //these are written out
   Int_t          mRunId;           // run number
