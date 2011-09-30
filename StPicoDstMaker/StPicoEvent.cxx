@@ -172,6 +172,7 @@ float StPicoEvent::energy() const
     else return 11.5;
   } else if(year()==2011) {
     if(day()>=112&&day()<=122) return 19.6;
+    if(day()>=172&&day()<=179) return 27.;
   }
   return 0.0;
 }
@@ -194,6 +195,8 @@ bool StPicoEvent::isMinBias() const  // continue to be updated
   } else if(year()==2011) {
     if(fabs(energy()-19.6)<1.e-4) {
       return ( mTriggerWord & 0x7 );
+    } else if(fabs(energy()-27.)<1.e-4) {
+      return ( mTriggerWord & 0x1 );
     }
   }
 
@@ -218,6 +221,8 @@ bool StPicoEvent::isMBSlow() const  // continue to be updated
   } else if(year()==2011) {
     if(fabs(energy()-19.6)<1.e-4) {
       return ( mTriggerWord>>3 & 0x7 );
+    } else if(fabs(energy()-27.)<1.e-4) {
+      return ( mTriggerWord>>1 & 0x1 );
     }
   }
   return kFALSE;
@@ -252,6 +257,8 @@ bool StPicoEvent::isHT() const    // continue to be updated
   } else if(year()==2011) {
     if(fabs(energy()-19.6)<1.e-4) {
       return ( mTriggerWord>>6 & 0x1 );
+    } else if(fabs(energy()-27.)<1.e-4) {
+      return ( mTriggerWord>>2 & 0x1 );
     }
   }
   return kFALSE;
@@ -265,7 +272,7 @@ bool StPicoEvent::isHT11() const    // continue to be updated
       return ( mTriggerWord>>5 & 0x7 );
     }
   }
-  return kFALSE;
+  return kTRUE;  // default HT trigger ht-11
 }
 
 bool StPicoEvent::isHT15() const    // continue to be updated
