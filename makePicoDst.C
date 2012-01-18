@@ -8,8 +8,11 @@ class StMuDstMaker;
 
 
 StChain *chain;
-void makePicoDst(const Int_t runnumber=11037016, const Char_t *inputFile="st_physics_11037016_raw_5010002.MuDst.root", const bool creatingPhiWgt = kFALSE, const int prodMod = 0)
-{
+//void makePicoDst(const Int_t runnumber=11037016, const Char_t *inputFile="st_physics_11037016_raw_5010002.MuDst.root", const bool creatingPhiWgt = kFALSE, const int prodMod = 0)
+void makePicoDst(const Int_t runnumber=12169026,
+    const Char_t *inputFile="/star/data54/reco/AuAu200_production_2011/FullField/P11id/2011/169/12169026/st_physics_adc_12169026_raw_4510001.MuDst.root",
+    const bool creatingPhiWgt = kFALSE, const int prodMod = 0, const int emcMode=1
+){
         Int_t nEvents = 10000000;
 //	Int_t nEvents = 50;	
 //Load all the System libraries
@@ -35,7 +38,7 @@ void makePicoDst(const Int_t runnumber=11037016, const Char_t *inputFile="st_phy
   	gSystem->Load("StStrangeMuDstMaker");
   	gSystem->Load("StMuDSTMaker");
 
-	if(!creatingPhiWgt) {
+	if(!creatingPhiWgt&&emcMode) {
 		gSystem->Load("StTpcDb");
 		gSystem->Load("StMcEvent");
 		gSystem->Load("StMcEventMaker");
@@ -68,9 +71,9 @@ void makePicoDst(const Int_t runnumber=11037016, const Char_t *inputFile="st_phy
         MuDstMaker->SetStatus("PrimaryTracks",1);
         MuDstMaker->SetStatus("GlobalTracks",1);
         MuDstMaker->SetStatus("BTof*",1);
-        MuDstMaker->SetStatus("Emc*",1);
+//        MuDstMaker->SetStatus("Emc*",1);
 	
-	if(!creatingPhiWgt) {
+	if(!creatingPhiWgt&&emcMode) {
 		St_db_Maker *dbMk = new St_db_Maker("db","MySQL:StarDb","$STAR/StarDb","StarDb");
 
 		StEmcADCtoEMaker *adc2e = new StEmcADCtoEMaker();
@@ -92,6 +95,8 @@ void makePicoDst(const Int_t runnumber=11037016, const Char_t *inputFile="st_phy
 	StPicoDstMaker *picoMaker = new StPicoDstMaker(1,inputFile,"picoDst");
         picoMaker->setRunNumber(runnumber);
         picoMaker->setProdMode(prodMod); // 0-mb, 1-central, 2-ht
+        picoMaker->setEmcMode(emcMode); // 0-No EMC, 1-EMC ON
+//        picoMaker->SetDebug(1);
 
 	chain->Init();
 	cout<<"chain->Init();"<<endl;
