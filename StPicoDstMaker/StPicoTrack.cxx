@@ -66,6 +66,8 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
 
   // Flow analysis
   mFlowFlag = (UChar_t)(flowFlag);
+
+#if 0
   if(mFlowFlag==others) {
     mQXi = 0.;
     mQYi = 0.;
@@ -78,6 +80,7 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
       LOG_WARN << " WARN!!! something is wrong with this Qi " << mQXi << " " << mQYi << " flag=" << flowFlag << " phi_weight=" << phi_weight << " pt=" << pt << endm;
     }
   }
+#endif
 
   // TOF
   StMuBTofHit *btofHit = (StMuBTofHit *)t->tofHit();
@@ -99,6 +102,7 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
     mBTofZLocal  = (fabs(t->btofPidTraits().zLocal())*1000.>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->btofPidTraits().zLocal()*1000.));
   }
 
+#if EMCON == 1
   // EMC - filled in a separated function
   mBEMCId       = (id>Pico::SHORTMAX) ? -1 : (Short_t)id;
   mBTOWADC0     = (adc0>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)adc0;
@@ -116,6 +120,7 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
   mBTOWE3       = (e[4]*1000.>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(e[4]*1000.));
   mBTOWDistEta  = (fabs(dist[2]*10000.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(dist[2]*10000.));
   mBTOWDistPhi  = (fabs(dist[3]*10000.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(dist[3]*10000.));
+#endif
 
   }// end if
 }
@@ -133,8 +138,8 @@ void StPicoTrack::Clear(const Option_t* opt)
   mGMomentum.set(0.,0.,0.);
   mPMomentum.set(0.,0.,0.);
   mFlowFlag = 0;
-  mQXi = 0.;
-  mQYi = 0.;
+//  mQXi = 0.;
+//  mQYi = 0.;
   mOriginX = 0;
   mOriginY = 0;
   mOriginZ = 0;
@@ -158,6 +163,7 @@ void StPicoTrack::Clear(const Option_t* opt)
   mBTofHitPosY = 0;
   mBTofHitPosZ = 0;
 
+#if EMCON == 1
   mBEMCId       = -1;
   mBTOWADC0     = 0;
   mBTOWE0       = -1*Pico::SHORTMAX;
@@ -174,6 +180,7 @@ void StPicoTrack::Clear(const Option_t* opt)
   mBTOWE3       = -1*Pico::SHORTMAX;
   mBTOWDistEta  = Pico::SHORTMAX;
   mBTOWDistPhi  = Pico::SHORTMAX;
+#endif
 }
 //----------------------------------------------------------------------------------
 void StPicoTrack::Print(const Char_t *option) const {
@@ -182,7 +189,7 @@ void StPicoTrack::Print(const Char_t *option) const {
     LOG_INFO << "gMom=" << gMom() << endm;
     LOG_INFO << "pMom=" << pMom() << endm;
     LOG_INFO << "Origin=" << origin() << endm;
-    LOG_INFO << "Q vector=" << mQXi << " " << mQYi << endm;
+//    LOG_INFO << "Q vector=" << mQXi << " " << mQYi << endm;
     LOG_INFO << " nHitsFit = " << nHitsFit() << " nHitsdEdx = " << nHitsDedx() << endm;
     LOG_INFO << " nSigma Pi/K/P/E = " << nSigmaPion() << "/" << nSigmaKaon() << "/" << nSigmaProton() << "/" << nSigmaElectron() << endm;
   }

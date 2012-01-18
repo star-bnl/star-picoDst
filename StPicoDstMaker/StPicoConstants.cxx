@@ -16,20 +16,54 @@ ClassImp(Pico)
    Int_t Pico::mCent_Year10_39GeV[nCen] ={7,15,28,50,81,125,185,265,316}; // Run10 39 GeV
    Int_t Pico::mCent_Year10_11_5GeV[nCen] ={7,14,26,44,70,105,153,184,221}; // Run10 11.5 GeV
    Int_t Pico::mCent_Year10_7_7GeV[nCen] ={6,12,22,37,58,87,128,154,185}; // Run10 7.7 GeV
+   Int_t Pico::mCent_Year11_19_6GeV[nCen] = {8,16,28,47,75,111,161,227,268}; // Run11 19.6 GeV
+   Int_t Pico::mCent_Year11_27GeV[nCen] = {8,16,28,47,75,111,161,227,268}; // Run11 27 GeV (Copy from 19.6)
+   Int_t Pico::mCent_Year11_200GeV[nCen] = {10,21,41,72,118,182,266,375,441}; // Run11 200 GeV (Copy from Run10 200 GeV)
 
   // event selectioin
-   Int_t Pico::mTriggerId[nTrigger] = {
-     290001,290004,  // mb
-     290003,         // mb-slow-bbc
-     290501,         // ht-11
-     290053, 290054, // vpd-tac
-     290002,         // vpd-tac-slow
-     290070,         // tof-150-fast
-     290060          // tof-150-slow
-   }; // 7.7
+//   Int_t Pico::mTriggerId[nTrigger] = {
+//     290001,290004,  // mb
+//     290003,         // mb-slow-bbc
+//     290501,         // ht-11
+//     290053, 290054, // vpd-tac
+//     290002,         // vpd-tac-slow
+//     290070,         // tof-150-fast
+//     290060          // tof-150-slow
+//   }; // 7.7
 //   Int_t Pico::mTriggerId[nTrigger] = {310004,310014}; // 11.5
 //   Int_t Pico::mTriggerId[nTrigger] = {280001,280002,280501}; // 39
 //   Int_t Pico::mTriggerId[nTrigger] = {260001,260011,260021,260031}; // 200
+//   Int_t Pico::mTriggerId[nTrigger] = {
+//     340001, 340011, 340021,   // mb1-fast
+//     340002, 340012, 340022,   // mb2-slow
+//     340500,                   // ht-11
+//     340300,                   // tof-200-fast
+//     340301,                   // tof-250-slow
+//     340068,                   // bbc-large-tof-fast
+//     340069                    // bbc-large-tof-slow
+//   }; // 19.6 GeV
+//   Int_t Pico::mTriggerId[nTrigger] = {
+//     360001, // mb1-fast
+//     360002, // mb2-slow
+//     360500, // ht-11
+//     360300, // tof-550-fast
+//     360301  // tof-550-slow
+////     360031, // zdc-mon-tac
+////     360051, // vpd-mon-tac
+////     360053, // bbc-small-mon-narrow
+////     360054, // bbc-small-mon-wide (equivalent to bbc-small-mon-narrow with prescale ??)
+////     360080, // bbc-small-tof-mon-wide
+////     360081  // bbc-small-tof-mon-narrow
+//   }; // 27 GeV (Run11)
+   Int_t Pico::mTriggerId[nTrigger] = {
+     350001, // vpd-zdc-mb
+     350011, // vpd-zdc-mb
+     350003, // vpd-zdc-mb-protected
+     350013, // vpd-zdc-mb-protected
+     350023, // vpd-zdc-mb-protected
+     350033, // vpd-zdc-mb-protected
+     350043  // vpd-zdc-mb-protected
+   }; // 200 GeV (Run11)
    Float_t Pico::mVzMax = 100;
    Float_t Pico::mVrMax =   2;
    Int_t Pico::mRefMultMin = 1;                    // >=

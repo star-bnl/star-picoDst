@@ -31,7 +31,20 @@ public:
   Int_t    refMultFtpcWest() const  { return (Int_t)mRefMultFtpcWest; }
   Int_t    refMult() const          { return (Int_t)(mRefMultPos+mRefMultNeg); }
   Int_t    refMultFtpc() const      { return (Int_t)(mRefMultFtpcEast+mRefMultFtpcWest); }
-  
+  Int_t    refMult2PosEast() const      { return (Int_t)mRefMult2PosEast; }
+  Int_t    refMult2NegEast() const      { return (Int_t)mRefMult2NegEast; }
+  Int_t    refMult2PosWest() const      { return (Int_t)mRefMult2PosWest; }
+  Int_t    refMult2NegWest() const      { return (Int_t)mRefMult2NegWest; }
+  Int_t    refMultHalfPosEast() const { return (Int_t)mRefMultHalfPosEast; }
+  Int_t    refMultHalfNegEast() const { return (Int_t)mRefMultHalfNegEast; }
+  Int_t    refMultHalfPosWest() const { return (Int_t)mRefMultHalfPosWest; }
+  Int_t    refMultHalfNegWest() const { return (Int_t)mRefMultHalfNegWest; }
+  Int_t    refMult2East() const       { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast); }
+  Int_t    refMult2West() const       { return (Int_t)(mRefMult2PosWest+mRefMult2NegWest); }
+  Int_t    refMult2() const           { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast+mRefMult2PosWest+mRefMult2NegWest); }
+  Int_t    refMultHalfEast() const    { return (Int_t)(mRefMultHalfPosEast+mRefMultHalfNegEast); }
+  Int_t    refMultHalfWest() const    { return (Int_t)(mRefMultHalfPosWest+mRefMultHalfNegWest); }
+
   Int_t    nVpdHitsEast() const     { return (Int_t)mNVpdHitsEast; }
   Int_t    nVpdHitsWest() const     { return (Int_t)mNVpdHitsWest; } 
   Int_t    nT0() const              { return (Int_t)mNT0; }
@@ -66,6 +79,7 @@ public:
   UShort_t bbcAdcEast(const Int_t i) { return mBbcAdcEast[i]; }
   UShort_t bbcAdcWest(const Int_t i) { return mBbcAdcWest[i]; }
 
+#if 0
   TVector2 Q() const         { return TVector2(mQx,mQy); }
   TVector2 Q_ran_1() const   { return TVector2(mQx_ran_1,mQy_ran_1); }
   TVector2 Q_ran_2() const   { return TVector2(mQx_ran_2,mQy_ran_2); }
@@ -73,6 +87,14 @@ public:
   TVector2 Q_chg_neg() const { return TVector2(mQx_chg_neg,mQy_chg_neg); }
   TVector2 Q_eta_pos() const { return TVector2(mQx_eta_pos,mQy_eta_pos); }
   TVector2 Q_eta_neg() const { return TVector2(mQx_eta_neg,mQy_eta_neg); }
+#endif
+  TVector2 Q() const         { return TVector2(-9999.,-9999.); }
+  TVector2 Q_ran_1() const   { return TVector2(-9999.,-9999.); }
+  TVector2 Q_ran_2() const   { return TVector2(-9999.,-9999.); }
+  TVector2 Q_chg_pos() const { return TVector2(-9999.,-9999.); }
+  TVector2 Q_chg_neg() const { return TVector2(-9999.,-9999.); }
+  TVector2 Q_eta_pos() const { return TVector2(-9999.,-9999.); }
+  TVector2 Q_eta_neg() const { return TVector2(-9999.,-9999.); }
 
 // other user's functions
   int      year() const;
@@ -82,9 +104,9 @@ public:
   bool     isMBSlow() const;
   bool     isCentral() const;
   bool     isHT() const;    
-  bool     isHT11() const;
-  bool     isHT15() const;
-  
+  bool     isHT11() const; 
+  bool     isHT15() const; 
+      
 protected: //these are written out
   Int_t          mRunId;           // run number
   Int_t          mEventId;         // event number
@@ -97,6 +119,14 @@ protected: //these are written out
   UShort_t       mRefMultFtpcWest; // FTPC refMult west
   UShort_t       mRefMultNeg;      // TPC refMult neg
   UShort_t       mRefMultPos;      // TPC refMult pos
+  UShort_t       mRefMult2NegEast; // TPC refMult2 neg (-1<eta<-0.5)
+  UShort_t       mRefMult2PosEast; // TPC refMult2 pos (-1<eta<-0.5)
+  UShort_t       mRefMult2NegWest; // TPC refMult2 neg (0.5<eta<1.0)
+  UShort_t       mRefMult2PosWest; // TPC refMult2 pos (0.5<eta<1.0)
+  UShort_t       mRefMultHalfNegEast ;// TPC refMultHalf neg (eta<0)
+  UShort_t       mRefMultHalfPosEast ;// TPC refMultHalf pos (eta<0)
+  UShort_t       mRefMultHalfNegWest ;// TPC refMultHalf neg (eta>0)
+  UShort_t       mRefMultHalfPosWest ;// TPC refMultHalf pos (eta>0)
   
   UChar_t        mNVpdHitsEast;    // Vpd Hits east;
   UChar_t        mNVpdHitsWest;    // vpd hits west;
@@ -133,6 +163,7 @@ protected: //these are written out
   UShort_t mBbcAdcEast[24] ; /// BBC East ADC: 0-23
   UShort_t mBbcAdcWest[24] ; /// BBC West ADC: 24-47
   
+#if 0
   Float_t mQx;
   Float_t mQy;
   
@@ -150,7 +181,7 @@ protected: //these are written out
   Float_t mQy_eta_pos;
   Float_t mQx_eta_neg;
   Float_t mQy_eta_neg;
-
+#endif
 
   friend class StPicoDst;
   friend class StPicoDstMaker;

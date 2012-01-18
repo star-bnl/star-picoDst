@@ -29,9 +29,12 @@
      nV0      = 2,
      ks       = 0,
      lambda   = 1,
-     nTrigger = 9  // 7.7, 11.5 GeV (Run10)
+//     nTrigger = 9  // 7.7, 11.5 GeV (Run10)
 //     nTrigger = 3  // 39 GeV (Run10)
 //     nTrigger = 4  // 200 GeV (Run10)
+//     nTrigger = 11 // Run11 19.6 GeV
+//     nTrigger = 5 // Run11 27 GeV
+     nTrigger = 7 // Run11 200 GeV
   };
 
 
@@ -50,6 +53,9 @@ public:
   static Int_t mCent_Year10_39GeV[nCen];// ={8,16,29,51,82,126,186,266,317};
   static Int_t mCent_Year10_11_5GeV[nCen];
   static Int_t mCent_Year10_7_7GeV[nCen];
+  static Int_t mCent_Year11_19_6GeV[nCen];
+  static Int_t mCent_Year11_27GeV[nCen];
+  static Int_t mCent_Year11_200GeV[nCen];
     
   // event selectioin
   static Int_t mTriggerId[nTrigger];// = {280001,280002};

@@ -59,6 +59,7 @@ const char* StPicoDstMaker::mEW[nEW*nDet] = {"EE","EW","WE","WW","FarWest","West
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(1), mCreatingPhiWgt(0), mProdMode(0),
+  mEmcMode(1),
   mOutputFile(0), mPhiWgtFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
 {
@@ -85,6 +86,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StMaker(name),
   mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(mode), mCreatingPhiWgt(0), mProdMode(0),
+  mEmcMode(1),
   mOutputFile(0), mPhiWgtFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
 {
@@ -226,7 +228,7 @@ Int_t StPicoDstMaker::Init(){
     openRead();     // if read, don't care about phi weight files
   } else if (mIoMode == ioWrite) {
     openWrite();
-    initEmc();
+    if(mEmcMode) initEmc();
   }
   return kStOK;
 }
@@ -236,7 +238,7 @@ Int_t StPicoDstMaker::Finish(){
     closeRead();     // if read, don't care about phi weight files
   } else if (mIoMode == ioWrite) {
     closeWrite();
-    finishEmc();
+    if(mEmcMode) finishEmc();
   }
   return kStOK;
 }
@@ -431,7 +433,9 @@ void StPicoDstMaker::closeWrite() {
 //-----------------------------------------------------------------------
 int StPicoDstMaker::Make(){
   int returnStarCode = kStOK;
-  if (mIoMode == ioWrite)     returnStarCode = MakeWrite();
+  if (mIoMode == ioWrite){
+    returnStarCode = MakeWrite();
+  }
   else if (mIoMode == ioRead) returnStarCode = MakeRead();
   return returnStarCode;
 }
@@ -460,8 +464,11 @@ Int_t StPicoDstMaker::MakeWrite() {
     LOG_WARN << " No MuEvent " << endm; return kStWarn;
   }
   mBTofHeader = mMuDst->btofHeader();
-  mEmcCollection = mMuDst->emcCollection();
-  if(mEmcCollection) buildEmcIndex();
+
+  if(mEmcMode){
+    mEmcCollection = mMuDst->emcCollection();
+    if(mEmcCollection) buildEmcIndex();
+  }
 
   clearIndices();
 
@@ -470,7 +477,6 @@ Int_t StPicoDstMaker::MakeWrite() {
   mBField = mMuEvent->magneticField();
 
   if(mPicoCut->passEvent(mMuEvent)) {
-
     fillTracks();
 
     if(!mCreatingPhiWgt) {
@@ -734,6 +740,7 @@ void StPicoDstMaker::fillEvent() {
   for(int i=0;i<40;i++) Q[i] = 0.;
   Int_t nTracks = mPicoArrays[picoTrack]->GetEntries();
 
+#if 0
   int Fcount = 0, Ecount = 0, Wcount = 0;
 
   for(int i=0;i<nTracks;i++) {
@@ -747,11 +754,14 @@ void StPicoDstMaker::fillEvent() {
   for(int q=0;q<Fcount;q++) iTrack[q] = q;
   random_shuffle(iTrack,iTrack+Fcount);
   Fcount = 0;
+#endif
 
   for(int i=0;i<nTracks;i++) {
     StPicoTrack *t = (StPicoTrack *)mPicoArrays[picoTrack]->UncheckedAt(i);
     if(!t) continue;
     mMap2Track[t->id()] = i;     // map2track index - used for v0 branch
+
+#if 0
     if(!t->flowFlag()) continue;
     int q = t->charge();
     float eta = t->pMom().pseudoRapidity();
@@ -781,9 +791,8 @@ void StPicoDstMaker::fillEvent() {
         Q[10] += Qi.X();
         Q[11] += Qi.Y();
       }
-    
-      
     }
+#endif 
   }
   int counter = mPicoArrays[picoEvent]->GetEntries();
 //  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(mMuEvent, mBTofHeader, Q);
@@ -830,7 +839,9 @@ void StPicoDstMaker::fillV0() {
 Int_t StPicoDstMaker::centrality(int refMult) {
   for(int i=0;i<nCen;i++) {
 //    if(refMult <= Pico::mCent_Year10_39GeV[i]) {
-    if(refMult <= Pico::mCent_Year10_7_7GeV[i]) {
+//    if(refMult <= Pico::mCent_Year10_7_7GeV[i]) {
+//    if(refMult <= Pico::mCent_Year11_19_6GeV[i]) {
+    if(refMult <= Pico::mCent_Year11_200GeV[i]) {
       return i;
     }
   }

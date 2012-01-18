@@ -46,6 +46,7 @@ class StPicoDstMaker : public StMaker {
    void setRunNumber(Int_t);              
    void setCreatingPhiWgt(Bool_t);
    void setProdMode(Int_t);
+   void setEmcMode(const Int_t mode=1); // 0:No EMC, 1:EMC On
    /// Returns null pointer if no StPicoDst
    StPicoDst *picoDst();
    /// In read mode, returns pointer to the chain of .picoDst.root files
@@ -120,6 +121,7 @@ class StPicoDstMaker : public StMaker {
    Int_t      mIoMode;         //! I/O mode:  0: - write,   1: - read
    Bool_t     mCreatingPhiWgt; //! creating phi weight files
    Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation
+   Int_t      mEmcMode;        //! EMC ON(=1)/OFF(=0)
 
    TString   mInputFileName;        //! *.list - MuDst or picoDst
    TString   mOutputFileName;       //! FileName
@@ -166,4 +168,5 @@ inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
 inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
 inline void StPicoDstMaker::setCreatingPhiWgt(bool val) { mCreatingPhiWgt = val; }
 inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
+inline void StPicoDstMaker::setEmcMode(const Int_t mode) { mEmcMode = mode; }
 #endif

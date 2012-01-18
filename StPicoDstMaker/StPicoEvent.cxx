@@ -9,6 +9,8 @@
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
 #include "StBTofHeader.h"
+#include "StMessMgr.h"
+#include "StPicoUtilities.h"
 
 ClassImp(StPicoEvent)
 
@@ -41,6 +43,20 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
   mRefMultFtpcWest = (UShort_t)(ev->refMultFtpcWest());
   mRefMultNeg = (UShort_t)(ev->refMultNeg());
   mRefMultPos = (UShort_t)(ev->refMultPos());
+  mRefMult2NegEast = (UShort_t)StPicoUtilities::refMult2(0, 0, muDst);
+  mRefMult2PosEast = (UShort_t)StPicoUtilities::refMult2(1, 0, muDst);
+  mRefMult2NegWest = (UShort_t)StPicoUtilities::refMult2(0, 1, muDst);
+  mRefMult2PosWest = (UShort_t)StPicoUtilities::refMult2(1, 1, muDst);
+  mRefMultHalfNegEast = (UShort_t)StPicoUtilities::refMultHalf(0, 0, muDst);
+  mRefMultHalfPosEast = (UShort_t)StPicoUtilities::refMultHalf(1, 0, muDst);
+  mRefMultHalfNegWest = (UShort_t)StPicoUtilities::refMultHalf(0, 1, muDst);
+  mRefMultHalfPosWest = (UShort_t)StPicoUtilities::refMultHalf(1, 1, muDst);
+
+  LOG_INFO << "Tmp: Neg: RefMult(org) = " << mRefMultNeg << "  (new) = " << StPicoUtilities::refMult(0, muDst)
+    << " refmult2 = " << mRefMult2NegEast+ mRefMult2PosEast+ mRefMult2NegWest+ mRefMult2PosWest
+    << " refmulthalf(<0) = " << mRefMultHalfNegEast+ mRefMultHalfPosEast
+    << " refmulthalf(>0) = " << mRefMultHalfNegWest+ mRefMultHalfPosWest
+    << endm;
 
   mNVpdHitsEast = 0;
   mNVpdHitsWest = 0;
@@ -127,6 +143,7 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
       else                mBbcAdcWest[pmtId] = bbc.adc(i) ;
     }
 
+#if 0
     mQx_ran_1 = Q[0];
     mQy_ran_1 = Q[1];
     mQx_ran_2 = Q[2];
@@ -144,8 +161,7 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
     mQy_eta_pos = Q[9];
     mQx_eta_neg = Q[10];
     mQy_eta_neg = Q[11];
-
-    
+#endif
 }
 
 StPicoEvent::~StPicoEvent()
@@ -173,6 +189,7 @@ float StPicoEvent::energy() const
   } else if(year()==2011) {
     if(day()>=112&&day()<=122) return 19.6;
     if(day()>=172&&day()<=179) return 27.;
+    if(day()>=123&&day()<=171) return 200.;
   }
   return 0.0;
 }
@@ -197,6 +214,8 @@ bool StPicoEvent::isMinBias() const  // continue to be updated
       return ( mTriggerWord & 0x7 );
     } else if(fabs(energy()-27.)<1.e-4) {
       return ( mTriggerWord & 0x1 );
+    } else if(fabs(energy()-200.)<1.e-4) {
+      return kTRUE;     // 200 GeV, only minbias
     }
   }
 
@@ -209,8 +228,8 @@ bool StPicoEvent::isMBSlow() const  // continue to be updated
   if(year()==2010) {
     if(fabs(energy()-200.)<1.e-4) {
       return kFALSE;     // no mbslow data produced yet
-    } else if(fabs(energy()-62.4)<1.e-4) {
-      return ( mTriggerWord>>3 & 0x1 );
+    } else if(fabs(energy()-62.4)<1.e-4) { 
+      return ( mTriggerWord>>3 & 0x1 );    
     } else if(fabs(energy()-39.)<1.e-4) {
       return ( mTriggerWord>>1 & 0x1 );
     } else if(fabs(energy()-11.5)<1.e-4) {
@@ -222,7 +241,9 @@ bool StPicoEvent::isMBSlow() const  // continue to be updated
     if(fabs(energy()-19.6)<1.e-4) {
       return ( mTriggerWord>>3 & 0x7 );
     } else if(fabs(energy()-27.)<1.e-4) {
-      return ( mTriggerWord>>1 & 0x1 );
+      return ( mTriggerWord>>1 & 0x1 );  
+    } else if(fabs(energy()-200.)<1.e-4) {
+      return kFALSE;
     }
   }
   return kFALSE;
@@ -234,8 +255,8 @@ bool StPicoEvent::isCentral() const  // continue to be updated
   if(year()==2010) { 
     if(fabs(energy()-200.)<1.e-4) {
       return kTRUE;      // 200 GeV, central stored in a separated output, always true
-    } else if(fabs(energy()-62.4)<1.e-4) {
-      return ( mTriggerWord>>4 & 0x1 );
+    } else if(fabs(energy()-62.4)<1.e-4) { 
+      return ( mTriggerWord>>4 & 0x1 );    
     }
   }
   return kFALSE;
@@ -247,8 +268,8 @@ bool StPicoEvent::isHT() const    // continue to be updated
   if(year()==2010) {
     if(fabs(energy()-200.)<1.e-4) {
       return kFALSE;      // 200 GeV, no HT data so far
-    } else if(fabs(energy()-62.4)<1.e-4) {
-      return ( mTriggerWord>>5 & 0xF );
+    } else if(fabs(energy()-62.4)<1.e-4) { 
+      return ( mTriggerWord>>5 & 0xF );    
     } else if(fabs(energy()-39.)<1.e-4) {
       return ( mTriggerWord>>2 & 0x1 );
     } else if(fabs(energy()-7.7)<1.e-4) {
@@ -258,30 +279,32 @@ bool StPicoEvent::isHT() const    // continue to be updated
     if(fabs(energy()-19.6)<1.e-4) {
       return ( mTriggerWord>>6 & 0x1 );
     } else if(fabs(energy()-27.)<1.e-4) {
-      return ( mTriggerWord>>2 & 0x1 );
+      return ( mTriggerWord>>2 & 0x1 );  
+    } else if(fabs(energy()-200.)<1.-4) {
+      return kFALSE;
     }
   }
   return kFALSE;
 }
-
+    
 bool StPicoEvent::isHT11() const    // continue to be updated
-{
+{ 
   if(!isHT()) return kFALSE;
-  if(year()==2010) {
+  if(year()==2010) { 
     if(fabs(energy()-62.4)<1.e-4) {
       return ( mTriggerWord>>5 & 0x7 );
-    }
-  }
+    } 
+  }   
   return kTRUE;  // default HT trigger ht-11
-}
-
+} 
+    
 bool StPicoEvent::isHT15() const    // continue to be updated
-{
+{ 
   if(!isHT()) return kFALSE;
-  if(year()==2010) {
+  if(year()==2010) { 
     if(fabs(energy()-62.4)<1.e-4) {
       return ( mTriggerWord>>8 & 0x1 );
-    }
-  }  
+    } 
+  }   
   return kFALSE;
-}
+} 

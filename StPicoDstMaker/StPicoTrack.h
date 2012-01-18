@@ -10,6 +10,9 @@ class StPicoDst;
 #include <stdio.h>
 #include <math.h>
 
+// Macro to control EMC variables
+#define EMCON 0
+
 class StPicoTrack : public TObject {
  public:
   StPicoTrack();
@@ -26,7 +29,8 @@ class StPicoTrack : public TObject {
   StThreeVectorF pMom() const    { return mPMomentum; }
   StThreeVectorF origin() const  { return StThreeVectorF(mOriginX/100.,mOriginY/100.,mOriginZ/100.); }
   Int_t   flowFlag() const       { return (Int_t)mFlowFlag; }
-  TVector2 Qi() const            { return TVector2(mQXi, mQYi); }
+//  TVector2 Qi() const            { return TVector2(mQXi, mQYi); }
+  TVector2 Qi() const            { return TVector2(-9999., -9999.); }
   Float_t dca() const            { return (Float_t)mGDca/1000.; }
   Short_t charge() const         { return (mNHitsFit>0) ? +1 : -1; }
   Int_t   nHitsFit() const       { return (mNHitsFit>0) ? (Int_t)mNHitsFit : (Int_t)(-1*mNHitsFit); }
@@ -46,6 +50,7 @@ class StPicoTrack : public TObject {
   Float_t btofZLocal() const     { return (Float_t)mBTofZLocal/1000.; }  
   StThreeVectorF btofHisPos() const { return StThreeVectorF(mBTofHitPosX/100., mBTofHitPosY/100., mBTofHitPosZ/100.); }  
 
+#if EMCON == 1
   Int_t   bemcId() const         { return (Int_t)mBEMCId; }
   Int_t   adc0() const           { return (Int_t)mBTOWADC0; }
   Float_t e0() const             { return (Float_t)mBTOWE0/1000.; }
@@ -63,6 +68,25 @@ class StPicoTrack : public TObject {
   Float_t e3() const             { return (Float_t)mBTOWE3/1000.; }
   Float_t etaTowDist() const     { return (Float_t)mBTOWDistEta/10000.; }
   Float_t phiTowDist() const     { return (Float_t)mBTOWDistPhi/10000.; }
+#else
+  Int_t   bemcId() const         { return -9999; }
+  Int_t   adc0() const           { return -9999; }
+  Float_t e0() const             { return -9999.; }
+  Float_t e() const              { return -9999.; }
+  Float_t zDist() const          { return -9999.; }
+  Float_t phiDist() const        { return -9999.; }
+  Int_t   nEta() const           { return -9999; }
+  Int_t   nPhi() const           { return -9999; }
+
+  Int_t   btowId() const         { return -9999; }
+  Int_t   btowId2() const        { return -9999; }
+  Int_t   btowId3() const        { return -9999; }
+  Float_t e1() const             { return -9999.; }
+  Float_t e2() const             { return -9999.; }
+  Float_t e3() const             { return -9999.; }
+  Float_t etaTowDist() const     { return -9999.; }
+  Float_t phiTowDist() const     { return -9999.; }
+#endif
 
  protected:
   UShort_t mId;               // track Id
@@ -71,8 +95,8 @@ class StPicoTrack : public TObject {
   StThreeVectorF mGMomentum;  // Global momentum
   StThreeVectorF mPMomentum;  // primary momentum, (0.,0.,0.) if none
   UChar_t  mFlowFlag;         // 1 - tpc EP, 2 - ftpc EP, 0 - none
-  Float_t  mQXi;              //
-  Float_t  mQYi;              // Q-vector for this track
+//  Float_t  mQXi;              //
+//  Float_t  mQYi;              // Q-vector for this track
   Short_t  mOriginX;          // global helix origin X * 100
   Short_t  mOriginY;          // global helix origin Y * 100 
   Short_t  mOriginZ;          // global helix origin Z * 100 
@@ -97,6 +121,7 @@ class StPicoTrack : public TObject {
   Short_t  mBTofHitPosY;      // projected hit position Y * 100
   Short_t  mBTofHitPosZ;      // projected hit position Z * 100
 
+#if EMCON == 1
   // these variables are extracted from the standard BEMC cluster algorithm
   Short_t  mBEMCId;           // index in bemcPoint array
   Short_t  mBTOWADC0;         // adc0 higest adc in the cluster
@@ -115,6 +140,7 @@ class StPicoTrack : public TObject {
   Short_t  mBTOWE3;           // E3*1000 3rd closest tower E
   Short_t  mBTOWDistEta;      // eta*10000 distance between track and matched tower center
   Short_t  mBTOWDistPhi;      // phi*10000 distance between track and matched tower center
+#endif
 
   friend class StPicoDst;
 
