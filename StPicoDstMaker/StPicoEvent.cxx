@@ -215,7 +215,8 @@ bool StPicoEvent::isMinBias() const  // continue to be updated
     } else if(fabs(energy()-27.)<1.e-4) {
       return ( mTriggerWord & 0x1 );
     } else if(fabs(energy()-200.)<1.e-4) {
-      return kTRUE;     // 200 GeV, only minbias
+      return ( mTriggerWord>>2 & 0x1f );  // return vpd-minbias-protected
+//      return kTRUE;     // 200 GeV, only minbias
     }
   }
 
