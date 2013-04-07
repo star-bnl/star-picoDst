@@ -16,6 +16,9 @@ class StPicoDst;
 class StPicoEvent;
 class StPicoTrack;
 class StPicoV0;
+class StPicoTrigger;
+class StPicoBTOWHit;
+class StPicoBTofHit;
 class StPicoCut;
 
 #include "StPicoConstants.h"
@@ -96,6 +99,9 @@ class StPicoDstMaker : public StMaker {
    void fillTracks();
    void fillEvent();
    void fillV0();
+   void fillTrigger();
+   void fillBTOWHits();
+   void fillBTofHits();
 
    Int_t phiBin(int, StMuTrack *, float);
    void  addPhiWeight(StMuTrack *, float, float*);

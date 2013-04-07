@@ -52,7 +52,7 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
   mRefMultHalfNegWest = (UShort_t)StPicoUtilities::refMultHalf(0, 1, muDst);
   mRefMultHalfPosWest = (UShort_t)StPicoUtilities::refMultHalf(1, 1, muDst);
 
-  LOG_INFO << "Tmp: Neg: RefMult(org) = " << mRefMultNeg << "  (new) = " << StPicoUtilities::refMult(0, muDst)
+  LOG_DEBUG << "Tmp: Neg: RefMult(org) = " << mRefMultNeg << "  (new) = " << StPicoUtilities::refMult(0, muDst)
     << " refmult2 = " << mRefMult2NegEast+ mRefMult2PosEast+ mRefMult2NegWest+ mRefMult2PosWest
     << " refmulthalf(<0) = " << mRefMultHalfNegEast+ mRefMultHalfPosEast
     << " refmulthalf(>0) = " << mRefMultHalfNegWest+ mRefMultHalfPosWest
@@ -76,10 +76,12 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
   if(pv){
     mRanking = pv->ranking() ;
     mNBEMCMatch = pv->nBEMCMatch() ;
+    mNBTOFMatch = pv->nBTOFMatch() ;
   }
   else{
     mRanking = -999.;
     mNBEMCMatch = 0;
+    mNBTOFMatch = 0;
   }
 
 

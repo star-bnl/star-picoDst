@@ -55,18 +55,36 @@ ClassImp(Pico)
 ////     360080, // bbc-small-tof-mon-wide
 ////     360081  // bbc-small-tof-mon-narrow
 //   }; // 27 GeV (Run11)
+//   Int_t Pico::mTriggerId[nTrigger] = {
+//       350001, // vpd-zdc-mb
+//       350011, // vpd-zdc-mb
+//       350003, // vpd-zdc-mb-protected
+//       350013, // vpd-zdc-mb-protected
+//       350023, // vpd-zdc-mb-protected
+//       350033, // vpd-zdc-mb-protected
+//       350043  // vpd-zdc-mb-protected
+//   }; // 200 GeV (Run11)
    Int_t Pico::mTriggerId[nTrigger] = {
-     350001, // vpd-zdc-mb
-     350011, // vpd-zdc-mb
-     350003, // vpd-zdc-mb-protected
-     350013, // vpd-zdc-mb-protected
-     350023, // vpd-zdc-mb-protected
-     350033, // vpd-zdc-mb-protected
-     350043  // vpd-zdc-mb-protected
-   }; // 200 GeV (Run11)
+       370011, // vpdmb-nobsmd
+       370001, // vpdmb
+       370022, // bbcmb
+       370501, // bht0-vpdmb
+       370511, // bht1-vpdmb
+       370531, // bht2
+       370542, // bht0-bbcmb-tof0
+       370546, // bht1-bbcmb-tof0
+       370522, // bht2-bbcmb
+       370601, // jp0
+       370611, // jp1
+       370621, // jp2
+       370641, // ajp
+       370301, // bbcmb-tof0
+       370361, // tofmult3-vpd
+       370341  // tofmult4
+   }; // pp200 GeV (Run12)
    Float_t Pico::mVzMax = 100;
    Float_t Pico::mVrMax =   2;
-   Int_t Pico::mRefMultMin = 1;                    // >=
+   Int_t Pico::mRefMultMin = 0;                    // >=
 
   // track selection
    Float_t Pico::mPtMin = 0.1;

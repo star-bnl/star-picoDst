@@ -6,6 +6,9 @@ class StPicoDstMaker;
 class StPicoEvent;
 class StPicoTrack;
 class StPicoV0;
+class StPicoTrigger;
+class StPicoBTOWHit;
+class StPicoBTofHit;
 
 #include "TObject.h"
 #include "TClonesArray.h"
@@ -38,6 +41,13 @@ public:
   static StPicoEvent* event() { return (StPicoEvent*)picoArrays[picoEvent]->UncheckedAt(0); }
   /// return pointer to i-th track 
   static StPicoTrack* track(int i) { return (StPicoTrack*)picoArrays[picoTrack]->UncheckedAt(i); }
+  /// return pointer to i-th trigger data
+  static StPicoTrigger* trigger(int i) { return (StPicoTrigger*)picoArrays[picoTrigger]->UncheckedAt(i); }
+  /// return pointer to i-th btow hit
+  static StPicoBTOWHit* btowHit(int i) { return (StPicoBTOWHit*)picoArrays[picoBTOWHit]->UncheckedAt(i); }
+  /// return pointer to i-th btof hit
+  static StPicoBTofHit* btofHit(int i) { return (StPicoBTofHit*)picoArrays[picoBTofHit]->UncheckedAt(i); }
+       
   /// returns pointer to the i-th picoV0Ks
   static StPicoV0*    ks(int i)    { return (StPicoV0*)picoV0Arrays[picoV0Ks]->UncheckedAt(i); }
   /// returns pointer to the i-th picoV0L
@@ -46,12 +56,19 @@ public:
   static StPicoV0*   lbar(int i)   { return (StPicoV0*)picoV0Arrays[picoV0Lbar]->UncheckedAt(i); }  
 
   static unsigned int numberOfTracks() { return picoArrays[picoTrack]->GetEntries(); }
+  static unsigned int numberOfTriggers() { return picoArrays[picoTrigger]->GetEntries(); }
+  static unsigned int numberOfBTOWHits() { return picoArrays[picoBTOWHit]->GetEntries(); }
+  static unsigned int numberOfBTofHits() { return picoArrays[picoBTofHit]->GetEntries(); }
+      
   static unsigned int numberOfKs()     { return picoV0Arrays[picoV0Ks]->GetEntries(); }
   static unsigned int numberOfLambda() { return picoV0Arrays[picoV0L]->GetEntries(); }
   static unsigned int numberOfLbar()   { return picoV0Arrays[picoV0Lbar]->GetEntries(); }
   
   virtual void Print(Option_t *option = "") const; ///< Print basic event info
   static void printTracks();
+  static void printTriggers();
+  static void printBTOWHits();
+  static void printBTofHits();
   static void printKs();
   static void printLambda();
   static void printLbar();

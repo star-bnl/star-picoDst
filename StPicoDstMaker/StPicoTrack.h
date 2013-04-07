@@ -11,7 +11,7 @@ class StPicoDst;
 #include <math.h>
 
 // Macro to control EMC variables
-#define EMCON 0
+#define EMCON 1
 
 class StPicoTrack : public TObject {
  public:

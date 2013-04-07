@@ -1,10 +1,10 @@
 #ifndef StPicoArrays_hh
 #define StPicoArrays_hh
 
-enum picoDstTypes {picoEvent=0, picoTrack};
+enum picoDstTypes {picoEvent=0, picoTrack, picoTrigger, picoBTOWHit, picoBTofHit};
 enum v0Types {picoV0Ks=0, picoV0L, picoV0Lbar};
 enum NPICOARRAYS {
-__NPICOARRAYS__ = 2,
+__NPICOARRAYS__ = 5,
 __NPICOV0ARRAYS__ = 3,
 __NALLPICOARRAYS__ = __NPICOARRAYS__+__NPICOV0ARRAYS__
 };

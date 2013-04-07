@@ -79,6 +79,9 @@ public:
   UShort_t bbcAdcEast(const Int_t i) { return mBbcAdcEast[i]; }
   UShort_t bbcAdcWest(const Int_t i) { return mBbcAdcWest[i]; }
 
+  Int_t   ht_th(const Int_t i) { return mHT_Th[i]; }
+  Int_t   jp_th(const Int_t i) { return mJP_Th[i]; }
+  
 #if 0
   TVector2 Q() const         { return TVector2(mQx,mQy); }
   TVector2 Q_ran_1() const   { return TVector2(mQx_ran_1,mQy_ran_1); }
@@ -106,6 +109,10 @@ public:
   bool     isHT() const;    
   bool     isHT11() const; 
   bool     isHT15() const; 
+
+// set functions for trigger thresholds
+  void     setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }
+  void     setJP_Th(const Int_t i, const Int_t th) { mJP_Th[i] = (UChar_t)th; }  
       
 protected: //these are written out
   Int_t          mRunId;           // run number
@@ -158,11 +165,16 @@ protected: //these are written out
   // From StMuPrimaryVertex
   Float_t mRanking ;
   UShort_t mNBEMCMatch ;
+  UShort_t mNBTOFMatch ;
 
   // BBC ADC for q-vectors (Hiroshi)
   UShort_t mBbcAdcEast[24] ; /// BBC East ADC: 0-23
   UShort_t mBbcAdcWest[24] ; /// BBC West ADC: 24-47
-  
+
+  // Online HT/JP thresholds
+  UChar_t mHT_Th[3];
+  UChar_t mJP_Th[3];
+    
 #if 0
   Float_t mQx;
   Float_t mQy;
