@@ -103,13 +103,15 @@ public:
   int      year() const;
   int      day() const;
   float    energy() const;
+  char*    system() const;
   bool     isMinBias() const;
   bool     isMBSlow() const;
   bool     isCentral() const;
   bool     isHT() const;    
   bool     isHT11() const; 
   bool     isHT15() const; 
-
+  bool     isHT18() const;
+  
 // set functions for trigger thresholds
   void     setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }
   void     setJP_Th(const Int_t i, const Int_t th) { mJP_Th[i] = (UChar_t)th; }  
