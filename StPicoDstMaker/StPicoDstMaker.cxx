@@ -494,8 +494,8 @@ Int_t StPicoDstMaker::MakeWrite() {
       // Do not fill v0 for 39 GeV
 //      if(mProdMode==minbias || mProdMode==minbias2) fillV0();  // only fill V0 branches for minbias data
 
-      fillTrigger();
-      fillBTOWHits();
+//      fillTrigger();
+//      fillBTOWHits();
       fillBTofHits();
     }
 
@@ -534,16 +534,31 @@ void StPicoDstMaker::fillTracks() {
     }
     int index = mIndex2Primary[gTrk->id()];
     StMuTrack *pTrk = (index>=0) ? (StMuTrack *)mMuDst->primaryTracks(index) : 0;
-    if(mCreatingPhiWgt && !pTrk) continue;
+
+    // Test: remove mCreatingPhiWgt flag
+//    if(mCreatingPhiWgt && !pTrk) continue;
+//    if(!pTrk) continue;
 
     Int_t flowFlag = mPicoCut->flowFlag(pTrk);
-    Float_t Vz = mMuDst->primaryVertex()->position().z();
+    Float_t Vz = -999.;
+    if(mMuDst->primaryVertex())
+       Vz = mMuDst->primaryVertex()->position().z();
     Int_t iPhi = phiBin(flowFlag, pTrk, Vz);
     float phi_wgt_read = 1.;
     if(iPhi>=0) phi_wgt_read = mPhiWeightRead[mCentrality][iPhi];
 
-    int id; int adc0; float e[5]; float dist[4]; int nhit[2]; int ntow[3];
-    getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
+//    int id; int adc0; float e[5]; float dist[4]; int nhit[2]; int ntow[3];
+//    getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
+    int id=-1000;
+    int adc0=-1000;
+    float e[5];
+    float dist[4];
+    int nhit[2];
+    int ntow[3];
+    for(Int_t j=0;j<5;j++) e[j] = -9999.;
+    for(Int_t j=0;j<4;j++) dist[j] = -9999.;
+    for(Int_t j=0;j<2;j++) nhit[j] = -1000;
+    for(Int_t j=0;j<3;j++) ntow[j] = -1000;
     int counter = mPicoArrays[picoTrack]->GetEntries();
     new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, phi_wgt_read, flowFlag, mBField, id, adc0, e, dist, nhit, ntow);
 //    continue;

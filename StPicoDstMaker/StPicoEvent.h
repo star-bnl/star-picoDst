@@ -111,6 +111,10 @@ public:
   bool     isHT11() const; 
   bool     isHT15() const; 
   bool     isHT18() const;
+  // Run14 14.5 GeV
+  bool     isBBC_mb() const;
+  bool     isZDC_mb() const;
+  bool     isVPD_mb() const;
   
 // set functions for trigger thresholds
   void     setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }

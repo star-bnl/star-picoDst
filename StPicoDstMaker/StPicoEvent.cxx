@@ -238,6 +238,11 @@ bool StPicoEvent::isMinBias() const  // continue to be updated
       return ( mTriggerWord & 0x1 );
     }
   }
+  else if (year()==2014) {
+    // 14.5 GeV
+    // (BBC_mb || ZDC_mb || VPD_mb)
+    return isBBC_mb() || isZDC_mb() || isVPD_mb() ;
+  }
 
   return kFALSE;
 }
@@ -355,3 +360,19 @@ bool StPicoEvent::isHT18() const    // continue to be updated
 
   return kFALSE;
 }
+
+bool StPicoEvent::isBBC_mb() const
+{
+  return ( mTriggerWord & 0x4 || mTriggerWord & 0x20 ) ;
+}
+
+bool StPicoEvent::isZDC_mb() const
+{
+  return mTriggerWord & 0x2 ;
+}
+
+bool StPicoEvent::isVPD_mb() const
+{
+  return mTriggerWord & 0x1 ;
+}
+
