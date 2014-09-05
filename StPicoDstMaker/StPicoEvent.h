@@ -50,8 +50,8 @@ public:
   Int_t    nT0() const              { return (Int_t)mNT0; }
   Float_t  vzVpd() const            { return (Float_t)mVzVpd/100.; }
   
-  Float_t  ZDCx() const             { return mZDCx; }
-  Float_t  BBCx() const             { return mBBCx; }
+  Float_t  ZDCx() const             { return (Float_t)mZDCx; }
+  Float_t  BBCx() const             { return (Float_t)mBBCx; }
   Float_t  Vpd(int i) const         { return (Float_t)mVpd[i]; }
   Float_t  ZdcSumAdcEast() const    { return (Float_t)mZdcSumAdcEast; }
   Float_t  ZdcSumAdcWest() const    { return (Float_t)mZdcSumAdcWest; }
@@ -75,7 +75,8 @@ public:
 
   Float_t ranking() const { return mRanking ; }
   UShort_t nBEMCMatch() const { return mNBEMCMatch ; }
-
+  UShort_t nBTOFMatch() const { return mNBTOFMatch ; }
+  
   UShort_t bbcAdcEast(const Int_t i) { return mBbcAdcEast[i]; }
   UShort_t bbcAdcWest(const Int_t i) { return mBbcAdcWest[i]; }
 
@@ -103,19 +104,13 @@ public:
   int      year() const;
   int      day() const;
   float    energy() const;
-  char*    system() const;
   bool     isMinBias() const;
   bool     isMBSlow() const;
   bool     isCentral() const;
   bool     isHT() const;    
   bool     isHT11() const; 
   bool     isHT15() const; 
-  bool     isHT18() const;
-  // Run14 14.5 GeV
-  bool     isBBC_mb() const;
-  bool     isZDC_mb() const;
-  bool     isVPD_mb() const;
-  
+
 // set functions for trigger thresholds
   void     setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }
   void     setJP_Th(const Int_t i, const Int_t th) { mJP_Th[i] = (UChar_t)th; }  
@@ -127,7 +122,7 @@ protected: //these are written out
   Float_t        mBField;          // B field in kilogauss
   StThreeVectorF mPrimaryVertex;   // primary Vertex (1st)
   StThreeVectorF mSecondVertex;    // second Vertex position (for study)
-  UShort_t       mTriggerWord;     // self-defined trigger word - see code for details
+  UInt_t         mTriggerWord;     // self-defined trigger word - see code for details
   UShort_t       mRefMultFtpcEast; // FTPC refMult east
   UShort_t       mRefMultFtpcWest; // FTPC refMult west
   UShort_t       mRefMultNeg;      // TPC refMult neg
@@ -140,14 +135,15 @@ protected: //these are written out
   UShort_t       mRefMultHalfPosEast ;// TPC refMultHalf pos (eta<0)
   UShort_t       mRefMultHalfNegWest ;// TPC refMultHalf neg (eta>0)
   UShort_t       mRefMultHalfPosWest ;// TPC refMultHalf pos (eta>0)
+  UShort_t       mGRefMult;
   
   UChar_t        mNVpdHitsEast;    // Vpd Hits east;
   UChar_t        mNVpdHitsWest;    // vpd hits west;
   UShort_t       mNT0;             // number of T0 particles in BTOF self calibration
   Short_t        mVzVpd;           // VzVpd*100.
 
-  UShort_t        mZDCx;           // zdcX
-  UShort_t        mBBCx;
+  UInt_t        mZDCx;           // zdcX
+  UInt_t        mBBCx;
   Float_t mBackgroundRate;
   Float_t mBbcBlueBackgroundRate;
   Float_t mBbcYellowBackgroundRate;
@@ -178,8 +174,8 @@ protected: //these are written out
   UShort_t mBbcAdcWest[24] ; /// BBC West ADC: 24-47
 
   // Online HT/JP thresholds
-  UChar_t mHT_Th[3];
-  UChar_t mJP_Th[3];
+  UChar_t mHT_Th[4];
+  UChar_t mJP_Th[4];
     
 #if 0
   Float_t mQx;

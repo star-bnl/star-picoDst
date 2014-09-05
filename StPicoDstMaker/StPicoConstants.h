@@ -36,7 +36,7 @@
 //     nTrigger = 5 // Run11 27 GeV
 //     nTrigger = 7 // Run11 200 GeV
 //     nTrigger = 16 // Run12 pp200 GeV
-     nTrigger = 8 // Run14 Au+Au 14.5 GeV
+     nTrigger = 19 // Run13 pp510 GeV
   };
 
 
@@ -69,7 +69,8 @@ public:
   static Float_t mPtMin;// = 0.1;
   static Int_t mNHitsFitMin;// = 15;                 // >=
   static Float_t mRatioMin;// = 0.52;
-  
+  static Float_t mGDcaMax;// = 10.;
+    
   static Float_t mPtTpcFlowMax;// = 2.0;
   static Float_t mPtTpcFlowMin;// = 0.15;
   static Float_t mDcaTpcFlowMax;// = 2.0;

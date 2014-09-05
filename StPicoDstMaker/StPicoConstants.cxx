@@ -64,8 +64,7 @@ ClassImp(Pico)
 //       350033, // vpd-zdc-mb-protected
 //       350043  // vpd-zdc-mb-protected
 //   }; // 200 GeV (Run11)
-#if 0
-   Int_t Pico::mTriggerId[nTrigger] = {
+/*   Int_t Pico::mTriggerId[nTrigger] = {
        370011, // vpdmb-nobsmd
        370001, // vpdmb
        370022, // bbcmb
@@ -83,26 +82,38 @@ ClassImp(Pico)
        370361, // tofmult3-vpd
        370341  // tofmult4
    }; // pp200 GeV (Run12)
-#endif
-   // physics trigger in Run14, 14.5 GeV
+*/
    Int_t Pico::mTriggerId[nTrigger] = {
-     440001, // VPD_mb
-     440004, // ZDC-mb
-     440005, // BBC_mb
-     440006, // bbc_mon_tof
-     440007, // tofmult4
-     440015, // BBC_mb
-     440016, // bbc_mon_tof
-     440017  // tofmult4
-   };
-   Float_t Pico::mVzMax = 100000;
-   Float_t Pico::mVrMax =   20000;
+       430001, // VPDMB
+       430011, // VPDMB
+       430021, // VPDMB
+       430031, // VPDMB
+       430005, // BBCMB
+       430015, // BBCMB
+       430004, // ZDCMB
+       430201, // BHT0*BBCMB*TOF0
+       430211, // BHT0*BBCMB*TOF0
+       430202, // BHT0*VPD
+       430222, // BHT0*VPD
+       430232, // BHT0*VPD
+       430203, // BHT1*VPDMB
+       430223, // BHT1*VPDMB
+       430243, // BHT1*VPDMB
+       430204, // BHT2
+       430207, // BHT2*BBCMB
+       430216, // BHT3
+       430236  // BHT3
+   }; // pp510 GeV (Run13)
+
+   Float_t Pico::mVzMax = 100;
+   Float_t Pico::mVrMax =   2;
    Int_t Pico::mRefMultMin = 0;                    // >=
 
   // track selection
-   Float_t Pico::mPtMin = 0.01; // 0.1
-   Int_t   Pico::mNHitsFitMin = 0; // 15
-   Float_t Pico::mRatioMin = 0.0; // 0.52
+   Float_t Pico::mPtMin = 0.1;
+   Int_t   Pico::mNHitsFitMin = 15;               // >=
+   Float_t Pico::mRatioMin = 0.52;
+   Float_t Pico::mGDcaMax = 10.;
 
    Float_t Pico::mPtTpcFlowMax = 2.0;
    Float_t Pico::mPtTpcFlowMin = 0.15;

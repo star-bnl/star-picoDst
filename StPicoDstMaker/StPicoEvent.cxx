@@ -37,7 +37,7 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
   for(int i=0;i<nTrigger;i++) {
     if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerId[i])) triggerId |= (1 << i);
   }
-  mTriggerWord = (UShort_t)triggerId;
+  mTriggerWord = (UInt_t)triggerId;
 
   mRefMultFtpcEast = (UShort_t)(ev->refMultFtpcEast());
   mRefMultFtpcWest = (UShort_t)(ev->refMultFtpcWest());
@@ -51,6 +51,7 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
   mRefMultHalfPosEast = (UShort_t)StPicoUtilities::refMultHalf(1, 0, muDst);
   mRefMultHalfNegWest = (UShort_t)StPicoUtilities::refMultHalf(0, 1, muDst);
   mRefMultHalfPosWest = (UShort_t)StPicoUtilities::refMultHalf(1, 1, muDst);
+  mGRefMult = (UShort_t)ev->grefmult();
 
   LOG_DEBUG << "Tmp: Neg: RefMult(org) = " << mRefMultNeg << "  (new) = " << StPicoUtilities::refMult(0, muDst)
     << " refmult2 = " << mRefMult2NegEast+ mRefMult2PosEast+ mRefMult2NegWest+ mRefMult2PosWest
@@ -119,8 +120,8 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
       }
     }
 
-    mZDCx = ev->runInfo().zdcCoincidenceRate();
-    mBBCx = ev->runInfo().bbcCoincidenceRate();
+    mZDCx = (UInt_t)ev->runInfo().zdcCoincidenceRate();
+    mBBCx = (UInt_t)ev->runInfo().bbcCoincidenceRate();
 
     mBackgroundRate = ev->runInfo().backgroundRate();
 
@@ -164,6 +165,11 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
     mQx_eta_neg = Q[10];
     mQy_eta_neg = Q[11];
 #endif
+
+    for(int i=0;i<4;i++) {
+      setHT_Th(i,0);
+      setJP_Th(i,0);
+    }
 }
 
 StPicoEvent::~StPicoEvent()
@@ -192,21 +198,8 @@ float StPicoEvent::energy() const
     if(day()>=112&&day()<=122) return 19.6;
     if(day()>=172&&day()<=179) return 27.;
     if(day()>=123&&day()<=171) return 200.;
-  } else if(year()==2012) {
-    if(day()>=39&&day()<=72) return 200.;
   }
   return 0.0;
-}
-
-char* StPicoEvent::system() const
-{
-  char* val;
-  if(year()<2010) val = 0; // not applicable for data before year 2010
-  if(year()==2010||year()==2011) { strcpy(val, "AuAu"); }
-  else if(year()==2012) {
-    if(day()>=39&&day()<=72) strcpy(val, "pp");
-  }
-  return val;
 }
 
 bool StPicoEvent::isMinBias() const  // continue to be updated
@@ -233,15 +226,6 @@ bool StPicoEvent::isMinBias() const  // continue to be updated
       return ( mTriggerWord>>2 & 0x1f );  // return vpd-minbias-protected
 //      return kTRUE;     // 200 GeV, only minbias
     }
-  } else if(year()==2012) {
-    if(strcmp(system(),"pp")==0 && fabs(energy()-200.)<1.e-4) {
-      return ( mTriggerWord & 0x1 );
-    }
-  }
-  else if (year()==2014) {
-    // 14.5 GeV
-    // (BBC_mb || ZDC_mb || VPD_mb)
-    return isBBC_mb() || isZDC_mb() || isVPD_mb() ;
   }
 
   return kFALSE;
@@ -308,12 +292,7 @@ bool StPicoEvent::isHT() const    // continue to be updated
     } else if(fabs(energy()-200.)<1.-4) {
       return kFALSE;
     }
-  }  else if(year()==2012) {
-    if(strcmp(system(),"pp")==0 && fabs(energy()-200.)<1.e-4) {
-      return ( mTriggerWord>>3 & 0x7 );
-    }
   }
-
   return kFALSE;
 }
     
@@ -324,12 +303,7 @@ bool StPicoEvent::isHT11() const    // continue to be updated
     if(fabs(energy()-62.4)<1.e-4) {
       return ( mTriggerWord>>5 & 0x7 );
     } 
-  } else if(year()==2012) {
-    if(strcmp(system(),"pp")==0 && fabs(energy()-200.)<1.e-4) {
-      return ( mTriggerWord>>3 & 0x1 );
-    }
-  }
-  
+  }   
   return kTRUE;  // default HT trigger ht-11
 } 
     
@@ -340,39 +314,6 @@ bool StPicoEvent::isHT15() const    // continue to be updated
     if(fabs(energy()-62.4)<1.e-4) {
       return ( mTriggerWord>>8 & 0x1 );
     } 
-  } else if(year()==2012) {
-    if(strcmp(system(),"pp")==0 && fabs(energy()-200.)<1.e-4) {
-      return ( mTriggerWord>>4 & 0x1 );
-    }
-  }
-  
+  }   
   return kFALSE;
 } 
-
-bool StPicoEvent::isHT18() const    // continue to be updated
-{
-  if(!isHT()) return kFALSE;
-  if(year()==2012) { 
-    if(strcmp(system(),"pp")==0 && fabs(energy()-200.)<1.e-4) {
-      return ( mTriggerWord>>5 & 0x1 );
-    }
-  }
-
-  return kFALSE;
-}
-
-bool StPicoEvent::isBBC_mb() const
-{
-  return ( mTriggerWord & 0x4 || mTriggerWord & 0x20 ) ;
-}
-
-bool StPicoEvent::isZDC_mb() const
-{
-  return mTriggerWord & 0x2 ;
-}
-
-bool StPicoEvent::isVPD_mb() const
-{
-  return mTriggerWord & 0x1 ;
-}
-

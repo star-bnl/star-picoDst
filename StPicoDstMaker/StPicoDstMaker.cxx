@@ -486,7 +486,7 @@ Int_t StPicoDstMaker::MakeWrite() {
 
 
 
-//  if(mPicoCut->passEvent(mMuEvent)) {  // keep all events in pp collisions to monitor triggers
+  if(mPicoCut->passEvent(mMuEvent)) {  // keep all events in pp collisions to monitor triggers
     fillTracks();
 
     if(!mCreatingPhiWgt) {
@@ -494,8 +494,8 @@ Int_t StPicoDstMaker::MakeWrite() {
       // Do not fill v0 for 39 GeV
 //      if(mProdMode==minbias || mProdMode==minbias2) fillV0();  // only fill V0 branches for minbias data
 
-//      fillTrigger();
-//      fillBTOWHits();
+      fillTrigger();
+      fillBTOWHits();
       fillBTofHits();
     }
 
@@ -506,7 +506,7 @@ Int_t StPicoDstMaker::MakeWrite() {
       mTTree->Fill(); THack::IsTreeWritable(mTTree);
     }
 
-//  }
+  }
 
   return kStOK;
 }
@@ -534,31 +534,16 @@ void StPicoDstMaker::fillTracks() {
     }
     int index = mIndex2Primary[gTrk->id()];
     StMuTrack *pTrk = (index>=0) ? (StMuTrack *)mMuDst->primaryTracks(index) : 0;
-
-    // Test: remove mCreatingPhiWgt flag
-//    if(mCreatingPhiWgt && !pTrk) continue;
-//    if(!pTrk) continue;
+    if(mCreatingPhiWgt && !pTrk) continue;
 
     Int_t flowFlag = mPicoCut->flowFlag(pTrk);
-    Float_t Vz = -999.;
-    if(mMuDst->primaryVertex())
-       Vz = mMuDst->primaryVertex()->position().z();
+    Float_t Vz = mMuDst->primaryVertex()->position().z();
     Int_t iPhi = phiBin(flowFlag, pTrk, Vz);
     float phi_wgt_read = 1.;
     if(iPhi>=0) phi_wgt_read = mPhiWeightRead[mCentrality][iPhi];
 
-//    int id; int adc0; float e[5]; float dist[4]; int nhit[2]; int ntow[3];
-//    getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
-    int id=-1000;
-    int adc0=-1000;
-    float e[5];
-    float dist[4];
-    int nhit[2];
-    int ntow[3];
-    for(Int_t j=0;j<5;j++) e[j] = -9999.;
-    for(Int_t j=0;j<4;j++) dist[j] = -9999.;
-    for(Int_t j=0;j<2;j++) nhit[j] = -1000;
-    for(Int_t j=0;j<3;j++) ntow[j] = -1000;
+    int id; int adc0; float e[5]; float dist[4]; int nhit[2]; int ntow[3];
+    getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
     int counter = mPicoArrays[picoTrack]->GetEntries();
     new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, phi_wgt_read, flowFlag, mBField, id, adc0, e, dist, nhit, ntow);
 //    continue;
@@ -840,12 +825,14 @@ void StPicoDstMaker::fillTrigger() {
   int bht0 = trigSimu->bemc->barrelHighTowerTh(0);
   int bht1 = trigSimu->bemc->barrelHighTowerTh(1);
   int bht2 = trigSimu->bemc->barrelHighTowerTh(2);
-  LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << endm;
-  for(int i=0;i<3;i++) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
+  int bht3 = trigSimu->bemc->barrelHighTowerTh(3);
+  LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
+  for(int i=0;i<4;i++) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
   
   bool fireBHT0 = false;
   bool fireBHT1 = false;
   bool fireBHT2 = false;
+  bool fireBHT3 = false;
 
 
   for (int towerId = 1; towerId <= 4800; ++towerId) {
@@ -854,7 +841,7 @@ void StPicoDstMaker::fillTrigger() {
     int adc = trigSimu->bemc->barrelHighTowerAdc(towerId);    
 //    if(towerId==4684) cout << " Id = " << towerId << " status = " << status << " adc = " << adc << endl;
     int flag = 0;
-    if( ( trgId>>3 & 0x1 ) || ( trgId>>6 & 0x1) ) { // bht0*vpdmb or bht0*bbcmb-tof0
+    if( ( trgId>>7 & 0x3 ) || ( trgId>>9 & 0x7) ) { // BHT0*BBCMB*TOF0 or BHT0*VPD
       if(adc>bht0) {
 	LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
 	fireBHT0 = true;
@@ -862,7 +849,7 @@ void StPicoDstMaker::fillTrigger() {
       }
     }
 
-    if( ( trgId>>4 & 0x1 ) || ( trgId>>7 & 0x1) ) { // bht1*vpdmb or bht1*bbcmb-tof0
+    if( ( trgId>>12 & 0x7 ) ) { // BHT1*VPDMB
       if(adc>bht1) {
         LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
         fireBHT1 = true;
@@ -870,7 +857,7 @@ void StPicoDstMaker::fillTrigger() {
       }
     }
 
-    if( ( trgId>>5 & 0x1 ) || ( trgId>>8 & 0x1) ) { // bht2*vpdmb or bht2*bbcmb
+    if( ( trgId>>15 & 0x1 ) || ( trgId>>16 & 0x1) ) { // BHT2 or BHT2*BBCMB
       if(adc>bht2) {
         LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
         fireBHT2 = true;
@@ -878,88 +865,34 @@ void StPicoDstMaker::fillTrigger() {
       }
     }
 
-    if( flag & 0x7 ) {
+    if( ( trgId>>17 & 0x3 ) ) { // BHT3
+      if(adc>bht3) {
+        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+        fireBHT3 = true; 
+        flag |= 1<<3;
+      }
+    }
+
+
+    if( flag & 0xf ) {
       int counter = mPicoArrays[picoTrigger]->GetEntries();
       new((*(mPicoArrays[picoTrigger]))[counter]) StPicoTrigger(flag, towerId, adc);
     }
 
   }
-  if( ( ( trgId>>3 & 0x1 ) || ( trgId>>6 & 0x1) ) && !fireBHT0 ) {
+  if( ( ( trgId>>7 & 0x3 ) || ( trgId>>9 & 0x7) ) && !fireBHT0 ) {
     LOG_WARN << " something is wrong with the bht0 in this event!!! " << endm;
   }
-  if( ( ( trgId>>4 & 0x1 ) || ( trgId>>7 & 0x1) ) && !fireBHT1 ) {
+  if( ( ( trgId>>12 & 0x7 ) ) && !fireBHT1 ) {
     LOG_WARN << " something is wrong with the bht1 in this event!!! " << endm;
   }
-  if( ( ( trgId>>5 & 0x1 ) || ( trgId>>8 & 0x1) ) && !fireBHT2 ) {
+  if( ( ( trgId>>15 & 0x1 ) || ( trgId>>16 & 0x1) ) && !fireBHT2 ) {
     LOG_WARN << " something is wrong with the bht2 in this event!!! " << endm;
   }
+  if( ( ( trgId>>17 & 0x3 ) ) && !fireBHT3 ) {
+    LOG_WARN << " something is wrong with the bht3 in this event!!! " << endm;
+  }
   
-  int bjp0 = trigSimu->bemc->barrelJetPatchTh(0);
-  int bjp1 = trigSimu->bemc->barrelJetPatchTh(1);
-  int bjp2 = trigSimu->bemc->barrelJetPatchTh(2);
-  LOG_DEBUG << " bjp thresholds " << bjp0 << " " << bjp1 << " " << bjp2 << endm;
-  for(int i=0;i<3;i++) mPicoDst->event()->setJP_Th(i, trigSimu->bemc->barrelJetPatchTh(i));
-  
-  bool fireBJP0 = false;
-  bool fireBJP1 = false;
-  bool fireBJP2 = false;
-
-  for (int jp = 0; jp < 18; ++jp) {
-    int adc = trigSimu->bemc->barrelJetPatchAdc(jp);
-    int flag = 0;
-    if( trgId>>9 & 0x1 ) { // jp0
-      if (adc>bjp0) {
-	LOG_DEBUG << " jpid = " << jp << " adc = " << adc << endm;
-	fireBJP0 = true;
-        flag |= 1<<4;
-      }
-    }
-
-    if( trgId>>10 & 0x1 ) { // jp1
-      if (adc>bjp1) {
-        LOG_DEBUG << " jpid = " << jp << " adc = " << adc << endm;
-        fireBJP1 = true;
-        flag |= 1<<5;
-      }
-    }
-
-    if( trgId>>11 & 0x1 ) { // jp2
-      if (adc>bjp2) {
-        LOG_DEBUG << " jpid = " << jp << " adc = " << adc << endm;
-        fireBJP2 = true;
-        flag |= 1<<6;
-      }
-    }
-
-    if( flag>>4 & 0x7 ) {
-      int counter = mPicoArrays[picoTrigger]->GetEntries();
-      new((*(mPicoArrays[picoTrigger]))[counter]) StPicoTrigger(flag, jp+1, adc);   
-    }
-
-  }
-  if( ( trgId>>9 & 0x1 ) ) {
-    if(fireBJP0 ) {
-      LOG_DEBUG << " This event fired BJP0. " << endm;
-    } else {
-      LOG_DEBUG << " This event fired EJP0 or OJP0 ?? " << endm;
-    }
-  }
-  if( ( trgId>>10 & 0x1 ) ) {
-    if(fireBJP1 ) {     
-      LOG_DEBUG << " This event fired BJP1. " << endm;
-    } else {
-      LOG_DEBUG << " This event fired EJP1 or OJP1 ?? " << endm;
-    }
-  }
-
-  if( ( trgId>>11 & 0x1 ) ) {
-    if(fireBJP2 ) {     
-      LOG_DEBUG << " This event fired BJP2. " << endm;
-    } else {
-      LOG_DEBUG << " This event fired EJP2 or OJP2 ?? " << endm;
-    }
-  }
- 
   return;
 }
 //-----------------------------------------------------------------------

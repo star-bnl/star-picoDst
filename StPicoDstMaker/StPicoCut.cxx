@@ -69,6 +69,7 @@ bool StPicoCut::passTrack( StMuTrack *t )
     return kFALSE;
   }
   if(t->p().perp()<Pico::mPtMin) return kFALSE;
+  if(t->dcaGlobal().mag()>Pico::mGDcaMax) return kFALSE;
   if(t->flag()/100<7) {  // TPC tracks
     if( t->nHitsFit(kTpcId) < Pico::mNHitsFitMin ) return kFALSE;
     if( (1.0*t->nHitsFit(kTpcId))/(1.0*t->nHitsPoss(kTpcId)) < Pico::mRatioMin ) return kFALSE;
