@@ -9,8 +9,11 @@ class StMuDstMaker;
 
 StChain *chain;
 //void makePicoDst(const Int_t runnumber=11037016, const Char_t *inputFile="st_physics_11037016_raw_5010002.MuDst.root", const bool creatingPhiWgt = kFALSE, const int prodMod = 0)
-void makePicoDst(const Int_t runnumber=12169026,
-    const Char_t *inputFile="/star/data54/reco/AuAu200_production_2011/FullField/P11id/2011/169/12169026/st_physics_adc_12169026_raw_4510001.MuDst.root",
+void makePicoDst(const Int_t runnumber=12042026,
+//    const Char_t *inputFile="/star/data54/reco/AuAu200_production_2011/FullField/P11id/2011/169/12169026/st_physics_adc_12169026_raw_4510001.MuDst.root",
+//    const Char_t *inputFile="/star/data78/reco/pp200_production_2012/ReversedFullField/P12id/2012/040/13040016/st_physics_13040016_raw_1010001.MuDst.root",
+//    const Char_t *inputFile="/star/data43/reco/pp500_production_2013/ReversedFullField/P14ia/2013/115/14115072/st_physics_14115072_raw_3690004.MuDst.root",
+    const Char_t *inputFile="root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/pp500_production_2011/ReversedFullField/P11id/2011/042/12042026/st_physics_adc_12042026_raw_2500001.MuDst.root",
     const bool creatingPhiWgt = kFALSE, const int prodMod = 0, const int emcMode=1
 ){
         Int_t nEvents = 10000000;
@@ -57,7 +60,10 @@ void makePicoDst(const Int_t runnumber=12169026,
 		gSystem->Load("StDbBroker");
 		gSystem->Load("StDetectorDbMaker");
 		gSystem->Load("StDbUtilities");
+                gSystem->Load("StEEmcUtil");
+                gSystem->Load("StEEmcDbMaker");
 		gSystem->Load("St_db_Maker");
+                gSystem->Load("StTriggerUtilities");
 	}
 
         gSystem->Load("StPicoDstMaker");
@@ -71,10 +77,13 @@ void makePicoDst(const Int_t runnumber=12169026,
         MuDstMaker->SetStatus("PrimaryTracks",1);
         MuDstMaker->SetStatus("GlobalTracks",1);
         MuDstMaker->SetStatus("BTof*",1);
-//        MuDstMaker->SetStatus("Emc*",1);
+        MuDstMaker->SetStatus("Emc*",1);
 	
 	if(!creatingPhiWgt&&emcMode) {
 		St_db_Maker *dbMk = new St_db_Maker("db","MySQL:StarDb","$STAR/StarDb","StarDb");
+
+                // Endcap database
+                StEEmcDbMaker* eemcDb = new StEEmcDbMaker;
 
 		StEmcADCtoEMaker *adc2e = new StEmcADCtoEMaker();
   		adc2e->setPrint(false);
@@ -90,6 +99,18 @@ void makePicoDst(const Int_t runnumber=12169026,
   		pre_ecl->setPrint(kFALSE);
   		StEpcMaker *epc=new StEpcMaker();
   		epc->setPrint(kFALSE);
+
+#if 1
+    // Trigger simulator
+    StTriggerSimuMaker* trigSimu = new StTriggerSimuMaker;
+    trigSimu->setMC(false);
+    trigSimu->useBemc();
+    trigSimu->useEemc();
+//    trigSimu->useOnlineDB();
+
+    trigSimu->bemc->setConfig(StBemcTriggerSimu::kOffline);
+#endif
+
 	}
 	
 	StPicoDstMaker *picoMaker = new StPicoDstMaker(1,inputFile,"picoDst");
