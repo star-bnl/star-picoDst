@@ -818,6 +818,7 @@ void StPicoDstMaker::fillEvent() {
 void StPicoDstMaker::fillTrigger() {
 
       // test for EMC trigger
+  LOG_INFO << " ===== Test EMC triggers ===== " << endm;
   StTriggerSimuMaker *trigSimu = (StTriggerSimuMaker *)GetMaker("StarTrigSimu");
 
   int trgId = mPicoDst->event()->triggerWord();
@@ -827,6 +828,10 @@ void StPicoDstMaker::fillTrigger() {
   int bht2 = trigSimu->bemc->barrelHighTowerTh(2);
   int bht3 = trigSimu->bemc->barrelHighTowerTh(3);
   LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
+  bht0 = 11;  // something was not updated here, put in the threshold manually
+  bht1 = 18;
+  bht2 = 25;
+  bht3 = 31;
   for(int i=0;i<4;i++) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
   
   bool fireBHT0 = false;
@@ -834,45 +839,45 @@ void StPicoDstMaker::fillTrigger() {
   bool fireBHT2 = false;
   bool fireBHT3 = false;
 
+  if( ( trgId>>9 & 0x1f ) ) { // BHT0*VPDMB
+    LOG_INFO << " This event fired the BHT0*VPDMB trigger" << endm;
+  }
+
+  if( ( trgId>>14 & 0x3 ) ) { // BHT1
+    LOG_INFO << " This event fired the BHT1 trigger" << endm;
+  }
+
+  if( ( trgId>>16 & 0x3 ) ) { // BHT2
+    LOG_INFO << " This event fired the BHT2 trigger" << endm;
+  }
+
 
   for (int towerId = 1; towerId <= 4800; ++towerId) {
-    int status;
-    trigSimu->bemc->getTables()->getStatus(BTOW, towerId, status);
     int adc = trigSimu->bemc->barrelHighTowerAdc(towerId);    
-//    if(towerId==4684) cout << " Id = " << towerId << " status = " << status << " adc = " << adc << endl;
     int flag = 0;
-    if( ( trgId>>7 & 0x3 ) || ( trgId>>9 & 0x7) ) { // BHT0*BBCMB*TOF0 or BHT0*VPD
+    if( ( trgId>>9 & 0x1f ) ) { // BHT0*VPDMB
       if(adc>bht0) {
-	LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+	LOG_INFO << " id = " << towerId << " adc = " << adc << endm;
 	fireBHT0 = true;
         flag |= 1<<0;
       }
     }
 
-    if( ( trgId>>12 & 0x7 ) ) { // BHT1*VPDMB
+    if( ( trgId>>14 & 0x3 ) ) { // BHT1
       if(adc>bht1) {
-        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+        LOG_INFO << " id = " << towerId << " adc = " << adc << endm;
         fireBHT1 = true;
         flag |= 1<<1;
       }
     }
 
-    if( ( trgId>>15 & 0x1 ) || ( trgId>>16 & 0x1) ) { // BHT2 or BHT2*BBCMB
+    if( ( trgId>>16 & 0x3 ) ) { // BHT2
       if(adc>bht2) {
-        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+        LOG_INFO << " id = " << towerId << " adc = " << adc << endm;
         fireBHT2 = true;
         flag |= 1<<2;
       }
     }
-
-    if( ( trgId>>17 & 0x3 ) ) { // BHT3
-      if(adc>bht3) {
-        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
-        fireBHT3 = true; 
-        flag |= 1<<3;
-      }
-    }
-
 
     if( flag & 0xf ) {
       int counter = mPicoArrays[picoTrigger]->GetEntries();
@@ -880,17 +885,14 @@ void StPicoDstMaker::fillTrigger() {
     }
 
   }
-  if( ( ( trgId>>7 & 0x3 ) || ( trgId>>9 & 0x7) ) && !fireBHT0 ) {
+  if( ( trgId>>9 & 0x1f ) && !fireBHT0 ) {
     LOG_WARN << " something is wrong with the bht0 in this event!!! " << endm;
   }
-  if( ( ( trgId>>12 & 0x7 ) ) && !fireBHT1 ) {
+  if( ( trgId>>14 & 0x3 ) && !fireBHT1 ) {
     LOG_WARN << " something is wrong with the bht1 in this event!!! " << endm;
   }
-  if( ( ( trgId>>15 & 0x1 ) || ( trgId>>16 & 0x1) ) && !fireBHT2 ) {
+  if( ( trgId>>16 & 0x3 ) && !fireBHT2 ) {
     LOG_WARN << " something is wrong with the bht2 in this event!!! " << endm;
-  }
-  if( ( ( trgId>>17 & 0x3 ) ) && !fireBHT3 ) {
-    LOG_WARN << " something is wrong with the bht3 in this event!!! " << endm;
   }
   
   return;

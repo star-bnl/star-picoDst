@@ -83,6 +83,7 @@ ClassImp(Pico)
        370341  // tofmult4
    }; // pp200 GeV (Run12)
 */
+/*
    Int_t Pico::mTriggerId[nTrigger] = {
        430001, // VPDMB
        430011, // VPDMB
@@ -104,6 +105,27 @@ ClassImp(Pico)
        430216, // BHT3
        430236  // BHT3
    }; // pp510 GeV (Run13)
+*/
+   Int_t Pico::mTriggerId[nTrigger] = {
+       320000, // VPDMB
+       320001, // VPDMB
+       320011, // VPDMB
+       320021, // VPDMB
+       330021, // VPDMB
+       320103, // BBCMB
+       320113, // BBCMB
+       320123, // BBCMB
+       330123, // BBCMB
+       320500, // BHT0*VPDMB
+       320504, // BHT0*VPDMB
+       320514, // BHT0*VPDMB
+       320524, // BHT0*VPDMB
+       330524, // BHT0*VPDMB
+       320501, // BHT1
+       330501, // BHT1
+       320503, // BHT2
+       330503  // BHT2
+   }; // pp500 GeV (Run11)
 
    Float_t Pico::mVzMax = 100;
    Float_t Pico::mVrMax =   2;
