@@ -1,17 +1,17 @@
-#include "StPicoTrigger.h"
+#include "StPicoEmcTrigger.h"
 #include "StPicoConstants.h"
 #include "StPicoDstMaker.h"
 
-ClassImp(StPicoTrigger)
+ClassImp(StPicoEmcTrigger)
 
 //----------------------------------------------------------------------------------
-StPicoTrigger::StPicoTrigger()
+StPicoEmcTrigger::StPicoEmcTrigger()
 {
   Clear();
 }
 
 //----------------------------------------------------------------------------------
-StPicoTrigger::StPicoTrigger(int flag, int id, int adc)
+StPicoEmcTrigger::StPicoEmcTrigger(int flag, int id, int adc)
 {
   Clear();
 
@@ -25,17 +25,17 @@ StPicoTrigger::StPicoTrigger(int flag, int id, int adc)
 }
 
 //----------------------------------------------------------------------------------
-StPicoTrigger::~StPicoTrigger()
+StPicoEmcTrigger::~StPicoEmcTrigger()
 { /* noop */ }
 
 //----------------------------------------------------------------------------------
-void StPicoTrigger::Clear(const Option_t* opt)
+void StPicoEmcTrigger::Clear(const Option_t* opt)
 {
   mFlag = 0;
   mId = 0;
   mAdc = 0;
 }
 //----------------------------------------------------------------------------------
-void StPicoTrigger::Print(const Char_t *option) const {
+void StPicoEmcTrigger::Print(const Char_t *option) const {
   LOG_INFO << " Flag = " << mFlag << " Id = " << mId << " Adc = " << mAdc << endm;
 }

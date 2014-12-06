@@ -1,16 +1,16 @@
-#ifndef StPicoTrigger_hh
-#define StPicoTrigger_hh
+#ifndef StPicoEmcTrigger_hh
+#define StPicoEmcTrigger_hh
 
 class StPicoDst;
 
 #include "TObject.h"
 #include "stdio.h"
 
-class StPicoTrigger : public TObject {
+class StPicoEmcTrigger : public TObject {
  public:
-  StPicoTrigger();
-  ~StPicoTrigger();
-  StPicoTrigger(int, int, int);
+  StPicoEmcTrigger();
+  ~StPicoEmcTrigger();
+  StPicoEmcTrigger(int, int, int);
   void    Clear(const Option_t *opt="");
   virtual void Print(const Char_t *option = "") const;  ///< Print trigger info
  
@@ -26,7 +26,7 @@ class StPicoTrigger : public TObject {
 
   friend class StPicoDst;
 
-  ClassDef(StPicoTrigger, 1)
+  ClassDef(StPicoEmcTrigger, 1)
 };
 
 #endif
