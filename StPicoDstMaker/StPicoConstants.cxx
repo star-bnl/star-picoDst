@@ -83,6 +83,7 @@ ClassImp(Pico)
        370341  // tofmult4
    }; // pp200 GeV (Run12)
 */
+
 /*
    Int_t Pico::mTriggerId[nTrigger] = {
        430001, // VPDMB
@@ -106,29 +107,63 @@ ClassImp(Pico)
        430236  // BHT3
    }; // pp510 GeV (Run13)
 */
-   Int_t Pico::mTriggerId[nTrigger] = {
-       320000, // VPDMB
-       320001, // VPDMB
-       320011, // VPDMB
-       320021, // VPDMB
-       330021, // VPDMB
-       320103, // BBCMB
-       320113, // BBCMB
-       320123, // BBCMB
-       330123, // BBCMB
-       320500, // BHT0*VPDMB
-       320504, // BHT0*VPDMB
-       320514, // BHT0*VPDMB
-       320524, // BHT0*VPDMB
-       330524, // BHT0*VPDMB
-       320501, // BHT1
-       330501, // BHT1
-       320503, // BHT2
-       330503  // BHT2
-   }; // pp500 GeV (Run11)
 
-   Float_t Pico::mVzMax = 100;
-   Float_t Pico::mVrMax =   2;
+
+Int_t Pico::mTriggerId[nTrigger] = {
+	// st_physics stream
+	450050,    // vpdmb-5-p-nobsmd-hlt (production_mid_2014, production_low_2014)
+	450060,    // vpdmb-5-p-nobsmd-hlt (production_mid_2014, production_low_2014)
+	450005,    // vpdmb-5-p-nobsmd (production_2014)
+	450015,    // vpdmb-5-p-nobsmd (production_2014, production_mid_2014, production_low_2014)
+	450025,    // vpdmb-5-p-nobsmd (production_mid_2014, production_low_2014)
+	450014,    // VPDMB-5-nobsmd
+	450024,    // VPDMB-5-nobsmd
+	450008,    // VPDMB-5 (production_2014, production_mid_2014, production_low_2014)
+	450018,    // VPDMB-5 (production_2014, production_mid_2014, production_low_2014)
+	450010,    // VPDMB-30 (production_2014, production_mid_2014, production_low_2014)
+	450020,    // VPDMB-30 (production_2014, production_mid_2014, production_low_2014)
+	450013,    // VPD-ZDC-novtx-mon (production_2014, production_mid_2014, production_low_2014)
+	450023,    // VPD-ZDC-novtx-mon (production_2014, production_mid_2014, production_low_2014)
+	450009,    // vpdmb-5-p-nobsmd-ssd-hlt (production_mid_2014, production_low_2014)
+	450012,    // ZDC-mon (production_2014, production_mid_2014, production_low_2014)
+	450022,    // ZDC-mon (production_2014, production_mid_2014, production_low_2014)
+	450011,    // MB-mon (production_2014, production_mid_2014, production_low_2014)
+	450021,    // MB-mon (production_2014, production_mid_2014, production_low_2014)
+	450103,    // Central-5 (production_2014, production_mid_2014, production_low_2014)
+	450201,    // BHT1*VPDMB-30 (production_2014, production_mid_2014, production_low_2014)
+	450211,    // BHT1*VPDMB-30 (production_2014, production_mid_2014, production_low_2014)
+	450202,    // BHT2*VPDMB-30 (production_2014, production_mid_2014, production_low_2014)
+	450212,    // BHT2*VPDMB-30 (production_2014, production_mid_2014, production_low_2014)
+	450203,    // BHT3 (production_2014, production_mid_2014, production_low_2014)
+	450213    // BHT3 (production_2014, production_mid_2014, production_low_2014)
+};
+
+
+Int_t Pico::mTriggerIdMtd[nTriggerMtd] = {
+  // st_mtd stream
+  450601, // dimuon
+  450611, // dimuon
+  450621, // dimuon
+  450631, // dimuon
+  450641, // dimuon
+  450604,    // dimuon-30-hft (production_2014)
+  450605,    // dimuon-5-hft (production_mid_2014, production_low_2014)
+  450606,    // dimuon-5-hft (production_mid_2014)
+  450602,    // e-mu (production_2014)
+  450612,    // e-mu (production_2014, production_low_2014)
+  450622,    // e-mu (production_2014, production_low_2014)
+  450632,    // e-mu (production_mid_2014)
+  450642,    // e-mu (production_2014, production_low_2014)
+  450600,    // single-muon (production_2014)
+  450610,    // single-muon (production_2014, production_low_2014)
+  450620,    // single-muon (production_2014, production_low_2014)
+  450630,    // single-muon (production_mid_2014)
+  450640     // single-muon (production_2014, production_low_2014)
+}; // Run14 AuAu200 GeV StMtd Stream
+
+
+   Float_t Pico::mVzMax = 200;
+   Float_t Pico::mVrMax =   10;
    Int_t Pico::mRefMultMin = 0;                    // >=
 
   // track selection

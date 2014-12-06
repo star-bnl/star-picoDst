@@ -12,11 +12,12 @@ class StBTofHeader;
 class StEmcCollection;
 class StEmcPosition;
 class StEmcGeom;
+class StBemcTables;
 class StPicoDst;
 class StPicoEvent;
 class StPicoTrack;
 class StPicoV0;
-class StPicoTrigger;
+class StPicoEmcTrigger;
 class StPicoBTOWHit;
 class StPicoBTofHit;
 class StPicoCut;
@@ -82,6 +83,8 @@ class StPicoDstMaker : public StMaker {
    void buildEmcIndex();
    void initEmc();
    void finishEmc();
+
+   Bool_t initMtd();
    
    void DeclareHistos();
    void WriteHistos();
@@ -99,9 +102,11 @@ class StPicoDstMaker : public StMaker {
    void fillTracks();
    void fillEvent();
    void fillV0();
-   void fillTrigger();
+   void fillEmcTrigger();
+   void fillMtdTrigger();
    void fillBTOWHits();
    void fillBTofHits();
+   void fillMtdHits();
 
    Int_t phiBin(int, StMuTrack *, float);
    void  addPhiWeight(StMuTrack *, float, float*);
@@ -126,7 +131,7 @@ class StPicoDstMaker : public StMaker {
 
    Int_t      mIoMode;         //! I/O mode:  0: - write,   1: - read
    Bool_t     mCreatingPhiWgt; //! creating phi weight files
-   Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation
+   Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation, 4: - st_mtd
    Int_t      mEmcMode;        //! EMC ON(=1)/OFF(=0)
 
    TString   mInputFileName;        //! *.list - MuDst or picoDst
@@ -153,6 +158,10 @@ class StPicoDstMaker : public StMaker {
    static const char* mEW[nEW*nDet]; //!={"EE","EW","WE","WW","FarWest","West","East","FarEast"};
    Float_t mPhiWeightRead[nCen+1][nEW*nDet*nPhi];
    Float_t mPhiWeightWrite[nEW*nDet*nPhi];  // phi weight for the current event
+
+   // MTD map from backleg to QT
+  Int_t  mModuleToQT[30][5];     // Map from module to QT board index
+  Int_t  mModuleToQTPos[30][5];  // Map from module to the position on QA board
          
    //
    friend class StPicoDst;

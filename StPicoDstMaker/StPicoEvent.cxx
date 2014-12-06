@@ -8,6 +8,7 @@
 #include "StMuDSTMaker/COMMON/StMuTrack.h" 
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
+#include "StMuDSTMaker/COMMON/StMuMtdHeader.h"
 #include "StBTofHeader.h"
 #include "StMessMgr.h"
 #include "StPicoUtilities.h"
@@ -33,11 +34,17 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
     mPrimaryVertex.set(-999.,-999.,-999.);
   }
 
-  int triggerId = 0;
+  unsigned int triggerId = 0;
   for(int i=0;i<nTrigger;i++) {
     if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerId[i])) triggerId |= (1 << i);
   }
   mTriggerWord = (UInt_t)triggerId;
+
+  triggerId = 0;
+  for(int i=0;i<nTriggerMtd;i++) {
+    if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerIdMtd[i])) triggerId |= (1 << i);
+  }
+  mTriggerWordMtd = (UInt_t)triggerId;
 
   mRefMultFtpcEast = (UShort_t)(ev->refMultFtpcEast());
   mRefMultFtpcWest = (UShort_t)(ev->refMultFtpcWest());

@@ -37,7 +37,9 @@
 //     nTrigger = 7 // Run11 200 GeV
 //     nTrigger = 16 // Run12 pp200 GeV
 //     nTrigger = 19 // Run13 pp510 GeV
-     nTrigger = 18 // Run11 pp500 GeV
+//     nTrigger = 23 // Run14 AuAu 200GeV MTD
+    nTrigger    = 25, // Run14 AuAu 200GeV st_physics
+    nTriggerMtd = 18 // Run14 AuAu 200GeV st_mtd
   };
 
 
@@ -62,6 +64,7 @@ public:
     
   // event selectioin
   static Int_t mTriggerId[nTrigger];// = {280001,280002};
+  static Int_t mTriggerIdMtd[nTriggerMtd];// added for Run14+ st_mtd stream data
   static Float_t mVzMax;// = 40;
   static Float_t mVrMax;// = 2;
   static Int_t mRefMultMin;// = 8;                    // >=

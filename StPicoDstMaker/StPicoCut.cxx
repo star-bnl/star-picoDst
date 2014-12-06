@@ -49,10 +49,10 @@ bool StPicoCut::passEvent( StMuEvent *ev )
   bool isTrg = kFALSE;
   for(int i=0;i<nTrigger;i++) {
     if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerId[i])){
-//      LOG_INFO << "StPicoCut::passEvent  Fire trigger = " << Pico::mTriggerId[i] << endm;
       isTrg = kTRUE;
     }
   }
+
   if(!isTrg) return kFALSE;
 
   if(ev->refMult()<Pico::mRefMultMin) return kFALSE;

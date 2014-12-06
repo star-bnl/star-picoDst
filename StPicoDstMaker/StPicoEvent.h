@@ -25,6 +25,7 @@ public:
   Float_t  bField() const           { return mBField; }
   StThreeVectorF primaryVertex() const { return mPrimaryVertex; }
   Int_t    triggerWord() const      { return mTriggerWord; }
+  Int_t    triggerWordMtd() const   { return mTriggerWordMtd; }
   Int_t    refMultPos() const       { return (Int_t)mRefMultPos; }
   Int_t    refMultNeg() const       { return (Int_t)mRefMultNeg; }
   Int_t    refMultFtpcEast() const  { return (Int_t)mRefMultFtpcEast; }
@@ -123,6 +124,7 @@ protected: //these are written out
   StThreeVectorF mPrimaryVertex;   // primary Vertex (1st)
   StThreeVectorF mSecondVertex;    // second Vertex position (for study)
   UInt_t         mTriggerWord;     // self-defined trigger word - see code for details
+  UInt_t         mTriggerWordMtd;  // Added in Run14, st_mtd trigger
   UShort_t       mRefMultFtpcEast; // FTPC refMult east
   UShort_t       mRefMultFtpcWest; // FTPC refMult west
   UShort_t       mRefMultNeg;      // TPC refMult neg
