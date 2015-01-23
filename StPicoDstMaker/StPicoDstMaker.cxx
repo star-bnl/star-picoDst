@@ -563,7 +563,7 @@ Int_t StPicoDstMaker::MakeWrite() {
 
       //fillV0();
       fillEmcTrigger();
-      if(mProdMode==4) fillMtdTrigger();   // This must be called before fillMtdHits()
+      fillMtdTrigger();   // This must be called before fillMtdHits()
       fillBTOWHits();
       //fillBTofHits();
       fillMtdHits();
@@ -622,6 +622,7 @@ void StPicoDstMaker::fillTracks() {
     
     if(mProdMode==4)
       {
+	// save only electron or muon candidates
 	Double_t nsigmaE = gTrk->nSigmaElectron();
 	Double_t beta = (gTrk) ? gTrk->btofPidTraits().beta() : -999.;
 
@@ -1102,81 +1103,78 @@ void StPicoDstMaker::fillMtdHits() {
       new((*(mPicoArrays[picoMtdHit]))[counter]) StPicoMtdHit(hit);
     }
 
-  if(mProdMode==4)
+  // check the firing hits
+  if(mPicoArrays[picoMtdTrigger]->GetEntries()!=1)
     {
-      // check the firing hits
-      if(mPicoArrays[picoMtdTrigger]->GetEntries()!=1)
+      LOG_ERROR << "There are " << mPicoArrays[picoMtdTrigger]->GetEntries() << " MTD trigger. Check it!" << endm;
+      return;
+    }
+
+  StPicoMtdTrigger *trigger = dynamic_cast<StPicoMtdTrigger*>(mPicoArrays[picoMtdTrigger]->At(0));
+
+  Int_t triggerQT[4][2];
+  Bool_t triggerBit[4][8];
+  Int_t pos1 = 0, pos2 = 0;
+  for(Int_t i=0; i<4; i++)
+    {
+      for(Int_t j=0; j<2; j++)
+	triggerQT[i][j] = 0;
+      for(Int_t j=0; j<8; j++)
+	triggerBit[i][j] = kFALSE;
+      
+      trigger->getMaximumQTtac(i+1,pos1,pos2);
+      triggerQT[i][0] = pos1;
+      triggerQT[i][1] = pos2;
+      for(Int_t j=0; j<2; j++)
 	{
-	  LOG_ERROR << "There are " << mPicoArrays[picoMtdTrigger]->GetEntries() << " MTD trigger. Check it!" << endm;
-	  return;
-	}
-
-      StPicoMtdTrigger *trigger = dynamic_cast<StPicoMtdTrigger*>(mPicoArrays[picoMtdTrigger]->At(0));
-
-      Int_t triggerQT[4][2];
-      Bool_t triggerBit[4][8];
-      Int_t pos1 = 0, pos2 = 0;
-      for(Int_t i=0; i<4; i++)
-	{
-	  for(Int_t j=0; j<2; j++)
-	    triggerQT[i][j] = 0;
-	  for(Int_t j=0; j<8; j++)
-	    triggerBit[i][j] = kFALSE;
-
-	  trigger->getMaximumQTtac(i+1,pos1,pos2);
-	  triggerQT[i][0] = pos1;
-	  triggerQT[i][1] = pos2;
-	  for(Int_t j=0; j<2; j++)
+	  if( triggerQT[i][j]>0 && ((trigger->getTF201TriggerBit()>>(i*2+j))&0x1) )
 	    {
-	      if( triggerQT[i][j]>0 && ((trigger->getTF201TriggerBit()>>(i*2+j))&0x1) )
-		{
-		  triggerBit[i][triggerQT[i][j]-1] = kTRUE;
-		}
+	      triggerBit[i][triggerQT[i][j]-1] = kTRUE;
 	    }
 	}
+    }
  
 
-      Int_t nHits = mPicoArrays[picoMtdHit]->GetEntries();
-      vector<Int_t> triggerPos;
-      vector<Int_t> hitIndex;
-
-      for(Int_t i=0; i<nHits; i++)
+  Int_t nHits = mPicoArrays[picoMtdHit]->GetEntries();
+  vector<Int_t> triggerPos;
+  vector<Int_t> hitIndex;
+  
+  for(Int_t i=0; i<nHits; i++)
+    {
+      StPicoMtdHit *hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(i));
+      Int_t backleg = hit->backleg();
+      Int_t module  = hit->module();
+      Int_t qt = mModuleToQT[backleg-1][module-1];
+      Int_t pos = mModuleToQTPos[backleg-1][module-1];
+      if(qt>0 && pos>0 && triggerBit[qt-1][pos-1])
 	{
-	  StPicoMtdHit *hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(i));
-	  Int_t backleg = hit->backleg();
-	  Int_t module  = hit->module();
-	  Int_t qt = mModuleToQT[backleg-1][module-1];
-	  Int_t pos = mModuleToQTPos[backleg-1][module-1];
-	  if(qt>0 && pos>0 && triggerBit[qt-1][pos-1])
-	    {
-	      triggerPos.push_back(qt*10+pos);
-	      hitIndex.push_back(i);
-	    }
-	  else
-	    {
-	      hit->setTriggerFlag(0);
-	    }
+	  triggerPos.push_back(qt*10+pos);
+	  hitIndex.push_back(i);
 	}
-
-      vector<Int_t> hits;
-      hits.clear();
-      while(triggerPos.size()>0)
+      else
 	{
-	  hits.clear();
-	  hits.push_back(0);
-	  for(Int_t j=1; j<(Int_t)triggerPos.size(); j++)
-	    {
-	      if(triggerPos[j] == triggerPos[0])
-		hits.push_back(j);
-	    }
+	  hit->setTriggerFlag(0);
+	}
+    }
+
+  vector<Int_t> hits;
+  hits.clear();
+  while(triggerPos.size()>0)
+    {
+      hits.clear();
+      hits.push_back(0);
+      for(Int_t j=1; j<(Int_t)triggerPos.size(); j++)
+	{
+	  if(triggerPos[j] == triggerPos[0])
+	    hits.push_back(j);
+	}
 	 
-	  for(Int_t k=(Int_t)hits.size()-1; k>-1; k--)
-	    {
-	      StPicoMtdHit *hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(hitIndex[hits[k]]));
-	      hit->setTriggerFlag((Int_t)hits.size());
-	      triggerPos.erase(triggerPos.begin()+hits[k]);
-	      hitIndex.erase(hitIndex.begin()+hits[k]);
-	    }
+      for(Int_t k=(Int_t)hits.size()-1; k>-1; k--)
+	{
+	  StPicoMtdHit *hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(hitIndex[hits[k]]));
+	  hit->setTriggerFlag((Int_t)hits.size());
+	  triggerPos.erase(triggerPos.begin()+hits[k]);
+	  hitIndex.erase(hitIndex.begin()+hits[k]);
 	}
     }
 }

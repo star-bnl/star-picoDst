@@ -131,7 +131,7 @@ class StPicoDstMaker : public StMaker {
 
    Int_t      mIoMode;         //! I/O mode:  0: - write,   1: - read
    Bool_t     mCreatingPhiWgt; //! creating phi weight files
-   Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation, 4: - st_mtd
+   Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation, 4: - save only electron or muon candidates
    Int_t      mEmcMode;        //! EMC ON(=1)/OFF(=0)
 
    TString   mInputFileName;        //! *.list - MuDst or picoDst

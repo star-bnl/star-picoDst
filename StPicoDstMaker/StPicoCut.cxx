@@ -50,6 +50,16 @@ bool StPicoCut::passEvent( StMuEvent *ev )
   for(int i=0;i<nTrigger;i++) {
     if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerId[i])){
       isTrg = kTRUE;
+      break;
+    }
+  }
+
+  if(!isTrg){
+    for(int i=0;i<nTriggerMtd;i++) {
+      if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerIdMtd[i])){
+	isTrg = kTRUE;
+	break;
+      }
     }
   }
 

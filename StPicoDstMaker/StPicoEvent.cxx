@@ -324,3 +324,87 @@ bool StPicoEvent::isHT15() const    // continue to be updated
   }   
   return kFALSE;
 } 
+
+bool StPicoEvent::isMtdTrig() const    // continue to be updated
+{ 
+  if(isDiMuon() || isSingleMuon() || isEMuon())
+    return kTRUE;
+  else
+    return kFALSE;
+}
+
+bool StPicoEvent::isDiMuon() const    // continue to be updated
+{ 
+  if(year()==2014)
+    { 
+      for(Int_t i=0; i<8; i++)
+	{
+	  if(mTriggerWordMtd & (1<<i)) 
+	    return kTRUE;
+	}
+    }
+  else if(year()==2013)
+    { 
+      for(Int_t i=0; i<2; i++)
+	{
+	  if(mTriggerWordMtd & (1<<i)) 
+	    return kTRUE;
+	}
+    }
+  return kFALSE;
+}
+
+bool StPicoEvent::isDiMuonHFT() const    // continue to be updated
+{ 
+  if(year()==2014)
+    { 
+      for(Int_t i=5; i<8; i++)
+	{
+	  if(mTriggerWordMtd & (1<<i)) 
+	    return kTRUE;
+	}
+    }
+  return kFALSE;
+} 
+
+bool StPicoEvent::isSingleMuon() const    // continue to be updated
+{ 
+  if(year()==2014)
+    { 
+      for(Int_t i=13; i<18; i++)
+	{
+	  if(mTriggerWordMtd & (1<<i)) 
+	    return kTRUE;
+	}
+    }
+  else if(year()==2013)
+    { 
+      for(Int_t i=5; i<7; i++)
+	{
+	  if(mTriggerWordMtd & (1<<i)) 
+	    return kTRUE;
+	}
+    }
+  return kFALSE;
+}
+
+bool StPicoEvent::isEMuon() const    // continue to be updated
+{ 
+  if(year()==2014)
+    { 
+      for(Int_t i=8; i<13; i++)
+	{
+	  if(mTriggerWordMtd & (1<<i)) 
+	    return kTRUE;
+	}
+    }
+  else if(year()==2013)
+    { 
+      for(Int_t i=2; i<5; i++)
+	{
+	  if(mTriggerWordMtd & (1<<i)) 
+	    return kTRUE;
+	}
+    }
+  return kFALSE;
+}

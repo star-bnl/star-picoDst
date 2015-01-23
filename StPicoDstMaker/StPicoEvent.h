@@ -111,6 +111,11 @@ public:
   bool     isHT() const;    
   bool     isHT11() const; 
   bool     isHT15() const; 
+  bool     isMtdTrig() const;
+  bool     isDiMuon() const;
+  bool     isDiMuonHFT() const;
+  bool     isSingleMuon() const;
+  bool     isEMuon() const;
 
 // set functions for trigger thresholds
   void     setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }

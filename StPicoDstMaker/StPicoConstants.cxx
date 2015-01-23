@@ -85,27 +85,37 @@ ClassImp(Pico)
 */
 
 /*
-   Int_t Pico::mTriggerId[nTrigger] = {
-       430001, // VPDMB
-       430011, // VPDMB
-       430021, // VPDMB
-       430031, // VPDMB
-       430005, // BBCMB
-       430015, // BBCMB
-       430004, // ZDCMB
-       430201, // BHT0*BBCMB*TOF0
-       430211, // BHT0*BBCMB*TOF0
-       430202, // BHT0*VPD
-       430222, // BHT0*VPD
-       430232, // BHT0*VPD
-       430203, // BHT1*VPDMB
-       430223, // BHT1*VPDMB
-       430243, // BHT1*VPDMB
-       430204, // BHT2
-       430207, // BHT2*BBCMB
-       430216, // BHT3
-       430236  // BHT3
-   }; // pp510 GeV (Run13)
+Int_t Pico::mTriggerId[nTrigger] = {
+  430001, // VPDMB
+  430011, // VPDMB
+  430021, // VPDMB
+  430031, // VPDMB
+  430005, // BBCMB
+  430015, // BBCMB
+  430004, // ZDCMB
+  430201, // BHT0*BBCMB*TOF0
+  430211, // BHT0*BBCMB*TOF0
+  430202, // BHT0*VPD
+  430222, // BHT0*VPD
+  430232, // BHT0*VPD
+  430203, // BHT1*VPDMB
+  430223, // BHT1*VPDMB
+  430243, // BHT1*VPDMB
+  430204, // BHT2
+  430207, // BHT2*BBCMB
+  430216, // BHT3
+  430236  // BHT3
+}; // Run13 pp510 GeV st_physics
+
+Int_t Pico::mTriggerIdMtd[nTriggerMtd] = {
+  430103,    // dimuon
+  430113,    // dimuon
+  430102,    // e-mu 
+  430112,    // e-mu
+  430122,    // e-mu
+  430101,    // single-muon
+  430111     // single-muon
+}; // Run13 pp510 GeV st_mtd
 */
 
 

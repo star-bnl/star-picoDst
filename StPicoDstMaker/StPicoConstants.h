@@ -36,8 +36,8 @@
 //     nTrigger = 5 // Run11 27 GeV
 //     nTrigger = 7 // Run11 200 GeV
 //     nTrigger = 16 // Run12 pp200 GeV
-//     nTrigger = 19 // Run13 pp510 GeV
-//     nTrigger = 23 // Run14 AuAu 200GeV MTD
+//     nTrigger = 19, // Run13 pp510 GeV st_physics
+//     nTriggerMtd = 7 // Run13 pp510 GeV st_mtd
     nTrigger    = 25, // Run14 AuAu 200GeV st_physics
     nTriggerMtd = 18 // Run14 AuAu 200GeV st_mtd
   };
