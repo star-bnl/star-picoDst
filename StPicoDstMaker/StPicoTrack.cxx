@@ -19,7 +19,7 @@ StPicoTrack::StPicoTrack()
 // t - the global track.  p - the associated primary track from the first primary vertex
 /////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowFlag, double B)
+StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowFlag, double B, StDcaGeometry* dcaG)
 {
   Clear();
   if(!t || t->type()!=global || (p && ( p->type()!=primary || p->id()!=t->id() ) ) ) {
@@ -48,6 +48,7 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
     mNHitsMax  = (Char_t)(t->nHitsPoss(kTpcId));
   } else { // FTPC tracks
     if(mGMomentum.pseudoRapidity()>0.) {
+//  if(t->helix().momentum(B*kilogauss).pseudoRapidity()>0.) {
       mNHitsFit  = (UChar_t)(t->nHitsFit(kFtpcWestId)*q);
       mNHitsMax  = (Char_t)(t->nHitsPoss(kFtpcWestId));
     } else {
@@ -66,6 +67,16 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
 
   // Flow analysis
   mFlowFlag = (UChar_t)(flowFlag);
+
+  if(dcaG) {
+    const float* params = dcaG->params();
+    const float* errMatrix = dcaG->errMatrix();
+    for(int i=0;i<6;i++) mPar[i] = params[i];
+    for(int i=0;i<15;i++) mErrMatrix[i] = errMatrix[i];
+
+  } else {
+    cout << " This track doesn't have a dcaGeometry!!!!" << endl;
+  }
 
 #if 0
   if(mFlowFlag==others) {
@@ -117,11 +128,16 @@ void StPicoTrack::Clear(const Option_t* opt)
   mNSigmaKaon     = Pico::SHORTMAX;
   mNSigmaProton   = Pico::SHORTMAX;
   mNSigmaElectron = Pico::SHORTMAX;
+  for(int i=0;i<6;i++) mPar[i] = 0;
+  for(int i=0;i<15;i++) mErrMatrix[i] = 0;
+  
 }
 //----------------------------------------------------------------------------------
 void StPicoTrack::Print(const Char_t *option) const {
   if(strcmp(option,"tpc")==0 || strcmp(option,"")==0) {
-    LOG_INFO << "id=" << id() << " flowflag=" << flowFlag() << " chi2=" << chi2() << " dca=" << dca() << endm;
+    LOG_INFO << "id=" << id() << " flowflag=" << flowFlag() << " chi2=" << chi2() 
+             << " dca=" << dca() 
+             << endm;
     LOG_INFO << "gMom=" << gMom() << endm;
     LOG_INFO << "pMom=" << pMom() << endm;
     LOG_INFO << "Origin=" << origin() << endm;

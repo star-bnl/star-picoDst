@@ -30,8 +30,10 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
   mBField=ev->magneticField();
 
   mPrimaryVertex = ev->primaryVertexPosition();
+  mPrimaryVertexError = ev->primaryVertexErrors();
   if( mPrimaryVertex.x()==mPrimaryVertex.y()&&mPrimaryVertex.y()==mPrimaryVertex.z() ){
     mPrimaryVertex.set(-999.,-999.,-999.);
+    mPrimaryVertexError.set(0.,0.,0);
   }
 
   unsigned int triggerId = 0;

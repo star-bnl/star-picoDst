@@ -24,6 +24,7 @@ public:
   Int_t    fillId() const           { return (Int_t)mFillId; }
   Float_t  bField() const           { return mBField; }
   StThreeVectorF primaryVertex() const { return mPrimaryVertex; }
+  StThreeVectorF primaryVertexError() const { return mPrimaryVertexError; }
   Int_t    triggerWord() const      { return mTriggerWord; }
   Int_t    triggerWordMtd() const   { return mTriggerWordMtd; }
   Int_t    refMultPos() const       { return (Int_t)mRefMultPos; }
@@ -45,6 +46,7 @@ public:
   Int_t    refMult2() const           { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast+mRefMult2PosWest+mRefMult2NegWest); }
   Int_t    refMultHalfEast() const    { return (Int_t)(mRefMultHalfPosEast+mRefMultHalfNegEast); }
   Int_t    refMultHalfWest() const    { return (Int_t)(mRefMultHalfPosWest+mRefMultHalfNegWest); }
+  Int_t    grefMult() const           { return (Int_t)(mGRefMult); }
 
   Int_t    nVpdHitsEast() const     { return (Int_t)mNVpdHitsEast; }
   Int_t    nVpdHitsWest() const     { return (Int_t)mNVpdHitsWest; } 
@@ -128,6 +130,7 @@ protected: //these are written out
   Float_t        mBField;          // B field in kilogauss
   StThreeVectorF mPrimaryVertex;   // primary Vertex (1st)
   StThreeVectorF mSecondVertex;    // second Vertex position (for study)
+  StThreeVectorF mPrimaryVertexError; // vertex error
   UInt_t         mTriggerWord;     // self-defined trigger word - see code for details
   UInt_t         mTriggerWordMtd;  // Added in Run14, st_mtd trigger
   UShort_t       mRefMultFtpcEast; // FTPC refMult east

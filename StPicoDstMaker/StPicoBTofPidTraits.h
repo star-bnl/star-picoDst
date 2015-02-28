@@ -18,7 +18,7 @@ class StPicoBTofPidTraits : public TObject{
   Float_t btofBeta() const       { return (Float_t)mBTofBeta/20000.; }
   Float_t btofYLocal() const     { return (Float_t)mBTofYLocal/1000.; }
   Float_t btofZLocal() const     { return (Float_t)mBTofZLocal/1000.; }  
-  StThreeVectorF btofHisPos() const { return StThreeVectorF(mBTofHitPosX/100., mBTofHitPosY/100., mBTofHitPosZ/100.); }  
+  StThreeVectorF btofHitPos() const { return StThreeVectorF(mBTofHitPosX/100., mBTofHitPosY/100., mBTofHitPosZ/100.); }  
 
  private:
   Short_t  mTrackIndex;       // Index to the associated track in the event

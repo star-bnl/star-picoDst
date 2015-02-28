@@ -3,6 +3,7 @@
 
 class StMuTrack;
 class StPicoDst;
+class StDcaGeometry;
 
 #include "TObject.h"
 #include "StThreeVectorF.hh"
@@ -17,7 +18,7 @@ class StPicoTrack : public TObject {
  public:
   StPicoTrack();
   ~StPicoTrack();
-  StPicoTrack(StMuTrack *, StMuTrack *, float, int, double);
+  StPicoTrack(StMuTrack *, StMuTrack *, float, int, double, StDcaGeometry*);
   void    Clear(const Option_t *opt="");
   virtual void Print(const Char_t *option = "") const;  ///< Print track info
             
@@ -35,12 +36,16 @@ class StPicoTrack : public TObject {
   Int_t   nHitsFit() const       { return (mNHitsFit>0) ? (Int_t)mNHitsFit : (Int_t)(-1*mNHitsFit); }
   Int_t   nHitsMax() const       { return (Int_t)mNHitsMax; }
   Int_t   nHitsDedx() const      { return (Int_t)mNHitsDedx; }
+  Int_t   nHitsMapHFT() const    { return (Int_t)mNHitsMapHFT; }
   Float_t dEdx() const           { return (Float_t)mDedx/1000.; }
   Float_t nSigmaPion() const     { return (Float_t)mNSigmaPion/100.; }
   Float_t nSigmaKaon() const     { return (Float_t)mNSigmaKaon/100.; }
   Float_t nSigmaProton() const   { return (Float_t)mNSigmaProton/100.; }
   Float_t nSigmaElectron() const { return (Float_t)mNSigmaElectron/100.; }
-  
+
+  const Float_t* params() const     { return mPar; }
+  const Float_t* errMatrix() const  { return mErrMatrix; }
+    
   // pid traits
   void    setEmcPidTraitsIndex(Int_t index)  { mEmcPidTraitsIndex = (Short_t)index;  }
   Int_t   emcPidTraitsIndex() const          { return (Int_t)mEmcPidTraitsIndex;     }
@@ -73,7 +78,35 @@ class StPicoTrack : public TObject {
   Short_t  mNSigmaProton;     // nsigmaP * 100
   Short_t  mNSigmaElectron;   // nsigmaE * 100
   UChar_t  mNHitsMapHFT;      // the hit map in all HFT layers
-
+  
+  // DcaGeometry
+  /*
+  /// signed impact parameter; Signed in such a way that:
+  ///     x =  -impact*sin(Psi)
+  ///     y =   impact*cos(Psi)
+  Float_t  mImp;
+  ///  Z-coordinate of this track (reference plane)
+  Float_t  mZ;
+  ///  Psi angle of the track
+  Float_t  mPsi;
+  /// signed invert pt [sign = sign(-qB)]
+  Float_t  mPti;
+  /// tangent of the track momentum dip angle
+  Float_t  mTan;
+  /// signed curvature
+  Float_t  mCurv;
+  */
+  /// pars
+  Float_t  mPar[6];                                            
+  /// pars errors
+  Float_t  mErrMatrix[15];
+  /*
+  Float_t  mImpImp;
+  Float_t  mZImp, mZZ;
+  Float_t  mPsiImp, mPsiZ, mPsiPsi;
+  Float_t  mPtiImp, mPtiZ, mPtiPsi, mPtiPti;
+  Float_t  mTanImp, mTanZ, mTanPsi, mTanPti, mTanTan;
+  */                     
   // pidTraits
   Short_t  mEmcPidTraitsIndex;  // index of the EMC  pidTratis in the event
   Short_t  mBTofPidTraitsIndex; // index of the BTOF pidTratis in the event

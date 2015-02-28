@@ -63,6 +63,7 @@
 #include "StTriggerUtilities/Eemc/StEemcTriggerSimu.h"
 #include "StTriggerUtilities/Emc/StEmcTriggerSimu.h"
 #include "StTriggerData.h"
+#include "StDcaGeometry.h"
 
 ClassImp(StPicoDstMaker)
 
@@ -640,8 +641,11 @@ void StPicoDstMaker::fillTracks() {
 	  continue;
       }
 
+    if(gTrk->index2Cov()<0) continue;
+    StDcaGeometry *dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
+    if(!dcaG) { cout << "No dca Geometry for this track !!! " << i << endm; }
     int counter = mPicoArrays[picoTrack]->GetEntries();
-    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, phi_wgt_read, flowFlag, mBField);
+    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, phi_wgt_read, flowFlag, mBField, dcaG);
 
     if(iPhi>=nEW*nDet*nPhi) 
       {
