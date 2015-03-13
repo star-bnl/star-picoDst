@@ -27,33 +27,33 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
   } else {
   mId        = (UShort_t)t->id();
   mChi2      = (t->chi2()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(t->chi2()*1000.));
-  mGMomentum = t->helix().momentum(B*kilogauss);
+//  mGMomentum = t->helix().momentum(B*kilogauss);
   if(p) {
     mPMomentum = p->p();
-    mChi2Prob  = (p->chi2prob()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(p->chi2prob()*1000.));
+//    mChi2Prob  = (p->chi2prob()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(p->chi2prob()*1000.));
   } else {
     mPMomentum.set(0.,0.,0.);
-    mChi2Prob = Pico::USHORTMAX ;
+//    mChi2Prob = Pico::USHORTMAX ;
   }
-  StThreeVectorF o = t->helix().origin();
-  mOriginX   = (fabs(o.x()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(o.x()*100.));
-  mOriginY   = (fabs(o.y()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(o.y()*100.));
-  mOriginZ   = (fabs(o.z()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(o.z()*100.));
+//  StThreeVectorF o = t->helix().origin();
+//  mOriginX   = (fabs(o.x()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(o.x()*100.));
+//  mOriginY   = (fabs(o.y()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(o.y()*100.));
+//  mOriginZ   = (fabs(o.z()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(o.z()*100.));
   int q      = t->charge();
-  mGDca      = (t->dcaGlobal().mag()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(t->dcaGlobal().mag()*1000.));
+//  mGDca      = (t->dcaGlobal().mag()*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(t->dcaGlobal().mag()*1000.));
   mDedx      = (t->dEdx()*1e6*1000.>Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(t->dEdx()*1e6*1000.));
   int flag = t->flag();
   if(flag/100<7) { // TPC tracks
     mNHitsFit  = (UChar_t)(t->nHitsFit(kTpcId)*q);
-    mNHitsMax  = (Char_t)(t->nHitsPoss(kTpcId));
+//    mNHitsMax  = (Char_t)(t->nHitsPoss(kTpcId));
   } else { // FTPC tracks
-    if(mGMomentum.pseudoRapidity()>0.) {
-//  if(t->helix().momentum(B*kilogauss).pseudoRapidity()>0.) {
+//    if(mGMomentum.pseudoRapidity()>0.) {
+  if(t->helix().momentum(B*kilogauss).pseudoRapidity()>0.) {
       mNHitsFit  = (UChar_t)(t->nHitsFit(kFtpcWestId)*q);
-      mNHitsMax  = (Char_t)(t->nHitsPoss(kFtpcWestId));
+//      mNHitsMax  = (Char_t)(t->nHitsPoss(kFtpcWestId));
     } else {
       mNHitsFit  = (UChar_t)(t->nHitsFit(kFtpcEastId)*q);
-      mNHitsMax  = (Char_t)(t->nHitsPoss(kFtpcEastId));
+//      mNHitsMax  = (Char_t)(t->nHitsPoss(kFtpcEastId));
     }
   }
   mNHitsDedx = (Char_t)(t->nHitsDedx());
@@ -66,7 +66,7 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
   mNHitsMapHFT = map0>>1 & 0x7F;  // see hitMap definition in StTrackTopologyMap
 
   // Flow analysis
-  mFlowFlag = (UChar_t)(flowFlag);
+//  mFlowFlag = (UChar_t)(flowFlag);
 
   if(dcaG) {
     const float* params = dcaG->params();
@@ -110,19 +110,19 @@ void StPicoTrack::Clear(const Option_t* opt)
 {
   mId = 0;
   mChi2 = Pico::USHORTMAX;
-  mChi2Prob = Pico::USHORTMAX;
-  mGMomentum.set(0.,0.,0.);
+//  mChi2Prob = Pico::USHORTMAX;
+//  mGMomentum.set(0.,0.,0.);
   mPMomentum.set(0.,0.,0.);
-  mFlowFlag = 0;
+//  mFlowFlag = 0;
 //  mQXi = 0.;
 //  mQYi = 0.;
-  mOriginX = 0;
-  mOriginY = 0;
-  mOriginZ = 0;
-  mGDca = Pico::USHORTMAX;
+//  mOriginX = 0;
+//  mOriginY = 0;
+//  mOriginZ = 0;
+//  mGDca = Pico::USHORTMAX;
   mDedx = 0;
   mNHitsFit  = 0;
-  mNHitsMax  = 0;
+//  mNHitsMax  = 0;
   mNHitsDedx = 0;
   mNSigmaPion     = Pico::SHORTMAX;
   mNSigmaKaon     = Pico::SHORTMAX;
@@ -135,12 +135,14 @@ void StPicoTrack::Clear(const Option_t* opt)
 //----------------------------------------------------------------------------------
 void StPicoTrack::Print(const Char_t *option) const {
   if(strcmp(option,"tpc")==0 || strcmp(option,"")==0) {
-    LOG_INFO << "id=" << id() << " flowflag=" << flowFlag() << " chi2=" << chi2() 
-             << " dca=" << dca() 
+    LOG_INFO << "id=" << id() 
+// << " flowflag=" << flowFlag() 
+             << " chi2=" << chi2() 
+//             << " dca=" << dca() 
              << endm;
-    LOG_INFO << "gMom=" << gMom() << endm;
+//    LOG_INFO << "gMom=" << gMom() << endm;
     LOG_INFO << "pMom=" << pMom() << endm;
-    LOG_INFO << "Origin=" << origin() << endm;
+//    LOG_INFO << "Origin=" << origin() << endm;
 //    LOG_INFO << "Q vector=" << mQXi << " " << mQYi << endm;
     LOG_INFO << " nHitsFit = " << nHitsFit() << " nHitsdEdx = " << nHitsDedx() << endm;
     LOG_INFO << " nSigma Pi/K/P/E = " << nSigmaPion() << "/" << nSigmaKaon() << "/" << nSigmaProton() << "/" << nSigmaElectron() << endm;

@@ -47,7 +47,11 @@ public:
   Int_t    refMultHalfEast() const    { return (Int_t)(mRefMultHalfPosEast+mRefMultHalfNegEast); }
   Int_t    refMultHalfWest() const    { return (Int_t)(mRefMultHalfPosWest+mRefMultHalfNegWest); }
   Int_t    grefMult() const           { return (Int_t)(mGRefMult); }
-
+  Int_t    numberOfPxlInnerHits() const { return (Int_t)(mNHitsHFT[0]); }
+  Int_t    numberOfPxlOuterHits() const { return (Int_t)(mNHitsHFT[1]); }
+  Int_t    numberOfIstHits() const      { return (Int_t)(mNHitsHFT[2]); }
+  Int_t    numberOfSsdHits() const      { return (Int_t)(mNHitsHFT[3]); }
+        
   Int_t    nVpdHitsEast() const     { return (Int_t)mNVpdHitsEast; }
   Int_t    nVpdHitsWest() const     { return (Int_t)mNVpdHitsWest; } 
   Int_t    nT0() const              { return (Int_t)mNT0; }
@@ -146,6 +150,7 @@ protected: //these are written out
   UShort_t       mRefMultHalfNegWest ;// TPC refMultHalf neg (eta>0)
   UShort_t       mRefMultHalfPosWest ;// TPC refMultHalf pos (eta>0)
   UShort_t       mGRefMult;
+  UShort_t       mNHitsHFT[4];
   
   UChar_t        mNVpdHitsEast;    // Vpd Hits east;
   UChar_t        mNVpdHitsWest;    // vpd hits west;

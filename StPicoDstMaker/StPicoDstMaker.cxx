@@ -535,11 +535,28 @@ Int_t StPicoDstMaker::MakeWrite() {
   if(!mMuDst) {
     LOG_WARN << " No MuDst " << endm; return kStWarn;
   }
+
   mMuEvent = mMuDst->event();
   if(!mMuEvent) {
     LOG_WARN << " No MuEvent " << endm; return kStWarn;
   }
   mBTofHeader = mMuDst->btofHeader();
+
+  //////////////////////////////////////
+  // select the right vertex using VPD
+  /////////////////////////////////////
+  Float_t vzVpd = -999;
+  if(mBTofHeader) vzVpd = mBTofHeader->vpdVz();
+  for(unsigned int i=0;i<mMuDst->numberOfPrimaryVertices();i++) {
+    StMuPrimaryVertex *vtx = mMuDst->primaryVertex(i);
+    if(!vtx) continue;
+    Float_t vz = vtx->position().z();
+    if(fabs(vzVpd)<100 && fabs(vzVpd-vz)<3.) {
+      mMuDst->setVertexIndex(i);
+      break;
+    }
+  }
+  /////////////////////////////////////
 
   if(mEmcMode){
     mEmcCollection = mMuDst->emcCollection();
@@ -611,7 +628,8 @@ void StPicoDstMaker::fillTracks() {
     StMuTrack *pTrk = (index>=0) ? (StMuTrack *)mMuDst->primaryTracks(index) : 0;
     if(mCreatingPhiWgt && !pTrk) continue;
 
-    Int_t flowFlag = mPicoCut->flowFlag(pTrk);
+//    Int_t flowFlag = mPicoCut->flowFlag(pTrk);
+    Int_t flowFlag = 1;
     Float_t Vz = mMuDst->primaryVertex()->position().z();
     Int_t iPhi = phiBin(flowFlag, pTrk, Vz);
     float phi_wgt_read = 1.;
@@ -1182,7 +1200,7 @@ void StPicoDstMaker::fillMtdHits() {
 	}
     }
 }
-
+/*
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillV0() {
   int nTracks = mPicoArrays[picoTrack]->GetEntries();
@@ -1218,6 +1236,7 @@ void StPicoDstMaker::fillV0() {
     } // end j
   } // end i
 }
+*/
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::centrality(int refMult) {
   for(int i=0;i<nCen;i++) {

@@ -44,8 +44,18 @@ StPicoV0::StPicoV0(StPicoTrack *t_pos, StPicoTrack *t_neg, StMuEvent *ev, Int_t 
     double B = ev->magneticField();
     StThreeVectorF primaryVertex = ev->primaryVertexPosition();
 
+    StDcaGeometry *dcaG_pos = new StDcaGeometry();
+    dcaG_pos->set(t_pos->params(),t_pos->errMatrix());
+    StPhysicalHelixD helix_pos = dcaG_pos->helix();
+
+    StDcaGeometry *dcaG_neg = new StDcaGeometry();
+    dcaG_neg->set(t_neg->params(),t_neg->errMatrix());
+    StPhysicalHelixD helix_neg = dcaG_neg->helix();
+
+/*
     StPhysicalHelixD helix_pos(t_pos->gMom(), t_pos->origin(), B*kilogauss, t_pos->charge());
     StPhysicalHelixD helix_neg(t_neg->gMom(), t_neg->origin(), B*kilogauss, t_neg->charge());
+*/
 
     double res = 3.0;  // allow resolution
     double xc_pos = helix_pos.xcenter();
@@ -84,6 +94,9 @@ StPicoV0::StPicoV0(StPicoTrack *t_pos, StPicoTrack *t_neg, StMuEvent *ev, Int_t 
     }
 
     }
+
+    delete dcaG_pos;
+    delete dcaG_neg;
   }
 }
 

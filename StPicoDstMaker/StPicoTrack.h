@@ -24,17 +24,17 @@ class StPicoTrack : public TObject {
             
   Int_t   id() const             { return (Int_t)mId; }
   Float_t chi2() const           { return (Float_t)mChi2/1000.; }
-  Float_t chi2prob() const       { return (Float_t)mChi2Prob/1000.;}
-  StThreeVectorF gMom() const    { return mGMomentum; }
+//  Float_t chi2prob() const       { return (Float_t)mChi2Prob/1000.;}
+//  StThreeVectorF gMom() const    { return mGMomentum; }
   StThreeVectorF pMom() const    { return mPMomentum; }
-  StThreeVectorF origin() const  { return StThreeVectorF(mOriginX/100.,mOriginY/100.,mOriginZ/100.); }
-  Int_t   flowFlag() const       { return (Int_t)mFlowFlag; }
+//  StThreeVectorF origin() const  { return StThreeVectorF(mOriginX/100.,mOriginY/100.,mOriginZ/100.); }
+//  Int_t   flowFlag() const       { return (Int_t)mFlowFlag; }
 //  TVector2 Qi() const            { return TVector2(mQXi, mQYi); }
-  TVector2 Qi() const            { return TVector2(-9999., -9999.); }
-  Float_t dca() const            { return (Float_t)mGDca/1000.; }
+//  TVector2 Qi() const            { return TVector2(-9999., -9999.); }
+//  Float_t dca() const            { return (Float_t)mGDca/1000.; }
   Short_t charge() const         { return (mNHitsFit>0) ? +1 : -1; }
   Int_t   nHitsFit() const       { return (mNHitsFit>0) ? (Int_t)mNHitsFit : (Int_t)(-1*mNHitsFit); }
-  Int_t   nHitsMax() const       { return (Int_t)mNHitsMax; }
+//  Int_t   nHitsMax() const       { return (Int_t)mNHitsMax; }
   Int_t   nHitsDedx() const      { return (Int_t)mNHitsDedx; }
   Int_t   nHitsMapHFT() const    { return (Int_t)mNHitsMapHFT; }
   Float_t dEdx() const           { return (Float_t)mDedx/1000.; }
@@ -59,19 +59,19 @@ class StPicoTrack : public TObject {
  protected:
   UShort_t mId;               // track Id
   UShort_t mChi2;             // chi2*1000
-  UShort_t mChi2Prob;         // chi2prob*1000
-  StThreeVectorF mGMomentum;  // Global momentum
+//  UShort_t mChi2Prob;         // chi2prob*1000
+//  StThreeVectorF mGMomentum;  // Global momentum
   StThreeVectorF mPMomentum;  // primary momentum, (0.,0.,0.) if none
-  UChar_t  mFlowFlag;         // 1 - tpc EP, 2 - ftpc EP, 0 - none
+//  UChar_t  mFlowFlag;         // 1 - tpc EP, 2 - ftpc EP, 0 - none
 //  Float_t  mQXi;              //
 //  Float_t  mQYi;              // Q-vector for this track
-  Short_t  mOriginX;          // global helix origin X * 100
-  Short_t  mOriginY;          // global helix origin Y * 100 
-  Short_t  mOriginZ;          // global helix origin Z * 100 
-  UShort_t mGDca;             // global dca*1000
+//  Short_t  mOriginX;          // global helix origin X * 100
+//  Short_t  mOriginY;          // global helix origin Y * 100 
+//  Short_t  mOriginZ;          // global helix origin Z * 100 
+//  UShort_t mGDca;             // global dca*1000
   UShort_t mDedx;             // dEdx*1000
   Char_t   mNHitsFit;         // q*nHitsFit
-  UChar_t  mNHitsMax;         // nHitsMax
+//  UChar_t  mNHitsMax;         // nHitsMax
   UChar_t  mNHitsDedx;        // nHitsDedx
   Short_t  mNSigmaPion;       // nsigmaPi * 100
   Short_t  mNSigmaKaon;       // nsigmaK * 100

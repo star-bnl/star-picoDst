@@ -61,6 +61,11 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
   mRefMultHalfNegWest = (UShort_t)StPicoUtilities::refMultHalf(0, 1, muDst);
   mRefMultHalfPosWest = (UShort_t)StPicoUtilities::refMultHalf(1, 1, muDst);
   mGRefMult = (UShort_t)ev->grefmult();
+  mNHitsHFT[0] = (UShort_t)ev->numberOfPxlInnerHits();
+  mNHitsHFT[1] = (UShort_t)ev->numberOfPxlOuterHits();
+  mNHitsHFT[2] = (UShort_t)ev->numberOfIstHits();
+  mNHitsHFT[3] = (UShort_t)ev->numberOfSsdHits();
+
 
   LOG_DEBUG << "Tmp: Neg: RefMult(org) = " << mRefMultNeg << "  (new) = " << StPicoUtilities::refMult(0, muDst)
     << " refmult2 = " << mRefMult2NegEast+ mRefMult2PosEast+ mRefMult2NegWest+ mRefMult2PosWest

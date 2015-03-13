@@ -101,7 +101,7 @@ class StPicoDstMaker : public StMaker {
 
    void fillTracks();
    void fillEvent();
-   void fillV0();
+//   void fillV0();
    void fillEmcTrigger();
    void fillMtdTrigger();
    void fillBTOWHits();

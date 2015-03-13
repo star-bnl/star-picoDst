@@ -101,7 +101,7 @@ bool StPicoCut::passTrack( StMuTrack *t )
 
   return kTRUE;
 }
-
+/*
 //----------------------------------------------------------------------------------
 bool StPicoCut::passV0Daughter( StPicoTrack *t )
 {
@@ -255,3 +255,4 @@ int StPicoCut::flowFlag( StMuTrack *p )
 
   return others;
 }
+*/
