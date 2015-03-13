@@ -10,6 +10,8 @@ class StDcaGeometry;
 #include "TVector2.h"
 #include <stdio.h>
 #include <math.h>
+#include "StEvent/StDcaGeometry.h"
+
 
 // Macro to control EMC variables
 #define EMCON 1
@@ -45,6 +47,11 @@ class StPicoTrack : public TObject {
 
   const Float_t* params() const     { return mPar; }
   const Float_t* errMatrix() const  { return mErrMatrix; }
+
+  StDcaGeometry dcaGeometry() const;
+  StPhysicalHelixD helix() const;
+  Bool_t isHFTTrack() const { return (mNHitsMapHFT>>0 & 0x1) && (mNHitsMapHFT>>1 & 0x3) && (mNHitsMapHFT>>3 & 0x3); }
+  
     
   // pid traits
   void    setEmcPidTraitsIndex(Int_t index)  { mEmcPidTraitsIndex = (Short_t)index;  }
@@ -117,4 +124,15 @@ class StPicoTrack : public TObject {
   ClassDef(StPicoTrack, 1)
 };
 
+inline StDcaGeometry StPicoTrack::dcaGeometry() const
+{
+  StDcaGeometry a;
+  a.set(mPar, mErrMatrix);
+  return a;
+}
+
+inline StPhysicalHelixD StPicoTrack::helix() const
+{
+  return dcaGeometry().helix();
+}
 #endif
