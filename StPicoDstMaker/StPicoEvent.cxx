@@ -212,11 +212,6 @@ float StPicoEvent::energy() const
     if(day()>=112&&day()<=122) return 19.6;
     if(day()>=172&&day()<=179) return 27.;
     if(day()>=123&&day()<=171) return 200.;
-  } else if(year()==2013) {
-    return 510.;
-  } else if(year()==2014) {
-    if(day()>=046&&day()<=070) return 14.5;
-    if(day()>=077) return 200.;
   }
   return 0.0;
 }
@@ -244,12 +239,6 @@ bool StPicoEvent::isMinBias() const  // continue to be updated
     } else if(fabs(energy()-200.)<1.e-4) {
       return ( mTriggerWord>>2 & 0x1f );  // return vpd-minbias-protected
 //      return kTRUE;     // 200 GeV, only minbias
-    }
-  } else if(year()==2014) {
-    if(fabs(energy()-14.5)<1.e-4) {
-      return ( (mTriggerWord>>2 & 0x1) || (mTriggerWord>>5 & 0x1) );
-    } else if(fabs(energy()-200.)<1.e-4) {
-      return ( mTriggerWord & 0x1f );
     }
   }
 
@@ -292,10 +281,6 @@ bool StPicoEvent::isCentral() const  // continue to be updated
     } else if(fabs(energy()-62.4)<1.e-4) { 
       return ( mTriggerWord>>4 & 0x1 );    
     }
-  } else if(year()==2014) {
-    if(fabs(energy()-200.)<1.e-4) {
-      return ( mTriggerWord>>18 & 0x1 );
-    }
   }
   return kFALSE;
 }
@@ -321,10 +306,6 @@ bool StPicoEvent::isHT() const    // continue to be updated
     } else if(fabs(energy()-200.)<1.-4) {
       return kFALSE;
     }
-  } else if(year()==2014) {
-    if(fabs(energy()-200.)<1.e-4) { 
-      return ( mTriggerWord>>19 & 0xf );
-    }
   }
   return kFALSE;
 }
@@ -336,7 +317,7 @@ bool StPicoEvent::isHT11() const    // continue to be updated
     if(fabs(energy()-62.4)<1.e-4) {
       return ( mTriggerWord>>5 & 0x7 );
     } 
-  }
+  }   
   return kTRUE;  // default HT trigger ht-11
 } 
     
@@ -347,23 +328,9 @@ bool StPicoEvent::isHT15() const    // continue to be updated
     if(fabs(energy()-62.4)<1.e-4) {
       return ( mTriggerWord>>8 & 0x1 );
     } 
-  } else if(year()==2014) {
-    if(fabs(energy()-200.)<1.e-4) { 
-      return ( mTriggerWord>>19 & 0x3 );
-    }
-  }              
+  }   
   return kFALSE;
 } 
-bool StPicoEvent::isHT18() const    // continue to be updated
-{
-  if(!isHT()) return kFALSE;
-  if(year()==2014) {
-    if(fabs(energy()-200.)<1.e-4) {
-      return ( mTriggerWord>>21 & 0x3 );
-    }
-  }
-  return kFALSE;
-}
 
 bool StPicoEvent::isMtdTrig() const    // continue to be updated
 { 

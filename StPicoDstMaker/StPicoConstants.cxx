@@ -172,8 +172,8 @@ Int_t Pico::mTriggerIdMtd[nTriggerMtd] = {
 }; // Run14 AuAu200 GeV StMtd Stream
 
 
-   Float_t Pico::mVzMax = 200;
-   Float_t Pico::mVrMax =   10;
+   Float_t Pico::mVzMax = 100;
+   Float_t Pico::mVrMax =   2;
    Int_t Pico::mRefMultMin = 0;                    // >=
 
   // track selection

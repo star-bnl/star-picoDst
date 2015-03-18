@@ -985,15 +985,8 @@ void StPicoDstMaker::fillEmcTrigger() {
     int adc = trigSimu->bemc->barrelHighTowerAdc(towerId);    
 //    if(towerId==4684) cout << " Id = " << towerId << " status = " << status << " adc = " << adc << endl;
     int flag = 0;
-    if( ( trgId>>7 & 0x3 ) || ( trgId>>9 & 0x7) ) { // BHT0*BBCMB*TOF0 or BHT0*VPD
-      if(adc>bht0) {
-	LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
-	fireBHT0 = true;
-        flag |= 1<<0;
-      }
-    }
 
-    if( ( trgId>>12 & 0x7 ) ) { // BHT1*VPDMB
+    if( ( trgId>>19 & 0x3 ) ) { // BHT1*VPDMB-30
       if(adc>bht1) {
         LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
         fireBHT1 = true;
@@ -1001,7 +994,7 @@ void StPicoDstMaker::fillEmcTrigger() {
       }
     }
 
-    if( ( trgId>>15 & 0x1 ) || ( trgId>>16 & 0x1) ) { // BHT2 or BHT2*BBCMB
+    if( ( trgId>>21 & 0x3 ) ) { // BHT2*VPDMB-30
       if(adc>bht2) {
         LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
         fireBHT2 = true;
@@ -1009,7 +1002,7 @@ void StPicoDstMaker::fillEmcTrigger() {
       }
     }
 
-    if( ( trgId>>17 & 0x3 ) ) { // BHT3
+    if( ( trgId>>23 & 0x3 ) ) { // BHT3
       if(adc>bht3) {
         LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
         fireBHT3 = true; 
@@ -1024,16 +1017,14 @@ void StPicoDstMaker::fillEmcTrigger() {
     }
 
   }
-  if( ( ( trgId>>7 & 0x3 ) || ( trgId>>9 & 0x7) ) && !fireBHT0 ) {
-    LOG_WARN << " something is wrong with the bht0 in this event!!! " << endm;
-  }
-  if( ( ( trgId>>12 & 0x7 ) ) && !fireBHT1 ) {
+
+  if( ( ( trgId>>19 & 0x3 ) ) && !fireBHT1 ) {
     LOG_WARN << " something is wrong with the bht1 in this event!!! " << endm;
   }
-  if( ( ( trgId>>15 & 0x1 ) || ( trgId>>16 & 0x1) ) && !fireBHT2 ) {
+  if( ( ( trgId>>21 & 0x3 ) ) && !fireBHT2 ) {
     LOG_WARN << " something is wrong with the bht2 in this event!!! " << endm;
   }
-  if( ( ( trgId>>17 & 0x3 ) ) && !fireBHT3 ) {
+  if( ( ( trgId>>23 & 0x3 ) ) && !fireBHT3 ) {
     LOG_WARN << " something is wrong with the bht3 in this event!!! " << endm;
   }
   

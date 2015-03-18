@@ -117,7 +117,6 @@ public:
   bool     isHT() const;    
   bool     isHT11() const; 
   bool     isHT15() const; 
-  bool     isHT18() const;
   bool     isMtdTrig() const;
   bool     isDiMuon() const;
   bool     isDiMuonHFT() const;
