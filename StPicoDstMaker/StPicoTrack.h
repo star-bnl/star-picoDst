@@ -12,7 +12,6 @@ class StDcaGeometry;
 #include <math.h>
 #include "StEvent/StDcaGeometry.h"
 
-
 // Macro to control EMC variables
 #define EMCON 1
 
@@ -39,6 +38,8 @@ class StPicoTrack : public TObject {
 //  Int_t   nHitsMax() const       { return (Int_t)mNHitsMax; }
   Int_t   nHitsDedx() const      { return (Int_t)mNHitsDedx; }
   Int_t   nHitsMapHFT() const    { return (Int_t)mNHitsMapHFT; }
+  Int_t   firstTpcHitRow() const { return (Int_t)mFirstTpcHitRow; }
+  Int_t   lastTpcHitRow() const  { return (Int_t)mLastTpcHitRow; }  
   Float_t dEdx() const           { return (Float_t)mDedx/1000.; }
   Float_t nSigmaPion() const     { return (Float_t)mNSigmaPion/100.; }
   Float_t nSigmaKaon() const     { return (Float_t)mNSigmaKaon/100.; }
@@ -51,8 +52,7 @@ class StPicoTrack : public TObject {
   StDcaGeometry dcaGeometry() const;
   StPhysicalHelixD helix() const;
   Bool_t isHFTTrack() const { return (mNHitsMapHFT>>0 & 0x1) && (mNHitsMapHFT>>1 & 0x3) && (mNHitsMapHFT>>3 & 0x3); }
-  
-    
+          
   // pid traits
   void    setEmcPidTraitsIndex(Int_t index)  { mEmcPidTraitsIndex = (Short_t)index;  }
   Int_t   emcPidTraitsIndex() const          { return (Int_t)mEmcPidTraitsIndex;     }
@@ -85,6 +85,8 @@ class StPicoTrack : public TObject {
   Short_t  mNSigmaProton;     // nsigmaP * 100
   Short_t  mNSigmaElectron;   // nsigmaE * 100
   UChar_t  mNHitsMapHFT;      // the hit map in all HFT layers
+  UChar_t  mFirstTpcHitRow;   // first tpc hit row number
+  UChar_t  mLastTpcHitRow;    // last tpc hit row number
   
   // DcaGeometry
   /*
@@ -130,9 +132,9 @@ inline StDcaGeometry StPicoTrack::dcaGeometry() const
   a.set(mPar, mErrMatrix);
   return a;
 }
-
+      
 inline StPhysicalHelixD StPicoTrack::helix() const
 {
   return dcaGeometry().helix();
-}
+}        
 #endif

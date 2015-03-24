@@ -63,7 +63,41 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
   mNSigmaElectron = (fabs(t->nSigmaElectron()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->nSigmaElectron()*100.));
 
   unsigned int map0 = t->topologyMap().data(0);
+  unsigned int map1 = t->topologyMap().data(1);
   mNHitsMapHFT = map0>>1 & 0x7F;  // see hitMap definition in StTrackTopologyMap
+  mFirstTpcHitRow = 0;
+  mLastTpcHitRow = 0;
+  for(int row=1;row<=24;row++) {
+    if(map0>>(row+7) & 0x1) {
+      mFirstTpcHitRow = row; break;      
+    }
+  }
+  if(mFirstTpcHitRow==0) {
+    for(int row=25;row<=45;row++) {
+      if(map1>>(row-25) & 0x1) {
+        mFirstTpcHitRow = row; break;
+      }
+    }
+  }
+  for(int row=45;row>=25;row--) {
+    if(map1>>(row-25) & 0x1) {
+      mLastTpcHitRow = row; break;
+    }
+  }
+  if(mLastTpcHitRow==0) {
+    for(int row=24;row>=1;row--) {         
+      if(map0>>(row+7) & 0x1) {   
+        mLastTpcHitRow = row; break;
+      }
+    }
+  }
+
+/*
+  map0 &= 0xffffff00;
+  map1 &= 0x001fffff;
+  cout << " map = " << hex << map0 << "\t" << hex << map1 << endl;
+  cout << "  first/last tpc hit row = " << dec << (Int_t)mFirstTpcHitRow << "\t" << dec << (Int_t)mLastTpcHitRow << endl;
+*/
 
   // Flow analysis
 //  mFlowFlag = (UChar_t)(flowFlag);
@@ -124,13 +158,18 @@ void StPicoTrack::Clear(const Option_t* opt)
   mNHitsFit  = 0;
 //  mNHitsMax  = 0;
   mNHitsDedx = 0;
+  mNHitsMapHFT = 0;
+  mFirstTpcHitRow = 0;
+  mLastTpcHitRow = 0;  
   mNSigmaPion     = Pico::SHORTMAX;
   mNSigmaKaon     = Pico::SHORTMAX;
   mNSigmaProton   = Pico::SHORTMAX;
   mNSigmaElectron = Pico::SHORTMAX;
   for(int i=0;i<6;i++) mPar[i] = 0;
   for(int i=0;i<15;i++) mErrMatrix[i] = 0;
-  
+  mEmcPidTraitsIndex = -1;
+  mBTofPidTraitsIndex = -1;
+  mMtdPidTraitsIndex = -1;  
 }
 //----------------------------------------------------------------------------------
 void StPicoTrack::Print(const Char_t *option) const {
