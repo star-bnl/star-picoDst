@@ -1,7 +1,7 @@
 
 #include <bitset>
 #include "TRegexp.h"
-#include "StChain.h"
+#include "StChain/StChain.h"
 #include "StPicoDstMaker.h"
 #include "StPicoDst.h"
 #include "StPicoEvent.h"
@@ -18,7 +18,7 @@
 #include "StPicoArrays.h"
 #include "StPicoCut.h"
 #include "StPicoConstants.h"
-#include "THack.h"
+#include "StarRoot/THack.h"
 #include "TChain.h"
 #include "TTree.h"
 #include "TH1D.h"
@@ -32,7 +32,7 @@
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 #include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
 #include "StMuDSTMaker/COMMON/StMuBTofPidTraits.h"
-#include "StBTofHeader.h"
+#include "StEvent/StBTofHeader.h"
 
 #include "StMuDSTMaker/COMMON/StMuMtdHit.h"
 #include "StMuDSTMaker/COMMON/StMuMtdPidTraits.h"
@@ -42,13 +42,13 @@
 #include "StMuDSTMaker/COMMON/StMuEmcPoint.h"
 #include "StEmcUtil/projection/StEmcPosition.h"
 //StEmc
-#include "StEmcCollection.h"
-#include "StEmcCluster.h"
-#include "StEmcDetector.h"
-#include "StEmcModule.h"
-#include "StEmcClusterCollection.h"
-#include "StEmcPoint.h"
-#include "StEmcRawHit.h"
+#include "StEvent/StEmcCollection.h"
+#include "StEvent/StEmcCluster.h"
+#include "StEvent/StEmcDetector.h"
+#include "StEvent/StEmcModule.h"
+#include "StEvent/StEmcClusterCollection.h"
+#include "StEvent/StEmcPoint.h"
+#include "StEvent/StEmcRawHit.h"
 #include "StEmcUtil/geometry/StEmcGeom.h"
 #include "StEmcUtil/others/emcDetectorName.h"
 #include "StEmcADCtoEMaker/StBemcData.h"
@@ -62,8 +62,8 @@
 #include "StTriggerUtilities/Bemc/StBemcTriggerSimu.h"
 #include "StTriggerUtilities/Eemc/StEemcTriggerSimu.h"
 #include "StTriggerUtilities/Emc/StEmcTriggerSimu.h"
-#include "StTriggerData.h"
-#include "StDcaGeometry.h"
+#include "StEvent/StTriggerData.h"
+#include "StEvent/StDcaGeometry.h"
 
 ClassImp(StPicoDstMaker)
 

@@ -8,8 +8,8 @@
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
-#include "StPhysicalHelixD.hh"
-#include "StLorentzVectorF.hh"
+#include "StarClassLibrary/StPhysicalHelixD.hh"
+#include "StarClassLibrary/StLorentzVectorF.hh"
 
 ClassImp(StPicoV0)
 
