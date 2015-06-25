@@ -983,7 +983,6 @@ void StPicoDstMaker::fillEmcTrigger() {
   LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
   for(int i=0;i<4;i++) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
   
-  bool fireBHT0 = false;
   bool fireBHT1 = false;
   bool fireBHT2 = false;
   bool fireBHT3 = false;
