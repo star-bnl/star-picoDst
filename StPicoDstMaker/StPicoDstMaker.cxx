@@ -338,6 +338,8 @@ Int_t StPicoDstMaker::openRead() {
           mChain->Add(line);
           nFile++;
         }
+
+        delete ftmp;
       }
     }
     LOG_INFO << " Total " << nFile << " files have been read in. " << endm;
