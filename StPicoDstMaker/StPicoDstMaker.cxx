@@ -331,9 +331,9 @@ Int_t StPicoDstMaker::openRead() {
       inputStream.getline(line,512);
       string aFile = line;      
       if (inputStream.good() && aFile.find(".picoDst.root")!=string::npos) {
-//        TFile *ftmp = new TFile(line);
-        TFile *ftmp = TFile::Open(line);
-        if(ftmp && ftmp->IsOpen() && ftmp->GetNkeys()) {
+
+        TFile ftmp(line);
+        if(!ftmp.IsZombie() && ftmp.GetNkeys()) {
           LOG_INFO << " Read in picoDst file " << line << endm;
           mChain->Add(line);
           nFile++;
