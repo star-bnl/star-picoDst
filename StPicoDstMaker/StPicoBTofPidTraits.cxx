@@ -3,7 +3,7 @@
 #include "StMuDSTMaker/COMMON/StMuBTofHit.h"
 #include "StMuDSTMaker/COMMON/StMuBTofPidTraits.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
-#include "StMessMgr.h"
+#include "St_base/StMessMgr.h"
 
 #include "StPicoConstants.h"
 #include "StPicoBTofPidTraits.h"

@@ -1,8 +1,8 @@
 #include <iostream>
 #include <bitset>
 
-#include "StTriggerData.h"
-#include "StMessMgr.h"
+#include "StEvent/StTriggerData.h"
+#include "St_base/StMessMgr.h"
 
 #include "StPicoMtdTrigger.h"
 
