@@ -1,6 +1,6 @@
 #ifndef STAR_StPicoDstMaker
 #define STAR_StPicoDstMaker
-#include "StMaker.h"
+#include "StChain/StMaker.h"
 #include "TClonesArray.h"
 class TFile;
 class TTree;
@@ -31,7 +31,7 @@ class StMcEvent;
 
 #include "StPicoConstants.h"
 #include "StPicoArrays.h"
-#include "StEmcRawHit.h"
+#include "StEvent/StEmcRawHit.h"
 #include <vector>
 #include <utility>
 #include <string>
