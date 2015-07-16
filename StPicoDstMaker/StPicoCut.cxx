@@ -1,9 +1,9 @@
-#include "StEvent/StEnumerations.h"
+#include "StEnumerations.h"
 #include "StPicoCut.h"
 #include "StPicoV0.h"
 #include "StPicoTrack.h"
 #include "StPicoConstants.h"
-#include "St_base/StMessMgr.h"
+#include "StMessMgr.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 

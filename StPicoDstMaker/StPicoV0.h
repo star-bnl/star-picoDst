@@ -5,7 +5,7 @@ class StPicoTrack;
 class StMuEvent;
 
 #include "TObject.h"
-#include "StarClassLibrary/StThreeVectorF.hh"
+#include "StThreeVectorF.hh"
 
 class StPicoV0 : public TObject {
  public:

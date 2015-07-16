@@ -1,5 +1,5 @@
 #include "TMath.h"
-#include "St_base/StMessMgr.h"
+#include "StMessMgr.h"
 
 #include "StPicoConstants.h"
 #include "StPicoEmcPidTraits.h"

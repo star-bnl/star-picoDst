@@ -1,7 +1,7 @@
 #include "StMuDSTMaker/COMMON/StMuMtdPidTraits.h"
 #include "StMuDSTMaker/COMMON/StMuMtdHit.h"
 #include "StarClassLibrary/PhysicalConstants.h"
-#include "St_base/StMessMgr.h"
+#include "StMessMgr.h"
 
 #include "StPicoConstants.h"
 #include "StPicoMtdPidTraits.h"

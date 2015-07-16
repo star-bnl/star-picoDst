@@ -1,5 +1,5 @@
 #include "StMuDSTMaker/COMMON/StMuMtdHit.h"
-#include "St_base/StMessMgr.h"
+#include "StMessMgr.h"
 
 #include "StPicoMtdHit.h"
 #include "StPicoConstants.h"

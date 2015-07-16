@@ -8,12 +8,12 @@ class StPicoDst;
 class StDcaGeometry;
 
 #include "TObject.h"
-#include "StarClassLibrary/StThreeVectorF.hh"
+#include "StThreeVectorF.hh"
 #include "TVector2.h"
 #include <stdio.h>
 #include <math.h>
 #include "StEvent/StDcaGeometry.h"
-#include "StarClassLibrary/PhysicalConstants.h"
+#include "PhysicalConstants.h"
 
 
 // Macro to control EMC variables

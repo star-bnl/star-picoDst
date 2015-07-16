@@ -8,7 +8,7 @@ class StMuPrimaryVertex;
 class StPicoDst;
 class StPicoDstMaker;
 class StBTofHeader;
-#include "StarClassLibrary/StThreeVectorF.hh"
+#include "StThreeVectorF.hh"
 #include "TVector2.h"
 
 class StPicoEvent : public TObject {

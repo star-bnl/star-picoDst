@@ -2,7 +2,7 @@
 #define StPicoBTofPidTraits_hh
 
 #include "TObject.h"
-#include "StarClassLibrary/StThreeVectorF.hh"
+#include "StThreeVectorF.hh"
 class StMuTrack;
 
 class StPicoBTofPidTraits : public TObject{

@@ -1,12 +1,14 @@
 #ifndef StPicoArrays_hh
 #define StPicoArrays_hh
 
-enum picoDstTypes {picoEvent=0, picoTrack, picoEmcTrigger, picoMtdTrigger, 
+enum picoDstTypes {picoEvent=0,picoTrack,
+		   picoEmcTrigger, picoMtdTrigger, 
 		   picoBTOWHit, picoBTofHit, picoMtdHit,
-		   picoEmcPidTraits, picoBTofPidTraits, picoMtdPidTraits};
+		   picoEmcPidTraits, picoBTofPidTraits, picoMtdPidTraits,
+		   picoMcEvent, picoMcTrack};
 enum v0Types {picoV0Ks=0, picoV0L, picoV0Lbar};
 enum NPICOARRAYS {
-__NPICOARRAYS__ = 10,
+__NPICOARRAYS__ = 12,
 __NPICOV0ARRAYS__ = 3,
 __NALLPICOARRAYS__ = __NPICOARRAYS__+__NPICOV0ARRAYS__
 };
