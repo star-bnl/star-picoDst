@@ -1,11 +1,12 @@
-
 #include <bitset>
 #include "TRegexp.h"
 #include "StChain/StChain.h"
 #include "StPicoDstMaker.h"
 #include "StPicoDst.h"
 #include "StPicoEvent.h"
+#include "StPicoMcEvent.h"
 #include "StPicoTrack.h"
+#include "StPicoMcTrack.h"
 #include "StPicoV0.h"
 #include "StPicoEmcTrigger.h"
 #include "StPicoMtdTrigger.h"
@@ -64,6 +65,21 @@
 #include "StTriggerUtilities/Emc/StEmcTriggerSimu.h"
 #include "StEvent/StTriggerData.h"
 #include "StEvent/StDcaGeometry.h"
+// Lomnitz MC information
+#include "StTrack.h"
+#include "StGlobalTrack.h"
+#include "StMuDSTMaker/COMMON/StMuMcVertex.h"
+#include "StMuDSTMaker/COMMON/StMuMcTrack.h"
+#include "StMcEvent/StMcIstHitCollection.hh"
+#include "StMcEvent/StMcIstLayerHitCollection.hh"
+#include "StMcEvent/StMcIstHit.hh"
+#include "StMcEvent/StMcPxlHitCollection.hh"
+#include "StMcEvent/StMcPxlHit.hh"
+#include "StMcEvent/StMcEvent.hh"
+#include "StEvent/StRnDHitCollection.h"
+#include "StEvent/StRnDHit.h"
+#include "StMcEvent/StMcTrack.hh"
+#include "StEvent/StEvent.h"
 
 ClassImp(StPicoDstMaker)
 
@@ -255,9 +271,11 @@ Int_t StPicoDstMaker::Init(){
     openRead();     // if read, don't care about phi weight files
   } else if (mIoMode == ioWrite) {
     openWrite();
-    if(!initMtd()) {                                                                            
-      LOG_ERROR << " MTD initialization error!!! " << endm;
-      return kStErr;
+    //Lomnitz
+    if(!mMcMode)
+      if(!initMtd()) {                                                                            
+	LOG_ERROR << " MTD initialization error!!! " << endm;
+	return kStErr;
     }
     if(mEmcMode) initEmc();
   }
@@ -331,9 +349,9 @@ Int_t StPicoDstMaker::openRead() {
       inputStream.getline(line,512);
       string aFile = line;      
       if (inputStream.good() && aFile.find(".picoDst.root")!=string::npos) {
-
-        TFile ftmp(line);
-        if(!ftmp.IsZombie() && ftmp.GetNkeys()) {
+//        TFile *ftmp = new TFile(line);
+        TFile *ftmp = TFile::Open(line);
+        if(ftmp && ftmp->IsOpen() && ftmp->GetNkeys()) {
           LOG_INFO << " Read in picoDst file " << line << endm;
           mChain->Add(line);
           nFile++;
@@ -527,6 +545,7 @@ Int_t StPicoDstMaker::MakeRead() {
 }
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::MakeWrite() {
+  
   StMuDstMaker *muDstMaker = (StMuDstMaker*)GetMaker("MuDst");
   if(!muDstMaker) {
     LOG_WARN << " No MuDstMaker " << endm; return kStWarn;
@@ -571,13 +590,43 @@ Int_t StPicoDstMaker::MakeWrite() {
 
   StThreeVectorF pVtx(0.,0.,0.);
   if(mMuDst->primaryVertex()) pVtx = mMuDst->primaryVertex()->position();
-
   LOG_DEBUG << " eventId = " << mMuEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
-
-  if(mPicoCut->passEvent(mMuEvent)) {  // keep all events in pp collisions to monitor triggers
-
+  // -------- Lomnitz: Loading MC & RC Event information
+  if(mMcMode==kTRUE){
+    mMcEvent = (StMcEvent*) GetDataSet("StMcEvent");
+    if(!mMcEvent) {
+      LOG_WARN << "No StMcEvent information "<< endm;
+      return kStErr;
+    }
+    mRcEvent = (StEvent*) GetDataSet("StEvent");
+    if(!mRcEvent) {
+      LOG_WARN << "No StEvent information "<< endm;
+      return kStErr;
+    }
+    //Load associations maker for thracks
+    StAssociationMaker* assoc = 0;
+    assoc = (StAssociationMaker*) GetMaker("StAssociationMaker");
+    //
+    // multimaps
+    //
+    if (assoc) {
+      //mRcHitMap   = assoc->rcTpcHitMap();
+      mRcTrackMap = assoc->rcTrackMap();
+      mMcTrackMap = assoc->mcTrackMap();
+    }
+    cout<<"Filling mc"<<endl;
+    fillTracksMc();
+    cout<<"Filling tracks"<<endl;
     fillTracks();
-
+    fillMcEvent();
+    fillEvent();
+    mTTree->Fill(); THack::IsTreeWritable(mTTree);
+    return kStOk;
+  }
+  // --------
+  if(!mMcMode && mPicoCut->passEvent(mMuEvent)) {  // keep all events in pp collisions to monitor triggers
+    fillTracks();
+ 
     if(!mCreatingPhiWgt) {
       fillEvent();
       // Do not fill v0 for 39 GeV
@@ -611,7 +660,27 @@ Int_t StPicoDstMaker::MakeWrite() {
   return kStOK;
 }
 //-----------------------------------------------------------------------
+void StPicoDstMaker::fillTracksMc() {
+  StSPtrVecMcTrack mctracks=(StSPtrVecMcTrack)mMcEvent->tracks();
+
+  Int_t nGlobals = mMuDst->numberOfGlobalTracks();
+  for (int i_mc=0; i_mc< mctracks.size(); i_mc ++){
+    StMcTrack* mcTrk = dynamic_cast<StMcTrack *>(mctracks[i_mc]);
+    if( !mcTrk) continue;
+    if(mcTrk->key()==0 && mcTrk->geantId()==0) continue;  // not geant tracks
+    // Partner rc track
+    mcTrackMapIter i = mMcTrackMap->find(mcTrk);
+    const StGlobalTrack* rT = 0; 
+    if (i != mMcTrackMap->end()) rT = (*i).second->partnerTrack();
+    int counter = mPicoArrays[picoMcTrack]->GetEntries();
+    new((*(mPicoArrays[picoMcTrack]))[counter]) StPicoMcTrack(mcTrk, rT);
+    //StPicoMcTrack mcTrack(mcTrk, rT);
+  }  
+}
+
+//-----------------------------------------------------------------------
 void StPicoDstMaker::fillTracks() {
+  cout<<"Filling tracks"<<endl;
   Int_t nPrimarys = mMuDst->numberOfPrimaryTracks();
   for(int i=0;i<nPrimarys;i++) {
     StMuTrack *pTrk = (StMuTrack *)mMuDst->primaryTracks(i);
@@ -671,8 +740,9 @@ void StPicoDstMaker::fillTracks() {
     StDcaGeometry *dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
     if(!dcaG) { cout << "No dca Geometry for this track !!! " << i << endm; }
     int counter = mPicoArrays[picoTrack]->GetEntries();
+    cout<<"Actually adding track:"<<counter<<endl;
     new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, phi_wgt_read, flowFlag, mBField, dcaG);
-
+ 
     if(iPhi>=nEW*nDet*nPhi) 
       {
 	cout << " flowFlag = " << flowFlag << " eta=" << pTrk->eta() << " q=" << pTrk->charge() << " vz=" << Vz << endl;
@@ -703,7 +773,7 @@ void StPicoDstMaker::fillTracks() {
 	picoTrk->setMtdPidTraitsIndex(emc_index);
       }
   }
-
+  cout<<"added "<<mPicoArrays[picoTrack]->GetEntries() << "out of "<< nGlobals <<endl;
 //  cout << "   ++ track branch size = " <<  mPicoArrays[picoTrack]->GetEntries() << endl;
 }
 
@@ -967,6 +1037,11 @@ void StPicoDstMaker::fillEvent() {
 
 //  mPicoDst->Print() ;
 }
+void StPicoDstMaker::fillMcEvent(){
+  int counter = mPicoArrays[picoMcEvent]->GetEntries();
+  new((*(mPicoArrays[picoMcEvent]))[counter]) StPicoMcEvent(mMcEvent);
+  return;
+}
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillEmcTrigger() {
 
@@ -983,6 +1058,7 @@ void StPicoDstMaker::fillEmcTrigger() {
   LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
   for(int i=0;i<4;i++) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
   
+  bool fireBHT0 = false;
   bool fireBHT1 = false;
   bool fireBHT2 = false;
   bool fireBHT3 = false;

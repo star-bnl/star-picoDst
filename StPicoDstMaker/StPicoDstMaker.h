@@ -15,12 +15,19 @@ class StEmcGeom;
 class StBemcTables;
 class StPicoDst;
 class StPicoEvent;
+class StPicoMcEvent;
 class StPicoTrack;
+class StPicoMcTrack;
 class StPicoV0;
 class StPicoEmcTrigger;
 class StPicoBTOWHit;
 class StPicoBTofHit;
 class StPicoCut;
+//Mlomnitz
+class StEvent;
+class StMcEvent;
+#include "StAssociationMaker/StAssociationMaker.h"
+#include "StAssociationMaker/StTrackPairInfo.hh"
 
 #include "StPicoConstants.h"
 #include "StPicoArrays.h"
@@ -51,6 +58,7 @@ class StPicoDstMaker : public StMaker {
    void setCreatingPhiWgt(Bool_t);
    void setProdMode(Int_t);
    void setEmcMode(const Int_t mode=1); // 0:No EMC, 1:EMC On
+   void setMcMode(bool);
    /// Returns null pointer if no StPicoDst
    StPicoDst *picoDst();
    /// In read mode, returns pointer to the chain of .picoDst.root files
@@ -100,7 +108,9 @@ class StPicoDstMaker : public StMaker {
    Int_t MakeWrite();
 
    void fillTracks();
+   void fillTracksMc();
    void fillEvent();
+   void fillMcEvent();
 //   void fillV0();
    void fillEmcTrigger();
    void fillMtdTrigger();
@@ -119,6 +129,12 @@ class StPicoDstMaker : public StMaker {
     
    StMuDst*   mMuDst;
    StMuEvent* mMuEvent;
+   //Lomnitz
+   StMcEvent*       mMcEvent;
+   StEvent*         mRcEvent;
+   rcTrackMapType*  mRcTrackMap;   //!
+   mcTrackMapType*  mMcTrackMap;   //!
+   //
    StBTofHeader*    mBTofHeader;
    StEmcCollection* mEmcCollection;
    StEmcPosition*   mEmcPosition;
@@ -133,7 +149,8 @@ class StPicoDstMaker : public StMaker {
    Bool_t     mCreatingPhiWgt; //! creating phi weight files
    Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation, 4: - save only electron or muon candidates
    Int_t      mEmcMode;        //! EMC ON(=1)/OFF(=0)
-
+   bool     mMcMode;          // MC branches ON(1), OFF(0)
+   
    TString   mInputFileName;        //! *.list - MuDst or picoDst
    TString   mOutputFileName;       //! FileName
    TString   mPhiWgtFileName;       //! phi weight filename
@@ -184,4 +201,5 @@ inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
 inline void StPicoDstMaker::setCreatingPhiWgt(bool val) { mCreatingPhiWgt = val; }
 inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
 inline void StPicoDstMaker::setEmcMode(const Int_t mode) { mEmcMode = mode; }
+inline void StPicoDstMaker::setMcMode(bool mode) { mMcMode = mode; }
 #endif

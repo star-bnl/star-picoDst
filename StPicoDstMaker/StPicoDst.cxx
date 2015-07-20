@@ -2,6 +2,7 @@
 #include "StPicoDst.h"
 #include "StPicoEvent.h"
 #include "StPicoTrack.h"
+#include "StPicoMcTrack.h"
 #include "StPicoV0.h"
 #include "StPicoEmcTrigger.h"
 #include "StPicoBTOWHit.h"
