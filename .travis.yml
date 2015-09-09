@@ -1,0 +1,31 @@
+language: cpp
+compiler:
+  - gcc
+before_script:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install g++-4.8
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+  - g++ --version
+  - wget http://root.cern.ch/download/root_v5.34.30.Linux-ubuntu12-x86_64-gcc4.6.tar.gz -O /tmp/root_v5.34.30.tar.gz
+  - tar -xzf /tmp/root_v5.34.30.tar.gz
+  - source ./root/bin/thisroot.sh
+  - root-config --libs
+  - root-config --cflags
+  - git clone --depth=1 https://github.com/star-bnl/star-base.git    contrib/star-base
+  - git clone --depth=1 https://github.com/star-bnl/star-stevent.git contrib/star-stevent
+  - git clone --depth=1 https://github.com/star-bnl/star-muDst.git   contrib/star-muDst
+  - git clone --depth=1 https://github.com/star-bnl/star-tables.git  contrib/star-tables
+  - git clone --depth=1 https://github.com/star-bnl/star-emc.git     contrib/star-emc
+  - git clone --depth=1 https://github.com/star-bnl/star-trigger.git contrib/star-trigger
+  - git clone --depth=1 https://github.com/star-bnl/star-hbt.git     contrib/star-hbt
+  - git clone --depth=1 https://github.com/star-bnl/star-daq.git     contrib/star-daq
+branches:
+  only:
+    - master
+script:
+  - mkdir build/ && cd build/ && pwd
+  - cmake -D CMAKE_CXX_FLAGS=-std=c++0x -D CMAKE_INSTALL_PREFIX=./ -D STAR_BASE_DIR=contrib/star-base -D STAR_STEVENT_DIR=contrib/star-stevent -D STAR_MUDST_DIR=contrib/star-muDst -D STAR_TABLES_DIR=contrib/star-tables -D STAR_EMC_DIR=contrib/star-emc -D STAR_TRIGGER_DIR=contrib/star-trigger -D STAR_STHBT_DIR=contrib/star-hbt -D STAR_DAQ_DIR=contrib/star-daq ../
+  - make VERBOSE=1
+  - make install
+  - ls -la ./ && ls -la lib/
