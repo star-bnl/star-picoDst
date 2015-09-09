@@ -176,3 +176,87 @@ function(REFLEX_GENERATE_DICTIONARY dictionary)
                              --gccxmlpath=${gccxmlpath} ${ARG_OPTIONS} ${includedirs} ${definitions}
                      DEPENDS ${headerfiles} ${selectionfile})
 endfunction()
+
+
+#
+# function ROOT_GENERATE_LINKDEF( header_linkdef HEADERS header1 header2 ...)
+#
+# Generates a basic LinkDef header (header_linkdef) by parsing the user provided
+# header files with standard linux utilities such as grep, awk, and sed.
+#
+function(ROOT_GENERATE_LINKDEF header_linkdef)
+
+   message(STATUS "Generating LinkDef header: ${CMAKE_BINARY_DIR}/${header_linkdef}")
+
+   find_program(EXEC_GREP "grep")
+   find_program(EXEC_AWK "awk")
+   find_program(EXEC_SED "sed")
+
+   if(NOT EXEC_GREP OR NOT EXEC_AWK OR NOT EXEC_SED)
+      message(FATAL_ERROR "FATAL: ROOT_GENERATE_LINKDEF function requires grep, awk, and sed commands")
+   endif()
+
+   CMAKE_PARSE_ARGUMENTS(ARG "" "" "HEADERS" ${ARGN})
+
+   # Create the list of header files with ClassDef macros
+   set(headers_cint)
+
+   foreach(user_header_arg ${ARG_HEADERS})
+
+      file(GLOB user_headers ${user_header_arg})
+
+      foreach(header ${user_headers})
+        if(header MATCHES LinkDef) # skip LinkDefs from globbing result
+           continue()
+        endif()
+
+        # Build a list of user_headers to use in dictionary generation
+        execute_process(COMMAND grep -m1 -H ClassDef ${header} RESULT_VARIABLE exit_code OUTPUT_QUIET)
+        if (NOT ${exit_code})
+           list(APPEND headers_cint ${header})
+        else()
+           message(STATUS "WARNING: No ClassDef macro found in ${header}")
+        endif()
+
+      endforeach()
+   endforeach()
+
+
+   set(cint_dict_objects)
+
+   foreach(header ${headers_cint})
+      set(my_exec_cmd awk "match($0,\"ClassDef(.*)\\\\((.*),(.*)\\\\)\",a){printf(a[2]\"\\r\")}")
+
+      execute_process(COMMAND ${my_exec_cmd} ${header} COMMAND sed -e "s/\\s\\+/;/g"
+         RESULT_VARIABLE exit_code OUTPUT_VARIABLE extracted_dict_objects ERROR_VARIABLE extracted_dict_objects
+         OUTPUT_STRIP_TRAILING_WHITESPACE)
+      list(APPEND cint_dict_objects ${extracted_dict_objects})
+   endforeach()
+
+   # Create and write contents to LinkDef file
+   set_source_files_properties(${CMAKE_BINARY_DIR}/${header_linkdef} PROPERTIES GENERATED TRUE)
+   file(WRITE ${CMAKE_BINARY_DIR}/${header_linkdef}
+      "#ifdef __CINT__\n\n#pragma link off all globals;\n#pragma link off all classes;\n#pragma link off all functions;\n\n")
+
+   foreach(cint_dict_object ${cint_dict_objects})
+      file(APPEND ${CMAKE_BINARY_DIR}/${header_linkdef} "#pragma link C++ class ${cint_dict_object}+;\n")
+   endforeach()
+
+   file(APPEND ${CMAKE_BINARY_DIR}/${header_linkdef} "\n#endif\n")
+
+endfunction()
+
+
+#
+# function ROOT_GENERATE_LINKDEF( user_base_file_name HEADERS header1 header2 ...)
+#
+# A high level wrapper around the above function to simplify user calls
+#
+function(ROOT_GENERATE_LINKDEF_AND_DICTIONARY user_base_file_name)
+
+   CMAKE_PARSE_ARGUMENTS(ARG "" "" "HEADERS" ${ARGN})
+
+   root_generate_linkdef(${user_base_file_name}_LinkDef.h HEADERS ${ARG_HEADERS})
+   root_generate_dictionary(${user_base_file_name}_Cint ${ARG_HEADERS} LINKDEF ${user_base_file_name}_LinkDef.h)
+
+endfunction()
