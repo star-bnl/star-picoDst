@@ -1,5 +1,5 @@
-#ifndef StPicoMtdHit_hh
-#define StPicoMtdHit_hh
+#ifndef StPicoMtdHit_h
+#define StPicoMtdHit_h
 
 class PicoDst;
 class StMuMtdHit;

@@ -1,5 +1,5 @@
-#ifndef StPicoBTofPidTraits_hh
-#define StPicoBTofPidTraits_hh
+#ifndef StPicoBTofPidTraits_h
+#define StPicoBTofPidTraits_h
 
 #include "TObject.h"
 #include "StarClassLibrary/StThreeVectorF.hh"

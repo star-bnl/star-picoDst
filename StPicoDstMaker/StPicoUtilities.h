@@ -1,4 +1,3 @@
-
 #ifndef StPicoUtilities_h
 #define StPicoUtilities_h
 

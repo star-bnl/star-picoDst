@@ -1,5 +1,5 @@
-#ifndef StPicoArrays_hh
-#define StPicoArrays_hh
+#ifndef StPicoArrays_h
+#define StPicoArrays_h
 
 enum picoDstTypes {picoEvent=0, picoTrack, picoEmcTrigger, picoMtdTrigger, 
 		   picoBTOWHit, picoBTofHit, picoMtdHit,

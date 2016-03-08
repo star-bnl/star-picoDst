@@ -1,5 +1,5 @@
-#ifndef StPicoEmcPidTraits_hh
-#define StPicoEmcPidTraits_hh
+#ifndef StPicoEmcPidTraits_h
+#define StPicoEmcPidTraits_h
 
 #include "TObject.h"
 

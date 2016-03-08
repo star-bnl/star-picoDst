@@ -1,5 +1,5 @@
-#ifndef StPicoEvent_hh
-#define StPicoEvent_hh
+#ifndef StPicoEvent_h
+#define StPicoEvent_h
 
 class StMuDst;
 //class StMuEvent;

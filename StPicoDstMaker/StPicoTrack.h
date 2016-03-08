@@ -1,5 +1,5 @@
-#ifndef StPicoTrack_hh
-#define StPicoTrack_hh
+#ifndef StPicoTrack_h
+#define StPicoTrack_h
 
 #include <cmath>
 

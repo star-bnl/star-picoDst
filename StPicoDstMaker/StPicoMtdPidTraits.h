@@ -1,5 +1,5 @@
-#ifndef StPicoMtdPidTraits_hh
-#define StPicoMtdPidTraits_hh
+#ifndef StPicoMtdPidTraits_h
+#define StPicoMtdPidTraits_h
 
 #include "TObject.h"
 class StMuMtdPidTraits;
