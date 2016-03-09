@@ -22,8 +22,20 @@ class StDcaGeometry;
 class StPicoTrack : public TObject {
  public:
   StPicoTrack();
-  ~StPicoTrack();
-  StPicoTrack(StMuTrack *, StMuTrack *, float, int, double, StDcaGeometry*);
+  StPicoTrack(StMuTrack* globalTrack, StMuTrack* primaryTrack, float phi_weight, int flowFlag, double magField, StDcaGeometry*);
+  virtual ~StPicoTrack() {}
+
+  // This class doesn't allocate any data on the heap so the default copy ctor
+  // and assignment operators are sufficient. The compiler will generate them 
+  // by default for this class because the destructor is explicitely defined.
+  // But please note that this auto-generation feature is deprecated, i.e.
+  // it might disappear from future compiler implementations.
+  // Explicitely requesting the defaults as done below is the way to go, however
+  // it currently doesn't work with STAR version of rootcint which is needed for 
+  // ROOT I/O on this object.
+  //StPicoTrack(StPicoTrack const&) = default;
+  //StPicoTrack& operator=(StPicoTrack const&) = default;
+
   virtual void Print(const Char_t *option = "") const;  ///< Print track info
             
   Int_t   id() const             { return (Int_t)mId; }
