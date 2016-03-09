@@ -1,12 +1,7 @@
 #include <limits>
 #include "StPicoTrack.h"
-#include "StPicoCut.h"
-#include "StPicoConstants.h"
-#include "StPicoDstMaker.h"
-#include "TVector2.h"
-#include "StMuDSTMaker/COMMON/StMuDst.h"
+#include "St_base/StMessMgr.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
-#include "StMuDSTMaker/COMMON/StMuEvent.h"
 
 ClassImp(StPicoTrack)
 
@@ -135,7 +130,7 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
    }// end if
 }
 //----------------------------------------------------------------------------------
-void StPicoTrack::Print(const Char_t *option) const
+void StPicoTrack::Print(const Char_t* option) const
 {
    if (strcmp(option, "tpc") == 0 || strcmp(option, "") == 0)
    {

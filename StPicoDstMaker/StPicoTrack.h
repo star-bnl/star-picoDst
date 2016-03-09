@@ -3,17 +3,14 @@
 
 #include <cmath>
 
+#include "TObject.h"
+#include "StarClassLibrary/StThreeVectorF.hh"
+#include "StEvent/StDcaGeometry.h"
+#include "StarClassLibrary/PhysicalConstants.h"
+
 class StMuTrack;
 class StPicoDst;
 class StDcaGeometry;
-
-#include "TObject.h"
-#include "StarClassLibrary/StThreeVectorF.hh"
-#include "TVector2.h"
-#include <stdio.h>
-#include <math.h>
-#include "StEvent/StDcaGeometry.h"
-#include "StarClassLibrary/PhysicalConstants.h"
 
 
 // Macro to control EMC variables
@@ -36,7 +33,7 @@ class StPicoTrack : public TObject {
   //StPicoTrack(StPicoTrack const&) = default;
   //StPicoTrack& operator=(StPicoTrack const&) = default;
 
-  virtual void Print(const Char_t *option = "") const;  ///< Print track info
+  virtual void Print(const Char_t* option = "") const;  ///< Print track info
             
   Int_t   id() const;
   Float_t chi2() const;
