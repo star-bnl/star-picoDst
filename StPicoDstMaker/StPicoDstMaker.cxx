@@ -671,7 +671,7 @@ void StPicoDstMaker::fillTracks() {
     StDcaGeometry *dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
     if(!dcaG) { cout << "No dca Geometry for this track !!! " << i << endm; }
     int counter = mPicoArrays[picoTrack]->GetEntries();
-    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, phi_wgt_read, flowFlag, mBField, dcaG);
+    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, mBField, dcaG);
 
     if(iPhi>=nEW*nDet*nPhi) 
       {

@@ -19,7 +19,7 @@ class StDcaGeometry;
 class StPicoTrack : public TObject {
  public:
   StPicoTrack();
-  StPicoTrack(StMuTrack* globalTrack, StMuTrack* primaryTrack, float phi_weight, int flowFlag, double magField, StDcaGeometry*);
+  StPicoTrack(StMuTrack const* globalTrack, StMuTrack const* primaryTrack, double magField, StDcaGeometry const*);
   virtual ~StPicoTrack() {}
 
   // This class doesn't allocate any data on the heap so the default copy ctor
@@ -39,8 +39,8 @@ class StPicoTrack : public TObject {
   Float_t chi2() const;
   Float_t gPt() const;
   Float_t gPtot() const;
-  StThreeVectorF const & pMom() const;
-  StThreeVectorF gMom(StThreeVectorF const & pVtx, float B) const;
+  StThreeVectorF const& pMom() const;
+  StThreeVectorF gMom(StThreeVectorF const& pVtx, float B) const;
   Short_t charge() const;
   Int_t   nHitsFit() const;
   Int_t   nHitsMax() const;

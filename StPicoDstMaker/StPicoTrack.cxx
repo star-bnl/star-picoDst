@@ -18,7 +18,7 @@ StPicoTrack::StPicoTrack() : mId(0), mChi2(std::numeric_limits<unsigned short>::
 // t - the global track.  p - the associated primary track from the first primary vertex
 /////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowFlag, double B, StDcaGeometry* dcaG)
+StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, double const B, StDcaGeometry const* const dcaG)
 : mId(0), mChi2(std::numeric_limits<unsigned short>::max()), mPMomentum(0., 0., 0.), mDedx(0),
    mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mNSigmaPion(std::numeric_limits<short>::max()), mNSigmaKaon(std::numeric_limits<short>::max()),
    mNSigmaProton(std::numeric_limits<short>::max()), mNSigmaElectron(std::numeric_limits<short>::max()),                 
@@ -68,52 +68,6 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
       mMap0 = (UInt_t)(t->topologyMap().data(0));
       mMap1 = (UInt_t)(t->topologyMap().data(1));
 
-/*
-      unsigned int map0 = t->topologyMap().data(0);
-      unsigned int map1 = t->topologyMap().data(1);
-      mNHitsMapHFT = map0 >> 1 & 0x7F; // see hitMap definition in StTrackTopologyMap
-      mFirstTpcHitRow = 0;
-      mLastTpcHitRow = 0;
-      for (int row = 1; row <= 24; row++)
-      {
-         if (map0 >> (row + 7) & 0x1)
-         {
-            mFirstTpcHitRow = row;
-            break;
-         }
-      }
-      if (mFirstTpcHitRow == 0)
-      {
-         for (int row = 25; row <= 45; row++)
-         {
-            if (map1 >> (row - 25) & 0x1)
-            {
-               mFirstTpcHitRow = row;
-               break;
-            }
-         }
-      }
-      for (int row = 45; row >= 25; row--)
-      {
-         if (map1 >> (row - 25) & 0x1)
-         {
-            mLastTpcHitRow = row;
-            break;
-         }
-      }
-      if (mLastTpcHitRow == 0)
-      {
-         for (int row = 24; row >= 1; row--)
-         {
-            if (map0 >> (row + 7) & 0x1)
-            {
-               mLastTpcHitRow = row;
-               break;
-            }
-         }
-      }
-*/
-
       if (dcaG)
       {
          const float* params = dcaG->params();
@@ -126,8 +80,7 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
       {
          cout << " This track doesn't have a dcaGeometry!!!!" << endl;
       }
-
-   }// end if
+   }
 }
 //----------------------------------------------------------------------------------
 void StPicoTrack::Print(const Char_t* option) const
