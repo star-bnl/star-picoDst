@@ -94,8 +94,6 @@ class StPicoTrack : public TObject {
   Short_t  mBTofPidTraitsIndex; // index of the BTOF pidTratis in the event
   Short_t  mMtdPidTraitsIndex;  // index of the MTD  pidTratis in the event
 
-  friend class StPicoDst;
-
   ClassDef(StPicoTrack, 1)
 };
 
