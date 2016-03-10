@@ -1,5 +1,5 @@
-#ifndef STAR_StPicoDstMaker
-#define STAR_StPicoDstMaker
+#ifndef StPicoDstMaker_h
+#define StPicoDstMaker_h
 #include "StChain/StMaker.h"
 #include "TClonesArray.h"
 class TFile;

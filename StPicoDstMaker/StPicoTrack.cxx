@@ -1,18 +1,14 @@
+#include <limits>
 #include "StPicoTrack.h"
-#include "StPicoCut.h"
-#include "StPicoConstants.h"
-#include "StPicoDstMaker.h"
-#include "TVector2.h"
-#include "StMuDSTMaker/COMMON/StMuDst.h"
+#include "St_base/StMessMgr.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
-#include "StMuDSTMaker/COMMON/StMuEvent.h"
 
 ClassImp(StPicoTrack)
 
 //----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack() : mId(0), mChi2(Pico::USHORTMAX), mPMomentum(0., 0., 0.), mDedx(0),
-   mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mNSigmaPion(Pico::SHORTMAX), mNSigmaKaon(Pico::SHORTMAX),
-   mNSigmaProton(Pico::SHORTMAX), mNSigmaElectron(Pico::SHORTMAX),
+StPicoTrack::StPicoTrack() : mId(0), mChi2(std::numeric_limits<unsigned short>::max()), mPMomentum(0., 0., 0.), mDedx(0),
+   mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mNSigmaPion(std::numeric_limits<short>::max()), mNSigmaKaon(std::numeric_limits<short>::max()),
+   mNSigmaProton(std::numeric_limits<short>::max()), mNSigmaElectron(std::numeric_limits<short>::max()),
    mMap0(0), mMap1(0), mPar(), mErrMatrix(), mEmcPidTraitsIndex(-1),
    mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
 {
@@ -22,10 +18,10 @@ StPicoTrack::StPicoTrack() : mId(0), mChi2(Pico::USHORTMAX), mPMomentum(0., 0., 
 // t - the global track.  p - the associated primary track from the first primary vertex
 /////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowFlag, double B, StDcaGeometry* dcaG)
-: mId(0), mChi2(Pico::USHORTMAX), mPMomentum(0., 0., 0.), mDedx(0),
-   mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mNSigmaPion(Pico::SHORTMAX), mNSigmaKaon(Pico::SHORTMAX),
-   mNSigmaProton(Pico::SHORTMAX), mNSigmaElectron(Pico::SHORTMAX),                 
+StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, double const B, StDcaGeometry const* const dcaG)
+: mId(0), mChi2(std::numeric_limits<unsigned short>::max()), mPMomentum(0., 0., 0.), mDedx(0),
+   mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mNSigmaPion(std::numeric_limits<short>::max()), mNSigmaKaon(std::numeric_limits<short>::max()),
+   mNSigmaProton(std::numeric_limits<short>::max()), mNSigmaElectron(std::numeric_limits<short>::max()),                 
    mMap0(0), mMap1(0), mPar(), mErrMatrix(), mEmcPidTraitsIndex(-1),                   
    mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
 
@@ -37,13 +33,13 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
    else
    {
       mId        = (UShort_t)t->id();
-      mChi2      = (t->chi2() * 1000. > Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(t->chi2() * 1000.));
+      mChi2      = (t->chi2() * 1000. > std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)(TMath::Nint(t->chi2() * 1000.));
       if (p)
       {
          mPMomentum = p->p();
       }
       int q      = t->charge();
-      mDedx      = (t->dEdx() * 1e6 * 1000. > Pico::USHORTMAX) ? Pico::USHORTMAX : (UShort_t)(TMath::Nint(t->dEdx() * 1e6 * 1000.));
+      mDedx      = (t->dEdx() * 1e6 * 1000. > std::numeric_limits<unsigned short>::max()) ? 0 : (UShort_t)(TMath::Nint(t->dEdx() * 1e6 * 1000.));
       int flag = t->flag();
       if (flag / 100 < 7) // TPC tracks
       {
@@ -64,59 +60,13 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
          }
       }
       mNHitsDedx = (Char_t)(t->nHitsDedx());
-      mNSigmaPion     = (fabs(t->nSigmaPion() * 100.) > Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->nSigmaPion() * 100.));
-      mNSigmaKaon     = (fabs(t->nSigmaKaon() * 100.) > Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->nSigmaKaon() * 100.));
-      mNSigmaProton   = (fabs(t->nSigmaProton() * 100.) > Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->nSigmaProton() * 100.));
-      mNSigmaElectron = (fabs(t->nSigmaElectron() * 100.) > Pico::SHORTMAX) ? Pico::SHORTMAX : (Short_t)(TMath::Nint(t->nSigmaElectron() * 100.));
+      mNSigmaPion     = (fabs(t->nSigmaPion() * 100.)     > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaPion() * 100.));
+      mNSigmaKaon     = (fabs(t->nSigmaKaon() * 100.)     > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaKaon() * 100.));
+      mNSigmaProton   = (fabs(t->nSigmaProton() * 100.)   > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaProton() * 100.));
+      mNSigmaElectron = (fabs(t->nSigmaElectron() * 100.) > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaElectron() * 100.));
 
       mMap0 = (UInt_t)(t->topologyMap().data(0));
       mMap1 = (UInt_t)(t->topologyMap().data(1));
-
-/*
-      unsigned int map0 = t->topologyMap().data(0);
-      unsigned int map1 = t->topologyMap().data(1);
-      mNHitsMapHFT = map0 >> 1 & 0x7F; // see hitMap definition in StTrackTopologyMap
-      mFirstTpcHitRow = 0;
-      mLastTpcHitRow = 0;
-      for (int row = 1; row <= 24; row++)
-      {
-         if (map0 >> (row + 7) & 0x1)
-         {
-            mFirstTpcHitRow = row;
-            break;
-         }
-      }
-      if (mFirstTpcHitRow == 0)
-      {
-         for (int row = 25; row <= 45; row++)
-         {
-            if (map1 >> (row - 25) & 0x1)
-            {
-               mFirstTpcHitRow = row;
-               break;
-            }
-         }
-      }
-      for (int row = 45; row >= 25; row--)
-      {
-         if (map1 >> (row - 25) & 0x1)
-         {
-            mLastTpcHitRow = row;
-            break;
-         }
-      }
-      if (mLastTpcHitRow == 0)
-      {
-         for (int row = 24; row >= 1; row--)
-         {
-            if (map0 >> (row + 7) & 0x1)
-            {
-               mLastTpcHitRow = row;
-               break;
-            }
-         }
-      }
-*/
 
       if (dcaG)
       {
@@ -130,17 +80,10 @@ StPicoTrack::StPicoTrack(StMuTrack* t, StMuTrack* p, float phi_weight, int flowF
       {
          cout << " This track doesn't have a dcaGeometry!!!!" << endl;
       }
-
-   }// end if
-}
-
-//----------------------------------------------------------------------------------
-StPicoTrack::~StPicoTrack()
-{
-   /* noop */
+   }
 }
 //----------------------------------------------------------------------------------
-void StPicoTrack::Print(const Char_t *option) const
+void StPicoTrack::Print(const Char_t* option) const
 {
    if (strcmp(option, "tpc") == 0 || strcmp(option, "") == 0)
    {

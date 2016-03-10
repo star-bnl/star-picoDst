@@ -1,5 +1,5 @@
-#ifndef StPicoBTOWHit_hh
-#define StPicoBTOWHit_hh
+#ifndef StPicoBTOWHit_h
+#define StPicoBTOWHit_h
 
 class StPicoDst;
 

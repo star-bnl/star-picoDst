@@ -1,5 +1,5 @@
-#ifndef StPicoEmcTrigger_hh
-#define StPicoEmcTrigger_hh
+#ifndef StPicoEmcTrigger_h
+#define StPicoEmcTrigger_h
 
 class StPicoDst;
 

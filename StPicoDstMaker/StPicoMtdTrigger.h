@@ -1,5 +1,5 @@
-#ifndef StPicoMtdTrigger_hh
-#define StPicoMtdTrigger_hh
+#ifndef StPicoMtdTrigger_h
+#define StPicoMtdTrigger_h
 
 class StTriggerData;
 #include "TObject.h"
