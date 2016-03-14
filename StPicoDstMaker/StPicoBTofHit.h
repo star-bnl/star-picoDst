@@ -9,8 +9,8 @@ class StPicoDst;
 class StPicoBTofHit : public TObject {
  public:
   StPicoBTofHit();
-  ~StPicoBTofHit();
   StPicoBTofHit(int);
+  virtual ~StPicoBTofHit();
 
   virtual void Print(const Char_t *option = "") const;  ///< Print trigger info
  
