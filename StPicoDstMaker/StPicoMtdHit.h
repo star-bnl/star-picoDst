@@ -1,11 +1,9 @@
 #ifndef StPicoMtdHit_h
 #define StPicoMtdHit_h
 
-class PicoDst;
-class StMuMtdHit;
+#include <utility>
 #include "TObject.h"
-
-using namespace std;
+class StMuMtdHit;
 
 class StPicoMtdHit : public TObject {
  public:
@@ -22,15 +20,15 @@ class StPicoMtdHit : public TObject {
   Int_t  cell()        const;
   Int_t  triggerFlag() const;
   
-  pair<Float_t,Float_t> leadingEdgeTime()  const;
-  pair<Float_t,Float_t> trailingEdgeTime() const;
-  pair<Float_t,Float_t> tot() const;
+  std::pair<Float_t,Float_t> leadingEdgeTime()  const;
+  std::pair<Float_t,Float_t> trailingEdgeTime() const;
+  std::pair<Float_t,Float_t> tot() const;
   
  protected:
   Short_t mgChannel; // mgChannel = (backleg-1) * 60 + (module-1) * 12 + cell
   UChar_t mTriggerFlag; // # of hits in the corresponding trigger unit that fired the trigger
-  pair<Float_t,Float_t>  mLeadingEdgeTime;
-  pair<Float_t,Float_t>  mTrailingEdgeTime;
+  std::pair<Float_t,Float_t>  mLeadingEdgeTime;
+  std::pair<Float_t,Float_t>  mTrailingEdgeTime;
 	
   ClassDef(StPicoMtdHit,1)
 };
@@ -40,8 +38,8 @@ inline Int_t StPicoMtdHit::backleg()     const { return (Int_t)mgChannel/60 + 1;
 inline Int_t StPicoMtdHit::module()      const { return ((Int_t)mgChannel%60)/12 + 1; }
 inline Int_t StPicoMtdHit::cell()        const { return (Int_t)mgChannel%12;          }
 inline Int_t StPicoMtdHit::triggerFlag() const { return (Int_t) mTriggerFlag;         }
-inline pair<Float_t,Float_t> StPicoMtdHit::leadingEdgeTime()  const { return mLeadingEdgeTime;  }
-inline pair<Float_t,Float_t> StPicoMtdHit::trailingEdgeTime() const { return mTrailingEdgeTime; }
-inline pair<Float_t,Float_t> StPicoMtdHit::tot() const
-{ return pair<Float_t,Float_t>(mTrailingEdgeTime.first - mLeadingEdgeTime.first, mTrailingEdgeTime.second - mLeadingEdgeTime.second); }
+inline std::pair<Float_t,Float_t> StPicoMtdHit::leadingEdgeTime()  const { return mLeadingEdgeTime;  }
+inline std::pair<Float_t,Float_t> StPicoMtdHit::trailingEdgeTime() const { return mTrailingEdgeTime; }
+inline std::pair<Float_t,Float_t> StPicoMtdHit::tot() const
+{ return std::pair<Float_t,Float_t>(mTrailingEdgeTime.first - mLeadingEdgeTime.first, mTrailingEdgeTime.second - mLeadingEdgeTime.second); }
 #endif
