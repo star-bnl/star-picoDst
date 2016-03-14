@@ -8,7 +8,7 @@ class StPicoMtdTrigger : public TObject {
  public:
   StPicoMtdTrigger();
   StPicoMtdTrigger(const StTriggerData *trigger);
-  ~StPicoMtdTrigger();
+  virtual ~StPicoMtdTrigger();
 
   // qt: 1-4, pos: 1-8
   UShort_t   getQTtacSum(const Int_t qt, const Int_t pos);
