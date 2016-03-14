@@ -19,12 +19,7 @@ StPicoTrack::StPicoTrack() : mId(0), mChi2(std::numeric_limits<unsigned short>::
 /////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------------------------------
 StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, double const B, StDcaGeometry const* const dcaG)
-: mId(0), mChi2(std::numeric_limits<unsigned short>::max()), mPMomentum(0., 0., 0.), mDedx(0),
-   mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mNSigmaPion(std::numeric_limits<short>::max()), mNSigmaKaon(std::numeric_limits<short>::max()),
-   mNSigmaProton(std::numeric_limits<short>::max()), mNSigmaElectron(std::numeric_limits<short>::max()),                 
-   mMap0(0), mMap1(0), mPar(), mErrMatrix(), mEmcPidTraitsIndex(-1),                   
-   mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
-
+: StPicoTrack()
 {
    if (!t || t->type() != global || (p && (p->type() != primary || p->id() != t->id())))
    {
