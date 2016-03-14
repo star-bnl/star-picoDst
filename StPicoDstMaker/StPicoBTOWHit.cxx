@@ -14,12 +14,7 @@ StPicoBTOWHit::StPicoBTOWHit(): mId(0), mAdc(0), mE(0)
 //----------------------------------------------------------------------------------
 StPicoBTOWHit::StPicoBTOWHit(int id, int adc, float e): StPicoBTOWHit()
 {
-  if(id  <0 || adc <0)
-  {
-    mId   = 0;
-    mAdc  = 0;
-    return;
-  }
+  if(id  <0 || adc <0) return;
 
   mId   = (id  > std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)id;
   mAdc  = (adc > std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)adc;
