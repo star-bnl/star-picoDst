@@ -8,13 +8,13 @@ class StPicoMtdTrigger : public TObject {
  public:
   StPicoMtdTrigger();
   StPicoMtdTrigger(const StTriggerData *trigger);
-  ~StPicoMtdTrigger();
+  virtual ~StPicoMtdTrigger();
 
   // qt: 1-4, pos: 1-8
-  UShort_t   getQTtacSum(const Int_t qt, const Int_t pos)   { return mQTtacSum[qt-1][pos-1]; }
-  UShort_t   getMT101Tac(const Int_t qt, const Int_t index) { return mMT101Tac[qt-1][index]; }
-  UShort_t   getMT101Id(const Int_t qt, const Int_t index)  { return mMT101Id[qt-1][index];  }
-  UChar_t    getTF201TriggerBit()                           { return mTF201TriggerBit;       }
+  UShort_t   getQTtacSum(const Int_t qt, const Int_t pos);
+  UShort_t   getMT101Tac(const Int_t qt, const Int_t index);
+  UShort_t   getMT101Id(const Int_t qt, const Int_t index);
+  UChar_t    getTF201TriggerBit();
 
   void       getMaximumQTtac(const Int_t qt, Int_t& pos1, Int_t& pos2);
 
@@ -32,4 +32,8 @@ class StPicoMtdTrigger : public TObject {
 
   ClassDef(StPicoMtdTrigger,1);
 };
+inline UShort_t StPicoMtdTrigger::getQTtacSum(const Int_t qt, const Int_t pos)   { return mQTtacSum[qt-1][pos-1]; }
+inline UShort_t StPicoMtdTrigger::getMT101Tac(const Int_t qt, const Int_t index) { return mMT101Tac[qt-1][index]; }
+inline UShort_t StPicoMtdTrigger::getMT101Id(const Int_t qt, const Int_t index)  { return mMT101Id[qt-1][index];  }
+inline UChar_t  StPicoMtdTrigger::getTF201TriggerBit()                           { return mTF201TriggerBit;       }
 #endif

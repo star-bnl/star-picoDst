@@ -1,4 +1,3 @@
-#include <iostream>
 #include <bitset>
 
 #include "StEvent/StTriggerData.h"
@@ -9,16 +8,12 @@
 ClassImp(StPicoMtdTrigger)
 
 //----------------------------------------------------------------------------------
-StPicoMtdTrigger::StPicoMtdTrigger()
+StPicoMtdTrigger::StPicoMtdTrigger(): mQTtacSum{}, mMT101Tac{}, mMT101Id{}, mTF201TriggerBit(0)
 {
-  memset(mQTtacSum,0,sizeof(mQTtacSum));
-  memset(mMT101Tac,0,sizeof(mMT101Tac));
-  memset(mMT101Id,0,sizeof(mMT101Id));
-  mTF201TriggerBit = 0;
 }
 
 //----------------------------------------------------------------------------------
-StPicoMtdTrigger::StPicoMtdTrigger(const StTriggerData *trigger)
+StPicoMtdTrigger::StPicoMtdTrigger(const StTriggerData *trigger): StPicoMtdTrigger()
 {
   // QT information
   UShort_t mtdQTtac[4][16];
@@ -75,8 +70,6 @@ StPicoMtdTrigger::StPicoMtdTrigger(const StTriggerData *trigger)
 StPicoMtdTrigger::~StPicoMtdTrigger()
 {
 }
-
-
 //----------------------------------------------------------------------------------
 void StPicoMtdTrigger::getMaximumQTtac(const Int_t qt, Int_t& pos1, Int_t& pos2)
 {
