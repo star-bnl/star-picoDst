@@ -9,9 +9,9 @@ class StPicoDst;
 class StPicoBTOWHit : public TObject {
  public:
   StPicoBTOWHit();
-  ~StPicoBTOWHit();
   StPicoBTOWHit(int, int, float);
-  void    Clear(const Option_t *opt="");
+  virtual ~StPicoBTOWHit();
+
   virtual void Print(const Char_t *option = "") const;  ///< Print trigger info
  
   Int_t   id() const;
