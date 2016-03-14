@@ -1,10 +1,7 @@
 #ifndef StPicoBTOWHit_h
 #define StPicoBTOWHit_h
 
-class StPicoDst;
-
 #include "TObject.h"
-#include "stdio.h"
 
 class StPicoBTOWHit : public TObject {
  public:
@@ -22,9 +19,6 @@ class StPicoBTOWHit : public TObject {
   UShort_t mId;    // towerId 1-4800
   UShort_t mAdc;   // adc
   Short_t  mE;     // Energy * 1000;
-  
-
-  friend class StPicoDst;
 
   ClassDef(StPicoBTOWHit, 1)
 };
