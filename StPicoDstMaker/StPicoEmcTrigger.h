@@ -2,7 +2,6 @@
 #define StPicoEmcTrigger_h
 
 #include "TObject.h"
-#include "stdio.h"
 
 class StPicoEmcTrigger : public TObject {
  public:
