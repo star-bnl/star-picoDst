@@ -9,8 +9,8 @@ class StPicoMtdPidTraits : public TObject
 {
  public:
   StPicoMtdPidTraits();
-  StPicoMtdPidTraits(const StMuMtdHit *, const StMuMtdPidTraits*, const Int_t);
-  ~StPicoMtdPidTraits();
+  StPicoMtdPidTraits(const StMuMtdHit *, const StMuMtdPidTraits*, const Int_t index);
+  virtual ~StPicoMtdPidTraits();
   virtual void Print(const Char_t *option = "") const; 
     
   // Matching information
@@ -33,13 +33,13 @@ class StPicoMtdPidTraits : public TObject
   void    setBeta(Float_t beta);
   
 private:    
-  Short_t   mMtdHitChan;            // (backleg-1) * 60 + (module-1) * 12 + cell
   Short_t   mTrackIndex;            // Index to the associated track in the event
   Char_t    mMatchFlag;             // Matching flag indicating multiple matches
   Float_t   mDeltaY;                // DeltaY between matched track-hit pair
   Float_t   mDeltaZ;                // DeltaZ between matched track-hit pair
   Float_t   mDeltaTimeOfFlight;     // Difference between measured and expected time-of-flight
   Float_t   mBeta;                  // Beta of matched tracks
+  Short_t   mMtdHitChan;            // (backleg-1) * 60 + (module-1) * 12 + cell
   
   ClassDef(StPicoMtdPidTraits,1)
 };
