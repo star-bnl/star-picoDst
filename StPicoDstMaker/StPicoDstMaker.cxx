@@ -1168,7 +1168,7 @@ void StPicoDstMaker::fillMtdHits() {
       Int_t module  = hit->module();
       Int_t qt = mModuleToQT[backleg-1][module-1];
       Int_t pos = mModuleToQTPos[backleg-1][module-1];
-      if(qt>0 && pos>0 && triggerBit[qt-1][pos-1])
+      if(qt>0 && qt<=4 && pos>0 && triggerBit[qt-1][pos-1])
 	{
 	  triggerPos.push_back(qt*10+pos);
 	  hitIndex.push_back(i);
