@@ -1,8 +1,6 @@
 #ifndef StPicoEmcTrigger_h
 #define StPicoEmcTrigger_h
 
-class StPicoDst;
-
 #include "TObject.h"
 #include "stdio.h"
 
@@ -22,9 +20,6 @@ class StPicoEmcTrigger : public TObject {
   UChar_t mFlag;   // 0x1: ht0, 0x2: ht1, 0x4: ht2; 0x8: ht3
   UShort_t mId;    // soft id.  bjp: 1-18, ht: 1-4800
   UShort_t mAdc;   // adc
-  
-
-  friend class StPicoDst;
 
   ClassDef(StPicoEmcTrigger, 1)
 };
