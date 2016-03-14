@@ -10,8 +10,8 @@ using namespace std;
 class StPicoMtdHit : public TObject {
  public:
   StPicoMtdHit();
-  StPicoMtdHit(const StMuMtdHit* hit);
-  ~StPicoMtdHit();
+  StPicoMtdHit(StMuMtdHit const* hit);
+  virtual ~StPicoMtdHit();
 
   virtual void Print(const Char_t *option = "") const; 
 

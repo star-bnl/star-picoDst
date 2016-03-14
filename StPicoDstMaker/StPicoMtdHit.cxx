@@ -1,41 +1,35 @@
+#include <limits>
+
 #include "StMuDSTMaker/COMMON/StMuMtdHit.h"
 #include "St_base/StMessMgr.h"
 
 #include "StPicoMtdHit.h"
-#include "StPicoConstants.h"
-
 
 ClassImp(StPicoMtdHit)
 
 //----------------------------------------------------------------------------------
-StPicoMtdHit::StPicoMtdHit()
+StPicoMtdHit::StPicoMtdHit(): mgChannel(-1), mTriggerFlag(0), mLeadingEdgeTime{-999.,-999.}, mTrailingEdgeTime{-999.,-999}
 {
-  //constructor
-  mgChannel = -1;
-  mTriggerFlag = 0;
-  mLeadingEdgeTime.first   = -999.;
-  mLeadingEdgeTime.second  = -999.;
-  mTrailingEdgeTime.first  = -999.;
-  mTrailingEdgeTime.second = -999.;
 }
 
 //----------------------------------------------------------------------------------
-StPicoMtdHit::StPicoMtdHit(const StMuMtdHit* hit)
+StPicoMtdHit::StPicoMtdHit(StMuMtdHit const* hit): StPicoMtdHit()
 {
-  mTriggerFlag = 0;
   Int_t gchan = (hit->backleg()-1)*60 + (hit->module()-1)*12 + hit->cell();
-  if(gchan<Pico::SHORTMAX)
-    {
-      mgChannel = (Short_t)gchan;
-    }
+
+  if(gchan < std::numeric_limits<short>::max())
+  {
+    mgChannel = (Short_t)gchan;
+  }
   else
-    {
-      mgChannel = -1;
-      LOG_INFO << "Weird cell: backlet = " << hit->backleg()
-	       << ", module = " << hit->module()
-	       << ", cell = " << hit->cell()
-	       << endm;
-    }
+  {
+    mgChannel = -1;
+    LOG_INFO << "Weird cell: backleg = " << hit->backleg()
+      << ", module = " << hit->module()
+      << ", cell = " << hit->cell()
+      << endm;
+  }
+
   mLeadingEdgeTime  = (pair<Float_t,Float_t>)hit->leadingEdgeTime();
   mTrailingEdgeTime = (pair<Float_t,Float_t>)hit->trailingEdgeTime();
 }
