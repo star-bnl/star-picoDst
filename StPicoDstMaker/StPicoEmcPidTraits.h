@@ -6,8 +6,8 @@
 class StPicoEmcPidTraits: public TObject {
  public:
   StPicoEmcPidTraits();
-  StPicoEmcPidTraits(Int_t index, Int_t id, Int_t adc0, Float_t* e, Float_t* dist, Int_t* nhit, Int_t* ntow);
-  ~StPicoEmcPidTraits();
+  StPicoEmcPidTraits(Int_t index, Int_t id, Int_t adc0, Float_t const* e, Float_t const* dist, Int_t const* nhit, Int_t const* ntow);
+  virtual ~StPicoEmcPidTraits();
   virtual void Print(const Char_t *option = "") const;
 
   Int_t   bemcId() const;
