@@ -25,11 +25,6 @@ StPicoBTofHit::~StPicoBTofHit()
 { /* noop */ }
 
 //----------------------------------------------------------------------------------
-void StPicoBTofHit::Clear(const Option_t* opt)
-{
-  mId = 0;
-}
-//----------------------------------------------------------------------------------
 void StPicoBTofHit::Print(const Char_t *option) const {
   LOG_INFO << " Id = " << id() << endm;
 }

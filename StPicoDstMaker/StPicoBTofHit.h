@@ -11,7 +11,7 @@ class StPicoBTofHit : public TObject {
   StPicoBTofHit();
   ~StPicoBTofHit();
   StPicoBTofHit(int);
-  void    Clear(const Option_t *opt="");
+
   virtual void Print(const Char_t *option = "") const;  ///< Print trigger info
  
   Int_t   id() const;
