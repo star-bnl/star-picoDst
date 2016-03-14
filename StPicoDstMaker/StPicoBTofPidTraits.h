@@ -8,8 +8,8 @@ class StMuTrack;
 class StPicoBTofPidTraits : public TObject{
  public:
   StPicoBTofPidTraits();
-  StPicoBTofPidTraits(const StMuTrack *, const StMuTrack*, const Int_t);
-  ~StPicoBTofPidTraits();
+  StPicoBTofPidTraits(const StMuTrack *, const StMuTrack*, const Int_t index);
+  virtual ~StPicoBTofPidTraits();
   virtual void Print(const Char_t *option = "") const;
 
   Int_t   btofCellId() const;
