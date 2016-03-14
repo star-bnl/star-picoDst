@@ -1,10 +1,7 @@
 #ifndef StPicoBTofHit_h
 #define StPicoBTofHit_h
 
-class StPicoDst;
-
 #include "TObject.h"
-#include "stdio.h"
 
 class StPicoBTofHit : public TObject {
  public:
@@ -21,8 +18,6 @@ class StPicoBTofHit : public TObject {
 
  protected:
   Short_t mId;     // (tray-1)*192+(module-1)*6+(cell-1):
-
-  friend class StPicoDst;
 
   ClassDef(StPicoBTofHit, 1)
 };
