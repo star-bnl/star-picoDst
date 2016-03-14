@@ -3,9 +3,6 @@
 
 ClassImp(Pico)
 
-   Float_t Pico::mMass[nPar] = {0.13957, 0.49368, 0.93827, 0.000511};
-   Float_t Pico::mMassV0[nV0] = {0.49765, 1.11568};
-
    UShort_t Pico::USHORTMAX = 65535;
    Short_t  Pico::SHORTMAX  = 32767;
    UChar_t  Pico::UCHARMAX  = 255;
@@ -193,28 +190,3 @@ Int_t Pico::mTriggerIdMtd[nTriggerMtd] = {
    Float_t Pico::mEtaFtpcFlowMin = 2.5;
    Float_t Pico::mEtaFtpcFlowMax = 4.0;
    Int_t Pico::mNHitsFtpcFlowMin = 5;              // >=
-
-  // V0 cuts
-   Float_t Pico::mV0DaughterNHitsFitMin     = 15;         // >= : TPC tracks
-   Float_t Pico::mV0DaughterNSigmaPionMax   = 3.0;
-   Float_t Pico::mV0DaughterNSigmaKaonMax   = 0.0;
-   Float_t Pico::mV0DaughterNSigmaProtonMax = 3.0;
-   Float_t Pico::mV0DcaDaughtersMax         = 0.85;
-
-   Float_t Pico::mV0DaughterDca2VertexPtMax = 1.0;
-  // Kshort
-   Float_t Pico::mV0KsNSigmaPionMax     = 3.0;
-   Float_t Pico::mV0KsPionDca2VertexMin = 0.75;
-   Float_t Pico::mV0KsDca2VertexMax     = 2.0;
-   Float_t Pico::mV0KsDecayLengthMin    = 2.0;
-   Float_t Pico::mV0KsDecayLengthMax    = 300.;
-   Float_t Pico::mV0KsMassWindowMax     = 0.1;
-  // Lambda
-   Float_t Pico::mV0LambdaNSigmaPionMax       = 3.0;
-   Float_t Pico::mV0LambdaNSigmaProtonMax     = 3.0;
-   Float_t Pico::mV0LambdaPionDca2VertexMin   = 1.0;
-   Float_t Pico::mV0LambdaProtonDca2VertexMin = 0.4;
-   Float_t Pico::mV0LambdaDca2VertexMax       = 5.0;
-   Float_t Pico::mV0LambdaDecayLengthMin      = 2.0;
-   Float_t Pico::mV0LambdaDecayLengthMax      = 300.;
-   Float_t Pico::mV0LambdaMassWindowMax       = 0.1;

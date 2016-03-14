@@ -5,7 +5,6 @@
 
 class StMuEvent;
 class StMuTrack;
-class StPicoV0;
 class StPicoTrack;
 
 class StPicoCut : public TObject {
@@ -16,11 +15,6 @@ class StPicoCut : public TObject {
   bool passEvent( StMuEvent * );
   bool passTrack( StMuTrack * );
   /*
-  bool passV0Daughter( StPicoTrack * );
-  bool passV0( StPicoV0 *, StMuEvent * );
-  bool passKs( StPicoV0 * );
-  bool passLambda( StPicoV0 * );
-  bool passLbar( StPicoV0 * );
   int  flowFlag( StMuTrack * );
   */
   ClassDef(StPicoCut,1)

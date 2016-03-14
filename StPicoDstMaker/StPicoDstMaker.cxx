@@ -1,4 +1,3 @@
-
 #include <bitset>
 #include "TRegexp.h"
 #include "StChain/StChain.h"
@@ -6,7 +5,6 @@
 #include "StPicoDst.h"
 #include "StPicoEvent.h"
 #include "StPicoTrack.h"
-#include "StPicoV0.h"
 #include "StPicoEmcTrigger.h"
 #include "StPicoMtdTrigger.h"
 #include "StPicoBTOWHit.h"
@@ -161,7 +159,6 @@ void StPicoDstMaker::clearIndices() {
 void StPicoDstMaker::assignArrays()
 {
   mPicoArrays     = mPicoAllArrays + 0;
-  mPicoV0Arrays   = mPicoArrays    + __NPICOARRAYS__;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearArrays()
@@ -180,11 +177,8 @@ void StPicoDstMaker::zeroArrays()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::SetStatus(const char *arrType, int status)
 {
-  static const char *specNames[] = {"EventAll","V0All",0};
-  static const int specIndex[] = {
-    0,
-    __NPICOARRAYS__,
-   -1};
+  static const char *specNames[] = {"EventAll",0};
+  static const int specIndex[] = { 0, -1};
 
   if (strncmp(arrType,"St",2)==0) arrType+=2;  //Ignore first "St"
   for (int i=0;specNames[i];i++) {
@@ -232,7 +226,6 @@ void StPicoDstMaker::setBranchAddresses(TChain* chain) {
 void  StPicoDstMaker::streamerOff() {
   StPicoEvent::Class()->IgnoreTObjectStreamer();
   StPicoTrack::Class()->IgnoreTObjectStreamer();
-  StPicoV0::Class()->IgnoreTObjectStreamer();
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::createArrays() {
@@ -580,10 +573,7 @@ Int_t StPicoDstMaker::MakeWrite() {
 
     if(!mCreatingPhiWgt) {
       fillEvent();
-      // Do not fill v0 for 39 GeV
-//      if(mProdMode==minbias || mProdMode==minbias2) fillV0();  // only fill V0 branches for minbias data
 
-      //fillV0();
       fillEmcTrigger();
       fillMtdTrigger();   // This must be called before fillMtdHits()
       fillBTOWHits();
@@ -1200,43 +1190,6 @@ void StPicoDstMaker::fillMtdHits() {
 	}
     }
 }
-/*
-//-----------------------------------------------------------------------
-void StPicoDstMaker::fillV0() {
-  int nTracks = mPicoArrays[picoTrack]->GetEntries();
-  for(int i=0;i<nTracks;i++) {
-    StPicoTrack *t_pos = (StPicoTrack *)mPicoArrays[picoTrack]->UncheckedAt(i);
-    if(!t_pos) continue;
-    if(t_pos->charge()!=+1) continue;
-    if(!mPicoCut->passV0Daughter(t_pos)) continue;
-    for(int j=0;j<nTracks;j++) {
-      StPicoTrack *t_neg = (StPicoTrack *)mPicoArrays[picoTrack]->UncheckedAt(j);
-      if(!t_neg) continue;
-      if(t_neg->charge()!=-1) continue;
-      if(!mPicoCut->passV0Daughter(t_neg)) continue;
-
-      StPicoV0 *aV0 = new StPicoV0(t_pos, t_neg, mMuEvent, mMap2Track);
-      if(!mPicoCut->passV0(aV0, mMuEvent)) {
-        delete aV0;
-        continue;
-      }
-      if(mPicoCut->passKs(aV0)) {
-        int counter = mPicoV0Arrays[picoV0Ks]->GetEntries();
-        new((*(mPicoV0Arrays[picoV0Ks]))[counter]) StPicoV0(aV0);
-      }
-      if(mPicoCut->passLambda(aV0)) {
-        int counter = mPicoV0Arrays[picoV0L]->GetEntries();
-        new((*(mPicoV0Arrays[picoV0L]))[counter]) StPicoV0(aV0);
-      }
-      if(mPicoCut->passLbar(aV0)) {
-        int counter = mPicoV0Arrays[picoV0Lbar]->GetEntries();
-        new((*(mPicoV0Arrays[picoV0Lbar]))[counter]) StPicoV0(aV0);
-      }
-      delete aV0;
-    } // end j
-  } // end i
-}
-*/
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::centrality(int refMult) {
   for(int i=0;i<nCen;i++) {

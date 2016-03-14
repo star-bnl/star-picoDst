@@ -16,7 +16,6 @@ class StBemcTables;
 class StPicoDst;
 class StPicoEvent;
 class StPicoTrack;
-class StPicoV0;
 class StPicoEmcTrigger;
 class StPicoBTOWHit;
 class StPicoBTofHit;
@@ -101,7 +100,6 @@ class StPicoDstMaker : public StMaker {
 
    void fillTracks();
    void fillEvent();
-//   void fillV0();
    void fillEmcTrigger();
    void fillMtdTrigger();
    void fillBTOWHits();
@@ -167,8 +165,7 @@ class StPicoDstMaker : public StMaker {
    friend class StPicoDst;
 
    TClonesArray*   mPicoAllArrays[__NALLPICOARRAYS__];   
-   TClonesArray**  mPicoArrays;   //[__NPICOARRAYS__]
-   TClonesArray**  mPicoV0Arrays; //[__NPICOV0ARRAYS__]
+   TClonesArray**  mPicoArrays;
    char            mStatusArrays[__NALLPICOARRAYS__];
    
    ClassDef(StPicoDstMaker,1)

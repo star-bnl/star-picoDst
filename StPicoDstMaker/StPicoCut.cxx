@@ -1,6 +1,5 @@
 #include "StEvent/StEnumerations.h"
 #include "StPicoCut.h"
-#include "StPicoV0.h"
 #include "StPicoTrack.h"
 #include "StPicoConstants.h"
 #include "St_base/StMessMgr.h"
@@ -109,121 +108,6 @@ bool StPicoCut::passTrack( StMuTrack *t )
   return kTRUE;
 }
 /*
-//----------------------------------------------------------------------------------
-bool StPicoCut::passV0Daughter( StPicoTrack *t )
-{
-  if(!t) return kFALSE;
-  if(t->nHitsFit()<Pico::mV0DaughterNHitsFitMin) return kFALSE;
-
-  bool pionCand = fabs(t->nSigmaPion())<=Pico::mV0DaughterNSigmaPionMax && 
-                  ( ( t->gMom().perp()<Pico::mV0DaughterDca2VertexPtMax && t->dca()>=Pico::mV0KsPionDca2VertexMin ) ||
-                    t->gMom().perp()>=Pico::mV0DaughterDca2VertexPtMax );
-  bool protonCand = fabs(t->nSigmaProton())<=Pico::mV0DaughterNSigmaProtonMax &&
-                  ( ( t->gMom().perp()<Pico::mV0DaughterDca2VertexPtMax && t->dca()>=Pico::mV0LambdaProtonDca2VertexMin ) ||
-                    t->gMom().perp()>=Pico::mV0DaughterDca2VertexPtMax );
-  if( !pionCand && !protonCand ) return kFALSE;
-
-  return kTRUE;
-}
-//----------------------------------------------------------------------------------
-bool StPicoCut::passV0( StPicoV0 *v0, StMuEvent *ev )
-{
-  if(!v0) return kFALSE;
-  if(v0->dcaDaughters()>Pico::mV0DcaDaughtersMax) return kFALSE;
-  StThreeVectorF v0Mom = v0->momentum(pos) + v0->momentum(neg);
-  StThreeVectorF pVtx = ev->eventSummary().primaryVertexPosition();
-  if(v0Mom.dot(v0->v0Pos()-pVtx)<=0) return kFALSE;  // V0 going away from primary vertex
-
-  return kTRUE;
-}
-//----------------------------------------------------------------------------------
-bool StPicoCut::passKs( StPicoV0 *v0 )
-{
-  if(!v0) return kFALSE;
-
-  v0->setParticleHypothesis(pion, pion);
-  StPicoTrack *t_pos = v0->track(pos);
-  StPicoTrack *t_neg = v0->track(neg);
-
-  // dEdx selection
-  if(fabs(t_pos->nSigmaPion())>Pico::mV0KsNSigmaPionMax) return kFALSE;
-  if(fabs(t_neg->nSigmaPion())>Pico::mV0KsNSigmaPionMax) return kFALSE;
-
-  // daughter-pVertex dca cut for low pT tracks
-  if(t_pos->gMom().perp()<Pico::mV0DaughterDca2VertexPtMax &&
-     t_pos->dca()<Pico::mV0KsPionDca2VertexMin) return kFALSE;
-  if(t_neg->gMom().perp()<Pico::mV0DaughterDca2VertexPtMax &&
-     t_neg->dca()<Pico::mV0KsPionDca2VertexMin) return kFALSE;
-
-  // typology cut
-  if(v0->dca2Vertex()>Pico::mV0KsDca2VertexMax) return kFALSE;
-  if(v0->decayLength()<Pico::mV0KsDecayLengthMin || v0->decayLength()>Pico::mV0KsDecayLengthMax) return kFALSE;
-
-  // mass cut
-  if(fabs(v0->m()-Pico::mMassV0[ks])>Pico::mV0KsMassWindowMax) return kFALSE;
-
-  return kTRUE;
-}
-
-//----------------------------------------------------------------------------------
-bool StPicoCut::passLambda( StPicoV0 *v0 )
-{
-  if(!v0) return kFALSE;
-
-  v0->setParticleHypothesis(proton, pion);
-  StPicoTrack *t_pos = v0->track(pos);
-  StPicoTrack *t_neg = v0->track(neg);
-
-  // dEdx selection
-  if(fabs(t_pos->nSigmaProton())>Pico::mV0LambdaNSigmaProtonMax) return kFALSE;
-  if(fabs(t_neg->nSigmaPion())>Pico::mV0LambdaNSigmaPionMax) return kFALSE;
-
-  // daughter-pVertex dca cut for low pT tracks
-  if(t_pos->gMom().perp()<Pico::mV0DaughterDca2VertexPtMax && 
-     t_pos->dca()<Pico::mV0LambdaProtonDca2VertexMin) return kFALSE;
-  if(t_neg->gMom().perp()<Pico::mV0DaughterDca2VertexPtMax && 
-     t_neg->dca()<Pico::mV0LambdaPionDca2VertexMin) return kFALSE;  
-
-  // typology cut
-  if(v0->dca2Vertex()>Pico::mV0LambdaDca2VertexMax) return kFALSE; 
-  if(v0->decayLength()<Pico::mV0LambdaDecayLengthMin || v0->decayLength()>Pico::mV0LambdaDecayLengthMax) return kFALSE;
-
-  // mass cut
-  if(fabs(v0->m()-Pico::mMassV0[lambda])>Pico::mV0LambdaMassWindowMax) return kFALSE;
-
-  return kTRUE;
-}
-
-//----------------------------------------------------------------------------------
-bool StPicoCut::passLbar( StPicoV0 *v0 )
-{
-  if(!v0) return kFALSE;
-
-  v0->setParticleHypothesis(pion, proton);
-  StPicoTrack *t_pos = v0->track(pos);
-  StPicoTrack *t_neg = v0->track(neg);
-
-  // dEdx selection
-  if(fabs(t_pos->nSigmaPion())>Pico::mV0LambdaNSigmaPionMax) return kFALSE;
-  if(fabs(t_neg->nSigmaProton())>Pico::mV0LambdaNSigmaProtonMax) return kFALSE;
-
-  // daughter-pVertex dca cut for low pT tracks   
-  if(t_pos->gMom().perp()<Pico::mV0DaughterDca2VertexPtMax && 
-     t_pos->dca()<Pico::mV0LambdaPionDca2VertexMin) return kFALSE;
-  if(t_neg->gMom().perp()<Pico::mV0DaughterDca2VertexPtMax && 
-     t_neg->dca()<Pico::mV0LambdaProtonDca2VertexMin) return kFALSE;
-
-  // typology cut
-  if(v0->dca2Vertex()>Pico::mV0LambdaDca2VertexMax) return kFALSE;
-  if(v0->decayLength()<Pico::mV0LambdaDecayLengthMin || v0->decayLength()>Pico::mV0LambdaDecayLengthMax) return kFALSE;
-
-  // mass cut
-  if(fabs(v0->m()-Pico::mMassV0[lambda])>Pico::mV0LambdaMassWindowMax) return kFALSE; 
-
-  return kTRUE;
-}
-
-//----------------------------------------------------------------------------------
 int StPicoCut::flowFlag( StMuTrack *p )
 {
   if(!p) return others;
