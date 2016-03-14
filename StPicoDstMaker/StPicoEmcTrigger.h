@@ -9,9 +9,9 @@ class StPicoDst;
 class StPicoEmcTrigger : public TObject {
  public:
   StPicoEmcTrigger();
-  ~StPicoEmcTrigger();
-  StPicoEmcTrigger(int, int, int);
-  void    Clear(const Option_t *opt="");
+  StPicoEmcTrigger(int flag, int id, int adc);
+  virtual ~StPicoEmcTrigger();
+
   virtual void Print(const Char_t *option = "") const;  ///< Print trigger info
  
   Int_t   flag() const;
