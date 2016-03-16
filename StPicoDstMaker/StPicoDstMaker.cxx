@@ -730,7 +730,7 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
  
   if(ok && okBSMDE && okBSMDP) {
 
-  Int_t mod, eta, sub;
+  Int_t mod=0, eta=0, sub=0;
   StSPtrVecEmcPoint& bEmcPoints = mEmcCollection->barrelPoints();
   int index=0;
   float mindist=1.e9;
@@ -784,17 +784,17 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
 
   //Get BEMC tower energy from matched tower + 2 nearest towers
 
-  int towerId;
+  int towerId = 0;
   int localTowerId = -1;
   int localId1 = -1;
   int localId2 = -1;
   double energy1 = 0, energy2 = 0;
-  double energyTemp;
+  double energyTemp = 0;
   double dist1 = 1000, dist2 = 1000;
-  double distTemp;
-  Float_t etaTemp, phiTemp;
+  double distTemp = 0;
+  Float_t etaTemp = 0, phiTemp = 0;
 
-  mEmcGeom[0]->getId(position.phi(),position.pseudoRapidity(),towerId);
+  if(mEmcGeom[0]->getId(position.phi(),position.pseudoRapidity(),towerId) == 1) return kTRUE;
   for(int ieta=-1;ieta<2;ieta++){
     for(int iphi=-1;iphi<2;iphi++){
       localTowerId++;//loops from 0 to 8
