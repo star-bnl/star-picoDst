@@ -14,9 +14,6 @@ class StPicoCut : public TObject {
   
   bool passEvent( StMuEvent * );
   bool passTrack( StMuTrack * );
-  /*
-  int  flowFlag( StMuTrack * );
-  */
   ClassDef(StPicoCut,1)
 };
 

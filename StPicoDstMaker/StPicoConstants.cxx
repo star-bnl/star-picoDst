@@ -178,15 +178,3 @@ Int_t Pico::mTriggerIdMtd[nTriggerMtd] = {
    Int_t   Pico::mNHitsFitMin = 15;               // >=
    Float_t Pico::mRatioMin = 0.;
    Float_t Pico::mGDcaMax = 10.;
-
-   Float_t Pico::mPtTpcFlowMax = 2.0;
-   Float_t Pico::mPtTpcFlowMin = 0.15;
-   Float_t Pico::mDcaTpcFlowMax = 2.0;
-   Float_t Pico::mEtaTpcFlowMax = 1.0;
-   Int_t Pico::mNHitsTpcFlowMin = 15;              // >=
-   Float_t Pico::mPtFtpcFlowMax = 2.0;
-   Float_t Pico::mPtFtpcFlowMin = 0.1;
-   Float_t Pico::mDcaFtpcFlowMax = 2.0;
-   Float_t Pico::mEtaFtpcFlowMin = 2.5;
-   Float_t Pico::mEtaFtpcFlowMax = 4.0;
-   Int_t Pico::mNHitsFtpcFlowMin = 5;              // >=
