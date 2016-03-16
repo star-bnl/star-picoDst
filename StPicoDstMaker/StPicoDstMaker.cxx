@@ -730,8 +730,6 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillEvent() {
-  Float_t Q[40];
-  for(int i=0;i<40;i++) Q[i] = 0.;
   Int_t nTracks = mPicoArrays[picoTrack]->GetEntries();
 
   for(int i=0;i<nTracks;i++) {
@@ -740,8 +738,7 @@ void StPicoDstMaker::fillEvent() {
     mMap2Track[t->id()] = i;     // map2track index - used for v0 branch
   }
   int counter = mPicoArrays[picoEvent]->GetEntries();
-//  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(mMuEvent, mBTofHeader, Q);
-  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(*mMuDst, Q);
+  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(*mMuDst);
 
 //  mPicoDst->Print() ;
 }

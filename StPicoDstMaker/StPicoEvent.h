@@ -14,7 +14,7 @@ class StPicoEvent : public TObject {
 public:
   StPicoEvent();
   virtual ~StPicoEvent();
-  StPicoEvent(const StMuDst& muDst, const Float_t* Q) ;
+  StPicoEvent(const StMuDst& muDst);
   
   Int_t    runId() const            { return mRunId; }
   Int_t    eventId() const          { return mEventId; }

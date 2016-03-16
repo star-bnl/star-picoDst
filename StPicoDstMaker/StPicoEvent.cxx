@@ -18,7 +18,7 @@ ClassImp(StPicoEvent)
 StPicoEvent::StPicoEvent()
 {}
 
-StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
+StPicoEvent::StPicoEvent(const StMuDst& muDst)
 {
   StMuEvent* ev = muDst.event() ;
   StBTofHeader* header = muDst.btofHeader() ;
