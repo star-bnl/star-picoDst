@@ -101,49 +101,8 @@ bool StPicoCut::passTrack( StMuTrack *t )
       nHitsMaxFtpc = t->nHitsPoss(kFtpcEastId);
     }
     float ratioFtpc  = (1.*nHitsFitFtpc)/(1.*nHitsMaxFtpc);
-    if( nHitsFitFtpc < Pico::mNHitsFtpcFlowMin ) return kFALSE;
     if( ratioFtpc < Pico::mRatioMin ) return kFALSE;
   }
 
   return kTRUE;
 }
-/*
-int StPicoCut::flowFlag( StMuTrack *p )
-{
-  if(!p) return others;
-  if(p->type()!=primary) return others;
-  if(p->vertexIndex()!=0) return others;
-
-  StThreeVectorF mom = p->p();
-  float pt = mom.perp();
-  float eta = mom.pseudoRapidity();
-  float gDca = p->dcaGlobal().mag();
-  int nHitsFitTpc = p->nHitsFit(kTpcId);
-  int nHitsMaxTpc = p->nHitsPoss(kTpcId);
-  float ratioTpc  = (1.*nHitsFitTpc)/(1.*nHitsMaxTpc);
-  int nHitsFitFtpc = 0;
-  int nHitsMaxFtpc = 0;
-  if(eta>0) {
-    nHitsFitFtpc = p->nHitsFit(kFtpcWestId);
-    nHitsMaxFtpc = p->nHitsPoss(kFtpcWestId);
-  } else {
-    nHitsFitFtpc = p->nHitsFit(kFtpcEastId);
-    nHitsMaxFtpc = p->nHitsPoss(kFtpcEastId);
-  }
-  float ratioFtpc  = (1.*nHitsFitFtpc)/(1.*nHitsMaxFtpc);
-
-  if( pt > Pico::mPtTpcFlowMin && pt < Pico::mPtTpcFlowMax &&
-      gDca < Pico::mDcaTpcFlowMax &&
-      fabs(eta) < Pico::mEtaTpcFlowMax &&
-      nHitsFitTpc >= Pico::mNHitsTpcFlowMin && ratioTpc > Pico::mRatioMin )
-    return tpcFlow;
-
-  if( pt > Pico::mPtFtpcFlowMin && pt < Pico::mPtFtpcFlowMax &&
-      gDca < Pico::mDcaFtpcFlowMax &&
-      fabs(eta) < Pico::mEtaFtpcFlowMax && fabs(eta) > Pico::mEtaFtpcFlowMin &&
-      nHitsFitFtpc >= Pico::mNHitsFtpcFlowMin && ratioFtpc > Pico::mRatioMin )     
-    return ftpcFlow;
-
-  return others;
-}
-*/

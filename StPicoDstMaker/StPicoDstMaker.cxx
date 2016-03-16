@@ -72,13 +72,11 @@ ClassImp(StPicoDstMaker)
 // Set maximum file size to 1.9 GB (Root has a 2GB limit)
 #define MAXFILESIZE 1900000000
 
-const char* StPicoDstMaker::mEW[nEW*nDet] = {"EE","EW","WE","WW","FarWest","West","East","FarEast"};
-
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(0), mCreatingPhiWgt(0), mProdMode(0),
+  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(0), mProdMode(0),
   mEmcMode(1),
-  mOutputFile(0), mPhiWgtFile(0),
+  mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
 {
   assignArrays();
@@ -90,25 +88,18 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   
   mInputFileName="";
   mOutputFileName="";
-  mPhiWgtFileName="";
-  mPhiTestFileName="";
   mEventCounter=0;
 
   memset(mEmcIndex, 0, sizeof(mEmcIndex));
-
-  for(int i=0;i<nCen+1;i++) {
-    for(int j=0;j<nEW*nDet;j++)      mPhiWgtHist[i][j] = 0;
-    for(int j=0;j<nEW*nDet*nPhi;j++) mPhiWeightRead[i][j] = 1.;
-  }
 
   memset(mModuleToQT,-1,sizeof(mModuleToQT));
   memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(mode), mCreatingPhiWgt(0), mProdMode(0),
+  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(mode), mProdMode(0),
   mEmcMode(1),
-  mOutputFile(0), mPhiWgtFile(0),
+  mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
 {
   assignArrays();
@@ -135,11 +126,6 @@ StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name)
 
   memset(mEmcIndex, 0, sizeof(mEmcIndex));
 
-  for(int i=0;i<nCen+1;i++) {
-    for(int j=0;j<nEW*nDet;j++)      mPhiWgtHist[i][j] = 0;
-    for(int j=0;j<nEW*nDet*nPhi;j++) mPhiWeightRead[i][j] = 1.;
-  }
-
   memset(mModuleToQT,-1,sizeof(mModuleToQT));
   memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
 }
@@ -153,7 +139,6 @@ StPicoDstMaker::~StPicoDstMaker() {
 void StPicoDstMaker::clearIndices() {
   for(size_t i=0;i<nTrk;i++) mIndex2Primary[i] = -1;
   for(size_t i=0;i<nTrk;i++) mMap2Track[i] = -1;
-  for(size_t i=0;i<nEW*nDet*nPhi;i++) mPhiWeightWrite[i] = 0.;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::assignArrays()
@@ -245,7 +230,7 @@ TClonesArray* StPicoDstMaker::clonesArray(TClonesArray*& p, const char* type, in
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Init(){
   if (mIoMode == ioRead) {
-    openRead();     // if read, don't care about phi weight files
+    openRead();     // if read
   } else if (mIoMode == ioWrite) {
     openWrite();
     if(!initMtd()) {                                                                            
@@ -301,7 +286,7 @@ Bool_t StPicoDstMaker::initMtd()
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Finish(){
   if (mIoMode == ioRead) {
-    closeRead();     // if read, don't care about phi weight files
+    closeRead();
   } else if (mIoMode == ioWrite) {
     closeWrite();
     if(mEmcMode) finishEmc();
@@ -348,73 +333,21 @@ Int_t StPicoDstMaker::openRead() {
 //-----------------------------------------------------------------------
 void StPicoDstMaker::openWrite() {
 
-  if(mProdMode==minbias2) {  // use phi weight files for mb2 production
-
-  char name[100];
-  sprintf(name,"%d.flowPhiWgt.inv.root", mRunNumber);
-  mPhiWgtFileName=name;
-  mPhiTestFileName=mInputFileName; mPhiTestFileName.ReplaceAll("MuDst.root","flowPhiWgt.test.root");
-
-  mPhiWgtFile = new TFile(mPhiWgtFileName.Data(),"READ");
-  if(!mPhiWgtFile->IsOpen()) {
-    LOG_INFO<<"*********************************************************************************************************"<<endm;
-    LOG_INFO<<"** Phi weight file '"<<mPhiWgtFileName.Data()<<"' not found.  Only phi weight files will be generated. **"<<endm;
-    LOG_INFO<<"*********************************************************************************************************"<<endm;
-    mCreatingPhiWgt = kTRUE;
-    mPhiWgtFileName = mInputFileName;
-    mPhiWgtFileName.ReplaceAll("MuDst.root","flowPhiWgt.hist.root");
-    mPhiWgtFile = new TFile(mPhiWgtFileName.Data(), "RECREATE");
-    LOG_INFO << " Creating file " << mPhiWgtFileName.Data() << endm;
-    DeclareHistos();    
-  } else {
-    mCreatingPhiWgt = kFALSE;
-    LOG_INFO<<"*******************************************************"<<endm;
-    LOG_INFO<<"** Reading phi weights from '"<<mPhiWgtFileName.Data()<<"'. **"<<endm;
-    LOG_INFO<<"*******************************************************"<<endm;
-    for(int ic = 0; ic < nCen+1; ic++) {
-      for(int iew = 0; iew < nEW*nDet; iew++) {
-        char hisname[100];
-        sprintf(hisname,"Phi_Weight_Cent_%d_%s",ic,mEW[iew]);
-        TH1* phiWgtHist = dynamic_cast<TH1*>(mPhiWgtFile->Get(hisname));
-        for(int iphi = 0; iphi < nPhi; iphi++) {
-          mPhiWeightRead[ic][iphi+nPhi*iew] = phiWgtHist->GetBinContent(iphi+1);
-        }
-      }
+  mOutputFile = new TFile(mOutputFileName.Data(),"RECREATE");
+  LOG_INFO << " Output file: " << mOutputFileName.Data() << " created." << endm;
+  mOutputFile->SetCompressionLevel(mCompression);
+  TBranch* branch;
+  int bufsize = mBufferSize;
+  if (mSplit) bufsize /= 4;
+  mTTree = new TTree("PicoDst","StPicoDst",mSplit);
+  mTTree->SetMaxTreeSize(MAXFILESIZE);
+  mTTree->SetAutoSave(1000000);
+  for ( int i=0; i<__NALLPICOARRAYS__; i++) {
+    if (mStatusArrays[i]==0) {
+      cout << " Branch " << StPicoArrays::picoArrayNames[i] << " status is OFF! " << endl;
+      continue;
     }
-    mPhiWgtFile->Close();
-    mPhiTestFileName = mInputFileName;
-    mPhiTestFileName.ReplaceAll("MuDst.root","flowPhiWgt.test.root");
-    mPhiWgtFile = new TFile(mPhiTestFileName.Data(),"RECREATE");
-    LOG_INFO << " Test file: " << mPhiTestFileName.Data() << " created." << endm;
-    DeclareHistos();
-  } // end if mPhiWgtFile
-
-  } else {
-
-    mCreatingPhiWgt = kFALSE;
-    LOG_INFO<<"*********************************************************************************************************"<<endm;
-    LOG_INFO<<"** This production mode doesn't require the phi weight files. Start to produce the picoDst directly... **"<<endm;
-    LOG_INFO<<"*********************************************************************************************************"<<endm;
-
-  }
-
-  if(!mCreatingPhiWgt) {
-    mOutputFile = new TFile(mOutputFileName.Data(),"RECREATE");
-    LOG_INFO << " Output file: " << mOutputFileName.Data() << " created." << endm;
-    mOutputFile->SetCompressionLevel(mCompression);
-    TBranch* branch;
-    int bufsize = mBufferSize;
-    if (mSplit) bufsize /= 4;
-    mTTree = new TTree("PicoDst","StPicoDst",mSplit);
-    mTTree->SetMaxTreeSize(MAXFILESIZE);
-    mTTree->SetAutoSave(1000000);
-    for ( int i=0; i<__NALLPICOARRAYS__; i++) {
-      if (mStatusArrays[i]==0) {
-        cout << " Branch " << StPicoArrays::picoArrayNames[i] << " status is OFF! " << endl;
-        continue;
-      }
-      branch = mTTree->Branch(StPicoArrays::picoArrayNames[i],&mPicoAllArrays[i],bufsize,mSplit);
-    }
+    branch = mTTree->Branch(StPicoArrays::picoArrayNames[i],&mPicoAllArrays[i],bufsize,mSplit);
   }
 }
 //-----------------------------------------------------------------------
@@ -451,28 +384,6 @@ void StPicoDstMaker::finishEmc() {
   }
   //mEmcDet = 0;
 }
-///-----------------------------------------------------------------------
-void StPicoDstMaker::DeclareHistos() {
-  LOG_INFO << " StPicoDstMaker::DeclareHistos() " << endm;
-  for(int ic = 0; ic < nCen+1; ic++) {
-    for(int iew = 0; iew < nEW*nDet; iew++) {
-      char hisname[100];
-      sprintf(hisname,"Phi_Weight_Cent_%d_%s",ic,mEW[iew]);
-      mPhiWgtHist[ic][iew] = new TH1D(hisname,hisname,nPhi,0.,TMath::Pi()*2.);
-    }
-  }
-}
-//_____________________________________________________________________________
-void StPicoDstMaker::WriteHistos() {
-  LOG_INFO << "StPicoDstMaker::WriteHistos() " << endm;
-  for(int ic = 0; ic < nCen+1; ic++) {
-    for(int iew = 0; iew < nEW*nDet; iew++) {
-      char hisname[100];
-      sprintf(hisname,"Phi_Weight_Cent_%d_%s",ic,mEW[iew]);
-      mPhiWgtHist[ic][iew]->Write();
-    }
-  }
-}
 //-----------------------------------------------------------------------
 void StPicoDstMaker::Clear(const char *){
   if (mIoMode==ioRead)
@@ -487,14 +398,8 @@ void StPicoDstMaker::closeRead() {
 //_____________________________________________________________________________
 void StPicoDstMaker::closeWrite() {
   if(mIoMode==ioWrite) {
-    if(mPhiWgtFile && mPhiWgtFile->IsOpen()) {
-      mPhiWgtFile->cd();
-      WriteHistos();
-      mPhiWgtFile->Close();
-    }
     if(mOutputFile) {
-      if(!mCreatingPhiWgt) 
-        mOutputFile->Write();
+      mOutputFile->Write();
       mOutputFile->Close();
     }
   }
@@ -571,31 +476,23 @@ Int_t StPicoDstMaker::MakeWrite() {
 
     fillTracks();
 
-    if(!mCreatingPhiWgt) {
-      fillEvent();
+    fillEvent();
 
-      fillEmcTrigger();
-      fillMtdTrigger();   // This must be called before fillMtdHits()
-      fillBTOWHits();
-      //fillBTofHits();
-      fillMtdHits();
-    }
+    fillEmcTrigger();
+    fillMtdTrigger();   // This must be called before fillMtdHits()
+    fillBTOWHits();
+    //fillBTofHits();
+    fillMtdHits();
 
     if(Debug()) mPicoDst->printTracks();
 
-//    if(mProdMode==minbias2) FillHistograms(mCentrality, mPhiWeightWrite);  // central data, not fill the phi weight anymore
-    if(!mCreatingPhiWgt) {
-      mTTree->Fill(); THack::IsTreeWritable(mTTree);
-    }
+    mTTree->Fill(); THack::IsTreeWritable(mTTree);
 
   }
   else
     {
-      if(!mCreatingPhiWgt) {
-        fillEvent();
-        mTTree->Fill(); THack::IsTreeWritable(mTTree);
-      }
-      //LOG_INFO << "Event did not pass " << endm;
+      fillEvent();
+      mTTree->Fill(); THack::IsTreeWritable(mTTree);
     }
 
   return kStOK;
@@ -624,14 +521,6 @@ void StPicoDstMaker::fillTracks() {
     }
     int index = mIndex2Primary[gTrk->id()];
     StMuTrack *pTrk = (index>=0) ? (StMuTrack *)mMuDst->primaryTracks(index) : 0;
-    if(mCreatingPhiWgt && !pTrk) continue;
-
-//    Int_t flowFlag = mPicoCut->flowFlag(pTrk);
-    Int_t flowFlag = 1;
-    Float_t Vz = mMuDst->primaryVertex()->position().z();
-    Int_t iPhi = phiBin(flowFlag, pTrk, Vz);
-    float phi_wgt_read = 1.;
-    if(iPhi>=0) phi_wgt_read = mPhiWeightRead[mCentrality][iPhi];
 
     int id = -1;
     int adc0; float e[5]; float dist[4]; int nhit[2]; int ntow[3];
@@ -662,13 +551,6 @@ void StPicoDstMaker::fillTracks() {
     if(!dcaG) { cout << "No dca Geometry for this track !!! " << i << endm; }
     int counter = mPicoArrays[picoTrack]->GetEntries();
     new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, mBField, dcaG);
-
-    if(iPhi>=nEW*nDet*nPhi) 
-      {
-	cout << " flowFlag = " << flowFlag << " eta=" << pTrk->eta() << " q=" << pTrk->charge() << " vz=" << Vz << endl;
-	cout << " WARN !!! " << iPhi << endl;
-      }
-    if(iPhi>=0) addPhiWeight(pTrk, phi_wgt_read, &mPhiWeightWrite[iPhi]);
 
     StPicoTrack *picoTrk = (StPicoTrack*)mPicoArrays[picoTrack]->At(counter);
     // Fill pid traits
@@ -847,109 +729,15 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
   return kTRUE;
 }
 //-----------------------------------------------------------------------
-Int_t StPicoDstMaker::phiBin(int flag, StMuTrack *p, float vz) {
-   int iPhi = -1;
-   if(!p) return iPhi;
-   if(flag<=0) return iPhi;
-   float phi = p->phi();
-   if(phi<0) phi += 2.*TMath::Pi();
-   int bin = (int)floor(360.0*phi/(2.*TMath::Pi()));
-
-   float eta = p->eta();
-   int iew;
-   if ( flag==tpcFlow ) {
-     int q = p->charge();
-     if ( eta > 0 && q > 0 ) iew = EE;
-     else if ( eta > 0 && q < 0 ) iew = EW;
-     else if ( eta < 0 && q > 0 ) iew = WE;
-     else iew = WW;
-   } else if ( flag==ftpcFlow ) {
-     if ( eta > 0 && vz > 0 ) iew = FarWest;
-     else if ( eta > 0 && vz < 0 ) iew = West;
-     else if ( eta < 0 && vz > 0 ) iew = East;
-     else iew = FarEast;
-   }
-   iPhi = bin + iew * nPhi + (flag-1) * nPhi * nEW;
-   return iPhi;
-}
-//-----------------------------------------------------------------------
-void StPicoDstMaker::addPhiWeight(StMuTrack *p, float read_phi_wgt, float* write_phi_wgt) {
-   if(!p) return;
-   float pt = p->p().perp();
-   float pt_weight = (pt < 2.) ? pt : 2.;
-   *write_phi_wgt += pt_weight * read_phi_wgt;
-}
-//-----------------------------------------------------------------------
-void StPicoDstMaker::FillHistograms(int cent, float* phi_wgt_write) {
-  for(int i=0;i<nDet;i++) {
-    for(int j=0;j<nEW;j++) {
-      for(int k=0;k<nPhi;k++) {
-        float tmp1 = mPhiWgtHist[cent][j+i*nEW]->GetBinContent(k+1);
-        float tmp2 = phi_wgt_write[k+j*nPhi+i*nEW*nPhi];
-        mPhiWgtHist[cent][j+i*nEW]->SetBinContent(k+1, tmp1+tmp2);
-      }
-    }
-  }
-}
-//-----------------------------------------------------------------------
 void StPicoDstMaker::fillEvent() {
   Float_t Q[40];
   for(int i=0;i<40;i++) Q[i] = 0.;
   Int_t nTracks = mPicoArrays[picoTrack]->GetEntries();
 
-#if 0
-  int Fcount = 0, Ecount = 0, Wcount = 0;
-
-  for(int i=0;i<nTracks;i++) {
-	  StPicoTrack *t = (StPicoTrack *)mPicoArrays[picoTrack]->UncheckedAt(i);
-	  if(!t) continue;
-	  if(!t->flowFlag()) continue;
-	  if(t->flowFlag()==tpcFlow)  Fcount++;
-
-  }
-  int iTrack[Fcount], Scount = Fcount/2 -1;
-  for(int q=0;q<Fcount;q++) iTrack[q] = q;
-  random_shuffle(iTrack,iTrack+Fcount);
-  Fcount = 0;
-#endif
-
   for(int i=0;i<nTracks;i++) {
     StPicoTrack *t = (StPicoTrack *)mPicoArrays[picoTrack]->UncheckedAt(i);
     if(!t) continue;
     mMap2Track[t->id()] = i;     // map2track index - used for v0 branch
-
-#if 0
-    if(!t->flowFlag()) continue;
-    int q = t->charge();
-    float eta = t->pMom().pseudoRapidity();
-    TVector2 Qi = t->Qi();
-    if(t->flowFlag()==tpcFlow) {
-      if(iTrack[Fcount] > Scount) {               // random subevent
-         Q[0] += Qi.X();
-         Q[1] += Qi.Y();
-         Ecount++;
-      } else {
-         Q[2] += Qi.X();
-         Q[3] += Qi.Y();
-         Wcount++;
-      }
-      Fcount++;      
-      if(q>0) {                 // charge subevent
-        Q[4] += Qi.X();
-        Q[5] += Qi.Y();
-      } else {
-        Q[6] += Qi.X();
-        Q[7] += Qi.Y();
-      }
-      if(eta>+0.075) {          // eta subevent
-        Q[8] += Qi.X();
-        Q[9] += Qi.Y();
-      } else if (eta<-0.075) {
-        Q[10] += Qi.X();
-        Q[11] += Qi.Y();
-      }
-    }
-#endif 
   }
   int counter = mPicoArrays[picoEvent]->GetEntries();
 //  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(mMuEvent, mBTofHeader, Q);

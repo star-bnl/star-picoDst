@@ -2,7 +2,6 @@
 #define StPicoEvent_h
 
 class StMuDst;
-//class StMuEvent;
 class TClonesArray;
 class StMuPrimaryVertex;
 class StPicoDst;
@@ -14,10 +13,8 @@ class StBTofHeader;
 class StPicoEvent : public TObject {
 public:
   StPicoEvent();
-  ~StPicoEvent();
+  virtual ~StPicoEvent();
   StPicoEvent(const StMuDst& muDst, const Float_t* Q) ;
-//  StPicoEvent(StMuEvent*, StBTofHeader*, float*);
-  void Clear(const Option_t*) {}
   
   Int_t    runId() const            { return mRunId; }
   Int_t    eventId() const          { return mEventId; }
@@ -90,23 +87,6 @@ public:
   Int_t   ht_th(const Int_t i) { return mHT_Th[i]; }
   Int_t   jp_th(const Int_t i) { return mJP_Th[i]; }
   
-#if 0
-  TVector2 Q() const         { return TVector2(mQx,mQy); }
-  TVector2 Q_ran_1() const   { return TVector2(mQx_ran_1,mQy_ran_1); }
-  TVector2 Q_ran_2() const   { return TVector2(mQx_ran_2,mQy_ran_2); }
-  TVector2 Q_chg_pos() const { return TVector2(mQx_chg_pos,mQy_chg_pos); }
-  TVector2 Q_chg_neg() const { return TVector2(mQx_chg_neg,mQy_chg_neg); }
-  TVector2 Q_eta_pos() const { return TVector2(mQx_eta_pos,mQy_eta_pos); }
-  TVector2 Q_eta_neg() const { return TVector2(mQx_eta_neg,mQy_eta_neg); }
-#endif
-  TVector2 Q() const         { return TVector2(-9999.,-9999.); }
-  TVector2 Q_ran_1() const   { return TVector2(-9999.,-9999.); }
-  TVector2 Q_ran_2() const   { return TVector2(-9999.,-9999.); }
-  TVector2 Q_chg_pos() const { return TVector2(-9999.,-9999.); }
-  TVector2 Q_chg_neg() const { return TVector2(-9999.,-9999.); }
-  TVector2 Q_eta_pos() const { return TVector2(-9999.,-9999.); }
-  TVector2 Q_eta_neg() const { return TVector2(-9999.,-9999.); }
-
 // other user's functions
   int      year() const;
   int      day() const;
@@ -193,26 +173,6 @@ protected: //these are written out
   UChar_t mHT_Th[4];
   UChar_t mJP_Th[4];
     
-#if 0
-  Float_t mQx;
-  Float_t mQy;
-  
-  Float_t mQx_ran_1;
-  Float_t mQy_ran_1;
-  Float_t mQx_ran_2;
-  Float_t mQy_ran_2;
-  
-  Float_t mQx_chg_pos;
-  Float_t mQy_chg_pos;
-  Float_t mQx_chg_neg;
-  Float_t mQy_chg_neg;
-  
-  Float_t mQx_eta_pos;
-  Float_t mQy_eta_pos;
-  Float_t mQx_eta_neg;
-  Float_t mQy_eta_neg;
-#endif
-
   friend class StPicoDst;
   friend class StPicoDstMaker;
     

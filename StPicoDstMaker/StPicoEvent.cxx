@@ -18,7 +18,6 @@ ClassImp(StPicoEvent)
 StPicoEvent::StPicoEvent()
 {}
 
-//StPicoEvent::StPicoEvent(StMuEvent* ev, StBTofHeader *header, float *Q)
 StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
 {
   StMuEvent* ev = muDst.event() ;
@@ -159,26 +158,6 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst, const Float_t* Q)
       if( eastWest == 0 ) mBbcAdcEast[pmtId] = bbc.adc(i) ;
       else                mBbcAdcWest[pmtId] = bbc.adc(i) ;
     }
-
-#if 0
-    mQx_ran_1 = Q[0];
-    mQy_ran_1 = Q[1];
-    mQx_ran_2 = Q[2];
-    mQy_ran_2 = Q[3];
-    
-    mQx = mQx_ran_1 + mQx_ran_2;
-    mQy = mQy_ran_1 + mQy_ran_2;
-    
-    mQx_chg_pos = Q[4];
-    mQy_chg_pos = Q[5];
-    mQx_chg_neg = Q[6];
-    mQy_chg_neg = Q[7];
-    
-    mQx_eta_pos = Q[8];
-    mQy_eta_pos = Q[9];
-    mQx_eta_neg = Q[10];
-    mQy_eta_neg = Q[11];
-#endif
 
     for(int i=0;i<4;i++) {
       setHT_Th(i,0);

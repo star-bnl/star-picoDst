@@ -5,20 +5,6 @@
   enum {
      nTrk     = 50000,
      nCen     = 9,
-     nEW      = 4,
-     nDet     = 2,
-     nPhi     = 360,
-     EE       = 0,
-     EW       = 1,
-     WE       = 2,
-     WW       = 3,
-     FarWest  = 0,
-     West     = 1,
-     East     = 2,
-     FarEast  = 3,
-     others   = 0,
-     tpcFlow  = 1,
-     ftpcFlow = 2,
 //     nTrigger = 9  // 7.7, 11.5 GeV (Run10)
 //     nTrigger = 3  // 39 GeV (Run10)
 //     nTrigger = 4  // 200 GeV (Run10)
@@ -61,18 +47,6 @@ public:
   static Int_t mNHitsFitMin;// = 15;                 // >=
   static Float_t mRatioMin;// = 0; //0.52;  -> removed for Run14 AuAu200GeV
   static Float_t mGDcaMax;// = 10.;
-    
-  static Float_t mPtTpcFlowMax;// = 2.0;
-  static Float_t mPtTpcFlowMin;// = 0.15;
-  static Float_t mDcaTpcFlowMax;// = 2.0;
-  static Float_t mEtaTpcFlowMax;// = 1.0;
-  static Int_t mNHitsTpcFlowMin;// = 15;              // >=
-  static Float_t mPtFtpcFlowMax;// = 2.0;
-  static Float_t mPtFtpcFlowMin;// = 0.1;
-  static Float_t mDcaFtpcFlowMax;// = 2.0;
-  static Float_t mEtaFtpcFlowMin;// = 2.5;     
-  static Float_t mEtaFtpcFlowMax;// = 4.0;
-  static Int_t mNHitsFtpcFlowMin;// = 5;              // >=
 
   ClassDef(Pico, 1)
 };              
