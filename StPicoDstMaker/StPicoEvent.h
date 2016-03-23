@@ -16,76 +16,76 @@ public:
   virtual ~StPicoEvent();
   StPicoEvent(const StMuDst& muDst);
   
-  Int_t    runId() const            { return mRunId; }
-  Int_t    eventId() const          { return mEventId; }
-  Int_t    fillId() const           { return (Int_t)mFillId; }
-  Float_t  bField() const           { return mBField; }
-  StThreeVectorF const & primaryVertex() const { return mPrimaryVertex; }
-  StThreeVectorF const & primaryVertexError() const { return mPrimaryVertexError; }
-  Int_t    triggerWord() const      { return mTriggerWord; }
-  Int_t    triggerWordMtd() const   { return mTriggerWordMtd; }
-  Int_t    refMultPos() const       { return (Int_t)mRefMultPos; }
-  Int_t    refMultNeg() const       { return (Int_t)mRefMultNeg; }
-  Int_t    refMultFtpcEast() const  { return (Int_t)mRefMultFtpcEast; }
-  Int_t    refMultFtpcWest() const  { return (Int_t)mRefMultFtpcWest; }
-  Int_t    refMult() const          { return (Int_t)(mRefMultPos+mRefMultNeg); }
-  Int_t    refMultFtpc() const      { return (Int_t)(mRefMultFtpcEast+mRefMultFtpcWest); }
-  Int_t    refMult2PosEast() const      { return (Int_t)mRefMult2PosEast; }
-  Int_t    refMult2NegEast() const      { return (Int_t)mRefMult2NegEast; }
-  Int_t    refMult2PosWest() const      { return (Int_t)mRefMult2PosWest; }
-  Int_t    refMult2NegWest() const      { return (Int_t)mRefMult2NegWest; }
-  Int_t    refMultHalfPosEast() const { return (Int_t)mRefMultHalfPosEast; }
-  Int_t    refMultHalfNegEast() const { return (Int_t)mRefMultHalfNegEast; }
-  Int_t    refMultHalfPosWest() const { return (Int_t)mRefMultHalfPosWest; }
-  Int_t    refMultHalfNegWest() const { return (Int_t)mRefMultHalfNegWest; }
-  Int_t    refMult2East() const       { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast); }
-  Int_t    refMult2West() const       { return (Int_t)(mRefMult2PosWest+mRefMult2NegWest); }
-  Int_t    refMult2() const           { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast+mRefMult2PosWest+mRefMult2NegWest); }
-  Int_t    refMultHalfEast() const    { return (Int_t)(mRefMultHalfPosEast+mRefMultHalfNegEast); }
-  Int_t    refMultHalfWest() const    { return (Int_t)(mRefMultHalfPosWest+mRefMultHalfNegWest); }
-  Int_t    grefMult() const           { return (Int_t)(mGRefMult); }
-  Int_t    numberOfPxlInnerHits() const { return (Int_t)(mNHitsHFT[0]); }
-  Int_t    numberOfPxlOuterHits() const { return (Int_t)(mNHitsHFT[1]); }
-  Int_t    numberOfIstHits() const      { return (Int_t)(mNHitsHFT[2]); }
-  Int_t    numberOfSsdHits() const      { return (Int_t)(mNHitsHFT[3]); }
+  Int_t    runId() const;
+  Int_t    eventId() const;
+  Int_t    fillId() const;
+  Float_t  bField() const;
+  StThreeVectorF const & primaryVertex() const;
+  StThreeVectorF const & primaryVertexError() const;
+  Int_t    triggerWord() const;
+  Int_t    triggerWordMtd() const;
+  Int_t    refMultPos() const;
+  Int_t    refMultNeg() const;
+  Int_t    refMultFtpcEast() const;
+  Int_t    refMultFtpcWest() const;
+  Int_t    refMult() const;
+  Int_t    refMultFtpc() const;
+  Int_t    refMult2PosEast() const;
+  Int_t    refMult2NegEast() const;
+  Int_t    refMult2PosWest() const;
+  Int_t    refMult2NegWest() const;
+  Int_t    refMultHalfPosEast() const;
+  Int_t    refMultHalfNegEast() const;
+  Int_t    refMultHalfPosWest() const;
+  Int_t    refMultHalfNegWest() const;
+  Int_t    refMult2East() const;
+  Int_t    refMult2West() const;
+  Int_t    refMult2() const;
+  Int_t    refMultHalfEast() const;
+  Int_t    refMultHalfWest() const;
+  Int_t    grefMult() const;
+  Int_t    numberOfPxlInnerHits() const;
+  Int_t    numberOfPxlOuterHits() const;
+  Int_t    numberOfIstHits() const;
+  Int_t    numberOfSsdHits() const;
         
-  Int_t    nVpdHitsEast() const     { return (Int_t)mNVpdHitsEast; }
-  Int_t    nVpdHitsWest() const     { return (Int_t)mNVpdHitsWest; } 
-  Int_t    nT0() const              { return (Int_t)mNT0; }
-  Float_t  vzVpd() const            { return (Float_t)mVzVpd/100.; }
+  Int_t    nVpdHitsEast() const;
+  Int_t    nVpdHitsWest() const;
+  Int_t    nT0() const;
+  Float_t  vzVpd() const;
   
-  Float_t  ZDCx() const             { return (Float_t)mZDCx; }
-  Float_t  BBCx() const             { return (Float_t)mBBCx; }
-  Float_t  Vpd(int i) const         { return (Float_t)mVpd[i]; }
-  Float_t  ZdcSumAdcEast() const    { return (Float_t)mZdcSumAdcEast; }
-  Float_t  ZdcSumAdcWest() const    { return (Float_t)mZdcSumAdcWest; }
-  Float_t  ZdcSmdEastHorizontal(int i) const { return (Float_t)mZdcSmdEastHorizontal[i]; }
-  Float_t  ZdcSmdEastVertical(int i) const   { return (Float_t)mZdcSmdEastVertical[i]; }
-  Float_t  ZdcSmdWestHorizontal(int i) const { return (Float_t)mZdcSmdWestHorizontal[i]; }
-  Float_t  ZdcSmdWestVertical(int i) const   { return (Float_t)mZdcSmdWestVertical[i]; }
+  Float_t  ZDCx() const;
+  Float_t  BBCx() const;
+  Float_t  Vpd(int i) const;
+  Float_t  ZdcSumAdcEast() const;
+  Float_t  ZdcSumAdcWest() const;
+  Float_t  ZdcSmdEastHorizontal(int i) const;
+  Float_t  ZdcSmdEastVertical(int i) const;
+  Float_t  ZdcSmdWestHorizontal(int i) const;
+  Float_t  ZdcSmdWestVertical(int i) const;
 
-  Float_t backgroundRate() const             { return mBackgroundRate; }
-  Float_t bbcBlueBackgroundRate() const      { return mBbcBlueBackgroundRate; }
-  Float_t bbcYellowBackgroundRate() const    { return mBbcYellowBackgroundRate; }
-  Float_t bbcEastRate() const { return mBbcEastRate; }
-  Float_t bbcWestRate() const { return mBbcWestRate; }  
-  Float_t zdcEastRate() const { return mZdcEastRate; }
-  Float_t zdcWestRate() const { return mZdcWestRate; }
+  Float_t backgroundRate() const;
+  Float_t bbcBlueBackgroundRate() const;
+  Float_t bbcYellowBackgroundRate() const;
+  Float_t bbcEastRate() const;
+  Float_t bbcWestRate() const;
+  Float_t zdcEastRate() const;
+  Float_t zdcWestRate() const;
   
-  Float_t spaceCharge() const { return mSpaceCharge; }
+  Float_t spaceCharge() const;
 
-  UShort_t btofTrayMultiplicity() const { return mbTofTrayMultiplicity ; }
-  UShort_t numberOfGlobalTracks() const { return mNumberOfGlobalTracks ; }
+  UShort_t btofTrayMultiplicity() const;
+  UShort_t numberOfGlobalTracks() const;
 
-  Float_t ranking() const { return mRanking ; }
-  UShort_t nBEMCMatch() const { return mNBEMCMatch ; }
-  UShort_t nBTOFMatch() const { return mNBTOFMatch ; }
+  Float_t ranking() const;
+  UShort_t nBEMCMatch() const;
+  UShort_t nBTOFMatch() const;
   
-  UShort_t bbcAdcEast(const Int_t i) { return mBbcAdcEast[i]; }
-  UShort_t bbcAdcWest(const Int_t i) { return mBbcAdcWest[i]; }
+  UShort_t bbcAdcEast(const Int_t i) const;
+  UShort_t bbcAdcWest(const Int_t i) const;
 
-  Int_t   ht_th(const Int_t i) { return mHT_Th[i]; }
-  Int_t   jp_th(const Int_t i) { return mJP_Th[i]; }
+  Int_t   ht_th(const Int_t i) const;
+  Int_t   jp_th(const Int_t i) const;
   
 // other user's functions
   int      year() const;
@@ -105,8 +105,8 @@ public:
   bool     isEMuon() const;
 
 // set functions for trigger thresholds
-  void     setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }
-  void     setJP_Th(const Int_t i, const Int_t th) { mJP_Th[i] = (UChar_t)th; }  
+  void     setHT_Th(const Int_t i, const Int_t th);
+  void     setJP_Th(const Int_t i, const Int_t th);
       
 protected: //these are written out
   Int_t          mRunId;           // run number
@@ -178,5 +178,76 @@ protected: //these are written out
     
   ClassDef(StPicoEvent,1)
 };
+inline Int_t    StPicoEvent::eventId() const          { return mEventId; }
+inline Int_t    StPicoEvent::fillId() const           { return (Int_t)mFillId; }
+inline Float_t  StPicoEvent::bField() const           { return mBField; }
+inline StThreeVectorF const & StPicoEvent::primaryVertex() const { return mPrimaryVertex; }
+inline StThreeVectorF const & StPicoEvent::primaryVertexError() const { return mPrimaryVertexError; }
+inline Int_t    StPicoEvent::triggerWord() const      { return mTriggerWord; }
+inline Int_t    StPicoEvent::triggerWordMtd() const   { return mTriggerWordMtd; }
+inline Int_t    StPicoEvent::refMultPos() const       { return (Int_t)mRefMultPos; }
+inline Int_t    StPicoEvent::refMultNeg() const       { return (Int_t)mRefMultNeg; }
+inline Int_t    StPicoEvent::refMultFtpcEast() const  { return (Int_t)mRefMultFtpcEast; }
+inline Int_t    StPicoEvent::refMultFtpcWest() const  { return (Int_t)mRefMultFtpcWest; }
+inline Int_t    StPicoEvent::refMult() const          { return (Int_t)(mRefMultPos+mRefMultNeg); }
+inline Int_t    StPicoEvent::refMultFtpc() const      { return (Int_t)(mRefMultFtpcEast+mRefMultFtpcWest); }
+inline Int_t    StPicoEvent::refMult2PosEast() const      { return (Int_t)mRefMult2PosEast; }
+inline Int_t    StPicoEvent::refMult2NegEast() const      { return (Int_t)mRefMult2NegEast; }
+inline Int_t    StPicoEvent::refMult2PosWest() const      { return (Int_t)mRefMult2PosWest; }
+inline Int_t    StPicoEvent::refMult2NegWest() const      { return (Int_t)mRefMult2NegWest; }
+inline Int_t    StPicoEvent::refMultHalfPosEast() const { return (Int_t)mRefMultHalfPosEast; }
+inline Int_t    StPicoEvent::refMultHalfNegEast() const { return (Int_t)mRefMultHalfNegEast; }
+inline Int_t    StPicoEvent::refMultHalfPosWest() const { return (Int_t)mRefMultHalfPosWest; }
+inline Int_t    StPicoEvent::refMultHalfNegWest() const { return (Int_t)mRefMultHalfNegWest; }
+inline Int_t    StPicoEvent::refMult2East() const       { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast); }
+inline Int_t    StPicoEvent::refMult2West() const       { return (Int_t)(mRefMult2PosWest+mRefMult2NegWest); }
+inline Int_t    StPicoEvent::refMult2() const           { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast+mRefMult2PosWest+mRefMult2NegWest); }
+inline Int_t    StPicoEvent::refMultHalfEast() const    { return (Int_t)(mRefMultHalfPosEast+mRefMultHalfNegEast); }
+inline Int_t    StPicoEvent::refMultHalfWest() const    { return (Int_t)(mRefMultHalfPosWest+mRefMultHalfNegWest); }
+inline Int_t    StPicoEvent::grefMult() const           { return (Int_t)(mGRefMult); }
+inline Int_t    StPicoEvent::numberOfPxlInnerHits() const { return (Int_t)(mNHitsHFT[0]); }
+inline Int_t    StPicoEvent::numberOfPxlOuterHits() const { return (Int_t)(mNHitsHFT[1]); }
+inline Int_t    StPicoEvent::numberOfIstHits() const      { return (Int_t)(mNHitsHFT[2]); }
+inline Int_t    StPicoEvent::numberOfSsdHits() const      { return (Int_t)(mNHitsHFT[3]); }
 
+inline Int_t    StPicoEvent::nVpdHitsEast() const     { return (Int_t)mNVpdHitsEast; }
+inline Int_t    StPicoEvent::nVpdHitsWest() const     { return (Int_t)mNVpdHitsWest; } 
+inline Int_t    StPicoEvent::nT0() const              { return (Int_t)mNT0; }
+inline Float_t  StPicoEvent::vzVpd() const            { return (Float_t)mVzVpd/100.; }
+
+inline Float_t  StPicoEvent::ZDCx() const             { return (Float_t)mZDCx; }
+inline Float_t  StPicoEvent::BBCx() const             { return (Float_t)mBBCx; }
+inline Float_t  StPicoEvent::Vpd(int i) const         { return (Float_t)mVpd[i]; }
+inline Float_t  StPicoEvent::ZdcSumAdcEast() const    { return (Float_t)mZdcSumAdcEast; }
+inline Float_t  StPicoEvent::ZdcSumAdcWest() const    { return (Float_t)mZdcSumAdcWest; }
+inline Float_t  StPicoEvent::ZdcSmdEastHorizontal(int i) const { return (Float_t)mZdcSmdEastHorizontal[i]; }
+inline Float_t  StPicoEvent::ZdcSmdEastVertical(int i) const   { return (Float_t)mZdcSmdEastVertical[i]; }
+inline Float_t  StPicoEvent::ZdcSmdWestHorizontal(int i) const { return (Float_t)mZdcSmdWestHorizontal[i]; }
+inline Float_t  StPicoEvent::ZdcSmdWestVertical(int i) const   { return (Float_t)mZdcSmdWestVertical[i]; }
+
+inline Float_t StPicoEvent::backgroundRate() const             { return mBackgroundRate; }
+inline Float_t StPicoEvent::bbcBlueBackgroundRate() const      { return mBbcBlueBackgroundRate; }
+inline Float_t StPicoEvent::bbcYellowBackgroundRate() const    { return mBbcYellowBackgroundRate; }
+inline Float_t StPicoEvent::bbcEastRate() const { return mBbcEastRate; }
+inline Float_t StPicoEvent::bbcWestRate() const { return mBbcWestRate; }  
+inline Float_t StPicoEvent::zdcEastRate() const { return mZdcEastRate; }
+inline Float_t StPicoEvent::zdcWestRate() const { return mZdcWestRate; }
+
+inline Float_t StPicoEvent::spaceCharge() const { return mSpaceCharge; }
+
+inline UShort_t StPicoEvent::btofTrayMultiplicity() const { return mbTofTrayMultiplicity ; }
+inline UShort_t StPicoEvent::numberOfGlobalTracks() const { return mNumberOfGlobalTracks ; }
+
+inline Float_t  StPicoEvent::ranking() const { return mRanking ; }
+inline UShort_t StPicoEvent::nBEMCMatch() const { return mNBEMCMatch ; }
+inline UShort_t StPicoEvent::nBTOFMatch() const { return mNBTOFMatch ; }
+
+inline UShort_t StPicoEvent::bbcAdcEast(const Int_t i) const { return mBbcAdcEast[i]; }
+inline UShort_t StPicoEvent::bbcAdcWest(const Int_t i) const { return mBbcAdcWest[i]; }
+
+inline Int_t   StPicoEvent::ht_th(const Int_t i) const { return mHT_Th[i]; }
+inline Int_t   StPicoEvent::jp_th(const Int_t i) const { return mJP_Th[i]; }
+
+inline void StPicoEvent::setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }
+inline void StPicoEvent::setJP_Th(const Int_t i, const Int_t th) { mJP_Th[i] = (UChar_t)th; }  
 #endif
