@@ -1,6 +1,8 @@
 #ifndef StPicoEvent_h
 #define StPicoEvent_h
 
+#include <vector>
+
 class StMuDst;
 class TClonesArray;
 class StMuPrimaryVertex;
@@ -22,8 +24,8 @@ public:
   Float_t  bField() const;
   StThreeVectorF const & primaryVertex() const;
   StThreeVectorF const & primaryVertexError() const;
-  Int_t    triggerWord() const;
-  Int_t    triggerWordMtd() const;
+  std::vector<unsigned int> triggerIds() const;
+  bool     isTrigger(unsigned int) const;
   Int_t    refMultPos() const;
   Int_t    refMultNeg() const;
   Int_t    refMultFtpcEast() const;
@@ -90,19 +92,6 @@ public:
 // other user's functions
   int      year() const;
   int      day() const;
-  float    energy() const;
-  bool     isMinBias() const;
-  bool     isMBSlow() const;
-  bool     isCentral() const;
-  bool     isHT() const;    
-  bool     isHT11() const; 
-  bool     isHT15() const; 
-  bool     isHT18() const;
-  bool     isMtdTrig() const;
-  bool     isDiMuon() const;
-  bool     isDiMuonHFT() const;
-  bool     isSingleMuon() const;
-  bool     isEMuon() const;
 
 // set functions for trigger thresholds
   void     setHT_Th(const Int_t i, const Int_t th);
@@ -116,8 +105,7 @@ protected: //these are written out
   StThreeVectorF mPrimaryVertex;   // primary Vertex (1st)
   StThreeVectorF mSecondVertex;    // second Vertex position (for study)
   StThreeVectorF mPrimaryVertexError; // vertex error
-  UInt_t         mTriggerWord;     // self-defined trigger word - see code for details
-  UInt_t         mTriggerWordMtd;  // Added in Run14, st_mtd trigger
+  std::vector<unsigned int> mTriggerIds;
   UShort_t       mRefMultFtpcEast; // FTPC refMult east
   UShort_t       mRefMultFtpcWest; // FTPC refMult west
   UShort_t       mRefMultNeg;      // TPC refMult neg
@@ -183,8 +171,7 @@ inline Int_t    StPicoEvent::fillId() const           { return (Int_t)mFillId; }
 inline Float_t  StPicoEvent::bField() const           { return mBField; }
 inline StThreeVectorF const & StPicoEvent::primaryVertex() const { return mPrimaryVertex; }
 inline StThreeVectorF const & StPicoEvent::primaryVertexError() const { return mPrimaryVertexError; }
-inline Int_t    StPicoEvent::triggerWord() const      { return mTriggerWord; }
-inline Int_t    StPicoEvent::triggerWordMtd() const   { return mTriggerWordMtd; }
+inline std::vector<unsigned int> StPicoEvent::triggerIds() const { return mTriggerIds;}
 inline Int_t    StPicoEvent::refMultPos() const       { return (Int_t)mRefMultPos; }
 inline Int_t    StPicoEvent::refMultNeg() const       { return (Int_t)mRefMultNeg; }
 inline Int_t    StPicoEvent::refMultFtpcEast() const  { return (Int_t)mRefMultFtpcEast; }

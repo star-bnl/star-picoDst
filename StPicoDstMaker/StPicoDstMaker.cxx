@@ -749,8 +749,6 @@ void StPicoDstMaker::fillEmcTrigger() {
   StTriggerSimuMaker *trigSimu = (StTriggerSimuMaker *)GetMaker("StarTrigSimu");
   if(!trigSimu) return;
 
-  int trgId = mPicoDst->event()->triggerWord();
-  
   int bht0 = trigSimu->bemc->barrelHighTowerTh(0);
   int bht1 = trigSimu->bemc->barrelHighTowerTh(1);
   int bht2 = trigSimu->bemc->barrelHighTowerTh(2);
@@ -758,61 +756,33 @@ void StPicoDstMaker::fillEmcTrigger() {
   LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
   for(int i=0;i<4;i++) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
   
-  bool fireBHT1 = false;
-  bool fireBHT2 = false;
-  bool fireBHT3 = false;
-
-
-  for (int towerId = 1; towerId <= 4800; ++towerId) {
+  for (int towerId = 1; towerId <= 4800; ++towerId)
+  {
     int status;
     trigSimu->bemc->getTables()->getStatus(BTOW, towerId, status);
     int adc = trigSimu->bemc->barrelHighTowerAdc(towerId);    
-//    if(towerId==4684) cout << " Id = " << towerId << " status = " << status << " adc = " << adc << endl;
     int flag = 0;
 
-    if( ( trgId>>19 & 0x3 ) ) { // BHT1*VPDMB-30
-      if(adc>bht1) {
-        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
-        fireBHT1 = true;
-        flag |= 1<<1;
-      }
+    if(adc>bht1) {
+      LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+      flag |= 1<<1;
     }
 
-    if( ( trgId>>21 & 0x3 ) ) { // BHT2*VPDMB-30
-      if(adc>bht2) {
-        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
-        fireBHT2 = true;
-        flag |= 1<<2;
-      }
+    if(adc>bht2) {
+      LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+      flag |= 1<<2;
     }
 
-    if( ( trgId>>23 & 0x3 ) ) { // BHT3
-      if(adc>bht3) {
-        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
-        fireBHT3 = true; 
-        flag |= 1<<3;
-      }
+    if(adc>bht3) {
+      LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+      flag |= 1<<3;
     }
-
 
     if( flag & 0xf ) {
       int counter = mPicoArrays[picoEmcTrigger]->GetEntries();
       new((*(mPicoArrays[picoEmcTrigger]))[counter]) StPicoEmcTrigger(flag, towerId, adc);
     }
-
   }
-
-  if( ( ( trgId>>19 & 0x3 ) ) && !fireBHT1 ) {
-    LOG_WARN << " something is wrong with the bht1 in this event!!! " << endm;
-  }
-  if( ( ( trgId>>21 & 0x3 ) ) && !fireBHT2 ) {
-    LOG_WARN << " something is wrong with the bht2 in this event!!! " << endm;
-  }
-  if( ( ( trgId>>23 & 0x3 ) ) && !fireBHT3 ) {
-    LOG_WARN << " something is wrong with the bht3 in this event!!! " << endm;
-  }
-  
-  return;
 }
 
 //-----------------------------------------------------------------------

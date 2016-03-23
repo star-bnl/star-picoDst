@@ -37,7 +37,7 @@ void StPicoDst::Print(Option_t *option) const {
   LOG_INFO << "=========== event header =============" << endm << endm;
   LOG_INFO << " fill/run/event Id = " << event()->fillId() << "/" << event()->runId() << "/" << event()->eventId() << endm;
   LOG_INFO << " vertex = " << event()->primaryVertex() << endm;
-  LOG_INFO << " triggerWord = " << event()->triggerWord() << " refMult = " << event()->refMult() << " refMultFtpc = " << event()->refMultFtpc() << endm;
+  LOG_INFO << " refMult = " << event()->refMult() << " refMultFtpc = " << event()->refMultFtpc() << endm;
   LOG_INFO << " nVpdHits e/w = " << event()->nVpdHitsEast() << "/" << event()->nVpdHitsWest() << " nT0 = " << event()->nT0() << " vzVpd = " << event()->vzVpd() << endm;
   LOG_INFO << "=====================================" << endm << endm;
 }
