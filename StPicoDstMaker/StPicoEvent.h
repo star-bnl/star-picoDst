@@ -90,7 +90,6 @@ public:
 
 // set functions for trigger thresholds
   void     setHT_Th(const Int_t i, const Int_t th);
-  void     setJP_Th(const Int_t i, const Int_t th);
 
 protected: //these are written out
   Int_t    mRunId;           // run number
@@ -154,9 +153,8 @@ protected: //these are written out
 
   Float_t mSpaceCharge;
 
-  // Online HT/JP thresholds
+  // Online HT thresholds
   UChar_t mHT_Th[4];
-  UChar_t mJP_Th[4];
 
   ClassDef(StPicoEvent,1)
 };
@@ -229,8 +227,6 @@ inline UShort_t StPicoEvent::bbcAdcWest(const Int_t i) const { return mBbcAdcWes
 inline Float_t StPicoEvent::spaceCharge() const { return mSpaceCharge; }
 
 inline Int_t   StPicoEvent::ht_th(const Int_t i) const { return mHT_Th[i]; }
-inline Int_t   StPicoEvent::jp_th(const Int_t i) const { return mJP_Th[i]; }
 
 inline void StPicoEvent::setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }
-inline void StPicoEvent::setJP_Th(const Int_t i, const Int_t th) { mJP_Th[i] = (UChar_t)th; }
 #endif

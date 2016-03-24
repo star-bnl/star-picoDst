@@ -28,7 +28,7 @@ StPicoEvent::StPicoEvent():
  mZdcSmdEastHorizontal{}, mZdcSmdEastVertical{}, mZdcSmdWestHorizontal{}, mZdcSmdWestVertical{},
  mBbcAdcEast{}, mBbcAdcWest{},
  mSpaceCharge(0),
- mHT_Th{}, mJP_Th{}
+ mHT_Th{}
 {}
 
 StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
