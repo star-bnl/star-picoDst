@@ -78,8 +78,6 @@ public:
   static void printBTofPidTraits();
   static void printMtdPidTraits();
         
-  friend class StPicoDstMaker;
-
   ClassDef(StPicoDst,1)
 };
 
