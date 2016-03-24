@@ -91,24 +91,24 @@ public:
 // set functions for trigger thresholds
   void     setHT_Th(const Int_t i, const Int_t th);
 
-protected: //these are written out
-  Int_t    mRunId;           // run number
-  Int_t    mEventId;         // event number
-  UShort_t mFillId;          // fill number
-  Float_t  mBField;          // B field in kilogauss
+protected:
+  Int_t    mRunId;
+  Int_t    mEventId;
+  UShort_t mFillId;
+  Float_t  mBField;
 
-  StThreeVectorF mPrimaryVertex;   // primary Vertex (1st)
-  StThreeVectorF mPrimaryVertexError; // vertex error
+  StThreeVectorF mPrimaryVertex;
+  StThreeVectorF mPrimaryVertexError;
   Float_t mRanking;
   UShort_t mNBEMCMatch;
   UShort_t mNBTOFMatch;
 
   std::vector<unsigned int> mTriggerIds;
 
-  UShort_t mRefMultFtpcEast; // FTPC refMult east
-  UShort_t mRefMultFtpcWest; // FTPC refMult west
-  UShort_t mRefMultNeg;      // TPC refMult neg
-  UShort_t mRefMultPos;      // TPC refMult pos
+  UShort_t mRefMultFtpcEast;
+  UShort_t mRefMultFtpcWest;
+  UShort_t mRefMultNeg;
+  UShort_t mRefMultPos;
   UShort_t mRefMult2NegEast; // TPC refMult2 neg (-1<eta<-0.5)
   UShort_t mRefMult2PosEast; // TPC refMult2 pos (-1<eta<-0.5)
   UShort_t mRefMult2NegWest; // TPC refMult2 neg (0.5<eta<1.0)
@@ -119,16 +119,16 @@ protected: //these are written out
   UShort_t mRefMultHalfPosWest ;// TPC refMultHalf pos (eta>0)
 
   UShort_t mGRefMult;
-  UShort_t mNumberOfGlobalTracks ; // # of global tracks
-  UShort_t mbTofTrayMultiplicity ; // BTOF tray multiplicity
+  UShort_t mNumberOfGlobalTracks ;
+  UShort_t mbTofTrayMultiplicity ;
   UShort_t mNHitsHFT[4];
 
-  UChar_t  mNVpdHitsEast;    // Vpd Hits east;
-  UChar_t  mNVpdHitsWest;    // vpd hits west;
+  UChar_t  mNVpdHitsEast;
+  UChar_t  mNVpdHitsWest;
   UShort_t mNT0;             // number of T0 particles in BTOF self calibration
   Short_t  mVzVpd;           // VzVpd*100.
 
-  UInt_t  mZDCx;           // zdcX
+  UInt_t  mZDCx;
   UInt_t  mBBCx;
   Float_t mBackgroundRate;
   Float_t mBbcBlueBackgroundRate;
@@ -148,8 +148,8 @@ protected: //these are written out
   UShort_t mZdcSmdWestVertical[8];
 
   // BBC ADC for q-vectors (Hiroshi)
-  UShort_t mBbcAdcEast[24] ; /// BBC East ADC: 0-23
-  UShort_t mBbcAdcWest[24] ; /// BBC West ADC: 24-47
+  UShort_t mBbcAdcEast[24];
+  UShort_t mBbcAdcWest[24];
 
   Float_t mSpaceCharge;
 
