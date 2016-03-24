@@ -4,13 +4,9 @@
 #include <vector>
 
 class StMuDst;
-class TClonesArray;
-class StMuPrimaryVertex;
 class StPicoDst;
 class StPicoDstMaker;
-class StBTofHeader;
 #include "StarClassLibrary/StThreeVectorF.hh"
-#include "TVector2.h"
 
 class StPicoEvent : public TObject {
 public:

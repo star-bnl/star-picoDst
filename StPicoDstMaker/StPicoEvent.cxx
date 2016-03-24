@@ -1,19 +1,13 @@
 #include <algorithm>
 #include <limits>
-#include "StPicoEvent.h"
-#include "StPicoConstants.h"
 #include "StEvent/StEventTypes.h"
-#include "St_base/StTree.h"
-#include "StEventUtilities/StuRefMult.hh"
-#include "TVector2.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h"
-#include "StMuDSTMaker/COMMON/StMuTrack.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
-#include "StMuDSTMaker/COMMON/StMuMtdHeader.h"
 #include "StEvent/StBTofHeader.h"
 #include "St_base/StMessMgr.h"
 #include "StPicoUtilities.h"
+#include "StPicoEvent.h"
 
 ClassImp(StPicoEvent)
 
@@ -89,7 +83,7 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
     mNVpdHitsEast = (UChar_t)(header->numberOfVpdHits(east));
     mNVpdHitsWest = (UChar_t)(header->numberOfVpdHits(west));
     mNT0 = (UShort_t)(header->nTzero());
-    mVzVpd = (fabs(header->vpdVz()*100.)>Pico::SHORTMAX) ? Pico::SHORTMAX : (UShort_t)(TMath::Nint(header->vpdVz()*100.));
+    mVzVpd = (fabs(header->vpdVz()*100.)>std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(header->vpdVz()*100.));
   }
 
   //Nov.10, 2008, Na
