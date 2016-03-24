@@ -4,8 +4,6 @@
 #include <vector>
 
 class StMuDst;
-class StPicoDst;
-class StPicoDstMaker;
 #include "StarClassLibrary/StThreeVectorF.hh"
 
 class StPicoEvent : public TObject {
@@ -159,9 +157,6 @@ protected: //these are written out
   // Online HT/JP thresholds
   UChar_t mHT_Th[4];
   UChar_t mJP_Th[4];
-
-  friend class StPicoDst;
-  friend class StPicoDstMaker;
 
   ClassDef(StPicoEvent,1)
 };
