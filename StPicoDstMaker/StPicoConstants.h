@@ -5,17 +5,6 @@
   enum {
      nTrk     = 50000,
      nCen     = 9,
-//     nTrigger = 9  // 7.7, 11.5 GeV (Run10)
-//     nTrigger = 3  // 39 GeV (Run10)
-//     nTrigger = 4  // 200 GeV (Run10)
-//     nTrigger = 11 // Run11 19.6 GeV
-//     nTrigger = 5 // Run11 27 GeV
-//     nTrigger = 7 // Run11 200 GeV
-//     nTrigger = 16 // Run12 pp200 GeV
-//     nTrigger = 19, // Run13 pp510 GeV st_physics
-//     nTriggerMtd = 7 // Run13 pp510 GeV st_mtd
-    nTrigger    = 25, // Run14 AuAu 200GeV st_physics
-    nTriggerMtd = 18 // Run14 AuAu 200GeV st_mtd
   };
 
 
