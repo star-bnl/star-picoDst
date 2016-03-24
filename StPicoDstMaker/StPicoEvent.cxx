@@ -25,7 +25,6 @@ StPicoEvent::StPicoEvent():
  mZDCx(0), mBBCx(0), mBackgroundRate(0), mBbcBlueBackgroundRate(0), mBbcYellowBackgroundRate(0),
  mBbcEastRate(0), mBbcWestRate(0), mZdcEastRate(0), mZdcWestRate(0),
  mBbcAdcEast{}, mBbcAdcWest{},
- mSpaceCharge(0),
  mHT_Th{}
 {}
 
@@ -105,8 +104,6 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
     if( eastWest == 0 ) mBbcAdcEast[pmtId] = bbc.adc(i) ;
     else                mBbcAdcWest[pmtId] = bbc.adc(i) ;
   }
-
-  mSpaceCharge = ev->runInfo().spaceCharge();
 }
 
 StPicoEvent::~StPicoEvent()

@@ -72,8 +72,6 @@ public:
   UShort_t bbcAdcEast(const Int_t i) const;
   UShort_t bbcAdcWest(const Int_t i) const;
 
-  Float_t spaceCharge() const;
-
   Int_t   ht_th(const Int_t i) const;
   Int_t   jp_th(const Int_t i) const;
 
@@ -133,8 +131,6 @@ protected:
   // BBC ADC for q-vectors (Hiroshi)
   UShort_t mBbcAdcEast[24];
   UShort_t mBbcAdcWest[24];
-
-  Float_t mSpaceCharge;
 
   // Online HT thresholds
   UChar_t mHT_Th[4];
@@ -199,9 +195,6 @@ inline Float_t StPicoEvent::zdcWestRate() const { return mZdcWestRate; }
 inline UShort_t StPicoEvent::bbcAdcEast(const Int_t i) const { return mBbcAdcEast[i]; }
 inline UShort_t StPicoEvent::bbcAdcWest(const Int_t i) const { return mBbcAdcWest[i]; }
 
-inline Float_t StPicoEvent::spaceCharge() const { return mSpaceCharge; }
-
 inline Int_t   StPicoEvent::ht_th(const Int_t i) const { return mHT_Th[i]; }
-
 inline void StPicoEvent::setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }
 #endif
