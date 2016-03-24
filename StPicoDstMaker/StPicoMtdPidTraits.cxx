@@ -9,7 +9,7 @@
 ClassImp(StPicoMtdPidTraits)
 
 //----------------------------------------------------------------------------------
-StPicoMtdPidTraits::StPicoMtdPidTraits() : 
+StPicoMtdPidTraits::StPicoMtdPidTraits() :
   mTrackIndex(-1), mMatchFlag(-1),
   mDeltaY(-999.), mDeltaZ(-999.), mDeltaTimeOfFlight(-999.), mBeta(-999.), mMtdHitChan(-1)
 {
@@ -17,8 +17,8 @@ StPicoMtdPidTraits::StPicoMtdPidTraits() :
 }
 
 //----------------------------------------------------------------------------------
-StPicoMtdPidTraits::StPicoMtdPidTraits(const StMuMtdHit * hit, 
-				       const StMuMtdPidTraits* trait, 
+StPicoMtdPidTraits::StPicoMtdPidTraits(const StMuMtdHit * hit,
+				       const StMuMtdPidTraits* trait,
 				       const Int_t index):
   mTrackIndex((Short_t)index),
   mMatchFlag((Char_t) trait->matchFlag()),
@@ -34,13 +34,13 @@ StPicoMtdPidTraits::StPicoMtdPidTraits(const StMuMtdHit * hit,
 
 //----------------------------------------------------------------------------------
 StPicoMtdPidTraits::~StPicoMtdPidTraits()
-{ 
+{
   // dummy destructor
 }
 //----------------------------------------------------------------------------------
 void StPicoMtdPidTraits::Print(const Char_t *option) const
 {
-  LOG_INFO << "Matched hit: backleg =  " << backleg() 
+  LOG_INFO << "Matched hit: backleg =  " << backleg()
 	   << ", module  = " << module()
 	   << ", cell    = " << cell()
 	   <<endm;

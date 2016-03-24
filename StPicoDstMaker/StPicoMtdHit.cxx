@@ -36,7 +36,7 @@ StPicoMtdHit::StPicoMtdHit(StMuMtdHit const* hit): StPicoMtdHit()
 
 //----------------------------------------------------------------------------------
 StPicoMtdHit::~StPicoMtdHit()
-{ 
+{
   // dummy destructor
 }
 

@@ -20,8 +20,8 @@ class StPicoMtdTrigger : public TObject {
 
  protected:
   static const UShort_t mtd_qt_tac_max = 4095;
-  static const UShort_t mtd_qt_tac_min = 100; 
-  static const UShort_t mtd_qt_tac_diff_range_abs = 600; 
+  static const UShort_t mtd_qt_tac_min = 100;
+  static const UShort_t mtd_qt_tac_diff_range_abs = 600;
 
 
  private:

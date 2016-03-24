@@ -13,7 +13,7 @@ public:
   static Float_t mVzMax;// = 40;
   static Float_t mVrMax;// = 2;
   static Int_t mRefMultMin;// = 8;                    // >=
-  
+
   // track selection
   static Float_t mPtMin;// = 0.1;
   static Int_t mNHitsFitMin;// = 15;                 // >=
@@ -21,5 +21,5 @@ public:
   static Float_t mGDcaMax;// = 10.;
 
   ClassDef(Pico, 1)
-};              
+};
 #endif

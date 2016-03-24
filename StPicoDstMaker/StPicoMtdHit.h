@@ -11,7 +11,7 @@ class StPicoMtdHit : public TObject {
   StPicoMtdHit(StMuMtdHit const* hit);
   virtual ~StPicoMtdHit();
 
-  virtual void Print(const Char_t *option = "") const; 
+  virtual void Print(const Char_t *option = "") const;
 
   void  setTriggerFlag(Int_t const flag);
   Int_t  gChannel()    const;
@@ -19,17 +19,17 @@ class StPicoMtdHit : public TObject {
   Int_t  module()      const;
   Int_t  cell()        const;
   Int_t  triggerFlag() const;
-  
+
   std::pair<Float_t,Float_t> leadingEdgeTime()  const;
   std::pair<Float_t,Float_t> trailingEdgeTime() const;
   std::pair<Float_t,Float_t> tot() const;
-  
+
  protected:
   Short_t mgChannel; // mgChannel = (backleg-1) * 60 + (module-1) * 12 + cell
   UChar_t mTriggerFlag; // # of hits in the corresponding trigger unit that fired the trigger
   std::pair<Float_t,Float_t>  mLeadingEdgeTime;
   std::pair<Float_t,Float_t>  mTrailingEdgeTime;
-	
+
   ClassDef(StPicoMtdHit,1)
 };
 inline void StPicoMtdHit::setTriggerFlag(Int_t const flag) { mTriggerFlag = (UChar_t)flag;}

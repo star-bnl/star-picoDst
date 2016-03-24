@@ -11,7 +11,7 @@ class StPicoCut : public TObject {
  public:
   StPicoCut();
   ~StPicoCut();
-  
+
   bool passEvent( StMuEvent * );
   bool passTrack( StMuTrack * );
   ClassDef(StPicoCut,1)
