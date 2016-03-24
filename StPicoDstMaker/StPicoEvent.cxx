@@ -24,8 +24,6 @@ StPicoEvent::StPicoEvent():
  mNVpdHitsEast(0), mNVpdHitsWest(0), mNT0(0), mVzVpd(std::numeric_limits<short>::max()),
  mZDCx(0), mBBCx(0), mBackgroundRate(0), mBbcBlueBackgroundRate(0), mBbcYellowBackgroundRate(0),
  mBbcEastRate(0), mBbcWestRate(0), mZdcEastRate(0), mZdcWestRate(0),
- mVpd{}, mZdcSumAdcEast(0), mZdcSumAdcWest(0),
- mZdcSmdEastHorizontal{}, mZdcSmdEastVertical{}, mZdcSmdWestHorizontal{}, mZdcSmdWestVertical{},
  mBbcAdcEast{}, mBbcAdcWest{},
  mSpaceCharge(0),
  mHT_Th{}
@@ -84,42 +82,6 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
     mNVpdHitsWest = (UChar_t)(header->numberOfVpdHits(west));
     mNT0 = (UShort_t)(header->nTzero());
     mVzVpd = (fabs(header->vpdVz()*100.)>std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(header->vpdVz()*100.));
-  }
-
-  //Nov.10, 2008, Na
-  StZdcTriggerDetector& ZDC = ev->zdcTriggerDetector();
-  mZdcSumAdcEast = (UShort_t)ZDC.adcSum(east);
-  mZdcSumAdcWest = (UShort_t)ZDC.adcSum(west);
-  for (int strip=1;strip<9;++strip)
-  {
-    if (ZDC.zdcSmd(east,1,strip))
-      mZdcSmdEastHorizontal[strip-1] = (UShort_t)ZDC.zdcSmd(east,1,strip);
-    if (ZDC.zdcSmd(east,0,strip))
-      mZdcSmdEastVertical[strip-1] = (UShort_t)ZDC.zdcSmd(east,0,strip);
-    if (ZDC.zdcSmd(west,1,strip))
-      mZdcSmdWestHorizontal[strip-1] = (UShort_t)ZDC.zdcSmd(west,1,strip);
-    if (ZDC.zdcSmd(west,0,strip))
-      mZdcSmdWestVertical[strip-1] = (UShort_t)ZDC.zdcSmd(west,0,strip);
-  }
-
-  StVpdTriggerDetector& VPD = ev->vpdTriggerDetector();
-
-  for(int i=0; i<16; ++i)
-  {
-    //event.VPD[i]= 1.0*theVPD.adc(i);
-    if(i>=0 && i<8) {
-      mVpd[i]=(UShort_t)VPD.ADC(east,8-i);
-      mVpd[i+8]=(UShort_t)VPD.TDC(east,8-i);
-      mVpd[i+32]=(UShort_t)VPD.ADC(west,8-i);
-      mVpd[i+40]=(UShort_t)VPD.TDC(west,8-i);
-    }
-    if(i>=8 && i<16) {
-      mVpd[i+8]=(UShort_t)VPD.ADC(east,32-(i+8));
-      mVpd[i+16]=(UShort_t)VPD.TDC(east,32-(i+8));
-      mVpd[i+40]=(UShort_t)VPD.ADC(west,32-(i+8));
-      mVpd[i+48]=(UShort_t)VPD.TDC(west,32-(i+8));
-      //cout<<"VPD-------  "<<VPD.ADC(east,32-(i+8))<<endl;
-    }
   }
 
   mZDCx = (UInt_t)ev->runInfo().zdcCoincidenceRate();

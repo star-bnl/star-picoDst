@@ -61,14 +61,6 @@ public:
 
   Float_t  ZDCx() const;
   Float_t  BBCx() const;
-  Float_t  Vpd(int i) const;
-  Float_t  ZdcSumAdcEast() const;
-  Float_t  ZdcSumAdcWest() const;
-  Float_t  ZdcSmdEastHorizontal(int i) const;
-  Float_t  ZdcSmdEastVertical(int i) const;
-  Float_t  ZdcSmdWestHorizontal(int i) const;
-  Float_t  ZdcSmdWestVertical(int i) const;
-
   Float_t backgroundRate() const;
   Float_t bbcBlueBackgroundRate() const;
   Float_t bbcYellowBackgroundRate() const;
@@ -138,15 +130,6 @@ protected:
   Float_t mZdcEastRate;
   Float_t mZdcWestRate;
 
-  //Nov.10, 2008, Na
-  UShort_t mVpd[64];
-  UShort_t mZdcSumAdcEast;
-  UShort_t mZdcSumAdcWest;
-  UShort_t mZdcSmdEastHorizontal[8];
-  UShort_t mZdcSmdEastVertical[8];
-  UShort_t mZdcSmdWestHorizontal[8];
-  UShort_t mZdcSmdWestVertical[8];
-
   // BBC ADC for q-vectors (Hiroshi)
   UShort_t mBbcAdcEast[24];
   UShort_t mBbcAdcWest[24];
@@ -205,14 +188,6 @@ inline Float_t  StPicoEvent::vzVpd() const            { return (Float_t)mVzVpd/1
 
 inline Float_t  StPicoEvent::ZDCx() const             { return (Float_t)mZDCx; }
 inline Float_t  StPicoEvent::BBCx() const             { return (Float_t)mBBCx; }
-inline Float_t  StPicoEvent::Vpd(int i) const         { return (Float_t)mVpd[i]; }
-inline Float_t  StPicoEvent::ZdcSumAdcEast() const    { return (Float_t)mZdcSumAdcEast; }
-inline Float_t  StPicoEvent::ZdcSumAdcWest() const    { return (Float_t)mZdcSumAdcWest; }
-inline Float_t  StPicoEvent::ZdcSmdEastHorizontal(int i) const { return (Float_t)mZdcSmdEastHorizontal[i]; }
-inline Float_t  StPicoEvent::ZdcSmdEastVertical(int i) const   { return (Float_t)mZdcSmdEastVertical[i]; }
-inline Float_t  StPicoEvent::ZdcSmdWestHorizontal(int i) const { return (Float_t)mZdcSmdWestHorizontal[i]; }
-inline Float_t  StPicoEvent::ZdcSmdWestVertical(int i) const   { return (Float_t)mZdcSmdWestVertical[i]; }
-
 inline Float_t StPicoEvent::backgroundRate() const             { return mBackgroundRate; }
 inline Float_t StPicoEvent::bbcBlueBackgroundRate() const      { return mBbcBlueBackgroundRate; }
 inline Float_t StPicoEvent::bbcYellowBackgroundRate() const    { return mBbcYellowBackgroundRate; }
