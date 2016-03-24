@@ -4,21 +4,11 @@
 
   enum {
      nTrk     = 50000,
-     nCen     = 9,
   };
 
 
 class Pico {
 public:
-
-  static Int_t mCent_Year10_200GeV[nCen];// ={14,30,56,94,146,217,312,431,510};
-  static Int_t mCent_Year10_39GeV[nCen];// ={8,16,29,51,82,126,186,266,317};
-  static Int_t mCent_Year10_11_5GeV[nCen];
-  static Int_t mCent_Year10_7_7GeV[nCen];
-  static Int_t mCent_Year11_19_6GeV[nCen];
-  static Int_t mCent_Year11_27GeV[nCen];
-  static Int_t mCent_Year11_200GeV[nCen];
-    
   // event selectioin
   static Float_t mVzMax;// = 40;
   static Float_t mVrMax;// = 2;

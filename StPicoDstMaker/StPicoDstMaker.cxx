@@ -74,7 +74,7 @@ ClassImp(StPicoDstMaker)
 
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(0), mProdMode(0),
+  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mIoMode(0), mProdMode(0),
   mEmcMode(1),
   mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
@@ -97,7 +97,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(mode), mProdMode(0),
+  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mIoMode(mode), mProdMode(0),
   mEmcMode(1),
   mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
@@ -464,7 +464,6 @@ Int_t StPicoDstMaker::MakeWrite() {
   clearIndices();
 
   Int_t refMult = mMuEvent->refMult();
-  mCentrality = centrality(refMult);
   mBField = mMuEvent->magneticField();
 
   StThreeVectorF pVtx(0.,0.,0.);
@@ -944,16 +943,4 @@ void StPicoDstMaker::fillMtdHits() {
 	  hitIndex.erase(hitIndex.begin()+hits[k]);
 	}
     }
-}
-//-----------------------------------------------------------------------
-Int_t StPicoDstMaker::centrality(int refMult) {
-  for(int i=0;i<nCen;i++) {
-//    if(refMult <= Pico::mCent_Year10_39GeV[i]) {
-//    if(refMult <= Pico::mCent_Year10_7_7GeV[i]) {
-//    if(refMult <= Pico::mCent_Year11_19_6GeV[i]) {
-    if(refMult <= Pico::mCent_Year11_200GeV[i]) {
-      return i;
-    }
-  }
-  return nCen;
 }

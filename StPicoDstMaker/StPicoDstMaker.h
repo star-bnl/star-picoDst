@@ -101,7 +101,6 @@ class StPicoDstMaker : public StMaker {
    void fillBTofHits();
    void fillMtdHits();
 
-   Int_t centrality(int);   
    bool getBEMC(StMuTrack *, int*, int*, float*, float*, int*, int*);
    
    enum ioMode {ioRead, ioWrite};
@@ -117,7 +116,6 @@ class StPicoDstMaker : public StMaker {
    StEmcRawHit*     mEmcIndex[4800];
    StPicoDst* mPicoDst;
    StPicoCut* mPicoCut;
-   Int_t      mCentrality;
    Float_t    mBField;
 
    Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write
