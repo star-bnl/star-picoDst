@@ -20,8 +20,6 @@ public:
   static Int_t mCent_Year11_200GeV[nCen];
     
   // event selectioin
-  static Int_t mTriggerId[nTrigger];// = {280001,280002};
-  static Int_t mTriggerIdMtd[nTriggerMtd];// added for Run14+ st_mtd stream data
   static Float_t mVzMax;// = 40;
   static Float_t mVrMax;// = 2;
   static Int_t mRefMultMin;// = 8;                    // >=
