@@ -11,11 +11,6 @@
 class Pico {
 public:
 
-  static UShort_t USHORTMAX;// = 65535;
-  static Short_t  SHORTMAX;//  = 32767;
-  static UChar_t  UCHARMAX;//  = 255;
-  static Char_t   CHARMAX;//   = 127;
-  
   static Int_t mCent_Year10_200GeV[nCen];// ={14,30,56,94,146,217,312,431,510};
   static Int_t mCent_Year10_39GeV[nCen];// ={8,16,29,51,82,126,186,266,317};
   static Int_t mCent_Year10_11_5GeV[nCen];
