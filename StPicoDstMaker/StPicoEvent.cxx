@@ -55,6 +55,14 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst)
   mRefMult2PosEast = (UShort_t)StPicoUtilities::refMult2(1, 0, muDst);
   mRefMult2NegWest = (UShort_t)StPicoUtilities::refMult2(0, 1, muDst);
   mRefMult2PosWest = (UShort_t)StPicoUtilities::refMult2(1, 1, muDst);
+  mRefMult3NegEast = (UShort_t)StPicoUtilities::refMult3(0, 0, muDst);
+  mRefMult3PosEast = (UShort_t)StPicoUtilities::refMult3(1, 0, muDst);
+  mRefMult3NegWest = (UShort_t)StPicoUtilities::refMult3(0, 1, muDst);
+  mRefMult3PosWest = (UShort_t)StPicoUtilities::refMult3(1, 1, muDst);
+  mRefMult4NegEast = (UShort_t)StPicoUtilities::refMult4(0, 0, muDst);
+  mRefMult4PosEast = (UShort_t)StPicoUtilities::refMult4(1, 0, muDst);
+  mRefMult4NegWest = (UShort_t)StPicoUtilities::refMult4(0, 1, muDst);
+  mRefMult4PosWest = (UShort_t)StPicoUtilities::refMult4(1, 1, muDst);
   mRefMultHalfNegEast = (UShort_t)StPicoUtilities::refMultHalf(0, 0, muDst);
   mRefMultHalfPosEast = (UShort_t)StPicoUtilities::refMultHalf(1, 0, muDst);
   mRefMultHalfNegWest = (UShort_t)StPicoUtilities::refMultHalf(0, 1, muDst);

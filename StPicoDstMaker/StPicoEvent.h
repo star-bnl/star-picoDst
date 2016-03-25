@@ -34,6 +34,14 @@ public:
   Int_t    refMult2NegEast() const      { return (Int_t)mRefMult2NegEast; }
   Int_t    refMult2PosWest() const      { return (Int_t)mRefMult2PosWest; }
   Int_t    refMult2NegWest() const      { return (Int_t)mRefMult2NegWest; }
+  Int_t    refMult3PosEast() const      { return (Int_t)mRefMult3PosEast; }
+  Int_t    refMult3NegEast() const      { return (Int_t)mRefMult3NegEast; }
+  Int_t    refMult3PosWest() const      { return (Int_t)mRefMult3PosWest; }
+  Int_t    refMult3NegWest() const      { return (Int_t)mRefMult3NegWest; }
+  Int_t    refMult4PosEast() const      { return (Int_t)mRefMult4PosEast; }
+  Int_t    refMult4NegEast() const      { return (Int_t)mRefMult4NegEast; }
+  Int_t    refMult4PosWest() const      { return (Int_t)mRefMult4PosWest; }
+  Int_t    refMult4NegWest() const      { return (Int_t)mRefMult4NegWest; }
   Int_t    refMultHalfPosEast() const { return (Int_t)mRefMultHalfPosEast; }
   Int_t    refMultHalfNegEast() const { return (Int_t)mRefMultHalfNegEast; }
   Int_t    refMultHalfPosWest() const { return (Int_t)mRefMultHalfPosWest; }
@@ -41,6 +49,12 @@ public:
   Int_t    refMult2East() const       { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast); }
   Int_t    refMult2West() const       { return (Int_t)(mRefMult2PosWest+mRefMult2NegWest); }
   Int_t    refMult2() const           { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast+mRefMult2PosWest+mRefMult2NegWest); }
+  Int_t    refMult3East() const       { return (Int_t)(mRefMult3PosEast+mRefMult3NegEast); }
+  Int_t    refMult3West() const       { return (Int_t)(mRefMult3PosWest+mRefMult3NegWest); }
+  Int_t    refMult3() const           { return (Int_t)(mRefMult3PosEast+mRefMult3NegEast+mRefMult3PosWest+mRefMult3NegWest); }
+  Int_t    refMult4East() const       { return (Int_t)(mRefMult4PosEast+mRefMult4NegEast); }
+  Int_t    refMult4West() const       { return (Int_t)(mRefMult4PosWest+mRefMult4NegWest); }
+  Int_t    refMult4() const           { return (Int_t)(mRefMult4PosEast+mRefMult4NegEast+mRefMult4PosWest+mRefMult4NegWest); }
   Int_t    refMultHalfEast() const    { return (Int_t)(mRefMultHalfPosEast+mRefMultHalfNegEast); }
   Int_t    refMultHalfWest() const    { return (Int_t)(mRefMultHalfPosWest+mRefMultHalfNegWest); }
   Int_t    grefMult() const           { return (Int_t)(mGRefMult); }
@@ -126,6 +140,14 @@ protected: //these are written out
   UShort_t       mRefMult2PosEast; // TPC refMult2 pos (-1<eta<-0.5)
   UShort_t       mRefMult2NegWest; // TPC refMult2 neg (0.5<eta<1.0)
   UShort_t       mRefMult2PosWest; // TPC refMult2 pos (0.5<eta<1.0)
+  UShort_t       mRefMult3NegEast; // TPC refMult3 neg (-1<eta<0.)
+  UShort_t       mRefMult3PosEast; // TPC refMult3 pos (-1<eta<0.)
+  UShort_t       mRefMult3NegWest; // TPC refMult3 neg (0.<eta<1.0)
+  UShort_t       mRefMult3PosWest; // TPC refMult3 pos (0.<eta<1.0)
+  UShort_t       mRefMult4NegEast; // TPC refMult4 neg (-1<eta<0.)
+  UShort_t       mRefMult4PosEast; // TPC refMult4 pos (-1<eta<0.)
+  UShort_t       mRefMult4NegWest; // TPC refMult4 neg (0.<eta<1.0)
+  UShort_t       mRefMult4PosWest; // TPC refMult4 pos (0.<eta<1.0)
   UShort_t       mRefMultHalfNegEast ;// TPC refMultHalf neg (eta<0)
   UShort_t       mRefMultHalfPosEast ;// TPC refMultHalf pos (eta<0)
   UShort_t       mRefMultHalfNegWest ;// TPC refMultHalf neg (eta>0)
