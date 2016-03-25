@@ -84,11 +84,8 @@ class StPicoDstMaker : public StMaker {
 
    Bool_t initMtd();
 
-   void assignArrays();
    void clearArrays();
-   void zeroArrays();
    void createArrays();
-   TClonesArray* clonesArray(TClonesArray*& p, const char* type, int size, int& counter);
 
    Int_t MakeRead();
    Int_t MakeWrite();

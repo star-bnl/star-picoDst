@@ -74,60 +74,42 @@ ClassImp(StPicoDstMaker)
 
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mIoMode(0), mProdMode(0),
-  mEmcMode(1),
-  mOutputFile(0),
-  mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
+  mMuDst(nullptr), mMuEvent(nullptr), mBTofHeader(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
+  mEmcGeom{}, mEmcIndex{},
+  mPicoDst(nullptr), mPicoCut(nullptr), mBField(0),
+  mIoMode(0), mProdMode(0), mEmcMode(1),
+  mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
+  mRunNumber(0),
+  mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536*4),
+  mIndex2Primary{}, mMap2Track{},
+  mModuleToQT{}, mModuleToQTPos{},
+  mPicoAllArrays{}, mPicoArrays(mPicoAllArrays), mStatusArrays{}
 {
-  assignArrays();
   streamerOff();
-  zeroArrays();
   createArrays();
   mPicoDst = new StPicoDst();
   mPicoCut = new StPicoCut();
 
-  mInputFileName="";
-  mOutputFileName="";
-  mEventCounter=0;
-
-  memset(mEmcIndex, 0, sizeof(mEmcIndex));
-
+  memset(mStatusArrays, (char)1, sizeof(mStatusArrays));
   memset(mModuleToQT,-1,sizeof(mModuleToQT));
   memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
 }
 //-----------------------------------------------------------------------
-StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mIoMode(mode), mProdMode(0),
-  mEmcMode(1),
-  mOutputFile(0),
-  mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
+StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StPicoDstMaker(name)
 {
-  assignArrays();
-  streamerOff();
-  zeroArrays();
-  createArrays();
-  mPicoDst = new StPicoDst();
-  mPicoCut = new StPicoCut();
+  mIoMode = mode;
 
-  if(mIoMode==ioWrite) {
+  if(mIoMode==ioWrite)
+  {
     TString inputDirFile = fileName;  // input is actually the full name including path
-    Int_t index = inputDirFile.Index("st_");
-    mInputFileName="";
-    for(int i=index;i<(int)inputDirFile.Length();i++) {
-      mInputFileName.Append(inputDirFile(i));
-    }
-    mOutputFileName=mInputFileName;
+    mInputFileName = inputDirFile(inputDirFile.Index("st_"),inputDirFile.Length());
+    mOutputFileName = mInputFileName;
     mOutputFileName.ReplaceAll("MuDst.root","picoDst.root");
   }
-  if(mIoMode==ioRead) {
+  else if(mIoMode==ioRead)
+  {
     mInputFileName = fileName;
   }
-  mEventCounter=0;
-
-  memset(mEmcIndex, 0, sizeof(mEmcIndex));
-
-  memset(mModuleToQT,-1,sizeof(mModuleToQT));
-  memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::~StPicoDstMaker() {
@@ -141,23 +123,12 @@ void StPicoDstMaker::clearIndices() {
   for(size_t i=0;i<nTrk;i++) mMap2Track[i] = -1;
 }
 //-----------------------------------------------------------------------
-void StPicoDstMaker::assignArrays()
-{
-  mPicoArrays     = mPicoAllArrays + 0;
-}
-//-----------------------------------------------------------------------
 void StPicoDstMaker::clearArrays()
 {
   for ( int i=0; i<__NALLPICOARRAYS__; i++) {
     mPicoAllArrays[i]->Clear();
     StPicoArrays::picoArrayCounters[i] = 0;
   }
-}
-//-----------------------------------------------------------------------
-void StPicoDstMaker::zeroArrays()
-{
-  memset(mPicoAllArrays, 0, sizeof(void*)*__NALLPICOARRAYS__);
-  memset(mStatusArrays, (char)1, sizeof(mStatusArrays)); // defaul all ON
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::SetStatus(const char *arrType, int status)
@@ -213,20 +184,16 @@ void  StPicoDstMaker::streamerOff() {
   StPicoTrack::Class()->IgnoreTObjectStreamer();
 }
 //-----------------------------------------------------------------------
-void StPicoDstMaker::createArrays() {
-  for ( int i=0; i<__NALLPICOARRAYS__; i++) {
-    clonesArray(mPicoAllArrays[i],StPicoArrays::picoArrayTypes[i],StPicoArrays::picoArraySizes[i],StPicoArrays::picoArrayCounters[i]);
+void StPicoDstMaker::createArrays()
+{
+  for ( int i=0; i<__NALLPICOARRAYS__; ++i)
+  {
+    mPicoAllArrays[i] = new TClonesArray(StPicoArrays::picoArrayTypes[i],StPicoArrays::picoArraySizes[i]);
+    StPicoArrays::picoArrayCounters[i] = 0;
   }
+
   mPicoDst->set(this);
 }
-//-----------------------------------------------------------------------
-TClonesArray* StPicoDstMaker::clonesArray(TClonesArray*& p, const char* type, int size, int& counter) {
-  if(p) return p;
-  p = new TClonesArray(type, size);
-  counter=0;
-  return p;
-}
-
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Init(){
   if (mIoMode == ioRead) {
