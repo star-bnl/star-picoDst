@@ -69,6 +69,13 @@ public:
   Float_t zdcEastRate() const;
   Float_t zdcWestRate() const;
 
+  Float_t  ZdcSumAdcEast() const;
+  Float_t  ZdcSumAdcWest() const;
+  Float_t  ZdcSmdEastHorizontal(int i) const;
+  Float_t  ZdcSmdEastVertical(int i) const;
+  Float_t  ZdcSmdWestHorizontal(int i) const;
+  Float_t  ZdcSmdWestVertical(int i) const;
+
   UShort_t bbcAdcEast(const Int_t i) const;
   UShort_t bbcAdcWest(const Int_t i) const;
 
@@ -126,6 +133,13 @@ protected:
   Float_t mBbcWestRate;
   Float_t mZdcEastRate;
   Float_t mZdcWestRate;
+
+  UShort_t mZdcSumAdcEast;
+  UShort_t mZdcSumAdcWest;
+  UShort_t mZdcSmdEastHorizontal[8];
+  UShort_t mZdcSmdEastVertical[8];
+  UShort_t mZdcSmdWestHorizontal[8];
+  UShort_t mZdcSmdWestVertical[8];
 
   // BBC ADC for q-vectors (Hiroshi)
   UShort_t mBbcAdcEast[24];
@@ -190,6 +204,13 @@ inline Float_t StPicoEvent::bbcEastRate() const { return mBbcEastRate; }
 inline Float_t StPicoEvent::bbcWestRate() const { return mBbcWestRate; }
 inline Float_t StPicoEvent::zdcEastRate() const { return mZdcEastRate; }
 inline Float_t StPicoEvent::zdcWestRate() const { return mZdcWestRate; }
+
+inline Float_t  StPicoEvent::ZdcSumAdcEast() const    { return (Float_t)mZdcSumAdcEast; }
+inline Float_t  StPicoEvent::ZdcSumAdcWest() const    { return (Float_t)mZdcSumAdcWest; }
+inline Float_t  StPicoEvent::ZdcSmdEastHorizontal(int i) const { return (Float_t)mZdcSmdEastHorizontal[i]; }
+inline Float_t  StPicoEvent::ZdcSmdEastVertical(int i) const   { return (Float_t)mZdcSmdEastVertical[i]; }
+inline Float_t  StPicoEvent::ZdcSmdWestHorizontal(int i) const { return (Float_t)mZdcSmdWestHorizontal[i]; }
+inline Float_t  StPicoEvent::ZdcSmdWestVertical(int i) const   { return (Float_t)mZdcSmdWestVertical[i]; }
 
 inline UShort_t StPicoEvent::bbcAdcEast(const Int_t i) const { return mBbcAdcEast[i]; }
 inline UShort_t StPicoEvent::bbcAdcWest(const Int_t i) const { return mBbcAdcWest[i]; }
