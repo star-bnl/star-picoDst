@@ -1,4 +1,5 @@
 #include <bitset>
+#include <string>
 #include "TRegexp.h"
 #include "StChain/StChain.h"
 #include "StPicoDstMaker.h"
@@ -261,40 +262,54 @@ Int_t StPicoDstMaker::Finish(){
   return kStOK;
 }
 //-----------------------------------------------------------------------
-Int_t StPicoDstMaker::openRead() {
+Int_t StPicoDstMaker::openRead()
+{
   if(!mChain) mChain = new TChain("PicoDst");
-  string dirFile = mInputFileName.Data();
-  if (dirFile.find(".list")!=string::npos)  {
-    ifstream inputStream(dirFile.c_str());
-    if(!(inputStream.good())) {
-      LOG_ERROR << "ERROR: Cannot open list file " << dirFile << endm;
-    }
-    char line[512];
-    int nFile=0;
-    string ltest;
-    while (inputStream.good()) {
-      inputStream.getline(line,512);
-      string aFile = line;
-      if (inputStream.good() && aFile.find(".picoDst.root")!=string::npos) {
 
-        TFile ftmp(line);
-        if(!ftmp.IsZombie() && ftmp.GetNkeys()) {
-          LOG_INFO << " Read in picoDst file " << line << endm;
-          mChain->Add(line);
-          nFile++;
+  string const dirFile = mInputFileName.Data();
+  if (dirFile.find(".list")!=string::npos)
+  {
+    ifstream inputStream(dirFile.c_str());
+
+    if(!inputStream)
+    {
+      LOG_ERROR << "ERROR: Cannot open list file " << dirFile << endm;
+      return kStErr;
+    }
+
+    int nFile=0;
+    string file;
+    while (getline(inputStream,file))
+    {
+      if (file.find(".picoDst.root")!=string::npos)
+      {
+        TFile ftmp(file.c_str());
+        if(!ftmp.IsZombie() && ftmp.GetNkeys())
+        {
+          LOG_INFO << " Read in picoDst file " << file << endm;
+          mChain->Add(file.c_str());
+          ++nFile;
         }
       }
     }
+
     LOG_INFO << " Total " << nFile << " files have been read in. " << endm;
-  } else if (dirFile.find(".picoDst.root")!=string::npos)  {
+  }
+  else if (dirFile.find(".picoDst.root")!=string::npos)
+  {
     mChain->Add(dirFile.c_str());
-  } else {
+  }
+  else
+  {
     LOG_WARN << " No good input file to read ... " << endm;
   }
-  if(mChain) {
+
+  if(mChain)
+  {
     setBranchAddresses(mChain);
     mPicoDst->set(this);
   }
+
   return kStOK;
 }
 //-----------------------------------------------------------------------

@@ -26,7 +26,6 @@ class StPicoCut;
 #include "StEvent/StEmcRawHit.h"
 #include <vector>
 #include <utility>
-#include <string>
 
 #if !defined(ST_NO_NAMESPACES)
 using namespace std;
