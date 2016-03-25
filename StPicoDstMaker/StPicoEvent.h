@@ -73,7 +73,6 @@ public:
   UShort_t bbcAdcWest(const Int_t i) const;
 
   Int_t   ht_th(const Int_t i) const;
-  Int_t   jp_th(const Int_t i) const;
 
   int      year() const;
   int      day() const;
