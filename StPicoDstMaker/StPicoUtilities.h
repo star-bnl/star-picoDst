@@ -1,8 +1,8 @@
 #ifndef StPicoUtilities_h
 #define StPicoUtilities_h
 
-#include "StMuDSTMaker/COMMON/StMuTrack.h" 
-#include "StMuDSTMaker/COMMON/StMuDst.h" 
+#include "StMuDSTMaker/COMMON/StMuTrack.h"
+#include "StMuDSTMaker/COMMON/StMuDst.h"
 
 namespace StPicoUtilities {
 
@@ -19,7 +19,7 @@ namespace StPicoUtilities {
 
       // these first 3 checks are easy, save time
       const Bool_t isChargeOk = (charge==0&&track->charge()<0)||(charge==1&&track->charge()>0);
-      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue; 
+      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue;
 
       // check eta, a bit more elaborate
       if (fabs(track->momentum().mag())<1.e-10) 		continue;
@@ -44,7 +44,7 @@ namespace StPicoUtilities {
 
       // these first 3 checks are easy, save time
       const Bool_t isChargeOk = (charge==0&&track->charge()<0)||(charge==1&&track->charge()>0);
-      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue; 
+      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue;
 
       // check eta, a bit more elaborate
       if (fabs(track->momentum().mag())<1.e-10) continue;
@@ -71,7 +71,7 @@ namespace StPicoUtilities {
 
       // these first 3 checks are easy, save time
       const Bool_t isChargeOk = (charge==0&&track->charge()<0)||(charge==1&&track->charge()>0);
-      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue; 
+      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue;
 
       // check eta, a bit more elaborate
       if (fabs(track->momentum().mag())<1.e-10) continue;

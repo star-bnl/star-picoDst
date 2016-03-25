@@ -74,7 +74,7 @@ ClassImp(StPicoDstMaker)
 
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(0), mProdMode(0),
+  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mIoMode(0), mProdMode(0),
   mEmcMode(1),
   mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
@@ -85,7 +85,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   createArrays();
   mPicoDst = new StPicoDst();
   mPicoCut = new StPicoCut();
-  
+
   mInputFileName="";
   mOutputFileName="";
   mEventCounter=0;
@@ -97,7 +97,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mCentrality(0), mIoMode(mode), mProdMode(0),
+  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mIoMode(mode), mProdMode(0),
   mEmcMode(1),
   mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
@@ -233,7 +233,7 @@ Int_t StPicoDstMaker::Init(){
     openRead();     // if read
   } else if (mIoMode == ioWrite) {
     openWrite();
-    if(!initMtd()) {                                                                            
+    if(!initMtd()) {
       LOG_ERROR << " MTD initialization error!!! " << endm;
       return kStErr;
     }
@@ -307,7 +307,7 @@ Int_t StPicoDstMaker::openRead() {
     string ltest;
     while (inputStream.good()) {
       inputStream.getline(line,512);
-      string aFile = line;      
+      string aFile = line;
       if (inputStream.good() && aFile.find(".picoDst.root")!=string::npos) {
 
         TFile ftmp(line);
@@ -368,7 +368,7 @@ void StPicoDstMaker::buildEmcIndex() {
     for (size_t iHit=0; iHit<modHits.size(); ++iHit) {
       StEmcRawHit* rawHit = modHits[iHit];
       if(!rawHit) continue;
-      unsigned int softId = rawHit->softId(1); 
+      unsigned int softId = rawHit->softId(1);
       if (mEmcGeom[0]->checkId(softId)==0) { // OK
         mEmcIndex[softId-1] = rawHit;
       }
@@ -464,7 +464,6 @@ Int_t StPicoDstMaker::MakeWrite() {
   clearIndices();
 
   Int_t refMult = mMuEvent->refMult();
-  mCentrality = centrality(refMult);
   mBField = mMuEvent->magneticField();
 
   StThreeVectorF pVtx(0.,0.,0.);
@@ -525,7 +524,7 @@ void StPicoDstMaker::fillTracks() {
     int id = -1;
     int adc0; float e[5]; float dist[4]; int nhit[2]; int ntow[3];
     if(mEmcMode) getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
-    
+
     if(mProdMode==4)
       {
 	// save only electron or muon candidates
@@ -609,7 +608,7 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
     LOG_WARN << " Projection failed for this track ... " << endm;
     return kFALSE;
   }
- 
+
   if(ok && okBSMDE && okBSMDP) {
 
   Int_t mod=0, eta=0, sub=0;
@@ -689,8 +688,8 @@ bool StPicoDstMaker::getBEMC(StMuTrack *t, int *id, int *adc, float *ene, float 
         mEmcGeom[0]->getEta(nextTowerId, etaTemp);
         mEmcGeom[0]->getPhi(nextTowerId, phiTemp);
         ene[2] = emcHit->energy();
-        d[2] = position.pseudoRapidity() - etaTemp; 
-        d[3] = position.phi() - phiTemp; 
+        d[2] = position.pseudoRapidity() - etaTemp;
+        d[3] = position.phi() - phiTemp;
       }
       else {
         energyTemp = emcHit->energy();
@@ -749,70 +748,40 @@ void StPicoDstMaker::fillEmcTrigger() {
   StTriggerSimuMaker *trigSimu = (StTriggerSimuMaker *)GetMaker("StarTrigSimu");
   if(!trigSimu) return;
 
-  int trgId = mPicoDst->event()->triggerWord();
-  
   int bht0 = trigSimu->bemc->barrelHighTowerTh(0);
   int bht1 = trigSimu->bemc->barrelHighTowerTh(1);
   int bht2 = trigSimu->bemc->barrelHighTowerTh(2);
   int bht3 = trigSimu->bemc->barrelHighTowerTh(3);
   LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
   for(int i=0;i<4;i++) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
-  
-  bool fireBHT1 = false;
-  bool fireBHT2 = false;
-  bool fireBHT3 = false;
 
-
-  for (int towerId = 1; towerId <= 4800; ++towerId) {
+  for (int towerId = 1; towerId <= 4800; ++towerId)
+  {
     int status;
     trigSimu->bemc->getTables()->getStatus(BTOW, towerId, status);
-    int adc = trigSimu->bemc->barrelHighTowerAdc(towerId);    
-//    if(towerId==4684) cout << " Id = " << towerId << " status = " << status << " adc = " << adc << endl;
+    int adc = trigSimu->bemc->barrelHighTowerAdc(towerId);
     int flag = 0;
 
-    if( ( trgId>>19 & 0x3 ) ) { // BHT1*VPDMB-30
-      if(adc>bht1) {
-        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
-        fireBHT1 = true;
-        flag |= 1<<1;
-      }
+    if(adc>bht1) {
+      LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+      flag |= 1<<1;
     }
 
-    if( ( trgId>>21 & 0x3 ) ) { // BHT2*VPDMB-30
-      if(adc>bht2) {
-        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
-        fireBHT2 = true;
-        flag |= 1<<2;
-      }
+    if(adc>bht2) {
+      LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+      flag |= 1<<2;
     }
 
-    if( ( trgId>>23 & 0x3 ) ) { // BHT3
-      if(adc>bht3) {
-        LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
-        fireBHT3 = true; 
-        flag |= 1<<3;
-      }
+    if(adc>bht3) {
+      LOG_DEBUG << " id = " << towerId << " adc = " << adc << endm;
+      flag |= 1<<3;
     }
-
 
     if( flag & 0xf ) {
       int counter = mPicoArrays[picoEmcTrigger]->GetEntries();
       new((*(mPicoArrays[picoEmcTrigger]))[counter]) StPicoEmcTrigger(flag, towerId, adc);
     }
-
   }
-
-  if( ( ( trgId>>19 & 0x3 ) ) && !fireBHT1 ) {
-    LOG_WARN << " something is wrong with the bht1 in this event!!! " << endm;
-  }
-  if( ( ( trgId>>21 & 0x3 ) ) && !fireBHT2 ) {
-    LOG_WARN << " something is wrong with the bht2 in this event!!! " << endm;
-  }
-  if( ( ( trgId>>23 & 0x3 ) ) && !fireBHT3 ) {
-    LOG_WARN << " something is wrong with the bht3 in this event!!! " << endm;
-  }
-  
-  return;
 }
 
 //-----------------------------------------------------------------------
@@ -918,7 +887,7 @@ void StPicoDstMaker::fillMtdHits() {
 	triggerQT[i][j] = 0;
       for(Int_t j=0; j<8; j++)
 	triggerBit[i][j] = kFALSE;
-      
+
       trigger->getMaximumQTtac(i+1,pos1,pos2);
       triggerQT[i][0] = pos1;
       triggerQT[i][1] = pos2;
@@ -930,12 +899,12 @@ void StPicoDstMaker::fillMtdHits() {
 	    }
 	}
     }
- 
+
 
   Int_t nHits = mPicoArrays[picoMtdHit]->GetEntries();
   vector<Int_t> triggerPos;
   vector<Int_t> hitIndex;
-  
+
   for(Int_t i=0; i<nHits; i++)
     {
       StPicoMtdHit *hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(i));
@@ -965,7 +934,7 @@ void StPicoDstMaker::fillMtdHits() {
 	  if(triggerPos[j] == triggerPos[0])
 	    hits.push_back(j);
 	}
-	 
+
       for(Int_t k=(Int_t)hits.size()-1; k>-1; k--)
 	{
 	  StPicoMtdHit *hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(hitIndex[hits[k]]));
@@ -974,16 +943,4 @@ void StPicoDstMaker::fillMtdHits() {
 	  hitIndex.erase(hitIndex.begin()+hits[k]);
 	}
     }
-}
-//-----------------------------------------------------------------------
-Int_t StPicoDstMaker::centrality(int refMult) {
-  for(int i=0;i<nCen;i++) {
-//    if(refMult <= Pico::mCent_Year10_39GeV[i]) {
-//    if(refMult <= Pico::mCent_Year10_7_7GeV[i]) {
-//    if(refMult <= Pico::mCent_Year11_19_6GeV[i]) {
-    if(refMult <= Pico::mCent_Year11_200GeV[i]) {
-      return i;
-    }
-  }
-  return nCen;
 }

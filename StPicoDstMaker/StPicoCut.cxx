@@ -46,28 +46,6 @@ bool StPicoCut::passEvent( StMuEvent *ev )
     return kFALSE ;
   }
 
-  bool isTrg = kFALSE;
-  for(int i=0;i<nTrigger;i++) {
-    if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerId[i])){
-      isTrg = kTRUE;
-      break;
-    }
-  }
-
-  if(!isTrg){
-    for(int i=0;i<nTriggerMtd;i++) {
-      if(ev->triggerIdCollection().nominal().isTrigger(Pico::mTriggerIdMtd[i])){
-	isTrg = kTRUE;
-	break;
-      }
-    }
-  }
-
-  if(!isTrg) {
-    LOG_INFO << "StPicoCut::passEvent trigger not fired " << endm;
-    return kFALSE;
-  }
-
   if(ev->refMult()<Pico::mRefMultMin) {
     LOG_INFO << "StPicoCut::passEvent refMult out of range, refMult = " << ev->refMult() << endm;
     return kFALSE;

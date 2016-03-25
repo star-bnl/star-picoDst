@@ -10,7 +10,7 @@ class StPicoBTofHit : public TObject {
   virtual ~StPicoBTofHit();
 
   virtual void Print(const Char_t *option = "") const;  ///< Print trigger info
- 
+
   Int_t   id() const;
   Int_t   tray() const;
   Int_t   module() const;

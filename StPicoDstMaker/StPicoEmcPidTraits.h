@@ -36,13 +36,13 @@ class StPicoEmcPidTraits: public TObject {
   Short_t  mBEMCId;           // index in bemcPoint array
   Short_t  mBTOWADC0;         // adc0 higest adc in the cluster
   Short_t  mBTOWE0;           // E0*1000 highest tower in the cluster
-  Short_t  mBTOWE;            // EMC point E*1000 
+  Short_t  mBTOWE;            // EMC point E*1000
   Short_t  mBEMCDistZ;        // z*100
   Short_t  mBEMCDistPhi;      // phi*10000
   UChar_t  mBSMDNEta;         // # of hits in eta
   UChar_t  mBSMDNPhi;         // # of hits in phi
 
-  // these variables are purely from single tower or nearby towers  
+  // these variables are purely from single tower or nearby towers
   Short_t  mBTOWId;           // projected tower Id 1-4800
   Char_t   mBTOWId23;         // emc 2nd and 3rd closest tower local id  ( 2nd X 10 + 3rd), each id 0-8
   Short_t  mBTOWE1;           // E1*1000 matched (closest) tower E

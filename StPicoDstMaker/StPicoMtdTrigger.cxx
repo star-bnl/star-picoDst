@@ -38,7 +38,7 @@ StPicoMtdTrigger::StPicoMtdTrigger(const StTriggerData *trigger): StPicoMtdTrigg
           Int_t j2 = mtdQTtac[im][i];
           Int_t j3 = mtdQTtac[im][i+1];
 
-          if(j2<mtd_qt_tac_min || j2>mtd_qt_tac_max || 
+          if(j2<mtd_qt_tac_min || j2>mtd_qt_tac_max ||
              j3<mtd_qt_tac_min || j3>mtd_qt_tac_max ||
              TMath::Abs(j2-j3)>mtd_qt_tac_diff_range_abs) continue;
 
@@ -62,7 +62,7 @@ StPicoMtdTrigger::StPicoMtdTrigger(const StTriggerData *trigger): StPicoMtdTrigg
     {
       mTF201TriggerBit |= ((decision>>(i+4))&0x1)<<i;
     }
-  LOG_DEBUG << "input  = " << (std::bitset<16>) decision << endm;  
+  LOG_DEBUG << "input  = " << (std::bitset<16>) decision << endm;
   LOG_DEBUG << "output = " << (std::bitset<8>)  mTF201TriggerBit << endm;
 }
 

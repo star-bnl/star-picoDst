@@ -23,18 +23,18 @@ class StPicoTrack : public TObject {
   virtual ~StPicoTrack() {}
 
   // This class doesn't allocate any data on the heap so the default copy ctor
-  // and assignment operators are sufficient. The compiler will generate them 
+  // and assignment operators are sufficient. The compiler will generate them
   // by default for this class because the destructor is explicitely defined.
   // But please note that this auto-generation feature is deprecated, i.e.
   // it might disappear from future compiler implementations.
   // Explicitely requesting the defaults as done below is the way to go, however
-  // it currently doesn't work with STAR version of rootcint which is needed for 
+  // it currently doesn't work with STAR version of rootcint which is needed for
   // ROOT I/O on this object.
   //StPicoTrack(StPicoTrack const&) = default;
   //StPicoTrack& operator=(StPicoTrack const&) = default;
 
   virtual void Print(const Char_t* option = "") const;  ///< Print track info
-            
+
   Int_t   id() const;
   Float_t chi2() const;
   Float_t gPt() const;
@@ -51,7 +51,7 @@ class StPicoTrack : public TObject {
   Float_t nSigmaKaon() const;
   Float_t nSigmaProton() const;
   Float_t nSigmaElectron() const;
-  
+
   UInt_t  map0() const;
   UInt_t  map1() const;
 
@@ -61,7 +61,7 @@ class StPicoTrack : public TObject {
   StDcaGeometry dcaGeometry() const;
   StPhysicalHelixD helix() const;
   bool isHFTTrack() const;
-          
+
   // MTD pid traits
   void setEmcPidTraitsIndex(Int_t index);
   void setBTofPidTraitsIndex(Int_t index);
@@ -85,9 +85,9 @@ class StPicoTrack : public TObject {
   Short_t  mNSigmaElectron;   // nsigmaE * 100
   UInt_t   mMap0;             // TopologyMap data0
   UInt_t   mMap1;             // TopologyMap data1
-  
+
   // a copy of the StMuTrack::dcaGeometry() parameters
-  Float_t  mPar[6];                                            
+  Float_t  mPar[6];
   Float_t  mErrMatrix[15];
   // pidTraits
   Short_t  mEmcPidTraitsIndex;  // index of the EMC  pidTratis in the event
@@ -131,7 +131,7 @@ inline StDcaGeometry StPicoTrack::dcaGeometry() const
   StDcaGeometry a;
   a.set(mPar, mErrMatrix);
   return a;
-}      
+}
 
 /// Return the global momentum at the dca point to the pVtx (usually it is the primary vertex.   B - magnetic field from PicoEvent::bField()
 inline StThreeVectorF StPicoTrack::gMom(StThreeVectorF const& pVtx, float B) const

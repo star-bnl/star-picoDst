@@ -13,8 +13,8 @@ ClassImp(StPicoBTofPidTraits)
 //----------------------------------------------------------------------------------
 StPicoBTofPidTraits::StPicoBTofPidTraits() :
   mTrackIndex(-1),
-  mBTofCellId(-1), mBTofMatchFlag(-1), 
-  mBTof(0), mBTofBeta(0), 
+  mBTofCellId(-1), mBTofMatchFlag(-1),
+  mBTof(0), mBTofBeta(0),
   mBTofYLocal(-999), mBTofZLocal(-999),
   mBTofHitPosX(-999), mBTofHitPosY(-999), mBTofHitPosZ(-999)
 {
@@ -22,15 +22,15 @@ StPicoBTofPidTraits::StPicoBTofPidTraits() :
 }
 
 //----------------------------------------------------------------------------------
-StPicoBTofPidTraits::StPicoBTofPidTraits(const StMuTrack *gTrack, 
-					 const StMuTrack *pTrack, 
+StPicoBTofPidTraits::StPicoBTofPidTraits(const StMuTrack *gTrack,
+					 const StMuTrack *pTrack,
 					 const Int_t index): StPicoBTofPidTraits()
 {
   mTrackIndex = (index > std::numeric_limits<short>::max()) ? -1 : (Short_t)index;
 
   StMuBTofHit *btofHit = (StMuBTofHit*)gTrack->tofHit();
-  Int_t tray         = btofHit->tray(); 
-  Int_t module       = btofHit->module(); 
+  Int_t tray         = btofHit->tray();
+  Int_t module       = btofHit->module();
   Int_t cell         = btofHit->cell();
   Float_t tof        = gTrack->btofPidTraits().timeOfFlight();
   Float_t beta       = (pTrack) ? pTrack->btofPidTraits().beta() : -999.;

@@ -34,12 +34,12 @@ protected:
   static TClonesArray** picoArrays;
 
 public:
-  /// returns pointer to the n-th TClonesArray 
+  /// returns pointer to the n-th TClonesArray
   static TClonesArray* picoArray(int type) { return picoArrays[type]; }
 
   /// returns pointer to current StPicoEvent (class holding the event wise information)
   static StPicoEvent* event() { return (StPicoEvent*)picoArrays[picoEvent]->UncheckedAt(0); }
-  /// return pointer to i-th track 
+  /// return pointer to i-th track
   static StPicoTrack* track(int i) { return (StPicoTrack*)picoArrays[picoTrack]->UncheckedAt(i); }
   /// return pointer to i-th trigger data
   static StPicoEmcTrigger* emcTrigger(int i) { return (StPicoEmcTrigger*)picoArrays[picoEmcTrigger]->UncheckedAt(i); }
@@ -58,7 +58,7 @@ public:
   static StPicoBTofPidTraits* btofPidTraits(int i) { return (StPicoBTofPidTraits*)picoArrays[picoBTofPidTraits]->UncheckedAt(i); }
   /// return pointer to i-th mtd pidTraits
   static StPicoMtdPidTraits* mtdPidTraits(int i) { return (StPicoMtdPidTraits*)picoArrays[picoMtdPidTraits]->UncheckedAt(i); }
-       
+
   static unsigned int numberOfTracks() { return picoArrays[picoTrack]->GetEntries(); }
   static unsigned int numberOfEmcTriggers() { return picoArrays[picoEmcTrigger]->GetEntries(); }
   static unsigned int numberOfBTOWHits() { return picoArrays[picoBTOWHit]->GetEntries(); }
@@ -67,7 +67,7 @@ public:
   static unsigned int numberOfEmcPidTraits()  { return picoArrays[picoEmcPidTraits] ->GetEntries();  }
   static unsigned int numberOfBTofPidTraits() { return picoArrays[picoBTofPidTraits]->GetEntries();  }
   static unsigned int numberOfMtdPidTraits()  { return picoArrays[picoMtdPidTraits] ->GetEntries();  }
-      
+
   virtual void Print(Option_t *option = "") const; ///< Print basic event info
   static void printTracks();
   static void printTriggers();
@@ -77,8 +77,6 @@ public:
   static void printEmcPidTraits();
   static void printBTofPidTraits();
   static void printMtdPidTraits();
-        
-  friend class StPicoDstMaker;
 
   ClassDef(StPicoDst,1)
 };

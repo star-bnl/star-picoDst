@@ -33,9 +33,9 @@ using namespace std;
 #endif
 
 class StPicoDstMaker : public StMaker {
- public: 
+ public:
    StPicoDstMaker(const char *name="PicoDst");
-   StPicoDstMaker(int mode, const char* fileName="", const char* name="PicoDst"); 
+   StPicoDstMaker(int mode, const char* fileName="", const char* name="PicoDst");
    virtual ~StPicoDstMaker();
 
    virtual Int_t Init();
@@ -46,7 +46,7 @@ class StPicoDstMaker : public StMaker {
    void printArrays();
    void SetStatus(const char *arrType,int status);
 
-   void setRunNumber(Int_t);              
+   void setRunNumber(Int_t);
    void setProdMode(Int_t);
    void setEmcMode(const Int_t mode=1); // 0:No EMC, 1:EMC On
    /// Returns null pointer if no StPicoDst
@@ -55,22 +55,22 @@ class StPicoDstMaker : public StMaker {
    TChain* chain();
    /// Returns pointer to the current TTree, the top level io structure
    TTree* tree();
-        
+
    /// Sets the split level for the file and all branches. Please refer to the ROOT manual (http://root.cern.ch) for more info
    void setSplit(int=99);
    /// Sets the buffer size for all branches.
    void setBufferSize(int=65536*4);
    /// Sets the compression level for the file and all branches. 0 means no compression, 9 is the higher compression level.
    void setCompression(int comp=9);
-                          
+
  protected:
  #define saveDelete(t) { delete t; t=0;}
- 
+
    void streamerOff();
-  
+
    void openWrite();
    void write();
-   void closeWrite(); 
+   void closeWrite();
    Int_t openRead();
    void  read();
    void setBranchAddresses();
@@ -101,13 +101,12 @@ class StPicoDstMaker : public StMaker {
    void fillBTofHits();
    void fillMtdHits();
 
-   Int_t centrality(int);   
    bool getBEMC(StMuTrack *, int*, int*, float*, float*, int*, int*);
-   
+
    enum ioMode {ioRead, ioWrite};
    // production modes for different data sets
    enum prodMode {minbias, central, ht, minbias2};
-    
+
    StMuDst*   mMuDst;
    StMuEvent* mMuEvent;
    StBTofHeader*    mBTofHeader;
@@ -117,7 +116,6 @@ class StPicoDstMaker : public StMaker {
    StEmcRawHit*     mEmcIndex[4800];
    StPicoDst* mPicoDst;
    StPicoCut* mPicoCut;
-   Int_t      mCentrality;
    Float_t    mBField;
 
    Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write
@@ -131,26 +129,26 @@ class StPicoDstMaker : public StMaker {
 
    TChain*   mChain;
    TTree*    mTTree;
-   
+
    int mEventCounter;
    int mSplit;
    int mCompression;
    int mBufferSize;
-   
+
    Int_t mIndex2Primary[nTrk];
    Int_t mMap2Track[nTrk];
 
    // MTD map from backleg to QT
   Int_t  mModuleToQT[30][5];     // Map from module to QT board index
   Int_t  mModuleToQTPos[30][5];  // Map from module to the position on QA board
-         
+
    //
    friend class StPicoDst;
 
-   TClonesArray*   mPicoAllArrays[__NALLPICOARRAYS__];   
+   TClonesArray*   mPicoAllArrays[__NALLPICOARRAYS__];
    TClonesArray**  mPicoArrays;
    char            mStatusArrays[__NALLPICOARRAYS__];
-   
+
    ClassDef(StPicoDstMaker,1)
 };
 

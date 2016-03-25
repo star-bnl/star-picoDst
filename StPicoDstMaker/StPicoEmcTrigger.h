@@ -10,7 +10,7 @@ class StPicoEmcTrigger : public TObject {
   virtual ~StPicoEmcTrigger();
 
   virtual void Print(const Char_t *option = "") const;  ///< Print trigger info
- 
+
   Int_t   flag() const;
   Int_t   id() const;
   Int_t   adc() const;
