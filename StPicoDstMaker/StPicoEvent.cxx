@@ -24,6 +24,8 @@ StPicoEvent::StPicoEvent():
  mNVpdHitsEast(0), mNVpdHitsWest(0), mNT0(0), mVzVpd(std::numeric_limits<short>::max()),
  mZDCx(0), mBBCx(0), mBackgroundRate(0), mBbcBlueBackgroundRate(0), mBbcYellowBackgroundRate(0),
  mBbcEastRate(0), mBbcWestRate(0), mZdcEastRate(0), mZdcWestRate(0),
+ mZdcSumAdcEast(0), mZdcSumAdcWest(0),
+ mZdcSmdEastHorizontal{}, mZdcSmdEastVertical{}, mZdcSmdWestHorizontal{}, mZdcSmdWestVertical{},
  mBbcAdcEast{}, mBbcAdcWest{},
  mHT_Th{}
 {}
@@ -93,8 +95,21 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
   mZdcEastRate = ev->runInfo().zdcEastRate();
   mZdcWestRate = ev->runInfo().zdcWestRate();
 
+  StZdcTriggerDetector& ZDC = ev->zdcTriggerDetector();
+  mZdcSumAdcEast = (UShort_t)ZDC.adcSum(east);
+  mZdcSumAdcWest = (UShort_t)ZDC.adcSum(west);
+  for (int strip=1;strip<9;++strip)
+  {
+    if (ZDC.zdcSmd(east,1,strip))
+      mZdcSmdEastHorizontal[strip-1] = (UShort_t)ZDC.zdcSmd(east,1,strip);
+    if (ZDC.zdcSmd(east,0,strip))
+      mZdcSmdEastVertical[strip-1] = (UShort_t)ZDC.zdcSmd(east,0,strip);
+    if (ZDC.zdcSmd(west,1,strip))
+      mZdcSmdWestHorizontal[strip-1] = (UShort_t)ZDC.zdcSmd(west,1,strip);
+    if (ZDC.zdcSmd(west,0,strip))
+      mZdcSmdWestVertical[strip-1] = (UShort_t)ZDC.zdcSmd(west,0,strip);
+  }
 
-  // BBC ADC (Hiroshi)
   StBbcTriggerDetector bbc = ev->bbcTriggerDetector() ;
   for(UInt_t i=0;i<bbc.numberOfPMTs();++i)
   {
