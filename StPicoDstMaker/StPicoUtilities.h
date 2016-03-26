@@ -111,8 +111,8 @@ namespace StPicoUtilities {
      // finally, check dca, nsigmaproton,mass square, if a track satisfies gets inside the if, count it
       const Double_t p = track->momentum().mag(); 
       const Double_t beta = track->btofPidTraits().beta();
-      float  M2;
-      if(beta==-999. ||  beta<=1.e-5 )M2=-999.;
+      Double_t  M2;
+      if(beta<=1.e-5 ) M2=-999.;
       else M2=p*p*(pow(1./beta, 2)-1);
       if (track->dca().mag()<3&&track->nSigmaProton()<(-3.0) && M2<0.4) ++countedTracks;
     }
@@ -144,10 +144,10 @@ namespace StPicoUtilities {
      // finally, check dca, nsigmaproton,mass square, if a track satisfies gets inside the if, count it
       const Double_t p = track->momentum().mag();
       const Double_t beta = track->btofPidTraits().beta();
-      float  M2;
-      if(beta==-999. ||  beta<=1.e-5 )M2=-999.;
+      Double_t  M2;
+      if(beta<=1.e-5 ) M2=-999.;
       else M2=p*p*(pow(1./beta, 2)-1);
-      if (track->dca().mag()<3 && M2<0.4 && ((M2==-999&&(track->nSigmaKaon()>3||track->nSigmaKaon()<-3))||(M2!=-999&&(M2>0.6||M2<0.1)))) ++countedTracks;
+      if (track->dca().mag()<3 && M2<0.4 && ((M2<-990&&(track->nSigmaKaon()>3||track->nSigmaKaon()<-3))||(M2>-990&&(M2>0.6||M2<0.1)))) ++countedTracks;
     }
     return countedTracks;
   }

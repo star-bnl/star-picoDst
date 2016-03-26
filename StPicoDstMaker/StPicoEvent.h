@@ -140,14 +140,14 @@ protected: //these are written out
   UShort_t       mRefMult2PosEast; // TPC refMult2 pos (-1<eta<-0.5)
   UShort_t       mRefMult2NegWest; // TPC refMult2 neg (0.5<eta<1.0)
   UShort_t       mRefMult2PosWest; // TPC refMult2 pos (0.5<eta<1.0)
-  UShort_t       mRefMult3NegEast; // TPC refMult3 neg (-1<eta<0.)
-  UShort_t       mRefMult3PosEast; // TPC refMult3 pos (-1<eta<0.)
-  UShort_t       mRefMult3NegWest; // TPC refMult3 neg (0.<eta<1.0)
-  UShort_t       mRefMult3PosWest; // TPC refMult3 pos (0.<eta<1.0)
-  UShort_t       mRefMult4NegEast; // TPC refMult4 neg (-1<eta<0.)
-  UShort_t       mRefMult4PosEast; // TPC refMult4 pos (-1<eta<0.)
-  UShort_t       mRefMult4NegWest; // TPC refMult4 neg (0.<eta<1.0)
-  UShort_t       mRefMult4PosWest; // TPC refMult4 pos (0.<eta<1.0)
+  UShort_t       mRefMult3NegEast; 
+  UShort_t       mRefMult3PosEast; 
+  UShort_t       mRefMult3NegWest; 
+  UShort_t       mRefMult3PosWest; 
+  UShort_t       mRefMult4NegEast; 
+  UShort_t       mRefMult4PosEast; 
+  UShort_t       mRefMult4NegWest; 
+  UShort_t       mRefMult4PosWest; 
   UShort_t       mRefMultHalfNegEast ;// TPC refMultHalf neg (eta<0)
   UShort_t       mRefMultHalfPosEast ;// TPC refMultHalf pos (eta<0)
   UShort_t       mRefMultHalfNegWest ;// TPC refMultHalf neg (eta>0)
