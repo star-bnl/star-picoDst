@@ -150,6 +150,7 @@ protected:
 
   ClassDef(StPicoEvent,1)
 };
+inline Int_t    StPicoEvent::runId() const            { return mRunId; }
 inline Int_t    StPicoEvent::eventId() const          { return mEventId; }
 inline Int_t    StPicoEvent::fillId() const           { return (Int_t)mFillId; }
 inline Float_t  StPicoEvent::bField() const           { return mBField; }
