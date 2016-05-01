@@ -2,9 +2,10 @@
 #define StPicoEvent_h
 
 #include <vector>
+#include "TObject.h"
+#include "StarClassLibrary/StThreeVectorF.hh"
 
 class StMuDst;
-#include "StarClassLibrary/StThreeVectorF.hh"
 
 class StPicoEvent : public TObject {
 public:
