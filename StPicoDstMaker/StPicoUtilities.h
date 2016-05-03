@@ -1,8 +1,8 @@
 #ifndef StPicoUtilities_h
 #define StPicoUtilities_h
 
-#include "StMuDSTMaker/COMMON/StMuTrack.h" 
-#include "StMuDSTMaker/COMMON/StMuDst.h" 
+#include "StMuDSTMaker/COMMON/StMuTrack.h"
+#include "StMuDSTMaker/COMMON/StMuDst.h"
 
 namespace StPicoUtilities {
 
@@ -19,7 +19,7 @@ namespace StPicoUtilities {
 
       // these first 3 checks are easy, save time
       const Bool_t isChargeOk = (charge==0&&track->charge()<0)||(charge==1&&track->charge()>0);
-      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue; 
+      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue;
 
       // check eta, a bit more elaborate
       if (fabs(track->momentum().mag())<1.e-10) 		continue;
@@ -44,7 +44,7 @@ namespace StPicoUtilities {
 
       // these first 3 checks are easy, save time
       const Bool_t isChargeOk = (charge==0&&track->charge()<0)||(charge==1&&track->charge()>0);
-      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue; 
+      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue;
 
       // check eta, a bit more elaborate
       if (fabs(track->momentum().mag())<1.e-10) continue;
@@ -71,10 +71,9 @@ namespace StPicoUtilities {
 
       // these first 3 checks are easy, save time
       const Bool_t isChargeOk = (charge==0&&track->charge()<0)||(charge==1&&track->charge()>0);
-      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue; 
+      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 || fabs(track->momentum().mag())<1.e-10) continue;
 
       // check eta, a bit more elaborate
-      if (fabs(track->momentum().mag())<1.e-10) continue;
       const Double_t eta = track->momentum().pseudoRapidity() ;
       if (fabs(eta)>1.0) continue;
 
@@ -100,21 +99,20 @@ namespace StPicoUtilities {
 
      // these first 3 checks are easy, save time
       const Bool_t isChargeOk = (charge==0&&track->charge()<0)||(charge==1&&track->charge()>0);
-      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 ) continue; 
+      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<10 || fabs(track->momentum().mag())<1.e-10 || track->dca().mag()>3) continue; 
 
      // check eta, a bit more elaborate
-      if (fabs(track->momentum().mag())<1.e-10) continue;
       const Double_t eta = track->momentum().pseudoRapidity() ;
       const Bool_t isEtaOk = (etaId==0&&(eta>-1.0&&eta<0)) || (etaId==1&&(eta>0&&eta<1.0));
       if (!isEtaOk) continue;
 
-     // finally, check dca, nsigmaproton,mass square, if a track satisfies gets inside the if, count it
+     // finally, nsigmaproton,mass square, if a track satisfies gets inside the if, count it
       const Double_t p = track->momentum().mag(); 
       const Double_t beta = track->btofPidTraits().beta();
       Double_t  M2;
       if(beta<=1.e-5 ) M2=-999.;
       else M2=p*p*(pow(1./beta, 2)-1);
-      if (track->dca().mag()<3&&track->nSigmaProton()<(-3.0) && M2<0.4) ++countedTracks;
+      if (track->nSigmaProton()<(-3.0) && M2<0.4) ++countedTracks;
     }
     return countedTracks;
   }
@@ -133,21 +131,25 @@ namespace StPicoUtilities {
 
      // these first 3 checks are easy, save time
       const Bool_t isChargeOk = (charge==0&&track->charge()<0)||(charge==1&&track->charge()>0);
-      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<15 ) continue; 
+      if (track->flag()<0 || !isChargeOk || track->nHitsFit(kTpcId)<15 || fabs(track->momentum().mag())<1.e-10 || track->dca().mag()>3) continue; 
 
      // check eta, a bit more elaborate
-      if (fabs(track->momentum().mag())<1.e-10) continue;
       const Double_t eta = track->momentum().pseudoRapidity() ;
       const Bool_t isEtaOk = (etaId==0&&(eta>-1.0&&eta<0)) || (etaId==1&&(eta>0&&eta<1.0));
       if (!isEtaOk) continue;
 
-     // finally, check dca, nsigmaproton,mass square, if a track satisfies gets inside the if, count it
+     // finally, check nsigmaproton, mass square, if a track satisfies gets inside the if, count it
       const Double_t p = track->momentum().mag();
       const Double_t beta = track->btofPidTraits().beta();
-      Double_t  M2;
-      if(beta<=1.e-5 ) M2=-999.;
-      else M2=p*p*(pow(1./beta, 2)-1);
-      if (track->dca().mag()<3 && M2<0.4 && ((M2<-990&&(track->nSigmaKaon()>3||track->nSigmaKaon()<-3))||(M2>-990&&(M2>0.6||M2<0.1)))) ++countedTracks;
+      if (beta<=1.e-5)
+	     {
+		  if (track->nSigmaKaon()>3||track->nSigmaKaon()<-3) ++countedTracks;	
+		 }
+	  else
+	     {
+		  const Double_t M2 = p*p*(pow(1./beta, 2)-1);
+		  if (M2>0.6||M2<0.1) ++countedTracks;
+		 } 
     }
     return countedTracks;
   }
@@ -156,8 +158,3 @@ namespace StPicoUtilities {
 }
 
 #endif
-
-
-
-
-
