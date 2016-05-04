@@ -139,17 +139,17 @@ namespace StPicoUtilities {
       if (!isEtaOk) continue;
 
      // finally, check nsigmaproton, mass square, if a track satisfies gets inside the if, count it
-      const Double_t p = track->momentum().mag();
       const Double_t beta = track->btofPidTraits().beta();
-      if (beta<=1.e-5)
-	     {
+	  if (beta<=1.e-5)
+	  {
 		  if (track->nSigmaKaon()>3||track->nSigmaKaon()<-3) ++countedTracks;	
-		 }
+	  }
 	  else
-	     {
+	  {
+		  const Double_t p = track->momentum().mag();
 		  const Double_t M2 = p*p*(pow(1./beta, 2)-1);
 		  if (M2>0.6||M2<0.1) ++countedTracks;
-		 } 
+	  } 
     }
     return countedTracks;
   }
