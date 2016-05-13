@@ -45,7 +45,7 @@ class StPicoTrack : public TObject {
   Int_t   nHitsFit() const;
   Int_t   nHitsMax() const;
   Int_t   nHitsDedx() const;
-  UInt_t   nHitsMapHFT() const;
+  UInt_t  hftHitsMap() const;
   Float_t dEdx() const;
   Float_t nSigmaPion() const;
   Float_t nSigmaKaon() const;
@@ -110,7 +110,7 @@ inline Short_t StPicoTrack::charge() const         { return (mNHitsFit>0) ? +1 :
 inline Int_t   StPicoTrack::nHitsFit() const       { return (mNHitsFit>0) ? (Int_t)mNHitsFit : (Int_t)(-1*mNHitsFit); }
 inline Int_t   StPicoTrack::nHitsMax() const       { return (Int_t)mNHitsMax; }
 inline Int_t   StPicoTrack::nHitsDedx() const      { return (Int_t)mNHitsDedx; }
-inline UInt_t   StPicoTrack::nHitsMapHFT() const    { return mMap0 >> 1 & 0x7F; }
+inline UInt_t  StPicoTrack::hftHitsMap() const     { return mMap0 >> 1 & 0x7F; }
 inline Float_t StPicoTrack::dEdx() const           { return (Float_t)mDedx/1000.; }
 inline Float_t StPicoTrack::nSigmaPion() const     { return (Float_t)mNSigmaPion/100.; }
 inline Float_t StPicoTrack::nSigmaKaon() const     { return (Float_t)mNSigmaKaon/100.; }
