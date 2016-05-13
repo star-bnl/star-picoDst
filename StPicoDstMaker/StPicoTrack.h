@@ -121,10 +121,15 @@ inline UInt_t  StPicoTrack::map1() const { return mMap1; }
 inline const Float_t* StPicoTrack::params() const     { return mPar; }
 inline const Float_t* StPicoTrack::errMatrix() const  { return mErrMatrix; }
 inline StPhysicalHelixD StPicoTrack::helix() const { return dcaGeometry().helix(); }
-inline bool StPicoTrack::isHFTTrack() const            { return (nHitsMapHFT()>>0 & 0x1) && (nHitsMapHFT()>>1 & 0x3) && (nHitsMapHFT()>>3 & 0x3); }
 inline Int_t   StPicoTrack::emcPidTraitsIndex() const  { return (Int_t)mEmcPidTraitsIndex; }
 inline Int_t   StPicoTrack::bTofPidTraitsIndex() const { return (Int_t)mBTofPidTraitsIndex; }
 inline Int_t   StPicoTrack::mtdPidTraitsIndex() const  { return (Int_t)mMtdPidTraitsIndex; }
+
+inline bool StPicoTrack::isHFTTrack() const
+{
+  UInt_t const hitsMap = hftHitsMap();
+  return (hitsMap>>0 & 0x1) && (hitsMap>>1 & 0x3) && (hitsMap>>3 & 0x3); 
+}
 
 inline StDcaGeometry StPicoTrack::dcaGeometry() const
 {
