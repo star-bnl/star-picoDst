@@ -146,7 +146,7 @@ class StPicoDstMaker : public StMaker {
    TClonesArray**  mPicoArrays;
    char            mStatusArrays[__NALLPICOARRAYS__];
 
-   ClassDef(StPicoDstMaker,1)
+   ClassDef(StPicoDstMaker,0)
 };
 
 inline StPicoDst* StPicoDstMaker::picoDst() { return mPicoDst; }
