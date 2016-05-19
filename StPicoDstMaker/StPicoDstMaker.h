@@ -28,9 +28,6 @@ class StPicoCut;
 #include <utility>
 #include <string>
 
-#if !defined(ST_NO_NAMESPACES)
-using namespace std;
-#endif
 
 class StPicoDstMaker : public StMaker {
  public:

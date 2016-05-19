@@ -65,9 +65,6 @@
 
 ClassImp(StPicoDstMaker)
 
-#if !(ST_NO_NAMESPACES)
-  using namespace units;
-#endif
 
 // Set maximum file size to 1.9 GB (Root has a 2GB limit)
 #define MAXFILESIZE 1900000000
