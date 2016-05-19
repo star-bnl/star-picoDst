@@ -61,7 +61,6 @@ class StPicoDstMaker : public StMaker {
    void setCompression(int comp=9);
 
  protected:
- #define saveDelete(t) { delete t; t=0;}
 
    void streamerOff();
 

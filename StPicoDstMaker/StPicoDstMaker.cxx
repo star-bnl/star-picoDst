@@ -130,7 +130,7 @@ StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name)
 StPicoDstMaker::~StPicoDstMaker() {
 //  if (mIoMode== ioWrite ) closeWrite();
 //  if (mIoMode== ioRead ) closeRead();
-  saveDelete(mChain);
+  delete mChain;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearIndices() {
