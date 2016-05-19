@@ -131,6 +131,8 @@ StPicoDstMaker::~StPicoDstMaker() {
 //  if (mIoMode== ioWrite ) closeWrite();
 //  if (mIoMode== ioRead ) closeRead();
   delete mChain;
+  delete mPicoCut;
+  delete mPicoDst;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearIndices() {
