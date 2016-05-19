@@ -105,8 +105,6 @@ class StPicoDstMaker : public StMaker {
    enum prodMode {minbias, central, ht, minbias2};
 
    StMuDst*   mMuDst;
-   StMuEvent* mMuEvent;
-   StBTofHeader*    mBTofHeader;
    StEmcCollection* mEmcCollection;
    StEmcPosition*   mEmcPosition;
    StEmcGeom*       mEmcGeom[4];

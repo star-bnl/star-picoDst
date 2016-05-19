@@ -71,7 +71,7 @@ ClassImp(StPicoDstMaker)
 
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mIoMode(0), mProdMode(0),
+  mMuDst(0), mEmcCollection(0), mIoMode(0), mProdMode(0),
   mEmcMode(1),
   mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
@@ -94,7 +94,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StMaker(name),
-  mMuDst(0), mMuEvent(0), mBTofHeader(0), mEmcCollection(0), mIoMode(mode), mProdMode(0),
+  mMuDst(0), mEmcCollection(0), mIoMode(mode), mProdMode(0),
   mEmcMode(1),
   mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
@@ -431,11 +431,13 @@ Int_t StPicoDstMaker::MakeWrite() {
     LOG_WARN << " No MuDst " << endm; return kStWarn;
   }
 
-  mMuEvent = mMuDst->event();
+  StMuEvent* mMuEvent = mMuDst->event();
+
   if(!mMuEvent) {
     LOG_WARN << " No MuEvent " << endm; return kStWarn;
   }
-  mBTofHeader = mMuDst->btofHeader();
+
+  const StBTofHeader* mBTofHeader = mMuDst->btofHeader();
 
   //////////////////////////////////////
   // select the right vertex using VPD
