@@ -1,14 +1,16 @@
 #
-# Example cmake command with parameters:
 #
-# cmake -D STAR_BASE_DIR=~/star-repos/star-base \
-#       -D STAR_STEVENT_DIR=~/star-repos/star-stevent \
-#       -D STAR_MUDST_DIR=~/star-repos/star-muDst \
-#       -D STAR_TABLES_DIR=~/star-repos/star-tables \
-#       -D STAR_EMC_DIR=~/star-repos/star-emc \
-#       -D STAR_TRIGGER_DIR=~/star-repos/star-trigger \
-#       -D STAR_PAMS_DIR=~/star-repos/star-pams \
-#       -D STAR_DAQ_DIR=~/star-repos/star-daq \
+# Example cmake command with installation path and include directories
+# specified:
+#
+# cmake -D STAR_BASE_DIR=~/star-bnl/star-base \
+#       -D STAR_STEVENT_DIR=~/star-bnl/star-stevent \
+#       -D STAR_MUDST_DIR=~/star-bnl/star-muDst \
+#       -D STAR_TABLES_DIR=~/star-bnl/star-tables \
+#       -D STAR_EMC_DIR=~/star-bnl/star-emc \
+#       -D STAR_TRIGGER_DIR=~/star-bnl/star-trigger \
+#       -D STAR_PAMS_DIR=~/star-bnl/star-pams \
+#       -D STAR_DAQ_DIR=~/star-bnl/star-daq \
 #       -D CMAKE_INSTALL_PREFIX=./ ../
 #
 
