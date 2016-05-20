@@ -66,7 +66,6 @@ add_library (
 	StPicoDstMaker/StPicoMtdPidTraits.cxx
 	StPicoDstMaker/StPicoMtdTrigger.cxx
 	StPicoDstMaker/StPicoTrack.cxx
-	StPicoDstMaker/StPicoV0.cxx
 	StPicoDstMaker_dict.cxx
 )
 
