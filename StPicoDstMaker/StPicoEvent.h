@@ -37,6 +37,14 @@ public:
   Int_t    refMult2NegEast() const;
   Int_t    refMult2PosWest() const;
   Int_t    refMult2NegWest() const;
+  Int_t    refMult3PosEast() const;
+  Int_t    refMult3NegEast() const;
+  Int_t    refMult3PosWest() const;
+  Int_t    refMult3NegWest() const;
+  Int_t    refMult4PosEast() const;
+  Int_t    refMult4NegEast() const;
+  Int_t    refMult4PosWest() const;
+  Int_t    refMult4NegWest() const;
   Int_t    refMultHalfPosEast() const;
   Int_t    refMultHalfNegEast() const;
   Int_t    refMultHalfPosWest() const;
@@ -46,6 +54,12 @@ public:
   Int_t    refMult2() const;
   Int_t    refMultHalfEast() const;
   Int_t    refMultHalfWest() const;
+  Int_t    refMult3East() const;
+  Int_t    refMult3West() const;
+  Int_t    refMult3() const;
+  Int_t    refMult4East() const;
+  Int_t    refMult4West() const;
+  Int_t    refMult4() const;
 
   Int_t    grefMult() const;
   UShort_t numberOfGlobalTracks() const;
@@ -110,6 +124,14 @@ protected:
   UShort_t mRefMult2PosEast; // TPC refMult2 pos (-1<eta<-0.5)
   UShort_t mRefMult2NegWest; // TPC refMult2 neg (0.5<eta<1.0)
   UShort_t mRefMult2PosWest; // TPC refMult2 pos (0.5<eta<1.0)
+  UShort_t mRefMult3NegEast;
+  UShort_t mRefMult3PosEast;
+  UShort_t mRefMult3NegWest;
+  UShort_t mRefMult3PosWest;
+  UShort_t mRefMult4NegEast;
+  UShort_t mRefMult4PosEast;
+  UShort_t mRefMult4NegWest;
+  UShort_t mRefMult4PosWest;
   UShort_t mRefMultHalfNegEast ;// TPC refMultHalf neg (eta<0)
   UShort_t mRefMultHalfPosEast ;// TPC refMultHalf pos (eta<0)
   UShort_t mRefMultHalfNegWest ;// TPC refMultHalf neg (eta>0)
@@ -174,6 +196,14 @@ inline Int_t    StPicoEvent::refMult2PosEast() const      { return (Int_t)mRefMu
 inline Int_t    StPicoEvent::refMult2NegEast() const      { return (Int_t)mRefMult2NegEast; }
 inline Int_t    StPicoEvent::refMult2PosWest() const      { return (Int_t)mRefMult2PosWest; }
 inline Int_t    StPicoEvent::refMult2NegWest() const      { return (Int_t)mRefMult2NegWest; }
+inline Int_t    StPicoEvent::refMult3PosEast() const      { return (Int_t)mRefMult3PosEast; }
+inline Int_t    StPicoEvent::refMult3NegEast() const      { return (Int_t)mRefMult3NegEast; }
+inline Int_t    StPicoEvent::refMult3PosWest() const      { return (Int_t)mRefMult3PosWest; }
+inline Int_t    StPicoEvent::refMult3NegWest() const      { return (Int_t)mRefMult3NegWest; }
+inline Int_t    StPicoEvent::refMult4PosEast() const      { return (Int_t)mRefMult4PosEast; }
+inline Int_t    StPicoEvent::refMult4NegEast() const      { return (Int_t)mRefMult4NegEast; }
+inline Int_t    StPicoEvent::refMult4PosWest() const      { return (Int_t)mRefMult4PosWest; }
+inline Int_t    StPicoEvent::refMult4NegWest() const      { return (Int_t)mRefMult4NegWest; }
 inline Int_t    StPicoEvent::refMultHalfPosEast() const { return (Int_t)mRefMultHalfPosEast; }
 inline Int_t    StPicoEvent::refMultHalfNegEast() const { return (Int_t)mRefMultHalfNegEast; }
 inline Int_t    StPicoEvent::refMultHalfPosWest() const { return (Int_t)mRefMultHalfPosWest; }
@@ -183,6 +213,12 @@ inline Int_t    StPicoEvent::refMult2West() const       { return (Int_t)(mRefMul
 inline Int_t    StPicoEvent::refMult2() const           { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast+mRefMult2PosWest+mRefMult2NegWest); }
 inline Int_t    StPicoEvent::refMultHalfEast() const    { return (Int_t)(mRefMultHalfPosEast+mRefMultHalfNegEast); }
 inline Int_t    StPicoEvent::refMultHalfWest() const    { return (Int_t)(mRefMultHalfPosWest+mRefMultHalfNegWest); }
+inline Int_t    StPicoEvent::refMult3East() const       { return (Int_t)(mRefMult3PosEast+mRefMult3NegEast); }
+inline Int_t    StPicoEvent::refMult3West() const       { return (Int_t)(mRefMult3PosWest+mRefMult3NegWest); }
+inline Int_t    StPicoEvent::refMult3() const           { return (Int_t)(mRefMult3PosEast+mRefMult3NegEast+mRefMult3PosWest+mRefMult3NegWest); }
+inline Int_t    StPicoEvent::refMult4East() const       { return (Int_t)(mRefMult4PosEast+mRefMult4NegEast); }
+inline Int_t    StPicoEvent::refMult4West() const       { return (Int_t)(mRefMult4PosWest+mRefMult4NegWest); }
+inline Int_t    StPicoEvent::refMult4() const           { return (Int_t)(mRefMult4PosEast+mRefMult4NegEast+mRefMult4PosWest+mRefMult4NegWest); }
 
 inline Int_t    StPicoEvent::grefMult() const           { return (Int_t)(mGRefMult); }
 inline UShort_t StPicoEvent::numberOfGlobalTracks() const { return mNumberOfGlobalTracks ; }
