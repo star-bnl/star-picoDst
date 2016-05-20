@@ -1,4 +1,9 @@
+# Basic usage:
 #
+# cd <project_dir>
+# mkdir build && cd build
+# cmake ../
+# make
 #
 # Example cmake command with installation path and include directories
 # specified:
