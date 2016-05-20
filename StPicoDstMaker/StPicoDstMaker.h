@@ -28,9 +28,6 @@ class StPicoCut;
 #include <utility>
 #include <string>
 
-#if !defined(ST_NO_NAMESPACES)
-using namespace std;
-#endif
 
 class StPicoDstMaker : public StMaker {
  public:
@@ -64,7 +61,6 @@ class StPicoDstMaker : public StMaker {
    void setCompression(int comp=9);
 
  protected:
- #define saveDelete(t) { delete t; t=0;}
 
    void streamerOff();
 
@@ -108,8 +104,6 @@ class StPicoDstMaker : public StMaker {
    enum prodMode {minbias, central, ht, minbias2};
 
    StMuDst*   mMuDst;
-   StMuEvent* mMuEvent;
-   StBTofHeader*    mBTofHeader;
    StEmcCollection* mEmcCollection;
    StEmcPosition*   mEmcPosition;
    StEmcGeom*       mEmcGeom[4];
@@ -149,7 +143,7 @@ class StPicoDstMaker : public StMaker {
    TClonesArray**  mPicoArrays;
    char            mStatusArrays[__NALLPICOARRAYS__];
 
-   ClassDef(StPicoDstMaker,1)
+   ClassDef(StPicoDstMaker,0)
 };
 
 inline StPicoDst* StPicoDstMaker::picoDst() { return mPicoDst; }
