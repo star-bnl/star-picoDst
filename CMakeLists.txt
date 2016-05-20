@@ -45,6 +45,11 @@ include_directories(
 	${STAR_TRIGGER_DIR}
 	${STAR_PAMS_DIR}/global/inc
 	${STAR_DAQ_DIR}
+	# In case the include paths were not provided we try to search for headers
+	# in standard STAR locations
+	$ENV{STAR}/.$ENV{STAR_HOST_SYS}/include
+	$ENV{STAR}/.$ENV{STAR_HOST_SYS}/include/tables
+	$ENV{STAR}/StRoot
 )
 
 
