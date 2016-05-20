@@ -1,31 +1,53 @@
+sudo: false
+
 language: cpp
+
 compiler:
   - gcc
-before_script:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get -qq update
-  - sudo apt-get -qq install g++-4.8
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
-  - g++ --version
-  - wget http://root.cern.ch/download/root_v5.34.30.Linux-ubuntu12-x86_64-gcc4.6.tar.gz -O /tmp/root_v5.34.30.tar.gz
-  - tar -xzf /tmp/root_v5.34.30.tar.gz
-  - source ./root/bin/thisroot.sh
-  - root-config --libs
-  - root-config --cflags
-  - git clone --depth=1 https://github.com/star-bnl/star-base.git    contrib/star-base
-  - git clone --depth=1 https://github.com/star-bnl/star-stevent.git contrib/star-stevent
-  - git clone --depth=1 https://github.com/star-bnl/star-muDst.git   contrib/star-muDst
-  - git clone --depth=1 https://github.com/star-bnl/star-tables.git  contrib/star-tables
-  - git clone --depth=1 https://github.com/star-bnl/star-emc.git     contrib/star-emc
-  - git clone --depth=1 https://github.com/star-bnl/star-trigger.git contrib/star-trigger
-  - git clone --depth=1 https://github.com/star-bnl/star-hbt.git     contrib/star-hbt
-  - git clone --depth=1 https://github.com/star-bnl/star-daq.git     contrib/star-daq
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.8
+    - g++-4.8
+
 branches:
   only:
     - master
+
+before_install:
+  - git submodule update --init --recursive
+
+# Make sure cmake picks up the compiler we want
+install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+
+before_script:
+    # Install desired version of ROOT
+  - wget http://root.cern.ch/download/root_v5.34.30.source.tar.gz -P /tmp/
+  - tar -xzf /tmp/root_v5.34.30.source.tar.gz
+  - wget http://root.cern.ch/download/root_v5.34.30.Linux-ubuntu12-x86_64-gcc4.6.tar.gz -P /tmp/
+  - tar -xzf /tmp/root_v5.34.30.Linux-ubuntu12-x86_64-gcc4.6.tar.gz
+  - source ./root/bin/thisroot.sh
+  - root-config --libs
+  - root-config --cflags
+    # Move some ROOT header files to common include directory
+  - rsync -auv root/math/mathmore/inc/Math root/include/
+    # Install dependencies
+  - git clone --depth=1 https://github.com/star-bnl/star-base.git    ext/star-base
+  - git clone --depth=1 https://github.com/star-bnl/star-stevent.git ext/star-stevent
+  - git clone --depth=1 https://github.com/star-bnl/star-muDst.git   ext/star-muDst
+  - git clone --depth=1 https://github.com/star-bnl/star-tables.git  ext/star-tables
+  - git clone --depth=1 https://github.com/star-bnl/star-emc.git     ext/star-emc
+  - git clone --depth=1 https://github.com/star-bnl/star-trigger.git ext/star-trigger
+  - git clone --depth=1 https://github.com/star-bnl/star-daq.git     ext/star-daq
+  - git clone --depth=1 https://github.com/star-bnl/star-pams.git    ext/star-pams
+
 script:
   - mkdir build/ && cd build/ && pwd
-  - cmake -D CMAKE_CXX_FLAGS=-std=c++0x -D CMAKE_INSTALL_PREFIX=./ -D STAR_BASE_DIR=contrib/star-base -D STAR_STEVENT_DIR=contrib/star-stevent -D STAR_MUDST_DIR=contrib/star-muDst -D STAR_TABLES_DIR=contrib/star-tables -D STAR_EMC_DIR=contrib/star-emc -D STAR_TRIGGER_DIR=contrib/star-trigger -D STAR_STHBT_DIR=contrib/star-hbt -D STAR_DAQ_DIR=contrib/star-daq ../
-  - make VERBOSE=1
-  - make install
-  - ls -la ./ && ls -la lib/
+  - cmake -D STAR_BASE_DIR=ext/star-base -D STAR_STEVENT_DIR=ext/star-stevent -D STAR_MUDST_DIR=ext/star-muDst -D STAR_TABLES_DIR=ext/star-tables -D STAR_EMC_DIR=ext/star-emc -D STAR_TRIGGER_DIR=ext/star-trigger -D STAR_PAMS_DIR=ext/star-pams -D STAR_DAQ_DIR=ext/star-daq ../
+  - cmake -D CMAKE_INSTALL_PREFIX=./ -D CMAKE_BUILD_TYPE=Release ../
+  - make -j4 && make install && make clean
+  - pwd && ls -la ./ && ls -la lib/

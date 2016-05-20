@@ -45,7 +45,7 @@ class StPicoTrack : public TObject {
   Int_t   nHitsFit() const;
   Int_t   nHitsMax() const;
   Int_t   nHitsDedx() const;
-  Int_t   nHitsMapHFT() const;
+  UInt_t  hftHitsMap() const;
   Float_t dEdx() const;
   Float_t nSigmaPion() const;
   Float_t nSigmaKaon() const;
@@ -110,21 +110,26 @@ inline Short_t StPicoTrack::charge() const         { return (mNHitsFit>0) ? +1 :
 inline Int_t   StPicoTrack::nHitsFit() const       { return (mNHitsFit>0) ? (Int_t)mNHitsFit : (Int_t)(-1*mNHitsFit); }
 inline Int_t   StPicoTrack::nHitsMax() const       { return (Int_t)mNHitsMax; }
 inline Int_t   StPicoTrack::nHitsDedx() const      { return (Int_t)mNHitsDedx; }
-inline Int_t   StPicoTrack::nHitsMapHFT() const    { return (Int_t)(mMap0 >> 1 & 0x7F); }
+inline UInt_t  StPicoTrack::hftHitsMap() const     { return mMap0 >> 1 & 0x7F; }
 inline Float_t StPicoTrack::dEdx() const           { return (Float_t)mDedx/1000.; }
 inline Float_t StPicoTrack::nSigmaPion() const     { return (Float_t)mNSigmaPion/100.; }
 inline Float_t StPicoTrack::nSigmaKaon() const     { return (Float_t)mNSigmaKaon/100.; }
 inline Float_t StPicoTrack::nSigmaProton() const   { return (Float_t)mNSigmaProton/100.; }
 inline Float_t StPicoTrack::nSigmaElectron() const { return (Float_t)mNSigmaElectron/100.; }
-inline UInt_t  StPicoTrack::map0() const { return (UInt_t)mMap0; }
-inline UInt_t  StPicoTrack::map1() const { return (UInt_t)mMap1; }
+inline UInt_t  StPicoTrack::map0() const { return mMap0; }
+inline UInt_t  StPicoTrack::map1() const { return mMap1; }
 inline const Float_t* StPicoTrack::params() const     { return mPar; }
 inline const Float_t* StPicoTrack::errMatrix() const  { return mErrMatrix; }
 inline StPhysicalHelixD StPicoTrack::helix() const { return dcaGeometry().helix(); }
-inline bool StPicoTrack::isHFTTrack() const            { return (nHitsMapHFT()>>0 & 0x1) && (nHitsMapHFT()>>1 & 0x3) && (nHitsMapHFT()>>3 & 0x3); }
 inline Int_t   StPicoTrack::emcPidTraitsIndex() const  { return (Int_t)mEmcPidTraitsIndex; }
 inline Int_t   StPicoTrack::bTofPidTraitsIndex() const { return (Int_t)mBTofPidTraitsIndex; }
 inline Int_t   StPicoTrack::mtdPidTraitsIndex() const  { return (Int_t)mMtdPidTraitsIndex; }
+
+inline bool StPicoTrack::isHFTTrack() const
+{
+  UInt_t const hitsMap = hftHitsMap();
+  return (hitsMap>>0 & 0x1) && (hitsMap>>1 & 0x3) && (hitsMap>>3 & 0x3); 
+}
 
 inline StDcaGeometry StPicoTrack::dcaGeometry() const
 {

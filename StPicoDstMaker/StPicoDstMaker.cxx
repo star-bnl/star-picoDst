@@ -66,9 +66,6 @@
 
 ClassImp(StPicoDstMaker)
 
-#if !(ST_NO_NAMESPACES)
-  using namespace units;
-#endif
 
 // Set maximum file size to 1.9 GB (Root has a 2GB limit)
 #define MAXFILESIZE 1900000000
@@ -116,7 +113,9 @@ StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name)
 StPicoDstMaker::~StPicoDstMaker() {
 //  if (mIoMode== ioWrite ) closeWrite();
 //  if (mIoMode== ioRead ) closeRead();
-  saveDelete(mChain);
+  delete mChain;
+  delete mPicoCut;
+  delete mPicoDst;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearIndices() {
@@ -416,11 +415,13 @@ Int_t StPicoDstMaker::MakeWrite() {
     LOG_WARN << " No MuDst " << endm; return kStWarn;
   }
 
-  mMuEvent = mMuDst->event();
+  StMuEvent* mMuEvent = mMuDst->event();
+
   if(!mMuEvent) {
     LOG_WARN << " No MuEvent " << endm; return kStWarn;
   }
-  mBTofHeader = mMuDst->btofHeader();
+
+  const StBTofHeader* mBTofHeader = mMuDst->btofHeader();
 
   //////////////////////////////////////
   // select the right vertex using VPD

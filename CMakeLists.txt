@@ -1,14 +1,21 @@
+# Basic usage:
 #
-# Example cmake command with parameters:
+# cd <project_dir>
+# mkdir build && cd build
+# cmake ../
+# make
 #
-# cmake -D STAR_BASE_DIR=~/star-repos/star-base \
-#       -D STAR_STEVENT_DIR=~/star-repos/star-stevent \
-#       -D STAR_MUDST_DIR=~/star-repos/star-muDst \
-#       -D STAR_TABLES_DIR=~/star-repos/star-tables \
-#       -D STAR_EMC_DIR=~/star-repos/star-emc \
-#       -D STAR_TRIGGER_DIR=~/star-repos/star-trigger \
-#       -D STAR_STHBT_DIR=~/star-repos/star-hbt \
-#       -D STAR_DAQ_DIR=~/star-repos/star-daq \
+# Example cmake command with installation path and include directories
+# specified:
+#
+# cmake -D STAR_BASE_DIR=~/star-bnl/star-base \
+#       -D STAR_STEVENT_DIR=~/star-bnl/star-stevent \
+#       -D STAR_MUDST_DIR=~/star-bnl/star-muDst \
+#       -D STAR_TABLES_DIR=~/star-bnl/star-tables \
+#       -D STAR_EMC_DIR=~/star-bnl/star-emc \
+#       -D STAR_TRIGGER_DIR=~/star-bnl/star-trigger \
+#       -D STAR_PAMS_DIR=~/star-bnl/star-pams \
+#       -D STAR_DAQ_DIR=~/star-bnl/star-daq \
 #       -D CMAKE_INSTALL_PREFIX=./ ../
 #
 
@@ -17,7 +24,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(star-picoDst)
 
 # Add to path in order to pick up the FindXXX.cmake files included in this project
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/star-cmake")
 
 # This project depends on ROOT
 find_package(ROOT)
@@ -26,7 +33,11 @@ if(NOT ROOT_FOUND)
 	message(FATAL_ERROR "FATAL: ROOT package not found")
 endif()
 
+# Perform some setup standard to STAR experiment environment
+include(StarCommon)
+
 add_definitions(-D__ROOT__)
+
 
 include_directories(
 	${ROOT_INCLUDE_DIR}
@@ -37,8 +48,13 @@ include_directories(
 	${STAR_TABLES_DIR}
 	${STAR_EMC_DIR}
 	${STAR_TRIGGER_DIR}
-	${STAR_STHBT_DIR}
+	${STAR_PAMS_DIR}/global/inc
 	${STAR_DAQ_DIR}
+	# In case the include paths were not provided we try to search for headers
+	# in standard STAR locations
+	$ENV{STAR}/.$ENV{STAR_HOST_SYS}/include
+	$ENV{STAR}/.$ENV{STAR_HOST_SYS}/include/tables
+	$ENV{STAR}/StRoot
 )
 
 
@@ -62,9 +78,8 @@ add_library (
 	StPicoDstMaker/StPicoMtdPidTraits.cxx
 	StPicoDstMaker/StPicoMtdTrigger.cxx
 	StPicoDstMaker/StPicoTrack.cxx
-	StPicoDstMaker/StPicoV0.cxx
-	StPicoDstMaker_Cint.cxx
+	StPicoDstMaker_dict.cxx
 )
 
 
-install(TARGETS StPicoDstMaker DESTINATION "lib")
+install(TARGETS StPicoDstMaker DESTINATION "${STAR_ADDITIONAL_INSTALL_PREFIX}/lib")
