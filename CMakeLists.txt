@@ -7,7 +7,7 @@
 #       -D STAR_TABLES_DIR=~/star-repos/star-tables \
 #       -D STAR_EMC_DIR=~/star-repos/star-emc \
 #       -D STAR_TRIGGER_DIR=~/star-repos/star-trigger \
-#       -D STAR_STHBT_DIR=~/star-repos/star-hbt \
+#       -D STAR_PAMS_DIR=~/star-repos/star-pams \
 #       -D STAR_DAQ_DIR=~/star-repos/star-daq \
 #       -D CMAKE_INSTALL_PREFIX=./ ../
 #
@@ -41,7 +41,7 @@ include_directories(
 	${STAR_TABLES_DIR}
 	${STAR_EMC_DIR}
 	${STAR_TRIGGER_DIR}
-	${STAR_STHBT_DIR}
+	${STAR_PAMS_DIR}/global/inc
 	${STAR_DAQ_DIR}
 )
 
