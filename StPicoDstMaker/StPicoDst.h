@@ -13,6 +13,7 @@ class StPicoMtdHit;
 class StPicoEmcPidTraits;
 class StPicoBTofPidTraits;
 class StPicoMtdPidTraits;
+class StPicoRpsCollection;
 
 #include "TObject.h"
 #include "TClonesArray.h"
@@ -59,6 +60,8 @@ public:
   /// return pointer to i-th mtd pidTraits
   static StPicoMtdPidTraits* mtdPidTraits(int i) { return (StPicoMtdPidTraits*)picoArrays[picoMtdPidTraits]->UncheckedAt(i); }
 
+  static StPicoRpsCollection* rpsCollection() { return (StPicoRpsCollection*)picoArrays[picoRpsCollection]->UncheckedAt(0); }	
+
   static unsigned int numberOfTracks() { return picoArrays[picoTrack]->GetEntries(); }
   static unsigned int numberOfEmcTriggers() { return picoArrays[picoEmcTrigger]->GetEntries(); }
   static unsigned int numberOfBTOWHits() { return picoArrays[picoBTOWHit]->GetEntries(); }
@@ -67,6 +70,7 @@ public:
   static unsigned int numberOfEmcPidTraits()  { return picoArrays[picoEmcPidTraits] ->GetEntries();  }
   static unsigned int numberOfBTofPidTraits() { return picoArrays[picoBTofPidTraits]->GetEntries();  }
   static unsigned int numberOfMtdPidTraits()  { return picoArrays[picoMtdPidTraits] ->GetEntries();  }
+  static unsigned int numberOfRpsCollection()  { return picoArrays[picoRpsCollection] ->GetEntries();  }
 
   virtual void Print(Option_t *option = "") const; ///< Print basic event info
   static void printTracks();
@@ -77,6 +81,8 @@ public:
   static void printEmcPidTraits();
   static void printBTofPidTraits();
   static void printMtdPidTraits();
+  static void printRpsCollection();
+  
 
   ClassDef(StPicoDst,1)
 };
