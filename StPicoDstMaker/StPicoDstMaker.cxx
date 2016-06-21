@@ -63,6 +63,10 @@
 #include "StEvent/StTriggerData.h"
 #include "StEvent/StDcaGeometry.h"
 
+//StRps
+#include "StMuDSTMaker/COMMON/StMuRpsCollection.h"
+#include "StPicoRpsCollection.h"
+
 ClassImp(StPicoDstMaker)
 
 
@@ -73,6 +77,7 @@ ClassImp(StPicoDstMaker)
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mMuDst(0), mEmcCollection(0), mIoMode(0), mProdMode(0),
   mEmcMode(1),
+  mRpMode(0),
   mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
 {
@@ -96,6 +101,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StMaker(name),
   mMuDst(0), mEmcCollection(0), mIoMode(mode), mProdMode(0),
   mEmcMode(1),
+  mRpMode(0),
   mOutputFile(0),
   mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
 {
@@ -455,8 +461,14 @@ Int_t StPicoDstMaker::MakeWrite() {
       break;
     }
   }
-  /////////////////////////////////////
 
+  /////////////////////////////////////
+  //select the right vertex in rpMode
+  ////////////////////////////////////
+  if(mRpMode){
+    //Loop over primary vertices and choose the one with tracks matched with TOF
+    rpVertex();
+  }
   if(mEmcMode){
     mEmcCollection = mMuDst->emcCollection();
     if(mEmcCollection) buildEmcIndex();
@@ -472,10 +484,9 @@ Int_t StPicoDstMaker::MakeWrite() {
 
   LOG_DEBUG << " eventId = " << mMuEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
 
-  if(mPicoCut->passEvent(mMuEvent)) {  // keep all events in pp collisions to monitor triggers
+  if(mPicoCut->passEvent(mMuEvent) || mRpMode) {  // keep all events in pp collisions to monitor triggers, some RP triggers do not use Vrt (TPC) info, e.g. ET
 
     fillTracks();
-
     fillEvent();
 
     fillEmcTrigger();
@@ -484,6 +495,10 @@ Int_t StPicoDstMaker::MakeWrite() {
     //fillBTofHits();
     fillMtdHits();
 
+    if(mRpMode){
+	fillRpsCollection();
+    	if(Debug()) mPicoDst->printRpsCollection();
+    }
     if(Debug()) mPicoDst->printTracks();
 
     mTTree->Fill(); THack::IsTreeWritable(mTTree);
@@ -944,4 +959,29 @@ void StPicoDstMaker::fillMtdHits() {
 	  hitIndex.erase(hitIndex.begin()+hits[k]);
 	}
     }
+}
+//-----------------------------------------------------------------------
+void StPicoDstMaker::fillRpsCollection(){
+  if(!mMuDst) {
+    LOG_WARN << " No MuDst for this event " << endm;
+    return;
+  }
+  StMuRpsCollection *rps = (StMuRpsCollection*)(mMuDst->RpsCollection());
+  if(!rps){
+	LOG_WARN << "No RP collection for this event" << endm;
+  }
+    int counter = mPicoArrays[picoRpsCollection]->GetEntries();
+    new((*(mPicoArrays[picoRpsCollection]))[counter]) StPicoRpsCollection(*rps);
+
+}
+void StPicoDstMaker::rpVertex(){
+    for(UInt_t i=0;i<mMuDst->numberOfPrimaryVertices() ;i++){
+ 	mMuDst->setVertexIndex(i);
+    	for (UInt_t pr = 0; pr < mMuDst->primaryTracks()->GetEntries(); ++pr) {
+		const StMuTrack*  track = dynamic_cast<StMuTrack *>(mMuDst->primaryTracks(pr));
+		if(!track)continue;
+		if( track->btofPidTraits().matchFlag() != 0 ){ return; }
+	}
+    }
+    if(mMuDst->numberOfPrimaryVertices()>0)mMuDst->setVertexIndex(0);
 }
