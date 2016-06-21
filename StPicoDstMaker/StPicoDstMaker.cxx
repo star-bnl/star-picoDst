@@ -86,7 +86,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mPicoCut(nullptr), mBField(0),
-  mIoMode(0), mProdMode(0), mEmcMode(1),
+  mIoMode(0), mProdMode(0), mEmcMode(1),mRpMode(0),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536*4),
@@ -462,10 +462,6 @@ Int_t StPicoDstMaker::MakeWrite() {
   /////////////////////////////////////
   //select the right vertex in rpMode
   ////////////////////////////////////
-  if(mRpMode){
-    //Loop over primary vertices and choose the one with tracks matched with TOF
-    rpVertex();
-  }
   if(mEmcMode){
     mEmcCollection = mMuDst->emcCollection();
     if(mEmcCollection) buildEmcIndex();
@@ -970,15 +966,4 @@ void StPicoDstMaker::fillRpsCollection(){
     int counter = mPicoArrays[picoRpsCollection]->GetEntries();
     new((*(mPicoArrays[picoRpsCollection]))[counter]) StPicoRpsCollection(*rps);
 
-}
-void StPicoDstMaker::rpVertex(){
-    for(UInt_t i=0;i<mMuDst->numberOfPrimaryVertices() ;i++){
- 	mMuDst->setVertexIndex(i);
-    	for (UInt_t pr = 0; pr < mMuDst->primaryTracks()->GetEntries(); ++pr) {
-		const StMuTrack*  track = dynamic_cast<StMuTrack *>(mMuDst->primaryTracks(pr));
-		if(!track)continue;
-		if( track->btofPidTraits().matchFlag() != 0 ){ return; }
-	}
-    }
-    if(mMuDst->numberOfPrimaryVertices()>0)mMuDst->setVertexIndex(0);
 }
