@@ -97,6 +97,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
 }
 //-----------------------------------------------------------------------
+
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StPicoDstMaker(name)
 {
   mIoMode = mode;
