@@ -3,8 +3,8 @@
 
 enum picoDstTypes {picoEvent=0, picoTrack, picoEmcTrigger, picoMtdTrigger,
 		   picoBTOWHit, picoBTofHit, picoMtdHit,
-		   picoEmcPidTraits, picoBTofPidTraits, picoMtdPidTraits, picoRpsCollection};
-enum NPICOARRAYS { __NALLPICOARRAYS__ = 11 };
+		   picoEmcPidTraits, picoBTofPidTraits, picoMtdPidTraits};
+enum NPICOARRAYS { __NALLPICOARRAYS__ = 10 };
 
 class StPicoArrays {
   public:
