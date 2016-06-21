@@ -164,6 +164,6 @@ void StPicoDst::printRpsCollection(){
     return;
   }
   LOG_INFO << endm;
-  LOG_INFO << "+++++++++ RPs collection ( " << numberOfMtdPidTraits() << " entries )" << endm << endm;
+  LOG_INFO << "+++++++++ RPs collection ( " << numberOfRpsCollection() << " entries )" << endm << endm;
 }
 ClassImp(StPicoDst)
