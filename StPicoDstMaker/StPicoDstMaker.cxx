@@ -76,13 +76,6 @@ ClassImp(StPicoDstMaker)
 
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
-<<<<<<< HEAD
-  mMuDst(0), mEmcCollection(0), mIoMode(0), mProdMode(0),
-  mEmcMode(1),
-  mRpMode(0),
-  mOutputFile(0),
-  mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
-=======
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mPicoCut(nullptr), mBField(0),
@@ -93,7 +86,6 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mIndex2Primary{}, mMap2Track{},
   mModuleToQT{}, mModuleToQTPos{},
   mPicoAllArrays{}, mPicoArrays(mPicoAllArrays), mStatusArrays{}
->>>>>>> 320b3b9... Simplify work in constructors
 {
   streamerOff();
   createArrays();
@@ -105,16 +97,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
 }
 //-----------------------------------------------------------------------
-<<<<<<< HEAD
-StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StMaker(name),
-  mMuDst(0), mEmcCollection(0), mIoMode(mode), mProdMode(0),
-  mEmcMode(1),
-  mRpMode(0),
-  mOutputFile(0),
-  mChain(0), mTTree(0), mSplit(99), mCompression(9), mBufferSize(65536*4)
-=======
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StPicoDstMaker(name)
->>>>>>> 320b3b9... Simplify work in constructors
 {
   mIoMode = mode;
 
