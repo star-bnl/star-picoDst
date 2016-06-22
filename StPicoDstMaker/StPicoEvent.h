@@ -102,11 +102,6 @@ public:
 // set functions for trigger thresholds
   void     setHT_Th(const Int_t i, const Int_t th);
 
-  UInt_t rpTriggerWord() const;
-  Int_t bcNumber() const;
-  Int_t nTofMatchedPTracks() const;
-  Int_t nVerticesTofMatched() const;
-
 protected:
   Int_t    mRunId;
   Int_t    mEventId;
@@ -175,12 +170,6 @@ protected:
 
   // Online HT thresholds
   UChar_t mHT_Th[4];
-
-  //Trigger Word for RPs
-  UInt_t mRpTriggerWord;
-  Int_t mBcNumber; //bunch crossing number
-  Int_t mNTofMatchedPTracks;
-  Int_t mNVerticesTofMatched;
 
   ClassDef(StPicoEvent,1)
 };
@@ -266,9 +255,4 @@ inline UShort_t StPicoEvent::bbcAdcWest(const Int_t i) const { return mBbcAdcWes
 
 inline Int_t   StPicoEvent::ht_th(const Int_t i) const { return mHT_Th[i]; }
 inline void StPicoEvent::setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }
-
-inline UInt_t StPicoEvent::rpTriggerWord() const { return mRpTriggerWord; }
-inline Int_t StPicoEvent::bcNumber() const { return mBcNumber; }
-inline Int_t StPicoEvent::nTofMatchedPTracks() const { return mNTofMatchedPTracks; }
-inline Int_t StPicoEvent::nVerticesTofMatched() const { return mNVerticesTofMatched; }
 #endif

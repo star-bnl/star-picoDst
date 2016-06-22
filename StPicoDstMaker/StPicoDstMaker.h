@@ -45,7 +45,6 @@ class StPicoDstMaker : public StMaker {
    void setRunNumber(Int_t);
    void setProdMode(Int_t);
    void setEmcMode(const Int_t mode=1); // 0:No EMC, 1:EMC On
-   void setRpMode(const Int_t mode=1); // 0:No RP, 1:RP On
    /// Returns null pointer if no StPicoDst
    StPicoDst *picoDst();
    /// In read mode, returns pointer to the chain of .picoDst.root files
@@ -93,7 +92,6 @@ class StPicoDstMaker : public StMaker {
    void fillBTOWHits();
    void fillBTofHits();
    void fillMtdHits();
-   void fillRpsCollection();
 
    bool getBEMC(StMuTrack *, int*, int*, float*, float*, int*, int*);
 
@@ -113,7 +111,6 @@ class StPicoDstMaker : public StMaker {
    Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write
    Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation, 4: - save only electron or muon candidates
    Int_t      mEmcMode;        //! EMC ON(=1)/OFF(=0)
-   Int_t      mRpMode;	       //! RP ON(=1)/OFF(=0);
 
    TString   mInputFileName;        //! *.list - MuDst or picoDst
    TString   mOutputFileName;       //! FileName
@@ -154,5 +151,4 @@ inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
 inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
 inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
 inline void StPicoDstMaker::setEmcMode(const Int_t mode) { mEmcMode = mode; }
-inline void StPicoDstMaker::setRpMode(const Int_t mode) { mRpMode = mode; }
 #endif

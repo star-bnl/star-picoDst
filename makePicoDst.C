@@ -18,10 +18,9 @@ void makePicoDst(const Int_t runnumber=15140004,
 //    const Char_t *inputFile="st_physics_15166010_raw_3000054.MuDst.root",
 //    const Char_t *inputFile="/star/data79/reco/AuAu_200_production_low_2014/ReversedFullField/P15ic/2014/145/15145024/st_physics_15145024_raw_1000048.MuDst.root",
 //    const Char_t *inputFile="root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu_200_production_low_2014/ReversedFullField/P15ic/2014/166/15166010/st_physics_15166010_raw_4500060.MuDst.root",
-    //const Char_t *inputFile="root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu_200_production_low_2014/ReversedFullField/P15ic/2014/140/15140004/st_physics_15140004_raw_1000016.MuDst.root",
- const Char_t *inputFile="/star/data05/scratch/lukful/test/st_rp_16086030_raw_4500024.MuDst.root",
-    const bool creatingPhiWgt = kFALSE, const int prodMod = 0, const int emcMode=1, const int rpMode = 1
- ){
+    const Char_t *inputFile="root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu_200_production_low_2014/ReversedFullField/P15ic/2014/140/15140004/st_physics_15140004_raw_1000016.MuDst.root",
+    const bool creatingPhiWgt = kFALSE, const int prodMod = 0, const int emcMode=1
+){
         Int_t nEvents = 10000000;
 //	Int_t nEvents = 500;	
 //Load all the System libraries
@@ -92,9 +91,6 @@ void makePicoDst(const Int_t runnumber=15140004,
         MuDstMaker->SetStatus("BTof*",1);
         MuDstMaker->SetStatus("Emc*",1);
         MuDstMaker->SetStatus("MTD*",1);
-	if(rpMode){
-		MuDstMaker->SetStatus("pp2pp",1);
-	}
 	
 	if(!creatingPhiWgt&&emcMode) {
 		St_db_Maker *dbMk = new St_db_Maker("db","MySQL:StarDb","$STAR/StarDb","StarDb");
@@ -137,7 +133,6 @@ void makePicoDst(const Int_t runnumber=15140004,
         picoMaker->setRunNumber(runnumber);
         picoMaker->setProdMode(prodMod); // 0-mb, 1-central, 2-ht
         picoMaker->setEmcMode(emcMode); // 0-No EMC, 1-EMC ON
-	picoMaker->setRpMode(rpMode); 	//0-No RP, 1-RP ON
 //        picoMaker->SetDebug(1);
 
 	chain->Init();

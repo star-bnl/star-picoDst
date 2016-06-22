@@ -10,7 +10,6 @@
 #include "StPicoBTofPidTraits.h"
 #include "StPicoMtdPidTraits.h"
 #include "StPicoDstMaker.h"
-#include "StPicoRpsCollection.h"
 
 TClonesArray** StPicoDst::picoArrays       = 0;
 
@@ -157,13 +156,5 @@ void StPicoDst::printMtdPidTraits()  {
     LOG_INFO << endm;
   }
 }
-//-----------------------------------------------------------------------
-void StPicoDst::printRpsCollection(){
-  if (numberOfRpsCollection() == 0) {
-    LOG_INFO << "No RPs collection found!" << endm;
-    return;
-  }
-  LOG_INFO << endm;
-  LOG_INFO << "+++++++++ RPs collection ( " << numberOfRpsCollection() << " entries )" << endm << endm;
-}
+
 ClassImp(StPicoDst)

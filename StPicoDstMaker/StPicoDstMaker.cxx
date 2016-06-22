@@ -64,10 +64,6 @@
 #include "StEvent/StTriggerData.h"
 #include "StEvent/StDcaGeometry.h"
 
-//StRps
-#include "StMuDSTMaker/COMMON/StMuRpsCollection.h"
-#include "StPicoRpsCollection.h"
-
 ClassImp(StPicoDstMaker)
 
 
@@ -79,7 +75,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mPicoCut(nullptr), mBField(0),
-  mIoMode(0), mProdMode(0), mEmcMode(1),mRpMode(0),
+  mIoMode(0), mProdMode(0), mEmcMode(1),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536*4),
@@ -441,6 +437,7 @@ Int_t StPicoDstMaker::MakeWrite() {
       break;
     }
   }
+  /////////////////////////////////////
 
   if(mEmcMode){
     mEmcCollection = mMuDst->emcCollection();
@@ -457,9 +454,10 @@ Int_t StPicoDstMaker::MakeWrite() {
 
   LOG_DEBUG << " eventId = " << mMuEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
 
-  if(mPicoCut->passEvent(mMuEvent) || mRpMode) {  // keep all events in pp collisions to monitor triggers, some RP triggers do not use Vrt (TPC) info, e.g. ET
+  if(mPicoCut->passEvent(mMuEvent)) {  // keep all events in pp collisions to monitor triggers
 
     fillTracks();
+
     fillEvent();
 
     fillEmcTrigger();
@@ -468,10 +466,6 @@ Int_t StPicoDstMaker::MakeWrite() {
     //fillBTofHits();
     fillMtdHits();
 
-    if(mRpMode){
-	fillRpsCollection();
-    	if(Debug()) mPicoDst->printRpsCollection();
-    }
     if(Debug()) mPicoDst->printTracks();
 
     mTTree->Fill(); THack::IsTreeWritable(mTTree);
@@ -932,18 +926,4 @@ void StPicoDstMaker::fillMtdHits() {
 	  hitIndex.erase(hitIndex.begin()+hits[k]);
 	}
     }
-}
-//-----------------------------------------------------------------------
-void StPicoDstMaker::fillRpsCollection(){
-  if(!mMuDst) {
-    LOG_WARN << " No MuDst for this event " << endm;
-    return;
-  }
-  StMuRpsCollection *rps = (StMuRpsCollection*)(mMuDst->RpsCollection());
-  if(!rps){
-	LOG_WARN << "No RP collection for this event" << endm;
-  }
-    int counter = mPicoArrays[picoRpsCollection]->GetEntries();
-    new((*(mPicoArrays[picoRpsCollection]))[counter]) StPicoRpsCollection(*rps);
-
 }

@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <limits>
 #include "StEvent/StEventTypes.h"
-#include "StEvent/StTriggerData.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
@@ -9,7 +8,6 @@
 #include "St_base/StMessMgr.h"
 #include "StPicoUtilities.h"
 #include "StPicoEvent.h"
-
 
 ClassImp(StPicoEvent)
 
@@ -31,8 +29,7 @@ StPicoEvent::StPicoEvent():
  mZdcSumAdcEast(0), mZdcSumAdcWest(0),
  mZdcSmdEastHorizontal{}, mZdcSmdEastVertical{}, mZdcSmdWestHorizontal{}, mZdcSmdWestVertical{},
  mBbcAdcEast{}, mBbcAdcWest{},
- mHT_Th{},
- mRpTriggerWord(0), mBcNumber(0), mNTofMatchedPTracks(0), mNVerticesTofMatched(0)
+ mHT_Th{}
 {}
 
 StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
@@ -132,10 +129,6 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
     if( eastWest == 0 ) mBbcAdcEast[pmtId] = bbc.adc(i) ;
     else                mBbcAdcWest[pmtId] = bbc.adc(i) ;
   }
-  mRpTriggerWord = (const_cast< StTriggerData *> (ev->triggerData() ) )->pp2ppDSM(0); 
-  mBcNumber = ev->l0Trigger().bunchCrossingId7bit(ev->runId());
-  StPicoUtilities::numberTofMatchedTracks(muDst, mNVerticesTofMatched, mNTofMatchedPTracks);
-  
 }
 
 StPicoEvent::~StPicoEvent()

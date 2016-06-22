@@ -4,13 +4,13 @@
 //============================================================================================
 const char* StPicoArrays::picoArrayNames [__NALLPICOARRAYS__] = {"Event","Tracks","EmcTrigger","MtdTrigger",
 								 "BTOWHit","BTofHit","MtdHit",
-								 "EmcPidTraits","BTofPidTraits","MtdPidTraits", "RpsCollection"};
+								 "EmcPidTraits","BTofPidTraits","MtdPidTraits"};
 
 //              ARRAY TYPES
 //============================================================================================
 const char* StPicoArrays::picoArrayTypes [__NALLPICOARRAYS__] = {"StPicoEvent","StPicoTrack","StPicoEmcTrigger","StPicoMtdTrigger",
 								 "StPicoBTOWHit","StPicoBTofHit","StPicoMtdHit",
-								 "StPicoEmcPidTraits","StPicoBTofPidTraits","StPicoMtdPidTraits", "StPicoRpsCollection"};
+								 "StPicoEmcPidTraits","StPicoBTofPidTraits","StPicoMtdPidTraits"};
 
 //              ARRAY SIZES
 //============================================================================================
@@ -19,12 +19,12 @@ const char* StPicoArrays::picoArrayTypes [__NALLPICOARRAYS__] = {"StPicoEvent","
 // only selected picoDst branches
 int StPicoArrays::picoArraySizes [__NALLPICOARRAYS__    ] = {1,1000,100,100,
 							     100,100,100,
-							     100,100,100,1};
+							     100,100,100};
 
 //              ARRAY COUNTERS
 //============================================================================================
 int   StPicoArrays::picoArrayCounters [__NALLPICOARRAYS__ ] = {0,0,0,0,
 							       0,0,0,
-							       0,0,0,0};
+							       0,0,0};
 StPicoArrays::StPicoArrays()
 {}

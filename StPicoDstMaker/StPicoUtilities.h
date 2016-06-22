@@ -153,30 +153,7 @@ namespace StPicoUtilities {
     }
     return countedTracks;
   }
-  inline void numberTofMatchedTracks(const StMuDst& mMuDst, Int_t &nVertices, Int_t &nTracks){    Int_t lastVertexID_withTracksTofMatched = -1;
-    nVertices = 0;
-    nTracks = 0;
-    Int_t originalVertex = mMuDst.currentVertexIndex ();
 
-    for(Int_t i=0;i< (Int_t)mMuDst.numberOfPrimaryVertices();i++){
- 	mMuDst.setVertexIndex(i);
-    	for (UInt_t pr = 0; pr < mMuDst.primaryTracks()->GetEntries(); ++pr) {
-		const StMuTrack*  track = dynamic_cast<StMuTrack *>(mMuDst.primaryTracks(pr));
-		if(!track)continue;
-		if( track->btofPidTraits().matchFlag() != 0 ){
-			nTracks++;
-			if(i!=lastVertexID_withTracksTofMatched){
-				nVertices++;
-				lastVertexID_withTracksTofMatched = i;
-			}
-		}
-
-	}
-	
-    }
-    if(nVertices!=1)nTracks=-1;
-    mMuDst.setVertexIndex(originalVertex);
-  }
 
 }
 
