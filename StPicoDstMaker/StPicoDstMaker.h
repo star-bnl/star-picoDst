@@ -94,7 +94,6 @@ class StPicoDstMaker : public StMaker {
    void fillBTofHits();
    void fillMtdHits();
    void fillRpsCollection();
-   void rpVertex();
 
    bool getBEMC(StMuTrack *, int*, int*, float*, float*, int*, int*);
 
