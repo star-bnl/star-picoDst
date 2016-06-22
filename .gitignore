@@ -11,3 +11,4 @@
 temp_gccflags.c
 *.o
 *.so
+*~
