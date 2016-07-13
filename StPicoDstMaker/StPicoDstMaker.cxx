@@ -770,9 +770,8 @@ void StPicoDstMaker::fillEmcTrigger() {
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillMtdTrigger()
 {
-  StTriggerData *trigger = const_cast<StTriggerData*>(mMuDst->event()->triggerData());
   int counter = mPicoArrays[picoMtdTrigger]->GetEntries();
-  new((*(mPicoArrays[picoMtdTrigger]))[counter]) StPicoMtdTrigger(trigger);
+  new((*(mPicoArrays[picoMtdTrigger]))[counter]) StPicoMtdTrigger(*mMuDst);
 }
 
 
