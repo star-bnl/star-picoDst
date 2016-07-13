@@ -10,6 +10,7 @@ class StPicoEmcPidTraits: public TObject {
   virtual ~StPicoEmcPidTraits();
   virtual void Print(const Char_t *option = "") const;
 
+  Int_t   trackIndex() const;
   Int_t   bemcId() const;
   Int_t   adc0() const;
   Float_t e0() const;
@@ -53,6 +54,7 @@ class StPicoEmcPidTraits: public TObject {
 
   ClassDef(StPicoEmcPidTraits,1);
 };
+inline Int_t   StPicoEmcPidTraits::trackIndex() const     { return (Int_t)mTrackIndex;             }
 inline Int_t   StPicoEmcPidTraits::bemcId() const         { return (Int_t)mBEMCId;                 }
 inline Int_t   StPicoEmcPidTraits::adc0() const           { return (Int_t)mBTOWADC0;               }
 inline Float_t StPicoEmcPidTraits::e0() const             { return (Float_t)mBTOWE0/1000.;         }
