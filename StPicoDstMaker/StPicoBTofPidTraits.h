@@ -12,6 +12,7 @@ class StPicoBTofPidTraits : public TObject{
   virtual ~StPicoBTofPidTraits();
   virtual void Print(const Char_t *option = "") const;
 
+  Int_t   trackIndex() const;
   Int_t   btofCellId() const;
   Int_t   btofMatchFlag() const;
   Float_t btof() const;
@@ -34,6 +35,7 @@ class StPicoBTofPidTraits : public TObject{
 
   ClassDef(StPicoBTofPidTraits,1);
 };
+inline Int_t   StPicoBTofPidTraits::trackIndex() const     { return mTrackIndex;}
 inline Int_t   StPicoBTofPidTraits::btofCellId() const     { return (Int_t)mBTofCellId; }
 inline Int_t   StPicoBTofPidTraits::btofMatchFlag() const  { return (Int_t)mBTofMatchFlag; }
 inline Float_t StPicoBTofPidTraits::btof() const           { return (Float_t)mBTof/1000.; }
