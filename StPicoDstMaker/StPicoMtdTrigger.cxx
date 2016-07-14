@@ -1,18 +1,21 @@
 #include <bitset>
 
-#include "StTriggerData.h"
+#include "StEvent/StTriggerData.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h" 
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StMuDSTMaker/COMMON/StMuMtdHeader.h"
 #include "St_base/StMessMgr.h"
-#include "StEnumerations.h"
+#include "StEvent/StEnumerations.h"
 
 #include "StPicoMtdTrigger.h"
 
 ClassImp(StPicoMtdTrigger)
 
 //----------------------------------------------------------------------------------
-StPicoMtdTrigger::StPicoMtdTrigger(): mVpdTacSum(0), mTHUBtime{}, mQTtacSum{}, mMT101Tac{}, mMT101Id{}, mTF201TriggerBit(0)
+StPicoMtdTrigger::StPicoMtdTrigger(): 
+  mVpdTacSum(0), mTHUBtime{}, 
+  mQTtacSum{}, mMT101Tac{}, mMT101Id{}, mTF201TriggerBit(0), 
+  mShouldHaveRejectEvent(-1)
 {
 }
 
@@ -25,6 +28,7 @@ StPicoMtdTrigger::StPicoMtdTrigger(const StMuDst& muDst): StPicoMtdTrigger()
     {
       mTHUBtime[0] = 25*(muMtdHeader->triggerTime(1)&0xfff);
       mTHUBtime[1] = 25*(muMtdHeader->triggerTime(2)&0xfff);
+      mShouldHaveRejectEvent = (Char_t)(muMtdHeader->shouldHaveRejectEvent());
     }
 
 
