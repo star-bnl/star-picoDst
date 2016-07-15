@@ -1,11 +1,9 @@
-#include <limits>
 
 #include "StMuDSTMaker/COMMON/StMuMtdHit.h"
 #include "St_base/StMessMgr.h"
 
 #include "StPicoMtdHit.h"
 
-ClassImp(StPicoMtdHit)
 
 //----------------------------------------------------------------------------------
 StPicoMtdHit::StPicoMtdHit(): mgChannel(-1), mTriggerFlag(0), mLeadingEdgeTime{-999.,-999.}, mTrailingEdgeTime{-999.,-999}

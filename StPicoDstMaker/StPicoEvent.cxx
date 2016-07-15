@@ -9,7 +9,6 @@
 #include "StPicoUtilities.h"
 #include "StPicoEvent.h"
 
-ClassImp(StPicoEvent)
 
 StPicoEvent::StPicoEvent():
  mRunId(0), mEventId(0), mFillId(0), mBField(0),

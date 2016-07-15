@@ -6,7 +6,6 @@
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 
-ClassImp(StPicoCut)
 
 //----------------------------------------------------------------------------------
 StPicoCut::StPicoCut() {}

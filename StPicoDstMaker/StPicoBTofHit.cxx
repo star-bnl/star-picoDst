@@ -3,7 +3,6 @@
 #include "St_base/StMessMgr.h"
 #include "StPicoBTofHit.h"
 
-ClassImp(StPicoBTofHit)
 
 StPicoBTofHit::StPicoBTofHit() : mId(0) {}
 StPicoBTofHit::StPicoBTofHit(int id): StPicoBTofHit()

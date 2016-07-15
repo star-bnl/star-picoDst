@@ -4,7 +4,6 @@
 #include "St_base/StMessMgr.h"
 #include "StPicoBTOWHit.h"
 
-ClassImp(StPicoBTOWHit)
 
 //----------------------------------------------------------------------------------
 StPicoBTOWHit::StPicoBTOWHit(): mId(0), mAdc(0), mE(0)
