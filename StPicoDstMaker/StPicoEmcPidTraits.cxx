@@ -4,7 +4,6 @@
 
 #include "StPicoEmcPidTraits.h"
 
-ClassImp(StPicoEmcPidTraits)
 
 //----------------------------------------------------------------------------------
 StPicoEmcPidTraits::StPicoEmcPidTraits() :

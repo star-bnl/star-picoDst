@@ -1,7 +1,6 @@
 #include "StPicoEmcTrigger.h"
 #include "StPicoDstMaker.h"
 
-ClassImp(StPicoEmcTrigger)
 
 //----------------------------------------------------------------------------------
 StPicoEmcTrigger::StPicoEmcTrigger(): mFlag(0), mId(0), mAdc(0)

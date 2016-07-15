@@ -64,7 +64,6 @@
 #include "StEvent/StTriggerData.h"
 #include "StEvent/StDcaGeometry.h"
 
-ClassImp(StPicoDstMaker)
 
 
 // Set maximum file size to 1.9 GB (Root has a 2GB limit)

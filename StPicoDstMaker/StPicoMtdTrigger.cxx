@@ -9,7 +9,6 @@
 
 #include "StPicoMtdTrigger.h"
 
-ClassImp(StPicoMtdTrigger)
 
 //----------------------------------------------------------------------------------
 StPicoMtdTrigger::StPicoMtdTrigger(): 

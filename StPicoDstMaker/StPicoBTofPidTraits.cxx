@@ -8,7 +8,6 @@
 
 #include "StPicoBTofPidTraits.h"
 
-ClassImp(StPicoBTofPidTraits)
 
 //----------------------------------------------------------------------------------
 StPicoBTofPidTraits::StPicoBTofPidTraits() :
