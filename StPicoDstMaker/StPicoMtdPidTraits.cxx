@@ -6,7 +6,6 @@
 
 #include "StPicoMtdPidTraits.h"
 
-ClassImp(StPicoMtdPidTraits)
 
 //----------------------------------------------------------------------------------
 StPicoMtdPidTraits::StPicoMtdPidTraits() :

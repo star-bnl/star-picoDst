@@ -3,7 +3,6 @@
 #include "St_base/StMessMgr.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 
-ClassImp(StPicoTrack)
 
 //----------------------------------------------------------------------------------
 StPicoTrack::StPicoTrack() : mId(0), mChi2(std::numeric_limits<unsigned short>::max()), mPMomentum(0., 0., 0.), mDedx(0),

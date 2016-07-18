@@ -62,6 +62,9 @@ class StPicoTrack : public TObject {
   StPhysicalHelixD helix() const;
   bool isHFTTrack() const;
 
+  /** Checks whether this track is associated with a primary vertex. */
+  bool isPrimary() const;
+
   // MTD pid traits
   void setEmcPidTraitsIndex(Int_t index);
   void setBTofPidTraitsIndex(Int_t index);
@@ -130,6 +133,17 @@ inline bool StPicoTrack::isHFTTrack() const
   UInt_t const hitsMap = hftHitsMap();
   return (hitsMap>>0 & 0x1) && (hitsMap>>1 & 0x3) && (hitsMap>>3 & 0x3); 
 }
+
+
+/**
+ * The default "primary" momentum is (0, 0, 0) but it is expected to have
+ * a non-zero length when the track is associated with a primary vertex.
+ */
+inline bool StPicoTrack::isPrimary() const
+{
+  return mPMomentum.magnitude() > 0;
+}
+
 
 inline StDcaGeometry StPicoTrack::dcaGeometry() const
 {

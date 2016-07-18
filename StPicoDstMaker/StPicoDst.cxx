@@ -157,4 +157,3 @@ void StPicoDst::printMtdPidTraits()  {
   }
 }
 
-ClassImp(StPicoDst)

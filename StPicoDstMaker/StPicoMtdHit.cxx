@@ -5,7 +5,6 @@
 
 #include "StPicoMtdHit.h"
 
-ClassImp(StPicoMtdHit)
 
 //----------------------------------------------------------------------------------
 StPicoMtdHit::StPicoMtdHit(): mgChannel(-1), mTriggerFlag(0), mLeadingEdgeTime{-999.,-999.}, mTrailingEdgeTime{-999.,-999}

@@ -1,6 +1,5 @@
 #include "StPicoConstants.h"
 
-ClassImp(Pico)
 
    Float_t Pico::mVzMax = 100;
    Float_t Pico::mVrMax =   2;
