@@ -1,3 +1,4 @@
+#include <limits>
 
 #include "StMuDSTMaker/COMMON/StMuMtdHit.h"
 #include "St_base/StMessMgr.h"
