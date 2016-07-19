@@ -3,7 +3,6 @@
 
 class StMuDst;
 #include "TObject.h"
-#include "tables/St_mtdQTSlewingCorr_Table.h"
 
 class StPicoMtdTrigger : public TObject {
  public:
