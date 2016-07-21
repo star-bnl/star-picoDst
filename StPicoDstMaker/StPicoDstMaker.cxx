@@ -36,6 +36,8 @@
 #include "StMuDSTMaker/COMMON/StMuMtdHit.h"
 #include "StMuDSTMaker/COMMON/StMuMtdPidTraits.h"
 #include "tables/St_mtdModuleToQTmap_Table.h"
+#include "tables/St_mtdQTSlewingCorr_Table.h"
+#include "tables/St_mtdQTSlewingCorrPart2_Table.h"
 
 #include "StMuDSTMaker/COMMON/StMuEmcCollection.h"
 #include "StMuDSTMaker/COMMON/StMuEmcPoint.h"
@@ -79,7 +81,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536*4),
   mIndex2Primary{}, mMap2Track{},
-  mModuleToQT{}, mModuleToQTPos{},
+  mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
   mPicoAllArrays{}, mPicoArrays(mPicoAllArrays), mStatusArrays{}
 {
   streamerOff();
@@ -88,8 +90,6 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mPicoCut = new StPicoCut();
 
   memset(mStatusArrays, (char)1, sizeof(mStatusArrays));
-  memset(mModuleToQT,-1,sizeof(mModuleToQT));
-  memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(int mode, const char* fileName, const char* name) : StPicoDstMaker(name)
@@ -199,23 +199,35 @@ Int_t StPicoDstMaker::Init(){
     openRead();     // if read
   } else if (mIoMode == ioWrite) {
     openWrite();
-    if(!initMtd()) {
-      LOG_ERROR << " MTD initialization error!!! " << endm;
-      return kStErr;
-    }
     if(mEmcMode) initEmc();
   }
   return kStOK;
 }
 
 //-----------------------------------------------------------------------
-Bool_t StPicoDstMaker::initMtd()
+Int_t StPicoDstMaker::InitRun(const Int_t runnumber){
+  if (mIoMode == ioWrite) {
+    if(!initMtd(runnumber)) {                                            
+      LOG_ERROR << " MTD initialization error!!! " << endm;
+      return kStErr;
+    }
+  }
+  return kStOK;
+}
+
+//-----------------------------------------------------------------------
+Bool_t StPicoDstMaker::initMtd(const int runnumber)
 {
-  // initialize MTD maps
-  memset(mModuleToQT,-1,sizeof(mModuleToQT));
-  memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
+  // Dec. 1st is the assumed to the start a new running year
+  int year = runnumber/1e6 + 1999;
+  if((runnumber%1000)/1000>334) year += 1;
+  LOG_INFO << "Run = " << runnumber << " year = " << year << endm;
 
   // obtain maps from DB
+  memset(mModuleToQT,-1,sizeof(mModuleToQT));
+  memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
+  memset(mQTtoModule,-1,sizeof(mQTtoModule));
+
   LOG_INFO << "Retrieving mtdModuleToQTmap table from database ..." << endm;
   TDataSet *dataset = GetDataBase("Geometry/mtd/mtdModuleToQTmap");
   St_mtdModuleToQTmap *mtdModuleToQTmap = static_cast<St_mtdModuleToQTmap*>(dataset->Find("mtdModuleToQTmap"));
@@ -242,6 +254,54 @@ Bool_t StPicoDstMaker::initMtd()
 	    {
 	      if(channel%8==1) mModuleToQTPos[i][j] = 1 + channel/8 * 2;
 	      else             mModuleToQTPos[i][j] = 2 + channel/8 * 2;
+	    }
+          if(mModuleToQT[i][j]>0 && mModuleToQTPos[i][j]>0)
+            mQTtoModule[mModuleToQT[i][j]-1][mModuleToQTPos[i][j]-1] = j + 1;
+	}
+    }
+
+  // online slewing correction for QT board
+  memset(mQTSlewBinEdge,-1,sizeof(mQTSlewBinEdge));
+  memset(mQTSlewCorr,-1,sizeof(mQTSlewCorr));
+  LOG_INFO << "Retrieving mtdQTSlewingCorr table from database ..." << endm;
+  dataset = GetDataBase("Calibrations/mtd/mtdQTSlewingCorr");
+  St_mtdQTSlewingCorr *mtdQTSlewingCorr = static_cast<St_mtdQTSlewingCorr*>(dataset->Find("mtdQTSlewingCorr"));
+  if(!mtdQTSlewingCorr)
+    {
+      LOG_ERROR << "No mtdQTSlewingCorr table found in database" << endm;
+      return kStErr;
+    }
+  mtdQTSlewingCorr_st *mtdQTSlewingCorrtable = static_cast<mtdQTSlewingCorr_st*>(mtdQTSlewingCorr->GetTable());
+  for(int j=0; j<4; j++)
+    {
+      for(int i=0; i<16; i++)
+        {
+          for(Int_t k=0; k<8; k++)
+            {
+              Int_t index = j*16*8 + i*8 + k;
+              mQTSlewBinEdge[j][i][k] = (int) mtdQTSlewingCorrtable->slewingBinEdge[index];
+              mQTSlewCorr[j][i][k] = (int) mtdQTSlewingCorrtable->slewingCorr[index];
+            }
+        }
+    }
+  if(year>=2016)
+    {
+      dataset = GetDataBase("Calibrations/mtd/mtdQTSlewingCorrPart2");
+      if(dataset)
+	{
+	  St_mtdQTSlewingCorrPart2 *mtdQTSlewingCorr2 = static_cast<St_mtdQTSlewingCorrPart2*>(dataset->Find("mtdQTSlewingCorrPart2"));
+	  mtdQTSlewingCorrPart2_st *mtdQTSlewingCorrtable2 = static_cast<mtdQTSlewingCorrPart2_st*>(mtdQTSlewingCorr2->GetTable());
+	  for(int j=0; j<4; j++)
+	    {
+	      for(int i=0; i<16; i++)
+		{
+		  for(Int_t k=0; k<8; k++)
+		    {
+		      Int_t index = j*16*8 + i*8 + k;
+		      mQTSlewBinEdge[j+4][i][k] = (int) mtdQTSlewingCorrtable2->slewingBinEdge[index];
+		      mQTSlewCorr[j+4][i][k] = (int) mtdQTSlewingCorrtable2->slewingCorr[index];
+		    }
+		}
 	    }
 	}
     }
@@ -551,9 +611,9 @@ void StPicoDstMaker::fillTracks() {
 
     if(gTrk->mtdHit())
       {
-	Int_t emc_index = mPicoArrays[picoMtdPidTraits]->GetEntries();
-	new((*(mPicoArrays[picoMtdPidTraits]))[emc_index]) StPicoMtdPidTraits(gTrk->mtdHit(), &(gTrk->mtdPidTraits()),counter);
-	picoTrk->setMtdPidTraitsIndex(emc_index);
+	Int_t mtd_index = mPicoArrays[picoMtdPidTraits]->GetEntries();
+	new((*(mPicoArrays[picoMtdPidTraits]))[mtd_index]) StPicoMtdPidTraits(gTrk->mtdHit(), &(gTrk->mtdPidTraits()),counter);
+	picoTrk->setMtdPidTraitsIndex(mtd_index);
       }
   }
 
@@ -770,7 +830,7 @@ void StPicoDstMaker::fillEmcTrigger() {
 void StPicoDstMaker::fillMtdTrigger()
 {
   int counter = mPicoArrays[picoMtdTrigger]->GetEntries();
-  new((*(mPicoArrays[picoMtdTrigger]))[counter]) StPicoMtdTrigger(*mMuDst);
+  new((*(mPicoArrays[picoMtdTrigger]))[counter]) StPicoMtdTrigger(*mMuDst,mQTtoModule,mQTSlewBinEdge,mQTSlewCorr);
 }
 
 
@@ -841,6 +901,8 @@ void StPicoDstMaker::fillMtdHits() {
     LOG_WARN << " No MuDst for this event " << endm;
     return;
   }
+
+  // fill MTD hits
   Int_t nMtdHits = mMuDst->numberOfMTDHit();
   for(Int_t i=0; i<nMtdHits; i++)
     {
@@ -849,6 +911,24 @@ void StPicoDstMaker::fillMtdHits() {
       Int_t counter = mPicoArrays[picoMtdHit]->GetEntries();
       new((*(mPicoArrays[picoMtdHit]))[counter]) StPicoMtdHit(hit);
     }
+  Int_t nHits = mPicoArrays[picoMtdHit]->GetEntries();
+
+  // associated MTD hits with PidTraits
+  Int_t nMtdPidTraits = mPicoArrays[picoMtdPidTraits]->GetEntries();
+  for(Int_t i=0; i<nMtdPidTraits; i++)
+    {
+      StPicoMtdPidTraits *pidTrait = dynamic_cast<StPicoMtdPidTraits*>(mPicoArrays[picoMtdPidTraits]->At(i));
+      for(Int_t j=0; j<nHits; j++)
+	{
+	  StPicoMtdHit *hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(j));
+	  if(pidTrait->gChannel() == hit->gChannel())
+	    {
+	      pidTrait->setMtdHitIndex(j);
+	      break;
+	    }
+	}
+    }
+
 
   // check the firing hits
   if(mPicoArrays[picoMtdTrigger]->GetEntries()!=1)
@@ -858,11 +938,10 @@ void StPicoDstMaker::fillMtdHits() {
     }
 
   StPicoMtdTrigger *trigger = dynamic_cast<StPicoMtdTrigger*>(mPicoArrays[picoMtdTrigger]->At(0));
-
-  Int_t triggerQT[4][2];
-  Bool_t triggerBit[4][8];
+  Int_t triggerQT[8][2];
+  Bool_t triggerBit[8][8];
   Int_t pos1 = 0, pos2 = 0;
-  for(Int_t i=0; i<4; i++)
+  for(Int_t i=0; i<8; i++)
     {
       for(Int_t j=0; j<2; j++)
 	triggerQT[i][j] = 0;
@@ -881,11 +960,8 @@ void StPicoDstMaker::fillMtdHits() {
 	}
     }
 
-
-  Int_t nHits = mPicoArrays[picoMtdHit]->GetEntries();
   vector<Int_t> triggerPos;
   vector<Int_t> hitIndex;
-
   for(Int_t i=0; i<nHits; i++)
     {
       StPicoMtdHit *hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(i));
@@ -893,7 +969,7 @@ void StPicoDstMaker::fillMtdHits() {
       Int_t module  = hit->module();
       Int_t qt = mModuleToQT[backleg-1][module-1];
       Int_t pos = mModuleToQTPos[backleg-1][module-1];
-      if(qt>0 && qt<=4 && pos>0 && triggerBit[qt-1][pos-1])
+      if(qt>=1 && qt<=8 && pos>0 && triggerBit[qt-1][pos-1])
 	{
 	  triggerPos.push_back(qt*10+pos);
 	  hitIndex.push_back(i);

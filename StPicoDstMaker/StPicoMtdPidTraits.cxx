@@ -9,7 +9,7 @@
 
 //----------------------------------------------------------------------------------
 StPicoMtdPidTraits::StPicoMtdPidTraits() :
-  mTrackIndex(-1), mMatchFlag(-1),
+  mTrackIndex(-1), mMtdHitIndex(-1), mMatchFlag(-1),
   mDeltaY(-999.), mDeltaZ(-999.), mDeltaTimeOfFlight(-999.), mBeta(-999.), mMtdHitChan(-1)
 {
   // constructor
@@ -20,6 +20,7 @@ StPicoMtdPidTraits::StPicoMtdPidTraits(const StMuMtdHit * hit,
 				       const StMuMtdPidTraits* trait,
 				       const Int_t index):
   mTrackIndex((Short_t)index),
+  mMtdHitIndex(-1),
   mMatchFlag((Char_t) trait->matchFlag()),
   mDeltaY(trait->deltaY()),
   mDeltaZ(trait->deltaZ()),

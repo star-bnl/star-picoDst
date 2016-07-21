@@ -35,6 +35,7 @@ class StPicoDstMaker : public StMaker {
    virtual ~StPicoDstMaker();
 
    virtual Int_t Init();
+   virtual Int_t InitRun(const Int_t runnumber);
    virtual Int_t Make();
    virtual void  Clear(Option_t *option="");
    virtual Int_t Finish();
@@ -77,7 +78,7 @@ class StPicoDstMaker : public StMaker {
    void initEmc();
    void finishEmc();
 
-   Bool_t initMtd();
+   Bool_t initMtd(const int runnumber);
 
    void clearArrays();
    void createArrays();
@@ -129,8 +130,11 @@ class StPicoDstMaker : public StMaker {
    Int_t mMap2Track[nTrk];
 
    // MTD map from backleg to QT
-  Int_t  mModuleToQT[30][5];     // Map from module to QT board index
-  Int_t  mModuleToQTPos[30][5];  // Map from module to the position on QA board
+   Int_t  mModuleToQT[30][5];        // Map from module to QT board index
+   Int_t  mModuleToQTPos[30][5];     // Map from module to the position on QA board
+   Int_t  mQTtoModule[8][8];         // Map from QT board to module
+   Int_t  mQTSlewBinEdge[8][16][8];  // Bin Edge for QT slewing correction
+   Int_t  mQTSlewCorr[8][16][8];     // QT Slewing correction
 
    //
    friend class StPicoDst;
