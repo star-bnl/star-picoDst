@@ -19,7 +19,7 @@ StPicoMtdTrigger::StPicoMtdTrigger():
 }
 
 //----------------------------------------------------------------------------------
-StPicoMtdTrigger::StPicoMtdTrigger(const StMuDst& muDst, const int year, const int QTtoModule[8][8],
+StPicoMtdTrigger::StPicoMtdTrigger(const StMuDst& muDst, const int QTtoModule[8][8],
 				   const int QTSlewBinEdge[8][16][8], const int QTSlewCorr[8][16][8]): StPicoMtdTrigger()
 {
   // Header information
@@ -31,6 +31,10 @@ StPicoMtdTrigger::StPicoMtdTrigger(const StMuDst& muDst, const int year, const i
       mShouldHaveRejectEvent = (Char_t)(muMtdHeader->shouldHaveRejectEvent());
     }
 
+  // RHIC year
+  const int runnumber = muDst.event()->runNumber();
+  int year = runnumber/1e6 + 1999;
+  if((runnumber%1000)/1000>334) year += 1;
 
   // Trigger data
   UShort_t mtd_qt_tac_min = 100;

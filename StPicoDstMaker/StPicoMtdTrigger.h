@@ -7,7 +7,7 @@ class StMuDst;
 class StPicoMtdTrigger : public TObject {
  public:
   StPicoMtdTrigger();
-  StPicoMtdTrigger(const StMuDst& muDst, const int year, const int QTtoModule[8][8],
+  StPicoMtdTrigger(const StMuDst& muDst, const int QTtoModule[8][8],
                    const int QTSlewBinEdge[8][16][8], const int QTSlewCorr[8][16][8]);
   virtual ~StPicoMtdTrigger();
 

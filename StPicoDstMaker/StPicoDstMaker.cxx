@@ -78,7 +78,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mPicoDst(nullptr), mPicoCut(nullptr), mBField(0),
   mIoMode(0), mProdMode(0), mEmcMode(1),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
-  mRunNumber(0), mYear(0),
+  mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536*4),
   mIndex2Primary{}, mMap2Track{},
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
@@ -206,14 +206,8 @@ Int_t StPicoDstMaker::Init(){
 
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::InitRun(const Int_t runnumber){
-  // Dec. 1st is the assumed to the start a new running year
-  mYear = runnumber/1e6 + 1999;
-  if((runnumber%1000)/1000>334) mYear += 1;
-
-  printf("[i]Run = %d, year = %d\n",runnumber,mYear);
-
   if (mIoMode == ioWrite) {
-    if(!initMtd()) {                                            
+    if(!initMtd(runnumber)) {                                            
       LOG_ERROR << " MTD initialization error!!! " << endm;
       return kStErr;
     }
@@ -222,8 +216,13 @@ Int_t StPicoDstMaker::InitRun(const Int_t runnumber){
 }
 
 //-----------------------------------------------------------------------
-Bool_t StPicoDstMaker::initMtd()
+Bool_t StPicoDstMaker::initMtd(const int runnumber)
 {
+  // Dec. 1st is the assumed to the start a new running year
+  int year = runnumber/1e6 + 1999;
+  if((runnumber%1000)/1000>334) year += 1;
+  LOG_INFO << "Run = " << runnumber << " year = " << year << endm;
+
   // obtain maps from DB
   memset(mModuleToQT,-1,sizeof(mModuleToQT));
   memset(mModuleToQTPos,-1,sizeof(mModuleToQTPos));
@@ -285,7 +284,7 @@ Bool_t StPicoDstMaker::initMtd()
             }
         }
     }
-  if(mYear>=2016)
+  if(year>=2016)
     {
       dataset = GetDataBase("Calibrations/mtd/mtdQTSlewingCorrPart2");
       if(dataset)
@@ -831,7 +830,7 @@ void StPicoDstMaker::fillEmcTrigger() {
 void StPicoDstMaker::fillMtdTrigger()
 {
   int counter = mPicoArrays[picoMtdTrigger]->GetEntries();
-  new((*(mPicoArrays[picoMtdTrigger]))[counter]) StPicoMtdTrigger(*mMuDst,mYear,mQTtoModule,mQTSlewBinEdge,mQTSlewCorr);
+  new((*(mPicoArrays[picoMtdTrigger]))[counter]) StPicoMtdTrigger(*mMuDst,mQTtoModule,mQTSlewBinEdge,mQTSlewCorr);
 }
 
 

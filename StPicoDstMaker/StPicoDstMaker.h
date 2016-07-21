@@ -78,7 +78,7 @@ class StPicoDstMaker : public StMaker {
    void initEmc();
    void finishEmc();
 
-   Bool_t initMtd();
+   Bool_t initMtd(const int runnumber);
 
    void clearArrays();
    void createArrays();
@@ -117,7 +117,6 @@ class StPicoDstMaker : public StMaker {
    TString   mOutputFileName;       //! FileName
    TFile*    mOutputFile;
    Int_t     mRunNumber;
-   Int_t     mYear;
 
    TChain*   mChain;
    TTree*    mTTree;
