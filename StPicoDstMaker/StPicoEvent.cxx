@@ -27,6 +27,7 @@ StPicoEvent::StPicoEvent():
  mBbcEastRate(0), mBbcWestRate(0), mZdcEastRate(0), mZdcWestRate(0),
  mZdcSumAdcEast(0), mZdcSumAdcWest(0),
  mBcNumber(0), mNTofMatchedPrimaryTracks(0), mNVerticesTofMatched(0),
+ mRpTriggerWord(0),
  mZdcSmdEastHorizontal{}, mZdcSmdEastVertical{}, mZdcSmdWestHorizontal{}, mZdcSmdWestVertical{},
  mBbcAdcEast{}, mBbcAdcWest{},
  mHT_Th{}
@@ -131,6 +132,8 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
   }
 
   mBcNumber = ev->l0Trigger().bunchCrossingId7bit(ev->runId());  StPicoUtilities::numberTofMatchedTracks(muDst, mNVerticesTofMatched, mNTofMatchedPrimaryTracks);
+
+  mRpTriggerWord = (const_cast< StTriggerData *> (ev->triggerData() ) )->pp2ppDSM(0); 
 }
 
 StPicoEvent::~StPicoEvent()
