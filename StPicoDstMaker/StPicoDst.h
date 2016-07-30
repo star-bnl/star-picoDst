@@ -13,6 +13,7 @@ class StPicoMtdHit;
 class StPicoBEmcPidTraits;
 class StPicoBTofPidTraits;
 class StPicoMtdPidTraits;
+class StMuRpsCollection;
 
 #include "TClonesArray.h"
 #include "StPicoDstMaker/StPicoArrays.h"
@@ -57,6 +58,8 @@ public:
   static StPicoBTofPidTraits* btofPidTraits(int i) { return (StPicoBTofPidTraits*)picoArrays[StPicoArrays::BTofPidTraits]->UncheckedAt(i); }
   /// return pointer to i-th mtd pidTraits
   static StPicoMtdPidTraits* mtdPidTraits(int i) { return (StPicoMtdPidTraits*)picoArrays[StPicoArrays::MtdPidTraits]->UncheckedAt(i); }
+  /// returns pointer to current StMuRpsCollection
+  static StMuRpsCollection* rpsCollection() { return (StMuRpsCollection*)picoArrays[StPicoArrays::RpsCollection]->UncheckedAt(0); }
 
   static unsigned int numberOfTracks() { return picoArrays[StPicoArrays::Track]->GetEntries(); }
   static unsigned int numberOfEmcTriggers() { return picoArrays[StPicoArrays::EmcTrigger]->GetEntries(); }

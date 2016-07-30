@@ -5,7 +5,8 @@
 const char* StPicoArrays::picoArrayNames [NAllPicoArrays] = {"Event", "Track", "EmcTrigger", "MtdTrigger",
                                                              "BTOWHit", "BTofHit", "MtdHit",
                                                              "BbcTile", "EpdTile",
-                                                             "EmcPidTraits", "BTofPidTraits", "MtdPidTraits"
+                                                             "EmcPidTraits", "BTofPidTraits", "MtdPidTraits",
+                                                             "RpsCollection"
                                                             };
 
 //              ARRAY TYPES
@@ -13,7 +14,8 @@ const char* StPicoArrays::picoArrayNames [NAllPicoArrays] = {"Event", "Track", "
 const char* StPicoArrays::picoArrayTypes [NAllPicoArrays] = {"StPicoEvent", "StPicoTrack", "StPicoEmcTrigger", "StPicoMtdTrigger",
                                                              "StPicoBTowHit", "StPicoBTofHit", "StPicoMtdHit",
                                                              "StPicoBbcTile", "StPicoEpdTile",
-                                                             "StPicoBEmcPidTraits", "StPicoBTofPidTraits", "StPicoMtdPidTraits"
+                                                             "StPicoBEmcPidTraits", "StPicoBTofPidTraits", "StPicoMtdPidTraits",
+                                                             "StMuRpsCollection"
                                                             };
 
 //              ARRAY SIZES
@@ -24,7 +26,8 @@ const char* StPicoArrays::picoArrayTypes [NAllPicoArrays] = {"StPicoEvent", "StP
 int StPicoArrays::picoArraySizes [NAllPicoArrays] = {1, 1000, 100, 100,
                                                      100, 100, 100,
                                                      100, 100,
-                                                     100, 100, 100
+                                                     100, 100, 100,
+                                                     1
                                                     };
 StPicoArrays::StPicoArrays()
 {}
