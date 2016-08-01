@@ -38,7 +38,7 @@ StPicoMtdTrigger::StPicoMtdTrigger(const StMuDst& muDst, const int QTtoModule[8]
 
   // Trigger data
   UShort_t mtd_qt_tac_min = 100;
-  if(year>=2016) mtd_qt_tac_min = 80;
+  if(runnumber>=16045067) mtd_qt_tac_min = 80;
   StTriggerData *trigger = const_cast<StTriggerData*>(muDst.event()->triggerData());
   if(trigger)
     {
