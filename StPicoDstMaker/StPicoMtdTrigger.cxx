@@ -39,6 +39,9 @@ StPicoMtdTrigger::StPicoMtdTrigger(const StMuDst& muDst, const int QTtoModule[8]
   // Trigger data
   UShort_t mtd_qt_tac_min = 100;
   if(runnumber>=16045067) mtd_qt_tac_min = 80;
+  UShort_t mtd_qt_tac_diff_range_abs = 600;
+  if(year==2015) mtd_qt_tac_diff_range_abs = 1023;
+
   StTriggerData *trigger = const_cast<StTriggerData*>(muDst.event()->triggerData());
   if(trigger)
     {
