@@ -12,10 +12,6 @@ class StMuTrack;
 class StPicoDst;
 class StDcaGeometry;
 
-
-// Macro to control EMC variables
-#define EMCON 1
-
 class StPicoTrack : public TObject {
  public:
   StPicoTrack();
