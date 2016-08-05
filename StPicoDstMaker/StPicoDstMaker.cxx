@@ -207,7 +207,7 @@ Int_t StPicoDstMaker::Init(){
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::InitRun(const Int_t runnumber){
   if (mIoMode == ioWrite) {
-    if(!initMtd(runnumber)) {                                            
+    if(!initMtd(runnumber)) {
       LOG_ERROR << " MTD initialization error!!! " << endm;
       return kStErr;
     }
@@ -589,9 +589,13 @@ void StPicoDstMaker::fillTracks() {
 
     if(gTrk->index2Cov()<0) continue;
     StDcaGeometry *dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
-    if(!dcaG) { cout << "No dca Geometry for this track !!! " << i << endm; }
+    if(!dcaG)
+    { cout << "No dca Geometry for this track !!! " << i << endm;
+      continue;
+    }
+
     int counter = mPicoArrays[picoTrack]->GetEntries();
-    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, mBField, dcaG);
+    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex()->position(), *dcaG);
 
     StPicoTrack *picoTrk = (StPicoTrack*)mPicoArrays[picoTrack]->At(counter);
     // Fill pid traits
