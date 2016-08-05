@@ -588,10 +588,8 @@ void StPicoDstMaker::fillTracks() {
       }
 
     if(gTrk->index2Cov()<0) continue;
-    StDcaGeometry *dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
-    if(!dcaG) { cout << "No dca Geometry for this track !!! " << i << endm; }
     int counter = mPicoArrays[picoTrack]->GetEntries();
-    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, mBField, dcaG);
+    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, mBField);
 
     StPicoTrack *picoTrk = (StPicoTrack*)mPicoArrays[picoTrack]->At(counter);
     // Fill pid traits

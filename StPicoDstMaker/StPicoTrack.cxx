@@ -5,11 +5,11 @@
 
 
 //----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack() : mId(0), mChi2(std::numeric_limits<unsigned short>::max()), mPMomentum(0., 0., 0.), mDedx(0),
-   mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mNSigmaPion(std::numeric_limits<short>::max()), mNSigmaKaon(std::numeric_limits<short>::max()),
+StPicoTrack::StPicoTrack() : mId(0), mChi2(std::numeric_limits<unsigned short>::max()),
+   mPMomentum(0., 0., 0.), mGMomentum(0., 0., 0.), mOrigin(0., 0., 0.),
+   mDedx(0), mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mNSigmaPion(std::numeric_limits<short>::max()), mNSigmaKaon(std::numeric_limits<short>::max()),
    mNSigmaProton(std::numeric_limits<short>::max()), mNSigmaElectron(std::numeric_limits<short>::max()),
-   mMap0(0), mMap1(0), mPar(), mErrMatrix(), mEmcPidTraitsIndex(-1),
-   mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
+   mMap0(0), mMap1(0), mEmcPidTraitsIndex(-1), mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
 {
 }
 
@@ -17,7 +17,7 @@ StPicoTrack::StPicoTrack() : mId(0), mChi2(std::numeric_limits<unsigned short>::
 // t - the global track.  p - the associated primary track from the first primary vertex
 /////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, double const B, StDcaGeometry const* const dcaG)
+StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, double const B)
 : StPicoTrack()
 {
    if (!t || t->type() != global || (p && (p->type() != primary || p->id() != t->id())))
@@ -32,6 +32,11 @@ StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, dou
       {
          mPMomentum = p->p();
       }
+
+      StPhysicalHelixD gHelix = t->helix();
+      mGMomentum = gHelix.momentum(B*kilogauss);
+      mOrigin = gHelix.origin();
+
       int q      = t->charge();
       mDedx      = (t->dEdx() * 1e6 * 1000. > std::numeric_limits<unsigned short>::max()) ? 0 : (UShort_t)(TMath::Nint(t->dEdx() * 1e6 * 1000.));
       int flag = t->flag();
@@ -61,19 +66,6 @@ StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, dou
 
       mMap0 = (UInt_t)(t->topologyMap().data(0));
       mMap1 = (UInt_t)(t->topologyMap().data(1));
-
-      if (dcaG)
-      {
-         const float* params = dcaG->params();
-         const float* errMatrix = dcaG->errMatrix();
-         for (int i = 0; i < 6; i++) mPar[i] = params[i];
-         for (int i = 0; i < 15; i++) mErrMatrix[i] = errMatrix[i];
-
-      }
-      else
-      {
-         cout << " This track doesn't have a dcaGeometry!!!!" << endl;
-      }
    }
 }
 //----------------------------------------------------------------------------------
