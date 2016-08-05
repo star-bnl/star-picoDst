@@ -12,14 +12,10 @@ class StMuTrack;
 class StPicoDst;
 class StDcaGeometry;
 
-
-// Macro to control EMC variables
-#define EMCON 1
-
 class StPicoTrack : public TObject {
  public:
   StPicoTrack();
-  StPicoTrack(StMuTrack const* globalTrack, StMuTrack const* primaryTrack, double magField, StDcaGeometry const*);
+  StPicoTrack(StMuTrack const* globalTrack, StMuTrack const* primaryTrack, double magField);
   virtual ~StPicoTrack() {}
 
   // This class doesn't allocate any data on the heap so the default copy ctor
@@ -40,7 +36,9 @@ class StPicoTrack : public TObject {
   Float_t gPt() const;
   Float_t gPtot() const;
   StThreeVectorF const& pMom() const;
+  StThreeVectorF const& gMom() const;
   StThreeVectorF gMom(StThreeVectorF const& pVtx, float B) const;
+  StThreeVectorF const& origin() const;
   Short_t charge() const;
   Int_t   nHitsFit() const;
   Int_t   nHitsMax() const;
@@ -58,8 +56,7 @@ class StPicoTrack : public TObject {
   const Float_t* params() const;
   const Float_t* errMatrix() const;
 
-  StDcaGeometry dcaGeometry() const;
-  StPhysicalHelixD helix() const;
+  StPhysicalHelixD helix(float B) const;
   bool isHFTTrack() const;
 
   /** Checks whether this track is associated with a primary vertex. */
@@ -78,6 +75,8 @@ class StPicoTrack : public TObject {
   UShort_t mId;               // track Id
   UShort_t mChi2;             // chi2*1000
   StThreeVectorF mPMomentum;  // primary momentum, (0.,0.,0.) if none
+  StThreeVectorF mGMomentum;  // global momentum from track dcaGeometry
+  StThreeVectorF mOrigin;     // origin from track dcaGeometry
   UShort_t mDedx;             // dEdx*1000
   Char_t   mNHitsFit;         // q*nHitsFit - TPC
   Char_t   mNHitsMax;         // nHitsMax - TPC
@@ -89,9 +88,6 @@ class StPicoTrack : public TObject {
   UInt_t   mMap0;             // TopologyMap data0
   UInt_t   mMap1;             // TopologyMap data1
 
-  // a copy of the StMuTrack::dcaGeometry() parameters
-  Float_t  mPar[6];
-  Float_t  mErrMatrix[15];
   // pidTraits
   Short_t  mEmcPidTraitsIndex;  // index of the EMC  pidTratis in the event
   Short_t  mBTofPidTraitsIndex; // index of the BTOF pidTratis in the event
@@ -106,9 +102,11 @@ inline void StPicoTrack::setMtdPidTraitsIndex(Int_t index)  { mMtdPidTraitsIndex
 
 inline Int_t   StPicoTrack::id() const                 { return (Int_t)mId; }
 inline Float_t StPicoTrack::chi2() const               { return (Float_t)mChi2/1000.; }
-inline Float_t StPicoTrack::gPt() const   { return 1./fabs(mPar[3]); }
-inline Float_t StPicoTrack::gPtot() const { return gPt()*sqrt(1+mPar[4]*mPar[4]); }
+inline Float_t StPicoTrack::gPt() const   { return mGMomentum.perp();}
+inline Float_t StPicoTrack::gPtot() const { return mGMomentum.mag(); }
 inline StThreeVectorF const& StPicoTrack::pMom() const { return mPMomentum; }
+inline StThreeVectorF const& StPicoTrack::gMom() const { return mGMomentum; }
+inline StThreeVectorF const& StPicoTrack::origin() const { return mOrigin; }
 inline Short_t StPicoTrack::charge() const         { return (mNHitsFit>0) ? +1 : -1; }
 inline Int_t   StPicoTrack::nHitsFit() const       { return (mNHitsFit>0) ? (Int_t)mNHitsFit : (Int_t)(-1*mNHitsFit); }
 inline Int_t   StPicoTrack::nHitsMax() const       { return (Int_t)mNHitsMax; }
@@ -121,9 +119,6 @@ inline Float_t StPicoTrack::nSigmaProton() const   { return (Float_t)mNSigmaProt
 inline Float_t StPicoTrack::nSigmaElectron() const { return (Float_t)mNSigmaElectron/100.; }
 inline UInt_t  StPicoTrack::map0() const { return mMap0; }
 inline UInt_t  StPicoTrack::map1() const { return mMap1; }
-inline const Float_t* StPicoTrack::params() const     { return mPar; }
-inline const Float_t* StPicoTrack::errMatrix() const  { return mErrMatrix; }
-inline StPhysicalHelixD StPicoTrack::helix() const { return dcaGeometry().helix(); }
 inline Int_t   StPicoTrack::emcPidTraitsIndex() const  { return (Int_t)mEmcPidTraitsIndex; }
 inline Int_t   StPicoTrack::bTofPidTraitsIndex() const { return (Int_t)mBTofPidTraitsIndex; }
 inline Int_t   StPicoTrack::mtdPidTraitsIndex() const  { return (Int_t)mMtdPidTraitsIndex; }
@@ -131,9 +126,8 @@ inline Int_t   StPicoTrack::mtdPidTraitsIndex() const  { return (Int_t)mMtdPidTr
 inline bool StPicoTrack::isHFTTrack() const
 {
   UInt_t const hitsMap = hftHitsMap();
-  return (hitsMap>>0 & 0x1) && (hitsMap>>1 & 0x3) && (hitsMap>>3 & 0x3); 
+  return (hitsMap>>0 & 0x1) && (hitsMap>>1 & 0x3) && (hitsMap>>3 & 0x3);
 }
-
 
 /**
  * The default "primary" momentum is (0, 0, 0) but it is expected to have
@@ -144,18 +138,15 @@ inline bool StPicoTrack::isPrimary() const
   return mPMomentum.magnitude() > 0;
 }
 
-
-inline StDcaGeometry StPicoTrack::dcaGeometry() const
+/// Return the global momentum at the dca point to the pVtx (usually it is the primary vertex.   B - magnetic field from PicoEvent::bField()
+inline StThreeVectorF StPicoTrack::gMom(StThreeVectorF const& pVtx, float const B) const
 {
-  StDcaGeometry a;
-  a.set(mPar, mErrMatrix);
-  return a;
+  StPhysicalHelixD gHelix = helix(B);
+  return gHelix.momentumAt(gHelix.pathLength(pVtx), B*kilogauss);
 }
 
-/// Return the global momentum at the dca point to the pVtx (usually it is the primary vertex.   B - magnetic field from PicoEvent::bField()
-inline StThreeVectorF StPicoTrack::gMom(StThreeVectorF const& pVtx, float B) const
+inline StPhysicalHelixD StPicoTrack::helix(float const B) const
 {
-  StPhysicalHelixD gHelix = helix();
-  return gHelix.momentumAt(gHelix.pathLength(pVtx), B*kilogauss);
+  return StPhysicalHelixD(mGMomentum, mOrigin, B*kilogauss, static_cast<float>(charge()));
 }
 #endif
