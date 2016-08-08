@@ -66,7 +66,7 @@
 #include "StEvent/StTriggerData.h"
 #include "StEvent/StDcaGeometry.h"
 
-
+#include "StMuDSTMaker/COMMON/StMuRpsCollection.h"
 
 // Set maximum file size to 1.9 GB (Root has a 2GB limit)
 #define MAXFILESIZE 1900000000
@@ -76,7 +76,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mPicoCut(nullptr), mBField(0),
-  mIoMode(0), mProdMode(0), mEmcMode(1),
+  mIoMode(0), mProdMode(0), mEmcMode(1),mRpMode(0),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536*4),
@@ -513,7 +513,7 @@ Int_t StPicoDstMaker::MakeWrite() {
 
   LOG_DEBUG << " eventId = " << mMuEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
 
-  if(mPicoCut->passEvent(mMuEvent)) {  // keep all events in pp collisions to monitor triggers
+  if(mPicoCut->passEvent(mMuEvent) || mRpMode) {  // keep all events in pp collisions to monitor triggers, some RP triggers do not use Vrt (TPC) info, e.g. ET
 
     fillTracks();
 
@@ -524,6 +524,8 @@ Int_t StPicoDstMaker::MakeWrite() {
     fillBTOWHits();
     //fillBTofHits();
     fillMtdHits();
+
+    if(mRpMode){	fillRpsCollection();    }
 
     if(Debug()) mPicoDst->printTracks();
 
@@ -1005,3 +1007,4 @@ void StPicoDstMaker::fillMtdHits() {
 	}
     }
 }
+void StPicoDstMaker::fillRpsCollection(){    if(!mMuDst) {	LOG_WARN << " No MuDst for this event " << endm;	return;    }    StMuRpsCollection *rps = (StMuRpsCollection*)(mMuDst->RpsCollection());    if(!rps){	LOG_WARN << "No RP collection for this event" << endm;    }    int counter = mPicoArrays[picoRpsCollection]->GetEntries();    new((*(mPicoArrays[picoRpsCollection]))[counter]) StMuRpsCollection(*rps);}
