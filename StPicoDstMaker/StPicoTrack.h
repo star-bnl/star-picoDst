@@ -56,9 +56,6 @@ public:
   UInt_t  map0() const;
   UInt_t  map1() const;
 
-  const Float_t* params() const;
-  const Float_t* errMatrix() const;
-
   StPhysicalHelixD helix(float B) const;
   bool isHFTTrack() const;
 
