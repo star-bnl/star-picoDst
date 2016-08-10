@@ -22,7 +22,6 @@ class StPicoBTofHit;
 class StPicoCut;
 
 #include "StPicoEnumerations.h"
-#include "StPicoConstants.h"
 #include "StPicoArrays.h"
 #include "StEvent/StEmcRawHit.h"
 #include <vector>
@@ -110,7 +109,6 @@ class StPicoDstMaker : public StMaker {
    StEmcGeom*       mEmcGeom[4];
    StEmcRawHit*     mEmcIndex[4800];
    StPicoDst* mPicoDst;
-   StPicoCut* mPicoCut;
    Float_t    mBField;
 
    Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write

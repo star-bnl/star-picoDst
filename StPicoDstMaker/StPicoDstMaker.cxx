@@ -15,8 +15,6 @@
 #include "StPicoBTofPidTraits.h"
 #include "StPicoMtdPidTraits.h"
 #include "StPicoArrays.h"
-#include "StPicoCut.h"
-#include "StPicoConstants.h"
 #include "StarRoot/THack.h"
 #include "TChain.h"
 #include "TTree.h"
@@ -75,7 +73,7 @@
 StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
-  mPicoDst(nullptr), mPicoCut(nullptr), mBField(0),
+  mPicoDst(nullptr), mBField(0),
   mIoMode(0), mProdMode(0), mEmcMode(1), mVtxMode(9999),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
@@ -87,7 +85,6 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   streamerOff();
   createArrays();
   mPicoDst = new StPicoDst();
-  mPicoCut = new StPicoCut();
 
   memset(mStatusArrays, (char)1, sizeof(mStatusArrays));
 }
@@ -113,7 +110,6 @@ StPicoDstMaker::~StPicoDstMaker() {
 //  if (mIoMode== ioWrite ) closeWrite();
 //  if (mIoMode== ioRead ) closeRead();
   delete mChain;
-  delete mPicoCut;
   delete mPicoDst;
 }
 //-----------------------------------------------------------------------
@@ -501,28 +497,19 @@ Int_t StPicoDstMaker::MakeWrite() {
 
   LOG_DEBUG << " eventId = " << mMuEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
 
-  if(mPicoCut->passEvent(mMuEvent)) {  // keep all events in pp collisions to monitor triggers
+  fillTracks();
 
-    fillTracks();
+  fillEvent();
 
-    fillEvent();
+  fillEmcTrigger();
+  fillMtdTrigger();   // This must be called before fillMtdHits()
+  fillBTOWHits();
+  //fillBTofHits();
+  fillMtdHits();
 
-    fillEmcTrigger();
-    fillMtdTrigger();   // This must be called before fillMtdHits()
-    fillBTOWHits();
-    //fillBTofHits();
-    fillMtdHits();
+  if(Debug()) mPicoDst->printTracks();
 
-    if(Debug()) mPicoDst->printTracks();
-
-    mTTree->Fill(); THack::IsTreeWritable(mTTree);
-
-  }
-  else
-    {
-      fillEvent();
-      mTTree->Fill(); THack::IsTreeWritable(mTTree);
-    }
+  mTTree->Fill(); THack::IsTreeWritable(mTTree);
 
   return kStOK;
 }
@@ -543,7 +530,6 @@ void StPicoDstMaker::fillTracks() {
   for(int i=0;i<nGlobals;i++) {
     StMuTrack *gTrk = (StMuTrack *)mMuDst->globalTracks(i);
     if(!gTrk) continue;
-    if(!mPicoCut->passTrack(gTrk)) continue;
     if(gTrk->id()<0 || gTrk->id()>=50000) {
       LOG_WARN << " This global track has a track id out of the range : " << gTrk->id() << endm;
       continue;
