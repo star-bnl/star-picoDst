@@ -76,7 +76,7 @@ StPicoDstMaker::StPicoDstMaker(const char* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mPicoCut(nullptr), mBField(0),
-  mIoMode(0), mProdMode(0), mEmcMode(1),
+  mIoMode(0), mProdMode(0), mEmcMode(1), mVtxMode(9999),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536*4),
@@ -480,23 +480,11 @@ Int_t StPicoDstMaker::MakeWrite() {
     LOG_WARN << " No MuEvent " << endm; return kStWarn;
   }
 
-  const StBTofHeader* mBTofHeader = mMuDst->btofHeader();
-
-  //////////////////////////////////////
-  // select the right vertex using VPD
-  /////////////////////////////////////
-  Float_t vzVpd = -999;
-  if(mBTofHeader) vzVpd = mBTofHeader->vpdVz();
-  for(unsigned int i=0;i<mMuDst->numberOfPrimaryVertices();i++) {
-    StMuPrimaryVertex *vtx = mMuDst->primaryVertex(i);
-    if(!vtx) continue;
-    Float_t vz = vtx->position().z();
-    if(fabs(vzVpd)<100 && fabs(vzVpd-vz)<3.) {
-      mMuDst->setVertexIndex(i);
-      break;
-    }
+  if(!selectVertex())
+  {
+    LOG_INFO << "Vertex is not valid" << endm;
+    return kStOK;
   }
-  /////////////////////////////////////
 
   if(mEmcMode){
     mEmcCollection = mMuDst->emcCollection();
@@ -1004,4 +992,40 @@ void StPicoDstMaker::fillMtdHits() {
 	  hitIndex.erase(hitIndex.begin()+hits[k]);
 	}
     }
+}
+
+bool StPicoDstMaker::selectVertex()
+{
+  if(mVtxMode == PicoVtxAuAu200)
+  {
+    StBTofHeader const* mBTofHeader = mMuDst->btofHeader();
+
+    if(mBTofHeader && fabs(mBTofHeader->vpdVz()) < 100)
+    {
+      float vzVpd = mBTofHeader->vpdVz();
+
+      for(unsigned int iVtx=0; iVtx<mMuDst->numberOfPrimaryVertices(); ++iVtx)
+      {
+        StMuPrimaryVertex *vtx = mMuDst->primaryVertex(iVtx);
+        if(!vtx) continue;
+
+        if(fabs(vzVpd - vtx->position().z()) < 3.)
+        {
+          mMuDst->setVertexIndex(iVtx);
+          break;
+        }
+      }
+    }
+
+  }
+  else // default case
+  {
+    LOG_ERROR << "Pico Vtx Mode not set!" << endm;
+    return false;
+  }
+
+  // Retrun false if selected vertex is not valid
+  if(!mMuDst->primaryVertex()) return false;
+  StThreeVectorF pVertex = mMuDst->primaryVertex()->position();
+  return !(fabs(pVertex.x())<1.e-5 && fabs(pVertex.y())<1.e-5 && fabs(pVertex.z())<1.e-5);
 }
