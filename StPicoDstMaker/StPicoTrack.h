@@ -13,8 +13,9 @@ class StMuTrack;
 class StPicoDst;
 class StDcaGeometry;
 
-class StPicoTrack : public TObject {
- public:
+class StPicoTrack : public TObject
+{
+public:
   StPicoTrack();
   StPicoTrack(StMuTrack const* globalTrack, StMuTrack const* primaryTrack, double magField, StThreeVectorD const& pVtx, StDcaGeometry const& dcaG);
   virtual ~StPicoTrack() {}
@@ -73,7 +74,7 @@ class StPicoTrack : public TObject {
   Int_t bTofPidTraitsIndex() const;
   Int_t mtdPidTraitsIndex() const;
 
- protected:
+protected:
   UShort_t mId;               // track Id
   UShort_t mChi2;             // chi2*1000
   StThreeVectorF mPMomentum;  // primary momentum, (0.,0.,0.) if none
@@ -98,38 +99,37 @@ class StPicoTrack : public TObject {
   ClassDef(StPicoTrack, 1)
 };
 
-inline void StPicoTrack::setEmcPidTraitsIndex(Int_t index)  { mEmcPidTraitsIndex = (Short_t)index;  }
+inline void StPicoTrack::setEmcPidTraitsIndex(Int_t index) { mEmcPidTraitsIndex = (Short_t)index; }
 inline void StPicoTrack::setBTofPidTraitsIndex(Int_t index) { mBTofPidTraitsIndex = (Short_t)index; }
-inline void StPicoTrack::setMtdPidTraitsIndex(Int_t index)  { mMtdPidTraitsIndex = (Short_t)index;  }
-
-inline Int_t   StPicoTrack::id() const                 { return (Int_t)mId; }
-inline Float_t StPicoTrack::chi2() const               { return (Float_t)mChi2/1000.; }
-inline Float_t StPicoTrack::gPt() const   { return mGMomentum.perp();}
+inline void StPicoTrack::setMtdPidTraitsIndex(Int_t index) { mMtdPidTraitsIndex = (Short_t)index; }
+inline Int_t   StPicoTrack::id() const { return (Int_t)mId; }
+inline Float_t StPicoTrack::chi2() const { return (Float_t)mChi2 / 1000.; }
+inline Float_t StPicoTrack::gPt() const { return mGMomentum.perp(); }
 inline Float_t StPicoTrack::gPtot() const { return mGMomentum.mag(); }
 inline StThreeVectorF const& StPicoTrack::pMom() const { return mPMomentum; }
 inline StThreeVectorF const& StPicoTrack::gMom() const { return mGMomentum; }
 inline StThreeVectorF const& StPicoTrack::origin() const { return mOrigin; }
 inline StThreeVectorF const& StPicoTrack::dca() const { return mOrigin; }
-inline Short_t StPicoTrack::charge() const         { return (mNHitsFit>0) ? +1 : -1; }
-inline Int_t   StPicoTrack::nHitsFit() const       { return (mNHitsFit>0) ? (Int_t)mNHitsFit : (Int_t)(-1*mNHitsFit); }
-inline Int_t   StPicoTrack::nHitsMax() const       { return (Int_t)mNHitsMax; }
-inline Int_t   StPicoTrack::nHitsDedx() const      { return (Int_t)mNHitsDedx; }
-inline UInt_t  StPicoTrack::hftHitsMap() const     { return mMap0 >> 1 & 0x7F; }
-inline Float_t StPicoTrack::dEdx() const           { return (Float_t)mDedx/1000.; }
-inline Float_t StPicoTrack::nSigmaPion() const     { return (Float_t)mNSigmaPion/100.; }
-inline Float_t StPicoTrack::nSigmaKaon() const     { return (Float_t)mNSigmaKaon/100.; }
-inline Float_t StPicoTrack::nSigmaProton() const   { return (Float_t)mNSigmaProton/100.; }
-inline Float_t StPicoTrack::nSigmaElectron() const { return (Float_t)mNSigmaElectron/100.; }
+inline Short_t StPicoTrack::charge() const { return (mNHitsFit > 0) ? +1 : -1; }
+inline Int_t   StPicoTrack::nHitsFit() const { return (mNHitsFit > 0) ? (Int_t)mNHitsFit : (Int_t)(-1 * mNHitsFit); }
+inline Int_t   StPicoTrack::nHitsMax() const { return (Int_t)mNHitsMax; }
+inline Int_t   StPicoTrack::nHitsDedx() const { return (Int_t)mNHitsDedx; }
+inline UInt_t  StPicoTrack::hftHitsMap() const { return mMap0 >> 1 & 0x7F; }
+inline Float_t StPicoTrack::dEdx() const { return (Float_t)mDedx / 1000.; }
+inline Float_t StPicoTrack::nSigmaPion() const { return (Float_t)mNSigmaPion / 100.; }
+inline Float_t StPicoTrack::nSigmaKaon() const { return (Float_t)mNSigmaKaon / 100.; }
+inline Float_t StPicoTrack::nSigmaProton() const { return (Float_t)mNSigmaProton / 100.; }
+inline Float_t StPicoTrack::nSigmaElectron() const { return (Float_t)mNSigmaElectron / 100.; }
 inline UInt_t  StPicoTrack::map0() const { return mMap0; }
 inline UInt_t  StPicoTrack::map1() const { return mMap1; }
-inline Int_t   StPicoTrack::emcPidTraitsIndex() const  { return (Int_t)mEmcPidTraitsIndex; }
+inline Int_t   StPicoTrack::emcPidTraitsIndex() const { return (Int_t)mEmcPidTraitsIndex; }
 inline Int_t   StPicoTrack::bTofPidTraitsIndex() const { return (Int_t)mBTofPidTraitsIndex; }
-inline Int_t   StPicoTrack::mtdPidTraitsIndex() const  { return (Int_t)mMtdPidTraitsIndex; }
+inline Int_t   StPicoTrack::mtdPidTraitsIndex() const { return (Int_t)mMtdPidTraitsIndex; }
 
 inline bool StPicoTrack::isHFTTrack() const
 {
   UInt_t const hitsMap = hftHitsMap();
-  return (hitsMap>>0 & 0x1) && (hitsMap>>1 & 0x3) && (hitsMap>>3 & 0x3);
+  return (hitsMap >> 0 & 0x1) && (hitsMap >> 1 & 0x3) && (hitsMap >> 3 & 0x3);
 }
 
 /**
@@ -145,11 +145,11 @@ inline bool StPicoTrack::isPrimary() const
 inline StThreeVectorF StPicoTrack::gMom(StThreeVectorF const& pVtx, float const B) const
 {
   StPhysicalHelixD gHelix = helix(B);
-  return gHelix.momentumAt(gHelix.pathLength(pVtx), B*kilogauss);
+  return gHelix.momentumAt(gHelix.pathLength(pVtx), B * kilogauss);
 }
 
 inline StPhysicalHelixD StPicoTrack::helix(float const B) const
 {
-  return StPhysicalHelixD(mGMomentum, mOrigin, B*kilogauss, static_cast<float>(charge()));
+  return StPhysicalHelixD(mGMomentum, mOrigin, B * kilogauss, static_cast<float>(charge()));
 }
 #endif

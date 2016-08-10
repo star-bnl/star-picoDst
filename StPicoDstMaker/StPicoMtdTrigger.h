@@ -4,8 +4,9 @@
 class StMuDst;
 #include "TObject.h"
 
-class StPicoMtdTrigger : public TObject {
- public:
+class StPicoMtdTrigger : public TObject
+{
+public:
   StPicoMtdTrigger();
   StPicoMtdTrigger(const StMuDst& muDst, const int QTtoModule[8][8],
                    const int QTSlewBinEdge[8][16][8], const int QTSlewCorr[8][16][8]);
@@ -26,12 +27,12 @@ class StPicoMtdTrigger : public TObject {
   void       getMaximumQTtac(const Int_t qt, Int_t& pos1, Int_t& pos2);
   Char_t     shouldHaveRejectEvent();
 
- protected:
+protected:
   static const UShort_t mtd_qt_tac_max = 4095;
   static const UShort_t kNQTboard = 8;
 
 
- private:
+private:
   UShort_t      mVpdTacSum;              // VPD tac sum
   UInt_t        mTHUBtime[2];            // trigger time from THUB (backleg 1-15 uses THUB2, 16-30 uses THUB1)
   UShort_t      mQTtacSum[kNQTboard][8]; // tacSum in 8 QT boards
@@ -39,18 +40,18 @@ class StPicoMtdTrigger : public TObject {
   UChar_t       mMT101Id[kNQTboard][2];  // id of largest tacSum -> position
   UInt_t        mTF201TriggerBit;        // trigger bit in TCU. Modified from original format.
   Char_t        mShouldHaveRejectEvent;  // indication of event status in filtering
-                                         // 0 - events not triggered by di-muon
-                                         // 1 - events should have been rejected 
-                                         // if only triggered by di-muon
-                                         // 2 - events pass filtering cuts
+  // 0 - events not triggered by di-muon
+  // 1 - events should have been rejected
+  // if only triggered by di-muon
+  // 2 - events pass filtering cuts
 
-  ClassDef(StPicoMtdTrigger,1);
+  ClassDef(StPicoMtdTrigger, 1);
 };
-inline UShort_t StPicoMtdTrigger::getVpdTacSum()                                 { return mVpdTacSum;             }
-inline UInt_t   StPicoMtdTrigger::getTHUBtime(const Int_t thub)                  { return mTHUBtime[thub-1];      }
-inline UShort_t StPicoMtdTrigger::getQTtacSum(const Int_t qt, const Int_t pos)   { return mQTtacSum[qt-1][pos-1]; }
-inline UShort_t StPicoMtdTrigger::getMT101Tac(const Int_t qt, const Int_t index) { return mMT101Tac[qt-1][index]; }
-inline UShort_t StPicoMtdTrigger::getMT101Id(const Int_t qt, const Int_t index)  { return mMT101Id[qt-1][index];  }
-inline UInt_t   StPicoMtdTrigger::getTF201TriggerBit()                           { return mTF201TriggerBit;       }
-inline Char_t   StPicoMtdTrigger::shouldHaveRejectEvent()                        { return mShouldHaveRejectEvent; }
+inline UShort_t StPicoMtdTrigger::getVpdTacSum() { return mVpdTacSum; }
+inline UInt_t   StPicoMtdTrigger::getTHUBtime(const Int_t thub) { return mTHUBtime[thub - 1]; }
+inline UShort_t StPicoMtdTrigger::getQTtacSum(const Int_t qt, const Int_t pos) { return mQTtacSum[qt - 1][pos - 1]; }
+inline UShort_t StPicoMtdTrigger::getMT101Tac(const Int_t qt, const Int_t index) { return mMT101Tac[qt - 1][index]; }
+inline UShort_t StPicoMtdTrigger::getMT101Id(const Int_t qt, const Int_t index) { return mMT101Id[qt - 1][index]; }
+inline UInt_t   StPicoMtdTrigger::getTF201TriggerBit() { return mTF201TriggerBit; }
+inline Char_t   StPicoMtdTrigger::shouldHaveRejectEvent() { return mShouldHaveRejectEvent; }
 #endif

@@ -11,24 +11,24 @@
 
 
 StPicoEvent::StPicoEvent():
- mRunId(0), mEventId(0), mFillId(0), mBField(0),
- mPrimaryVertex{-999.,-999.,-999.}, mPrimaryVertexError{-999.,-999.,-999},
- mRanking(-999), mNBEMCMatch(0), mNBTOFMatch(0),
- mTriggerIds{},
- mRefMultFtpcEast(0), mRefMultFtpcWest(0),
- mRefMultNeg(0), mRefMultPos(0),
- mRefMult2NegEast(0), mRefMult2PosEast(0), mRefMult2NegWest(0), mRefMult2PosWest(0),
- mRefMult3NegEast(0), mRefMult3PosEast(0), mRefMult3NegWest(0), mRefMult3PosWest(0),
- mRefMult4NegEast(0), mRefMult4PosEast(0), mRefMult4NegWest(0), mRefMult4PosWest(0),
- mRefMultHalfNegEast(0), mRefMultHalfPosEast(0), mRefMultHalfNegWest(0), mRefMultHalfPosWest(0),
- mGRefMult(0), mNumberOfGlobalTracks(0), mbTofTrayMultiplicity(0), mNHitsHFT{},
- mNVpdHitsEast(0), mNVpdHitsWest(0), mNT0(0), mVzVpd(std::numeric_limits<short>::max()),
- mZDCx(0), mBBCx(0), mBackgroundRate(0), mBbcBlueBackgroundRate(0), mBbcYellowBackgroundRate(0),
- mBbcEastRate(0), mBbcWestRate(0), mZdcEastRate(0), mZdcWestRate(0),
- mZdcSumAdcEast(0), mZdcSumAdcWest(0),
- mZdcSmdEastHorizontal{}, mZdcSmdEastVertical{}, mZdcSmdWestHorizontal{}, mZdcSmdWestVertical{},
- mBbcAdcEast{}, mBbcAdcWest{},
- mHT_Th{}
+  mRunId(0), mEventId(0), mFillId(0), mBField(0),
+  mPrimaryVertex{ -999., -999., -999.}, mPrimaryVertexError{ -999., -999., -999},
+  mRanking(-999), mNBEMCMatch(0), mNBTOFMatch(0),
+  mTriggerIds{},
+  mRefMultFtpcEast(0), mRefMultFtpcWest(0),
+  mRefMultNeg(0), mRefMultPos(0),
+  mRefMult2NegEast(0), mRefMult2PosEast(0), mRefMult2NegWest(0), mRefMult2PosWest(0),
+  mRefMult3NegEast(0), mRefMult3PosEast(0), mRefMult3NegWest(0), mRefMult3PosWest(0),
+  mRefMult4NegEast(0), mRefMult4PosEast(0), mRefMult4NegWest(0), mRefMult4PosWest(0),
+  mRefMultHalfNegEast(0), mRefMultHalfPosEast(0), mRefMultHalfNegWest(0), mRefMultHalfPosWest(0),
+  mGRefMult(0), mNumberOfGlobalTracks(0), mbTofTrayMultiplicity(0), mNHitsHFT{},
+  mNVpdHitsEast(0), mNVpdHitsWest(0), mNT0(0), mVzVpd(std::numeric_limits<short>::max()),
+  mZDCx(0), mBBCx(0), mBackgroundRate(0), mBbcBlueBackgroundRate(0), mBbcYellowBackgroundRate(0),
+  mBbcEastRate(0), mBbcWestRate(0), mZdcEastRate(0), mZdcWestRate(0),
+  mZdcSumAdcEast(0), mZdcSumAdcWest(0),
+  mZdcSmdEastHorizontal{}, mZdcSmdEastVertical{}, mZdcSmdWestHorizontal{}, mZdcSmdWestVertical{},
+  mBbcAdcEast{}, mBbcAdcWest{},
+  mHT_Th{}
 {}
 
 StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
@@ -38,17 +38,17 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
   mRunId = ev->runNumber();
   mEventId = ev->eventNumber();
   mFillId = ev->runInfo().beamFillNumber(blue);
-  mBField=ev->magneticField();
+  mBField = ev->magneticField();
 
   mPrimaryVertex = ev->primaryVertexPosition();
   mPrimaryVertexError = ev->primaryVertexErrors();
-  if( mPrimaryVertex.x()==mPrimaryVertex.y() && mPrimaryVertex.y()==mPrimaryVertex.z() )
+  if (mPrimaryVertex.x() == mPrimaryVertex.y() && mPrimaryVertex.y() == mPrimaryVertex.z())
   {
-    mPrimaryVertex.set(-999.,-999.,-999.);
-    mPrimaryVertexError.set(0.,0.,0);
+    mPrimaryVertex.set(-999., -999., -999.);
+    mPrimaryVertexError.set(0., 0., 0);
   }
 
-  if(StMuPrimaryVertex* pv = muDst.primaryVertex())
+  if (StMuPrimaryVertex* pv = muDst.primaryVertex())
   {
     mRanking = pv->ranking();
     mNBEMCMatch = pv->nBEMCMatch();
@@ -86,12 +86,12 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
   mNHitsHFT[2] = (UShort_t)ev->numberOfIstHits();
   mNHitsHFT[3] = (UShort_t)ev->numberOfSsdHits();
 
-  if(StBTofHeader* header = muDst.btofHeader())
+  if (StBTofHeader* header = muDst.btofHeader())
   {
     mNVpdHitsEast = (UChar_t)(header->numberOfVpdHits(east));
     mNVpdHitsWest = (UChar_t)(header->numberOfVpdHits(west));
     mNT0 = (UShort_t)(header->nTzero());
-    mVzVpd = (fabs(header->vpdVz()*100.)>std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(header->vpdVz()*100.));
+    mVzVpd = (fabs(header->vpdVz() * 100.) > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(header->vpdVz() * 100.));
   }
 
   mZDCx = (UInt_t)ev->runInfo().zdcCoincidenceRate();
@@ -107,25 +107,25 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
   StZdcTriggerDetector& ZDC = ev->zdcTriggerDetector();
   mZdcSumAdcEast = (UShort_t)ZDC.adcSum(east);
   mZdcSumAdcWest = (UShort_t)ZDC.adcSum(west);
-  for (int strip=1;strip<9;++strip)
+  for (int strip = 1; strip < 9; ++strip)
   {
-    if (ZDC.zdcSmd(east,1,strip))
-      mZdcSmdEastHorizontal[strip-1] = (UShort_t)ZDC.zdcSmd(east,1,strip);
-    if (ZDC.zdcSmd(east,0,strip))
-      mZdcSmdEastVertical[strip-1] = (UShort_t)ZDC.zdcSmd(east,0,strip);
-    if (ZDC.zdcSmd(west,1,strip))
-      mZdcSmdWestHorizontal[strip-1] = (UShort_t)ZDC.zdcSmd(west,1,strip);
-    if (ZDC.zdcSmd(west,0,strip))
-      mZdcSmdWestVertical[strip-1] = (UShort_t)ZDC.zdcSmd(west,0,strip);
+    if (ZDC.zdcSmd(east, 1, strip))
+      mZdcSmdEastHorizontal[strip - 1] = (UShort_t)ZDC.zdcSmd(east, 1, strip);
+    if (ZDC.zdcSmd(east, 0, strip))
+      mZdcSmdEastVertical[strip - 1] = (UShort_t)ZDC.zdcSmd(east, 0, strip);
+    if (ZDC.zdcSmd(west, 1, strip))
+      mZdcSmdWestHorizontal[strip - 1] = (UShort_t)ZDC.zdcSmd(west, 1, strip);
+    if (ZDC.zdcSmd(west, 0, strip))
+      mZdcSmdWestVertical[strip - 1] = (UShort_t)ZDC.zdcSmd(west, 0, strip);
   }
 
   StBbcTriggerDetector bbc = ev->bbcTriggerDetector() ;
-  for(UInt_t i=0;i<bbc.numberOfPMTs();++i)
+  for (UInt_t i = 0; i < bbc.numberOfPMTs(); ++i)
   {
-    const UInt_t eastWest = (i<24) ? 0 : 1 ; // East:0-23, West:24-47
-    const UInt_t pmtId    = i%24 ;           // pmtId:0-23
+    const UInt_t eastWest = (i < 24) ? 0 : 1 ; // East:0-23, West:24-47
+    const UInt_t pmtId    = i % 24 ;         // pmtId:0-23
 
-    if( eastWest == 0 ) mBbcAdcEast[pmtId] = bbc.adc(i) ;
+    if (eastWest == 0) mBbcAdcEast[pmtId] = bbc.adc(i) ;
     else                mBbcAdcWest[pmtId] = bbc.adc(i) ;
   }
 }
@@ -135,12 +135,12 @@ StPicoEvent::~StPicoEvent()
 
 int StPicoEvent::year() const
 {
-  return mRunId/1000000 - 1 + 2000;
+  return mRunId / 1000000 - 1 + 2000;
 }
 
 int StPicoEvent::day() const
 {
-  return (mRunId%1000000)/1000;
+  return (mRunId % 1000000) / 1000;
 }
 
 bool StPicoEvent::isTrigger(unsigned int id) const

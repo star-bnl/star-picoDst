@@ -3,8 +3,9 @@
 
 #include "TObject.h"
 
-class StPicoEmcPidTraits: public TObject {
- public:
+class StPicoEmcPidTraits: public TObject
+{
+public:
   StPicoEmcPidTraits();
   StPicoEmcPidTraits(Int_t index, Int_t id, Int_t adc0, Float_t const* e, Float_t const* dist, Int_t const* nhit, Int_t const* ntow);
   virtual ~StPicoEmcPidTraits();
@@ -30,7 +31,7 @@ class StPicoEmcPidTraits: public TObject {
   Float_t phiTowDist() const;
 
 
- private:
+private:
   Short_t  mTrackIndex;       // Index to the associated track in the event
 
   // these variables are extracted from the standard BEMC cluster algorithm
@@ -52,24 +53,24 @@ class StPicoEmcPidTraits: public TObject {
   Short_t  mBTOWDistEta;      // eta*10000 distance between track and matched tower center
   Short_t  mBTOWDistPhi;      // phi*10000 distance between track and matched tower center
 
-  ClassDef(StPicoEmcPidTraits,1);
+  ClassDef(StPicoEmcPidTraits, 1);
 };
-inline Int_t   StPicoEmcPidTraits::trackIndex() const     { return (Int_t)mTrackIndex;             }
-inline Int_t   StPicoEmcPidTraits::bemcId() const         { return (Int_t)mBEMCId;                 }
-inline Int_t   StPicoEmcPidTraits::adc0() const           { return (Int_t)mBTOWADC0;               }
-inline Float_t StPicoEmcPidTraits::e0() const             { return (Float_t)mBTOWE0/1000.;         }
-inline Float_t StPicoEmcPidTraits::e() const              { return (Float_t)mBTOWE/1000.;          }
-inline Float_t StPicoEmcPidTraits::zDist() const          { return (Float_t)mBEMCDistZ/100.;       }
-inline Float_t StPicoEmcPidTraits::phiDist() const        { return (Float_t)mBEMCDistPhi/10000.;   }
-inline Int_t   StPicoEmcPidTraits::nEta() const           { return (Int_t)mBSMDNEta;               }
-inline Int_t   StPicoEmcPidTraits::nPhi() const           { return (Int_t)mBSMDNPhi;               }
+inline Int_t   StPicoEmcPidTraits::trackIndex() const { return (Int_t)mTrackIndex; }
+inline Int_t   StPicoEmcPidTraits::bemcId() const { return (Int_t)mBEMCId; }
+inline Int_t   StPicoEmcPidTraits::adc0() const { return (Int_t)mBTOWADC0; }
+inline Float_t StPicoEmcPidTraits::e0() const { return (Float_t)mBTOWE0 / 1000.; }
+inline Float_t StPicoEmcPidTraits::e() const { return (Float_t)mBTOWE / 1000.; }
+inline Float_t StPicoEmcPidTraits::zDist() const { return (Float_t)mBEMCDistZ / 100.; }
+inline Float_t StPicoEmcPidTraits::phiDist() const { return (Float_t)mBEMCDistPhi / 10000.; }
+inline Int_t   StPicoEmcPidTraits::nEta() const { return (Int_t)mBSMDNEta; }
+inline Int_t   StPicoEmcPidTraits::nPhi() const { return (Int_t)mBSMDNPhi; }
 
-inline Int_t   StPicoEmcPidTraits::btowId() const         { return (Int_t)mBTOWId;                 }
-inline Int_t   StPicoEmcPidTraits::btowId2() const        { return (Int_t)mBTOWId23/10;            }
-inline Int_t   StPicoEmcPidTraits::btowId3() const        { return (Int_t)mBTOWId23%10;            }
-inline Float_t StPicoEmcPidTraits::e1() const             { return (Float_t)mBTOWE1/1000.;         }
-inline Float_t StPicoEmcPidTraits::e2() const             { return (Float_t)mBTOWE2/1000.;         }
-inline Float_t StPicoEmcPidTraits::e3() const             { return (Float_t)mBTOWE3/1000.;         }
-inline Float_t StPicoEmcPidTraits::etaTowDist() const     { return (Float_t)mBTOWDistEta/10000.;   }
-inline Float_t StPicoEmcPidTraits::phiTowDist() const     { return (Float_t)mBTOWDistPhi/10000.;   }
+inline Int_t   StPicoEmcPidTraits::btowId() const { return (Int_t)mBTOWId; }
+inline Int_t   StPicoEmcPidTraits::btowId2() const { return (Int_t)mBTOWId23 / 10; }
+inline Int_t   StPicoEmcPidTraits::btowId3() const { return (Int_t)mBTOWId23 % 10; }
+inline Float_t StPicoEmcPidTraits::e1() const { return (Float_t)mBTOWE1 / 1000.; }
+inline Float_t StPicoEmcPidTraits::e2() const { return (Float_t)mBTOWE2 / 1000.; }
+inline Float_t StPicoEmcPidTraits::e3() const { return (Float_t)mBTOWE3 / 1000.; }
+inline Float_t StPicoEmcPidTraits::etaTowDist() const { return (Float_t)mBTOWDistEta / 10000.; }
+inline Float_t StPicoEmcPidTraits::phiTowDist() const { return (Float_t)mBTOWDistPhi / 10000.; }
 #endif
