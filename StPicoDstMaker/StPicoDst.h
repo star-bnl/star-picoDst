@@ -44,7 +44,7 @@ public:
   static StPicoTrack* track(int i) { return (StPicoTrack*)picoArrays[picoTrack]->UncheckedAt(i); }
   /// return pointer to i-th trigger data
   static StPicoEmcTrigger* emcTrigger(int i) { return (StPicoEmcTrigger*)picoArrays[picoEmcTrigger]->UncheckedAt(i); }
-  static StPicoMtdTrigger *mtdTrigger(int i) { return (StPicoMtdTrigger*)picoArrays[picoMtdTrigger]->UncheckedAt(i); }
+  static StPicoMtdTrigger* mtdTrigger(int i) { return (StPicoMtdTrigger*)picoArrays[picoMtdTrigger]->UncheckedAt(i); }
 
   /// return pointer to i-th btow hit
   static StPicoBTOWHit* btowHit(int i) { return (StPicoBTOWHit*)picoArrays[picoBTOWHit]->UncheckedAt(i); }
@@ -69,7 +69,7 @@ public:
   static unsigned int numberOfBTofPidTraits() { return picoArrays[picoBTofPidTraits]->GetEntries(); }
   static unsigned int numberOfMtdPidTraits() { return picoArrays[picoMtdPidTraits] ->GetEntries(); }
 
-  virtual void Print(Option_t *option = "") const; ///< Print basic event info
+  virtual void Print(Option_t* option = "") const; ///< Print basic event info
   static void printTracks();
   static void printTriggers();
   static void printBTOWHits();

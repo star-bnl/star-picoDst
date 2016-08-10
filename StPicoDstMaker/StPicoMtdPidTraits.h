@@ -9,9 +9,9 @@ class StPicoMtdPidTraits : public TObject
 {
 public:
   StPicoMtdPidTraits();
-  StPicoMtdPidTraits(const StMuMtdHit *, const StMuMtdPidTraits*, const Int_t index);
+  StPicoMtdPidTraits(const StMuMtdHit* , const StMuMtdPidTraits*, const Int_t index);
   virtual ~StPicoMtdPidTraits();
-  virtual void Print(const Char_t *option = "") const;
+  virtual void Print(const Char_t* option = "") const;
 
   // Matching information
   Int_t    trackIndex()        const;

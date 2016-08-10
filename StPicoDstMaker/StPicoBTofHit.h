@@ -10,7 +10,7 @@ public:
   StPicoBTofHit(int);
   virtual ~StPicoBTofHit();
 
-  virtual void Print(const Char_t *option = "") const;  ///< Print trigger info
+  virtual void Print(const Char_t* option = "") const;  ///< Print trigger info
 
   Int_t   id() const;
   Int_t   tray() const;

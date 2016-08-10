@@ -12,7 +12,7 @@ class StPicoEvent : public TObject
 public:
   StPicoEvent();
   virtual ~StPicoEvent();
-  StPicoEvent(const StMuDst& muDst);
+  StPicoEvent(StMuDst const& muDst);
 
   Int_t    runId() const;
   Int_t    eventId() const;

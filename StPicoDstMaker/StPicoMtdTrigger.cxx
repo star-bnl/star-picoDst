@@ -23,7 +23,7 @@ StPicoMtdTrigger::StPicoMtdTrigger(const StMuDst& muDst, const int QTtoModule[8]
                                    const int QTSlewBinEdge[8][16][8], const int QTSlewCorr[8][16][8]): StPicoMtdTrigger()
 {
   // Header information
-  StMuMtdHeader *muMtdHeader = muDst.mtdHeader();
+  StMuMtdHeader* muMtdHeader = muDst.mtdHeader();
   if (muMtdHeader)
   {
     mTHUBtime[0] = 25 * (muMtdHeader->triggerTime(1) & 0xfff);
@@ -42,7 +42,7 @@ StPicoMtdTrigger::StPicoMtdTrigger(const StMuDst& muDst, const int QTtoModule[8]
   UShort_t mtd_qt_tac_diff_range_abs = 600;
   if (year == 2015) mtd_qt_tac_diff_range_abs = 1023;
 
-  StTriggerData *trigger = const_cast<StTriggerData*>(muDst.event()->triggerData());
+  StTriggerData* trigger = const_cast<StTriggerData*>(muDst.event()->triggerData());
   if (trigger)
   {
     // VPD tac sum

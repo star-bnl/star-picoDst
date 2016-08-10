@@ -48,7 +48,7 @@ StPicoEmcPidTraits::~StPicoEmcPidTraits()
 }
 
 //----------------------------------------------------------------------------------
-void StPicoEmcPidTraits::Print(const Char_t *option) const
+void StPicoEmcPidTraits::Print(const Char_t* option) const
 {
   LOG_INFO << "Matched track index = " << mTrackIndex << endm;
   LOG_INFO << " BEMC Id = " << bemcId() << " BTOW ADC0 = " << adc0() << " energy0 = " << e0() << " e = " << e() << endm;

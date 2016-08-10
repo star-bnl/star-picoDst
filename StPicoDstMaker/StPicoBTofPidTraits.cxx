@@ -21,13 +21,13 @@ StPicoBTofPidTraits::StPicoBTofPidTraits() :
 }
 
 //----------------------------------------------------------------------------------
-StPicoBTofPidTraits::StPicoBTofPidTraits(const StMuTrack *gTrack,
-    const StMuTrack *pTrack,
+StPicoBTofPidTraits::StPicoBTofPidTraits(const StMuTrack* gTrack,
+    const StMuTrack* pTrack,
     const Int_t index): StPicoBTofPidTraits()
 {
   mTrackIndex = (index > std::numeric_limits<short>::max()) ? -1 : (Short_t)index;
 
-  StMuBTofHit *btofHit = (StMuBTofHit*)gTrack->tofHit();
+  StMuBTofHit* btofHit = (StMuBTofHit*)gTrack->tofHit();
   Int_t tray         = btofHit->tray();
   Int_t module       = btofHit->module();
   Int_t cell         = btofHit->cell();
@@ -67,7 +67,7 @@ StPicoBTofPidTraits::~StPicoBTofPidTraits()
 }
 
 //----------------------------------------------------------------------------------
-void StPicoBTofPidTraits::Print(const Char_t *option) const
+void StPicoBTofPidTraits::Print(const Char_t* option) const
 {
   LOG_INFO << " Matched track index = " << mTrackIndex << endm;
   LOG_INFO << " BTOF cellId = " << btofCellId() << " tof = " << btof() << " beta = " << btofBeta() << endm;

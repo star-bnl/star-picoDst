@@ -31,7 +31,7 @@ public:
   //StPicoTrack(StPicoTrack const&) = default;
   //StPicoTrack& operator=(StPicoTrack const&) = default;
 
-  virtual void Print(const Char_t* option = "") const;  ///< Print track info
+  virtual void Print(Char_t const* option = "") const;  ///< Print track info
 
   Int_t   id() const;
   Float_t chi2() const;

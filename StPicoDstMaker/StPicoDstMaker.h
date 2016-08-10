@@ -26,24 +26,24 @@ class StPicoEvent;
 class StPicoDstMaker : public StMaker
 {
 public:
-  StPicoDstMaker(const char *name = "PicoDst");
-  StPicoDstMaker(int mode, const char* fileName = "", const char* name = "PicoDst");
+  StPicoDstMaker(char const* name = "PicoDst");
+  StPicoDstMaker(int mode, char const* fileName = "", char const* name = "PicoDst");
   virtual ~StPicoDstMaker();
 
   virtual Int_t Init();
-  virtual Int_t InitRun(const Int_t runnumber);
+  virtual Int_t InitRun(Int_t const runnumber);
   virtual Int_t Make();
-  virtual void  Clear(Option_t *option = "");
+  virtual void  Clear(Option_t* option = "");
   virtual Int_t Finish();
 
   void printArrays();
-  void SetStatus(const char *arrType, int status);
+  void SetStatus(char const* arrType, int status);
 
   void setRunNumber(Int_t);
   void setProdMode(Int_t);
-  void setEmcMode(const Int_t mode = 1); // 0:No EMC, 1:EMC On
+  void setEmcMode(int const mode = 1); // 0:No EMC, 1:EMC On
   /// Returns null pointer if no StPicoDst
-  StPicoDst *picoDst();
+  StPicoDst* picoDst();
   /// In read mode, returns pointer to the chain of .picoDst.root files
   TChain* chain();
   /// Returns pointer to the current TTree, the top level io structure
@@ -76,7 +76,7 @@ protected:
   void initEmc();
   void finishEmc();
 
-  Bool_t initMtd(const int runnumber);
+  Bool_t initMtd(Int_t const runnumber);
 
   void clearArrays();
   void createArrays();
@@ -92,7 +92,7 @@ protected:
   void fillBTofHits();
   void fillMtdHits();
 
-  bool getBEMC(StMuTrack *, int*, int*, float*, float*, int*, int*);
+  bool getBEMC(StMuTrack* , int*, int*, float*, float*, int*, int*);
   bool selectVertex();
 
   enum ioMode {ioRead, ioWrite};
@@ -153,6 +153,6 @@ inline void StPicoDstMaker::setCompression(int comp) { mCompression = comp; }
 inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
 inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
 inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
-inline void StPicoDstMaker::setEmcMode(const Int_t mode) { mEmcMode = mode; }
+inline void StPicoDstMaker::setEmcMode(int const mode) { mEmcMode = mode; }
 inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; }
 #endif
