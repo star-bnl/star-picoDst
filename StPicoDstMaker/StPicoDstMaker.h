@@ -21,6 +21,7 @@ class StPicoBTOWHit;
 class StPicoBTofHit;
 class StPicoCut;
 
+#include "StPicoEnumerations.h"
 #include "StPicoConstants.h"
 #include "StPicoArrays.h"
 #include "StEvent/StEmcRawHit.h"
@@ -60,6 +61,8 @@ class StPicoDstMaker : public StMaker {
    /// Sets the compression level for the file and all branches. 0 means no compression, 9 is the higher compression level.
    void setCompression(int comp=9);
 
+   void setVtxMode(int);
+
  protected:
 
    void streamerOff();
@@ -95,6 +98,7 @@ class StPicoDstMaker : public StMaker {
    void fillMtdHits();
 
    bool getBEMC(StMuTrack *, int*, int*, float*, float*, int*, int*);
+   bool selectVertex();
 
    enum ioMode {ioRead, ioWrite};
    // production modes for different data sets
@@ -112,6 +116,7 @@ class StPicoDstMaker : public StMaker {
    Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write
    Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation, 4: - save only electron or muon candidates
    Int_t      mEmcMode;        //! EMC ON(=1)/OFF(=0)
+   Int_t      mVtxMode;
 
    TString   mInputFileName;        //! *.list - MuDst or picoDst
    TString   mOutputFileName;       //! FileName
@@ -155,4 +160,5 @@ inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
 inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
 inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
 inline void StPicoDstMaker::setEmcMode(const Int_t mode) { mEmcMode = mode; }
+inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; }
 #endif

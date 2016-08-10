@@ -1,5 +1,6 @@
 
 #include <TSystem>
+#include "StRoot/StPicoDstMaker/StPicoEnumerations.h"
 
 class StMaker;
 class StChain;
@@ -82,6 +83,7 @@ void makePicoDst(const Int_t runnumber=15140004,
 	chain = new StChain();
 
 	StMuDstMaker *MuDstMaker = new StMuDstMaker(0,0,"",inputFile,"MuDst",100);
+  picoMaker->setVtxMode((int)PicoVtxAuAu200);
         MuDstMaker->SetStatus("*",0);
         MuDstMaker->SetStatus("MuEvent",1);
         MuDstMaker->SetStatus("PrimaryVertices",1);
