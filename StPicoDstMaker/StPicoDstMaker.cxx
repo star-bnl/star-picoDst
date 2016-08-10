@@ -470,9 +470,9 @@ Int_t StPicoDstMaker::MakeWrite() {
     LOG_WARN << " No MuDst " << endm; return kStWarn;
   }
 
-  StMuEvent* mMuEvent = mMuDst->event();
+  StMuEvent* muEvent = mMuDst->event();
 
-  if(!mMuEvent) {
+  if(!muEvent) {
     LOG_WARN << " No MuEvent " << endm; return kStWarn;
   }
 
@@ -489,13 +489,13 @@ Int_t StPicoDstMaker::MakeWrite() {
 
   clearIndices();
 
-  Int_t refMult = mMuEvent->refMult();
-  mBField = mMuEvent->magneticField();
+  Int_t refMult = muEvent->refMult();
+  mBField = muEvent->magneticField();
 
   StThreeVectorF pVtx(0.,0.,0.);
   if(mMuDst->primaryVertex()) pVtx = mMuDst->primaryVertex()->position();
 
-  LOG_DEBUG << " eventId = " << mMuEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
+  LOG_DEBUG << " eventId = " << muEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
 
   fillTracks();
 
