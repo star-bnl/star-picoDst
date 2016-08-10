@@ -7,7 +7,8 @@
 
 class StMuDst;
 
-class StPicoEvent : public TObject {
+class StPicoEvent : public TObject
+{
 public:
   StPicoEvent();
   virtual ~StPicoEvent();
@@ -171,12 +172,12 @@ protected:
   // Online HT thresholds
   UChar_t mHT_Th[4];
 
-  ClassDef(StPicoEvent,1)
+  ClassDef(StPicoEvent, 1)
 };
-inline Int_t    StPicoEvent::runId() const            { return mRunId; }
-inline Int_t    StPicoEvent::eventId() const          { return mEventId; }
-inline Int_t    StPicoEvent::fillId() const           { return (Int_t)mFillId; }
-inline Float_t  StPicoEvent::bField() const           { return mBField; }
+inline Int_t    StPicoEvent::runId() const { return mRunId; }
+inline Int_t    StPicoEvent::eventId() const { return mEventId; }
+inline Int_t    StPicoEvent::fillId() const { return (Int_t)mFillId; }
+inline Float_t  StPicoEvent::bField() const { return mBField; }
 
 inline StThreeVectorF const & StPicoEvent::primaryVertex() const { return mPrimaryVertex; }
 inline StThreeVectorF const & StPicoEvent::primaryVertexError() const { return mPrimaryVertexError; }
@@ -184,71 +185,71 @@ inline Float_t  StPicoEvent::ranking() const { return mRanking ; }
 inline UShort_t StPicoEvent::nBEMCMatch() const { return mNBEMCMatch ; }
 inline UShort_t StPicoEvent::nBTOFMatch() const { return mNBTOFMatch ; }
 
-inline std::vector<unsigned int> StPicoEvent::triggerIds() const { return mTriggerIds;}
+inline std::vector<unsigned int> StPicoEvent::triggerIds() const { return mTriggerIds; }
 
-inline Int_t    StPicoEvent::refMultPos() const       { return (Int_t)mRefMultPos; }
-inline Int_t    StPicoEvent::refMultNeg() const       { return (Int_t)mRefMultNeg; }
-inline Int_t    StPicoEvent::refMultFtpcEast() const  { return (Int_t)mRefMultFtpcEast; }
-inline Int_t    StPicoEvent::refMultFtpcWest() const  { return (Int_t)mRefMultFtpcWest; }
-inline Int_t    StPicoEvent::refMult() const          { return (Int_t)(mRefMultPos+mRefMultNeg); }
-inline Int_t    StPicoEvent::refMultFtpc() const      { return (Int_t)(mRefMultFtpcEast+mRefMultFtpcWest); }
-inline Int_t    StPicoEvent::refMult2PosEast() const      { return (Int_t)mRefMult2PosEast; }
-inline Int_t    StPicoEvent::refMult2NegEast() const      { return (Int_t)mRefMult2NegEast; }
-inline Int_t    StPicoEvent::refMult2PosWest() const      { return (Int_t)mRefMult2PosWest; }
-inline Int_t    StPicoEvent::refMult2NegWest() const      { return (Int_t)mRefMult2NegWest; }
-inline Int_t    StPicoEvent::refMult3PosEast() const      { return (Int_t)mRefMult3PosEast; }
-inline Int_t    StPicoEvent::refMult3NegEast() const      { return (Int_t)mRefMult3NegEast; }
-inline Int_t    StPicoEvent::refMult3PosWest() const      { return (Int_t)mRefMult3PosWest; }
-inline Int_t    StPicoEvent::refMult3NegWest() const      { return (Int_t)mRefMult3NegWest; }
-inline Int_t    StPicoEvent::refMult4PosEast() const      { return (Int_t)mRefMult4PosEast; }
-inline Int_t    StPicoEvent::refMult4NegEast() const      { return (Int_t)mRefMult4NegEast; }
-inline Int_t    StPicoEvent::refMult4PosWest() const      { return (Int_t)mRefMult4PosWest; }
-inline Int_t    StPicoEvent::refMult4NegWest() const      { return (Int_t)mRefMult4NegWest; }
+inline Int_t    StPicoEvent::refMultPos() const { return (Int_t)mRefMultPos; }
+inline Int_t    StPicoEvent::refMultNeg() const { return (Int_t)mRefMultNeg; }
+inline Int_t    StPicoEvent::refMultFtpcEast() const { return (Int_t)mRefMultFtpcEast; }
+inline Int_t    StPicoEvent::refMultFtpcWest() const { return (Int_t)mRefMultFtpcWest; }
+inline Int_t    StPicoEvent::refMult() const { return (Int_t)(mRefMultPos + mRefMultNeg); }
+inline Int_t    StPicoEvent::refMultFtpc() const { return (Int_t)(mRefMultFtpcEast + mRefMultFtpcWest); }
+inline Int_t    StPicoEvent::refMult2PosEast() const { return (Int_t)mRefMult2PosEast; }
+inline Int_t    StPicoEvent::refMult2NegEast() const { return (Int_t)mRefMult2NegEast; }
+inline Int_t    StPicoEvent::refMult2PosWest() const { return (Int_t)mRefMult2PosWest; }
+inline Int_t    StPicoEvent::refMult2NegWest() const { return (Int_t)mRefMult2NegWest; }
+inline Int_t    StPicoEvent::refMult3PosEast() const { return (Int_t)mRefMult3PosEast; }
+inline Int_t    StPicoEvent::refMult3NegEast() const { return (Int_t)mRefMult3NegEast; }
+inline Int_t    StPicoEvent::refMult3PosWest() const { return (Int_t)mRefMult3PosWest; }
+inline Int_t    StPicoEvent::refMult3NegWest() const { return (Int_t)mRefMult3NegWest; }
+inline Int_t    StPicoEvent::refMult4PosEast() const { return (Int_t)mRefMult4PosEast; }
+inline Int_t    StPicoEvent::refMult4NegEast() const { return (Int_t)mRefMult4NegEast; }
+inline Int_t    StPicoEvent::refMult4PosWest() const { return (Int_t)mRefMult4PosWest; }
+inline Int_t    StPicoEvent::refMult4NegWest() const { return (Int_t)mRefMult4NegWest; }
 inline Int_t    StPicoEvent::refMultHalfPosEast() const { return (Int_t)mRefMultHalfPosEast; }
 inline Int_t    StPicoEvent::refMultHalfNegEast() const { return (Int_t)mRefMultHalfNegEast; }
 inline Int_t    StPicoEvent::refMultHalfPosWest() const { return (Int_t)mRefMultHalfPosWest; }
 inline Int_t    StPicoEvent::refMultHalfNegWest() const { return (Int_t)mRefMultHalfNegWest; }
-inline Int_t    StPicoEvent::refMult2East() const       { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast); }
-inline Int_t    StPicoEvent::refMult2West() const       { return (Int_t)(mRefMult2PosWest+mRefMult2NegWest); }
-inline Int_t    StPicoEvent::refMult2() const           { return (Int_t)(mRefMult2PosEast+mRefMult2NegEast+mRefMult2PosWest+mRefMult2NegWest); }
-inline Int_t    StPicoEvent::refMultHalfEast() const    { return (Int_t)(mRefMultHalfPosEast+mRefMultHalfNegEast); }
-inline Int_t    StPicoEvent::refMultHalfWest() const    { return (Int_t)(mRefMultHalfPosWest+mRefMultHalfNegWest); }
-inline Int_t    StPicoEvent::refMult3East() const       { return (Int_t)(mRefMult3PosEast+mRefMult3NegEast); }
-inline Int_t    StPicoEvent::refMult3West() const       { return (Int_t)(mRefMult3PosWest+mRefMult3NegWest); }
-inline Int_t    StPicoEvent::refMult3() const           { return (Int_t)(mRefMult3PosEast+mRefMult3NegEast+mRefMult3PosWest+mRefMult3NegWest); }
-inline Int_t    StPicoEvent::refMult4East() const       { return (Int_t)(mRefMult4PosEast+mRefMult4NegEast); }
-inline Int_t    StPicoEvent::refMult4West() const       { return (Int_t)(mRefMult4PosWest+mRefMult4NegWest); }
-inline Int_t    StPicoEvent::refMult4() const           { return (Int_t)(mRefMult4PosEast+mRefMult4NegEast+mRefMult4PosWest+mRefMult4NegWest); }
+inline Int_t    StPicoEvent::refMult2East() const { return (Int_t)(mRefMult2PosEast + mRefMult2NegEast); }
+inline Int_t    StPicoEvent::refMult2West() const { return (Int_t)(mRefMult2PosWest + mRefMult2NegWest); }
+inline Int_t    StPicoEvent::refMult2() const { return (Int_t)(mRefMult2PosEast + mRefMult2NegEast + mRefMult2PosWest + mRefMult2NegWest); }
+inline Int_t    StPicoEvent::refMultHalfEast() const { return (Int_t)(mRefMultHalfPosEast + mRefMultHalfNegEast); }
+inline Int_t    StPicoEvent::refMultHalfWest() const { return (Int_t)(mRefMultHalfPosWest + mRefMultHalfNegWest); }
+inline Int_t    StPicoEvent::refMult3East() const { return (Int_t)(mRefMult3PosEast + mRefMult3NegEast); }
+inline Int_t    StPicoEvent::refMult3West() const { return (Int_t)(mRefMult3PosWest + mRefMult3NegWest); }
+inline Int_t    StPicoEvent::refMult3() const { return (Int_t)(mRefMult3PosEast + mRefMult3NegEast + mRefMult3PosWest + mRefMult3NegWest); }
+inline Int_t    StPicoEvent::refMult4East() const { return (Int_t)(mRefMult4PosEast + mRefMult4NegEast); }
+inline Int_t    StPicoEvent::refMult4West() const { return (Int_t)(mRefMult4PosWest + mRefMult4NegWest); }
+inline Int_t    StPicoEvent::refMult4() const { return (Int_t)(mRefMult4PosEast + mRefMult4NegEast + mRefMult4PosWest + mRefMult4NegWest); }
 
-inline Int_t    StPicoEvent::grefMult() const           { return (Int_t)(mGRefMult); }
+inline Int_t    StPicoEvent::grefMult() const { return (Int_t)(mGRefMult); }
 inline UShort_t StPicoEvent::numberOfGlobalTracks() const { return mNumberOfGlobalTracks ; }
 inline UShort_t StPicoEvent::btofTrayMultiplicity() const { return mbTofTrayMultiplicity ; }
 inline Int_t    StPicoEvent::numberOfPxlInnerHits() const { return (Int_t)(mNHitsHFT[0]); }
 inline Int_t    StPicoEvent::numberOfPxlOuterHits() const { return (Int_t)(mNHitsHFT[1]); }
-inline Int_t    StPicoEvent::numberOfIstHits() const      { return (Int_t)(mNHitsHFT[2]); }
-inline Int_t    StPicoEvent::numberOfSsdHits() const      { return (Int_t)(mNHitsHFT[3]); }
+inline Int_t    StPicoEvent::numberOfIstHits() const { return (Int_t)(mNHitsHFT[2]); }
+inline Int_t    StPicoEvent::numberOfSsdHits() const { return (Int_t)(mNHitsHFT[3]); }
 
-inline Int_t    StPicoEvent::nVpdHitsEast() const     { return (Int_t)mNVpdHitsEast; }
-inline Int_t    StPicoEvent::nVpdHitsWest() const     { return (Int_t)mNVpdHitsWest; }
-inline Int_t    StPicoEvent::nT0() const              { return (Int_t)mNT0; }
-inline Float_t  StPicoEvent::vzVpd() const            { return (Float_t)mVzVpd/100.; }
+inline Int_t    StPicoEvent::nVpdHitsEast() const { return (Int_t)mNVpdHitsEast; }
+inline Int_t    StPicoEvent::nVpdHitsWest() const { return (Int_t)mNVpdHitsWest; }
+inline Int_t    StPicoEvent::nT0() const { return (Int_t)mNT0; }
+inline Float_t  StPicoEvent::vzVpd() const { return (Float_t)mVzVpd / 100.; }
 
-inline Float_t  StPicoEvent::ZDCx() const             { return (Float_t)mZDCx; }
-inline Float_t  StPicoEvent::BBCx() const             { return (Float_t)mBBCx; }
-inline Float_t StPicoEvent::backgroundRate() const             { return mBackgroundRate; }
-inline Float_t StPicoEvent::bbcBlueBackgroundRate() const      { return mBbcBlueBackgroundRate; }
-inline Float_t StPicoEvent::bbcYellowBackgroundRate() const    { return mBbcYellowBackgroundRate; }
+inline Float_t  StPicoEvent::ZDCx() const { return (Float_t)mZDCx; }
+inline Float_t  StPicoEvent::BBCx() const { return (Float_t)mBBCx; }
+inline Float_t StPicoEvent::backgroundRate() const { return mBackgroundRate; }
+inline Float_t StPicoEvent::bbcBlueBackgroundRate() const { return mBbcBlueBackgroundRate; }
+inline Float_t StPicoEvent::bbcYellowBackgroundRate() const { return mBbcYellowBackgroundRate; }
 inline Float_t StPicoEvent::bbcEastRate() const { return mBbcEastRate; }
 inline Float_t StPicoEvent::bbcWestRate() const { return mBbcWestRate; }
 inline Float_t StPicoEvent::zdcEastRate() const { return mZdcEastRate; }
 inline Float_t StPicoEvent::zdcWestRate() const { return mZdcWestRate; }
 
-inline Float_t  StPicoEvent::ZdcSumAdcEast() const    { return (Float_t)mZdcSumAdcEast; }
-inline Float_t  StPicoEvent::ZdcSumAdcWest() const    { return (Float_t)mZdcSumAdcWest; }
+inline Float_t  StPicoEvent::ZdcSumAdcEast() const { return (Float_t)mZdcSumAdcEast; }
+inline Float_t  StPicoEvent::ZdcSumAdcWest() const { return (Float_t)mZdcSumAdcWest; }
 inline Float_t  StPicoEvent::ZdcSmdEastHorizontal(int i) const { return (Float_t)mZdcSmdEastHorizontal[i]; }
-inline Float_t  StPicoEvent::ZdcSmdEastVertical(int i) const   { return (Float_t)mZdcSmdEastVertical[i]; }
+inline Float_t  StPicoEvent::ZdcSmdEastVertical(int i) const { return (Float_t)mZdcSmdEastVertical[i]; }
 inline Float_t  StPicoEvent::ZdcSmdWestHorizontal(int i) const { return (Float_t)mZdcSmdWestHorizontal[i]; }
-inline Float_t  StPicoEvent::ZdcSmdWestVertical(int i) const   { return (Float_t)mZdcSmdWestVertical[i]; }
+inline Float_t  StPicoEvent::ZdcSmdWestVertical(int i) const { return (Float_t)mZdcSmdWestVertical[i]; }
 
 inline UShort_t StPicoEvent::bbcAdcEast(const Int_t i) const { return mBbcAdcEast[i]; }
 inline UShort_t StPicoEvent::bbcAdcWest(const Int_t i) const { return mBbcAdcWest[i]; }

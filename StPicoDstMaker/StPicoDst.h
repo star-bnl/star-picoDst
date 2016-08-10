@@ -18,7 +18,8 @@ class StPicoMtdPidTraits;
 #include "TClonesArray.h"
 #include "StPicoArrays.h"
 
-class StPicoDst : public TObject {
+class StPicoDst : public TObject
+{
 public:
   /// constructor
   StPicoDst();
@@ -50,7 +51,7 @@ public:
   /// return pointer to i-th btof hit
   static StPicoBTofHit* btofHit(int i) { return (StPicoBTofHit*)picoArrays[picoBTofHit]->UncheckedAt(i); }
   /// return pointer to i-th mtd hit
-  static StPicoMtdHit*  mtdHit(int i)  { return (StPicoMtdHit*)picoArrays[picoMtdHit]->UncheckedAt(i);   }
+  static StPicoMtdHit*  mtdHit(int i) { return (StPicoMtdHit*)picoArrays[picoMtdHit]->UncheckedAt(i); }
 
   /// return pointer to i-th emc pidTraits
   static StPicoEmcPidTraits* emcPidTraits(int i) { return (StPicoEmcPidTraits*)picoArrays[picoEmcPidTraits]->UncheckedAt(i); }
@@ -63,10 +64,10 @@ public:
   static unsigned int numberOfEmcTriggers() { return picoArrays[picoEmcTrigger]->GetEntries(); }
   static unsigned int numberOfBTOWHits() { return picoArrays[picoBTOWHit]->GetEntries(); }
   static unsigned int numberOfBTofHits() { return picoArrays[picoBTofHit]->GetEntries(); }
-  static unsigned int numberOfMtdHits()  { return picoArrays[picoMtdHit]->GetEntries();  }
-  static unsigned int numberOfEmcPidTraits()  { return picoArrays[picoEmcPidTraits] ->GetEntries();  }
-  static unsigned int numberOfBTofPidTraits() { return picoArrays[picoBTofPidTraits]->GetEntries();  }
-  static unsigned int numberOfMtdPidTraits()  { return picoArrays[picoMtdPidTraits] ->GetEntries();  }
+  static unsigned int numberOfMtdHits() { return picoArrays[picoMtdHit]->GetEntries(); }
+  static unsigned int numberOfEmcPidTraits() { return picoArrays[picoEmcPidTraits] ->GetEntries(); }
+  static unsigned int numberOfBTofPidTraits() { return picoArrays[picoBTofPidTraits]->GetEntries(); }
+  static unsigned int numberOfMtdPidTraits() { return picoArrays[picoMtdPidTraits] ->GetEntries(); }
 
   virtual void Print(Option_t *option = "") const; ///< Print basic event info
   static void printTracks();
@@ -78,7 +79,7 @@ public:
   static void printBTofPidTraits();
   static void printMtdPidTraits();
 
-  ClassDef(StPicoDst,1)
+  ClassDef(StPicoDst, 1)
 };
 
 #endif

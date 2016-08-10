@@ -17,18 +17,18 @@ StPicoMtdPidTraits::StPicoMtdPidTraits() :
 
 //----------------------------------------------------------------------------------
 StPicoMtdPidTraits::StPicoMtdPidTraits(const StMuMtdHit * hit,
-				       const StMuMtdPidTraits* trait,
-				       const Int_t index):
+                                       const StMuMtdPidTraits* trait,
+                                       const Int_t index):
   mTrackIndex((Short_t)index),
   mMtdHitIndex(-1),
   mMatchFlag((Char_t) trait->matchFlag()),
   mDeltaY(trait->deltaY()),
   mDeltaZ(trait->deltaZ()),
   mDeltaTimeOfFlight(trait->timeOfFlight() - trait->expTimeOfFlight()),
-  mBeta((trait->pathLength()/trait->expTimeOfFlight())*1e9/c_light),
+  mBeta((trait->pathLength() / trait->expTimeOfFlight()) * 1e9 / c_light),
   mMtdHitChan(-1)
 {
-  Int_t gchan = (hit->backleg()-1)*60 + (hit->module()-1)*12 + hit->cell();
+  Int_t gchan = (hit->backleg() - 1) * 60 + (hit->module() - 1) * 12 + hit->cell();
   mMtdHitChan = (gchan > std::numeric_limits<short>::max()) ? -1 : (Short_t) gchan;
 }
 
@@ -41,13 +41,13 @@ StPicoMtdPidTraits::~StPicoMtdPidTraits()
 void StPicoMtdPidTraits::Print(const Char_t *option) const
 {
   LOG_INFO << "Matched hit: backleg =  " << backleg()
-	   << ", module  = " << module()
-	   << ", cell    = " << cell()
-	   <<endm;
+           << ", module  = " << module()
+           << ", cell    = " << cell()
+           << endm;
   LOG_INFO << "Matched track index = " << mTrackIndex << endm;
   LOG_INFO << "(DeltaY, DeltaZ, DeltaTOF, beta) = ("
-	   << mDeltaY << ", "
-	   << mDeltaZ << ", "
-	   << mDeltaTimeOfFlight << ", "
-	   << mBeta << ")" << endm;
+           << mDeltaY << ", "
+           << mDeltaZ << ", "
+           << mDeltaTimeOfFlight << ", "
+           << mBeta << ")" << endm;
 }

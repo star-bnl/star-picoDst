@@ -22,8 +22,8 @@ StPicoBTofPidTraits::StPicoBTofPidTraits() :
 
 //----------------------------------------------------------------------------------
 StPicoBTofPidTraits::StPicoBTofPidTraits(const StMuTrack *gTrack,
-					 const StMuTrack *pTrack,
-					 const Int_t index): StPicoBTofPidTraits()
+    const StMuTrack *pTrack,
+    const Int_t index): StPicoBTofPidTraits()
 {
   mTrackIndex = (index > std::numeric_limits<short>::max()) ? -1 : (Short_t)index;
 
@@ -35,17 +35,29 @@ StPicoBTofPidTraits::StPicoBTofPidTraits(const StMuTrack *gTrack,
   Float_t beta       = (pTrack) ? pTrack->btofPidTraits().beta() : -999.;
   StThreeVectorF pos = gTrack->btofPidTraits().position();
 
-  mBTofCellId  = (Short_t)((tray-1)*192+(module-1)*6+(cell-1));
+  mBTofCellId  = (Short_t)((tray - 1) * 192 + (module - 1) * 6 + (cell - 1));
   mBTofMatchFlag = (UChar_t)(gTrack->btofPidTraits().matchFlag());
-  if(tof<0) { mBTof = 0; }
-  else { mBTof = (tof*1000.>std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)(TMath::Nint(tof*1000.)); }
-  if(beta<0) { mBTofBeta = 0; }
-  else { mBTofBeta = (beta*20000.>std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)(TMath::Nint(beta*20000.)); }
-  mBTofHitPosX = (fabs(pos.x()*100.)>std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(pos.x()*100.));
-  mBTofHitPosY = (fabs(pos.y()*100.)>std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(pos.y()*100.));
-  mBTofHitPosZ = (fabs(pos.z()*100.)>std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(pos.z()*100.));
-  mBTofYLocal  = (fabs(gTrack->btofPidTraits().yLocal())*1000.>std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrack->btofPidTraits().yLocal()*1000.));
-  mBTofZLocal  = (fabs(gTrack->btofPidTraits().zLocal())*1000.>std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrack->btofPidTraits().zLocal()*1000.));
+  if (tof < 0)
+  {
+    mBTof = 0;
+  }
+  else
+  {
+    mBTof = (tof * 1000. > std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)(TMath::Nint(tof * 1000.));
+  }
+  if (beta < 0)
+  {
+    mBTofBeta = 0;
+  }
+  else
+  {
+    mBTofBeta = (beta * 20000. > std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)(TMath::Nint(beta * 20000.));
+  }
+  mBTofHitPosX = (fabs(pos.x() * 100.) > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(pos.x() * 100.));
+  mBTofHitPosY = (fabs(pos.y() * 100.) > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(pos.y() * 100.));
+  mBTofHitPosZ = (fabs(pos.z() * 100.) > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(pos.z() * 100.));
+  mBTofYLocal  = (fabs(gTrack->btofPidTraits().yLocal()) * 1000. > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrack->btofPidTraits().yLocal() * 1000.));
+  mBTofZLocal  = (fabs(gTrack->btofPidTraits().zLocal()) * 1000. > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrack->btofPidTraits().zLocal() * 1000.));
 }
 
 //----------------------------------------------------------------------------------

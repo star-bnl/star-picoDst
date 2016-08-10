@@ -7,7 +7,7 @@ class StMuMtdHit;
 
 class StPicoMtdPidTraits : public TObject
 {
- public:
+public:
   StPicoMtdPidTraits();
   StPicoMtdPidTraits(const StMuMtdHit *, const StMuMtdPidTraits*, const Int_t index);
   virtual ~StPicoMtdPidTraits();
@@ -45,24 +45,24 @@ private:
   Float_t   mBeta;                  // Beta of matched tracks
   Short_t   mMtdHitChan;            // (backleg-1) * 60 + (module-1) * 12 + cell
 
-  ClassDef(StPicoMtdPidTraits,1)
+  ClassDef(StPicoMtdPidTraits, 1)
 };
-inline Int_t    StPicoMtdPidTraits::trackIndex()        const { return (Int_t)mTrackIndex;             }
-inline Int_t    StPicoMtdPidTraits::mtdHitIndex()       const { return (Int_t)mMtdHitIndex;            }
-inline Int_t    StPicoMtdPidTraits::gChannel()          const { return (Int_t)mMtdHitChan;             }
-inline Int_t    StPicoMtdPidTraits::backleg()           const { return (Int_t)mMtdHitChan/60 + 1;      }
-inline Int_t    StPicoMtdPidTraits::module()            const { return ((Int_t)mMtdHitChan%60)/12 + 1; }
-inline Int_t    StPicoMtdPidTraits::cell()              const { return (Int_t)mMtdHitChan%12;          }
-inline Int_t    StPicoMtdPidTraits::matchFlag()         const { return (Int_t)mMatchFlag;              }
-inline Float_t  StPicoMtdPidTraits::deltaY()            const { return mDeltaY;                        }
-inline Float_t  StPicoMtdPidTraits::deltaZ()            const { return mDeltaZ;                        }
-inline Float_t  StPicoMtdPidTraits::deltaTimeOfFlight() const { return mDeltaTimeOfFlight;             }
-inline Float_t  StPicoMtdPidTraits::beta()              const { return mBeta;                          }
-inline void    StPicoMtdPidTraits::setTrackIndex(Int_t index)      { mTrackIndex = (Short_t) index;  }
-inline void    StPicoMtdPidTraits::setMtdHitIndex(Int_t index)     { mMtdHitIndex = (Short_t) index; }
-inline void    StPicoMtdPidTraits::setMatchFlag(Char_t flag)       { mMatchFlag = flag;              }
-inline void    StPicoMtdPidTraits::setDeltaY(Float_t dy)           { mDeltaY = dy;                   }
-inline void    StPicoMtdPidTraits::setDeltaZ(Float_t dz)           { mDeltaZ = dz;                   }
-inline void    StPicoMtdPidTraits::setDeltaTimeOfFlight(Float_t t) { mDeltaTimeOfFlight = t;         }
-inline void    StPicoMtdPidTraits::setBeta(Float_t beta)           { mBeta = beta;                   }
+inline Int_t    StPicoMtdPidTraits::trackIndex()        const { return (Int_t)mTrackIndex; }
+inline Int_t    StPicoMtdPidTraits::mtdHitIndex()       const { return (Int_t)mMtdHitIndex; }
+inline Int_t    StPicoMtdPidTraits::gChannel()          const { return (Int_t)mMtdHitChan; }
+inline Int_t    StPicoMtdPidTraits::backleg()           const { return (Int_t)mMtdHitChan / 60 + 1; }
+inline Int_t    StPicoMtdPidTraits::module()            const { return ((Int_t)mMtdHitChan % 60) / 12 + 1; }
+inline Int_t    StPicoMtdPidTraits::cell()              const { return (Int_t)mMtdHitChan % 12; }
+inline Int_t    StPicoMtdPidTraits::matchFlag()         const { return (Int_t)mMatchFlag; }
+inline Float_t  StPicoMtdPidTraits::deltaY()            const { return mDeltaY; }
+inline Float_t  StPicoMtdPidTraits::deltaZ()            const { return mDeltaZ; }
+inline Float_t  StPicoMtdPidTraits::deltaTimeOfFlight() const { return mDeltaTimeOfFlight; }
+inline Float_t  StPicoMtdPidTraits::beta()              const { return mBeta; }
+inline void    StPicoMtdPidTraits::setTrackIndex(Int_t index) { mTrackIndex = (Short_t) index; }
+inline void    StPicoMtdPidTraits::setMtdHitIndex(Int_t index) { mMtdHitIndex = (Short_t) index; }
+inline void    StPicoMtdPidTraits::setMatchFlag(Char_t flag) { mMatchFlag = flag; }
+inline void    StPicoMtdPidTraits::setDeltaY(Float_t dy) { mDeltaY = dy; }
+inline void    StPicoMtdPidTraits::setDeltaZ(Float_t dz) { mDeltaZ = dz; }
+inline void    StPicoMtdPidTraits::setDeltaTimeOfFlight(Float_t t) { mDeltaTimeOfFlight = t; }
+inline void    StPicoMtdPidTraits::setBeta(Float_t beta) { mBeta = beta; }
 #endif

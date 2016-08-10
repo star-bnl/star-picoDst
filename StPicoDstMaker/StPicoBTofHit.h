@@ -3,8 +3,9 @@
 
 #include "TObject.h"
 
-class StPicoBTofHit : public TObject {
- public:
+class StPicoBTofHit : public TObject
+{
+public:
   StPicoBTofHit();
   StPicoBTofHit(int);
   virtual ~StPicoBTofHit();
@@ -16,14 +17,14 @@ class StPicoBTofHit : public TObject {
   Int_t   module() const;
   Int_t   cell() const;
 
- protected:
+protected:
   Short_t mId;     // (tray-1)*192+(module-1)*6+(cell-1):
 
   ClassDef(StPicoBTofHit, 1)
 };
 
-inline Int_t StPicoBTofHit::id() const     { return (Int_t)mId; }
-inline Int_t StPicoBTofHit::tray() const   { return (Int_t)mId/192 + 1; }
-inline Int_t StPicoBTofHit::module() const { return ((Int_t)mId%192)/6 + 1; }
-inline Int_t StPicoBTofHit::cell() const   { return (Int_t)mId/6 + 1; }
+inline Int_t StPicoBTofHit::id() const { return (Int_t)mId; }
+inline Int_t StPicoBTofHit::tray() const { return (Int_t)mId / 192 + 1; }
+inline Int_t StPicoBTofHit::module() const { return ((Int_t)mId % 192) / 6 + 1; }
+inline Int_t StPicoBTofHit::cell() const { return (Int_t)mId / 6 + 1; }
 #endif
