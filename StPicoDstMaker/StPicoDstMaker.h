@@ -1,31 +1,26 @@
 #ifndef StPicoDstMaker_h
 #define StPicoDstMaker_h
-#include "StChain/StMaker.h"
+
+#include <vector>
+#include <utility>
+
 #include "TClonesArray.h"
+
+#include "StChain/StMaker.h"
+#include "StPicoEnumerations.h"
+#include "StPicoArrays.h"
+
 class TFile;
 class TTree;
-class StFile;
 class StMuDst;
-class StMuEvent;
 class StMuTrack;
-class StBTofHeader;
 class StEmcCollection;
 class StEmcPosition;
 class StEmcGeom;
-class StBemcTables;
+class StEmcRawHit;
 class StPicoDst;
 class StPicoEvent;
-class StPicoTrack;
-class StPicoEmcTrigger;
-class StPicoBTOWHit;
-class StPicoBTofHit;
-class StPicoCut;
 
-#include "StPicoEnumerations.h"
-#include "StPicoArrays.h"
-#include "StEvent/StEmcRawHit.h"
-#include <vector>
-#include <utility>
 
 
 class StPicoDstMaker : public StMaker

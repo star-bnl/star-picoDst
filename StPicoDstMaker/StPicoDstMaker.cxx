@@ -1,7 +1,47 @@
 #include <bitset>
 #include <string>
 #include "TRegexp.h"
+#include "TChain.h"
+#include "TTree.h"
+#include "TBranch.h"
+
 #include "StChain/StChain.h"
+#include "StarRoot/THack.h"
+
+#include "StEvent/StBTofHeader.h"
+#include "StEvent/StDcaGeometry.h"
+#include "StEvent/StEmcCollection.h"
+#include "StEvent/StEmcCluster.h"
+#include "StEvent/StEmcDetector.h"
+#include "StEvent/StEmcModule.h"
+#include "StEvent/StEmcRawHit.h"
+
+#include "StMuDSTMaker/COMMON/StMuDstMaker.h"
+#include "StMuDSTMaker/COMMON/StMuDst.h"
+#include "StMuDSTMaker/COMMON/StMuEvent.h"
+#include "StMuDSTMaker/COMMON/StMuBTofHit.h"
+#include "StMuDSTMaker/COMMON/StMuTrack.h"
+#include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
+#include "StMuDSTMaker/COMMON/StMuMtdHit.h"
+#include "StMuDSTMaker/COMMON/StMuMtdPidTraits.h"
+#include "StMuDSTMaker/COMMON/StMuEmcCollection.h"
+#include "StMuDSTMaker/COMMON/StMuEmcPoint.h"
+
+#include "StTriggerUtilities/StTriggerSimuMaker.h"
+#include "StTriggerUtilities/Bemc/StBemcTriggerSimu.h"
+#include "StTriggerUtilities/Eemc/StEemcTriggerSimu.h"
+#include "StTriggerUtilities/Emc/StEmcTriggerSimu.h"
+
+#include "StEmcUtil/geometry/StEmcGeom.h"
+#include "StEmcUtil/others/emcDetectorName.h"
+#include "StEmcUtil/projection/StEmcPosition.h"
+#include "StEmcRawMaker/defines.h"
+#include "StEmcRawMaker/StBemcTables.h"
+
+#include "tables/St_mtdModuleToQTmap_Table.h"
+#include "tables/St_mtdQTSlewingCorr_Table.h"
+#include "tables/St_mtdQTSlewingCorrPart2_Table.h"
+
 #include "StPicoDstMaker.h"
 #include "StPicoDst.h"
 #include "StPicoEvent.h"
@@ -15,54 +55,6 @@
 #include "StPicoBTofPidTraits.h"
 #include "StPicoMtdPidTraits.h"
 #include "StPicoArrays.h"
-#include "StarRoot/THack.h"
-#include "TChain.h"
-#include "TTree.h"
-#include "TH1D.h"
-#include "TBranch.h"
-#include "TRandom3.h"
-#include "TRandom.h"
-#include "StMuDSTMaker/COMMON/StMuDstMaker.h"
-#include "StMuDSTMaker/COMMON/StMuDst.h"
-#include "StMuDSTMaker/COMMON/StMuEvent.h"
-#include "StMuDSTMaker/COMMON/StMuBTofHit.h"
-#include "StMuDSTMaker/COMMON/StMuTrack.h"
-#include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
-#include "StMuDSTMaker/COMMON/StMuBTofPidTraits.h"
-#include "StEvent/StBTofHeader.h"
-
-#include "StMuDSTMaker/COMMON/StMuMtdHit.h"
-#include "StMuDSTMaker/COMMON/StMuMtdPidTraits.h"
-#include "tables/St_mtdModuleToQTmap_Table.h"
-#include "tables/St_mtdQTSlewingCorr_Table.h"
-#include "tables/St_mtdQTSlewingCorrPart2_Table.h"
-
-#include "StMuDSTMaker/COMMON/StMuEmcCollection.h"
-#include "StMuDSTMaker/COMMON/StMuEmcPoint.h"
-#include "StEmcUtil/projection/StEmcPosition.h"
-//StEmc
-#include "StEvent/StEmcCollection.h"
-#include "StEvent/StEmcCluster.h"
-#include "StEvent/StEmcDetector.h"
-#include "StEvent/StEmcModule.h"
-#include "StEvent/StEmcClusterCollection.h"
-#include "StEvent/StEmcPoint.h"
-#include "StEvent/StEmcRawHit.h"
-#include "StEmcUtil/geometry/StEmcGeom.h"
-#include "StEmcUtil/others/emcDetectorName.h"
-#include "StEmcADCtoEMaker/StBemcData.h"
-#include "StEmcADCtoEMaker/StEmcADCtoEMaker.h"
-#include "StEmcRawMaker/defines.h"
-#include "StEmcRawMaker/StBemcRaw.h"
-#include "StEmcRawMaker/StBemcTables.h"
-#include "StEmcRawMaker/StEmcRawMaker.h"
-#include "StEmcRawMaker/defines.h"
-#include "StTriggerUtilities/StTriggerSimuMaker.h"
-#include "StTriggerUtilities/Bemc/StBemcTriggerSimu.h"
-#include "StTriggerUtilities/Eemc/StEemcTriggerSimu.h"
-#include "StTriggerUtilities/Emc/StEmcTriggerSimu.h"
-#include "StEvent/StTriggerData.h"
-#include "StEvent/StDcaGeometry.h"
 
 
 
@@ -394,7 +386,6 @@ void StPicoDstMaker::openWrite()
   mOutputFile = new TFile(mOutputFileName.Data(), "RECREATE");
   LOG_INFO << " Output file: " << mOutputFileName.Data() << " created." << endm;
   mOutputFile->SetCompressionLevel(mCompression);
-  TBranch* branch;
   int bufsize = mBufferSize;
   if (mSplit) bufsize /= 4;
   mTTree = new TTree("PicoDst", "StPicoDst", mSplit);
@@ -407,7 +398,8 @@ void StPicoDstMaker::openWrite()
       cout << " Branch " << StPicoArrays::picoArrayNames[i] << " status is OFF! " << endl;
       continue;
     }
-    branch = mTTree->Branch(StPicoArrays::picoArrayNames[i], &mPicoAllArrays[i], bufsize, mSplit);
+
+    mTTree->Branch(StPicoArrays::picoArrayNames[i], &mPicoAllArrays[i], bufsize, mSplit);
   }
 }
 //-----------------------------------------------------------------------
