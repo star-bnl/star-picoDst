@@ -23,7 +23,7 @@ StPicoEmcTrigger::~StPicoEmcTrigger()
   /* noop */
 }
 //----------------------------------------------------------------------------------
-void StPicoEmcTrigger::Print(const Char_t *option) const
+void StPicoEmcTrigger::Print(const Char_t* option) const
 {
   LOG_INFO << " Flag = " << mFlag << " Id = " << mId << " Adc = " << mAdc << endm;
 }

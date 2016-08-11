@@ -16,7 +16,7 @@ StPicoMtdPidTraits::StPicoMtdPidTraits() :
 }
 
 //----------------------------------------------------------------------------------
-StPicoMtdPidTraits::StPicoMtdPidTraits(const StMuMtdHit * hit,
+StPicoMtdPidTraits::StPicoMtdPidTraits(const StMuMtdHit*  hit,
                                        const StMuMtdPidTraits* trait,
                                        const Int_t index):
   mTrackIndex((Short_t)index),
@@ -38,7 +38,7 @@ StPicoMtdPidTraits::~StPicoMtdPidTraits()
   // dummy destructor
 }
 //----------------------------------------------------------------------------------
-void StPicoMtdPidTraits::Print(const Char_t *option) const
+void StPicoMtdPidTraits::Print(const Char_t* option) const
 {
   LOG_INFO << "Matched hit: backleg =  " << backleg()
            << ", module  = " << module()

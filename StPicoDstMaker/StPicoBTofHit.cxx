@@ -18,7 +18,7 @@ StPicoBTofHit::~StPicoBTofHit()
 }
 
 //----------------------------------------------------------------------------------
-void StPicoBTofHit::Print(const Char_t *option) const
+void StPicoBTofHit::Print(const Char_t* option) const
 {
   LOG_INFO << " Id = " << id() << endm;
 }

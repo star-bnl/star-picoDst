@@ -70,7 +70,7 @@ StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, dou
   }
 }
 //----------------------------------------------------------------------------------
-void StPicoTrack::Print(const Char_t* option) const
+void StPicoTrack::Print(Char_t const* option) const
 {
   if (strcmp(option, "tpc") == 0 || strcmp(option, "") == 0)
   {

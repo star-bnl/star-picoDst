@@ -10,7 +10,7 @@ public:
   StPicoBTOWHit(int, int, float);
   virtual ~StPicoBTOWHit();
 
-  virtual void Print(const Char_t *option = "") const;  ///< Print trigger info
+  virtual void Print(const Char_t* option = "") const;  ///< Print trigger info
 
   Int_t   id() const;
   Int_t   adc() const;

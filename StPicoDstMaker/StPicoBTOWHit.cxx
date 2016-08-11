@@ -27,7 +27,7 @@ StPicoBTOWHit::~StPicoBTOWHit()
 }
 
 //----------------------------------------------------------------------------------
-void StPicoBTOWHit::Print(const Char_t *option) const
+void StPicoBTOWHit::Print(const Char_t* option) const
 {
   LOG_INFO << " Id = " << id() << " Adc = " << adc() << " Energy = " << energy() << endm;
 }

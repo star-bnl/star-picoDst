@@ -9,9 +9,9 @@ class StPicoBTofPidTraits : public TObject
 {
 public:
   StPicoBTofPidTraits();
-  StPicoBTofPidTraits(const StMuTrack *, const StMuTrack*, const Int_t index);
+  StPicoBTofPidTraits(const StMuTrack* , const StMuTrack*, const Int_t index);
   virtual ~StPicoBTofPidTraits();
-  virtual void Print(const Char_t *option = "") const;
+  virtual void Print(const Char_t* option = "") const;
 
   Int_t   trackIndex() const;
   Int_t   btofCellId() const;

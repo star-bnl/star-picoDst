@@ -39,7 +39,7 @@ void StPicoDst::set(TClonesArray** thePicoArrays)
   picoArrays    = thePicoArrays;
 }
 //-----------------------------------------------------------------------
-void StPicoDst::Print(Option_t *option) const
+void StPicoDst::Print(Option_t* option) const
 {
   LOG_INFO << endm;
   LOG_INFO << "=========== event header =============" << endm << endm;

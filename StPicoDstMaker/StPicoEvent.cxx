@@ -31,7 +31,7 @@ StPicoEvent::StPicoEvent():
   mHT_Th{}
 {}
 
-StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
+StPicoEvent::StPicoEvent(StMuDst const& muDst) : StPicoEvent()
 {
   StMuEvent* ev = muDst.event() ;
 
@@ -122,8 +122,8 @@ StPicoEvent::StPicoEvent(const StMuDst& muDst) : StPicoEvent()
   StBbcTriggerDetector bbc = ev->bbcTriggerDetector() ;
   for (UInt_t i = 0; i < bbc.numberOfPMTs(); ++i)
   {
-    const UInt_t eastWest = (i < 24) ? 0 : 1 ; // East:0-23, West:24-47
-    const UInt_t pmtId    = i % 24 ;         // pmtId:0-23
+    UInt_t const eastWest = (i < 24) ? 0 : 1 ; // East:0-23, West:24-47
+    UInt_t const pmtId    = i % 24 ;         // pmtId:0-23
 
     if (eastWest == 0) mBbcAdcEast[pmtId] = bbc.adc(i) ;
     else                mBbcAdcWest[pmtId] = bbc.adc(i) ;

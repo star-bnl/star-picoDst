@@ -12,7 +12,7 @@ public:
   StPicoMtdHit(StMuMtdHit const* hit);
   virtual ~StPicoMtdHit();
 
-  virtual void Print(const Char_t *option = "") const;
+  virtual void Print(const Char_t* option = "") const;
 
   void  setTriggerFlag(Int_t const flag);
   Int_t  gChannel()    const;

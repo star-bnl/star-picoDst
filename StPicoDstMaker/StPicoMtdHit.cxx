@@ -40,7 +40,7 @@ StPicoMtdHit::~StPicoMtdHit()
 }
 
 //----------------------------------------------------------------------------------
-void StPicoMtdHit::Print(const Char_t *option) const
+void StPicoMtdHit::Print(const Char_t* option) const
 {
   LOG_INFO << " Backleg = " << backleg()
            << " Module  = " << module()

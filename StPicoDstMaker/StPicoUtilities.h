@@ -14,7 +14,7 @@ namespace StPicoUtilities
     // charge   0:negative, 1:positive
 
     size_t countedTracks = 0;
-    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); itrk++)
+    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); ++itrk)
     {
       StMuTrack* track = muDst.primaryTracks(itrk) ;
       if (!track) continue;
@@ -40,7 +40,7 @@ namespace StPicoUtilities
     // etaId    0:East(eta<-0.5), 1:West(eta>0.5)
 
     size_t countedTracks = 0;
-    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); itrk++)
+    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); ++itrk)
     {
       StMuTrack* track = muDst.primaryTracks(itrk) ;
       if (!track) continue;
@@ -68,7 +68,7 @@ namespace StPicoUtilities
     // etaId    0:East(eta<0), 1:West(eta>0)
 
     size_t countedTracks = 0;
-    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); itrk++)
+    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); ++itrk)
     {
       StMuTrack* track = muDst.primaryTracks(itrk) ;
       if (!track) continue;
@@ -97,7 +97,7 @@ namespace StPicoUtilities
     // etaId    0:East(-1<eta<0), 1:West(1>eta>0)
 
     size_t countedTracks = 0;
-    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); itrk++)
+    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); ++itrk)
     {
       StMuTrack* track = muDst.primaryTracks(itrk) ;
       if (!track) continue;
@@ -130,7 +130,7 @@ namespace StPicoUtilities
     // etaId    0:East(-1<eta<0), 1:West(1>eta>0)
 
     size_t countedTracks = 0;
-    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); itrk++)
+    for (Int_t itrk = 0; itrk < muDst.primaryTracks()->GetEntries(); ++itrk)
     {
       StMuTrack* track = muDst.primaryTracks(itrk) ;
       if (!track) continue;
@@ -159,8 +159,5 @@ namespace StPicoUtilities
     }
     return countedTracks;
   }
-
-
 }
-
 #endif
