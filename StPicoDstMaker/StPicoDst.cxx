@@ -1,14 +1,14 @@
 #include <map>
+#include "StPicoEvent/StPicoEvent.h"
+#include "StPicoEvent/StPicoTrack.h"
+#include "StPicoEvent/StPicoEmcTrigger.h"
+#include "StPicoEvent/StPicoBTOWHit.h"
+#include "StPicoEvent/StPicoBTofHit.h"
+#include "StPicoEvent/StPicoMtdHit.h"
+#include "StPicoEvent/StPicoEmcPidTraits.h"
+#include "StPicoEvent/StPicoBTofPidTraits.h"
+#include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoDst.h"
-#include "StPicoEvent.h"
-#include "StPicoTrack.h"
-#include "StPicoEmcTrigger.h"
-#include "StPicoBTOWHit.h"
-#include "StPicoBTofHit.h"
-#include "StPicoMtdHit.h"
-#include "StPicoEmcPidTraits.h"
-#include "StPicoBTofPidTraits.h"
-#include "StPicoMtdPidTraits.h"
 #include "StPicoDstMaker.h"
 
 TClonesArray** StPicoDst::picoArrays       = 0;

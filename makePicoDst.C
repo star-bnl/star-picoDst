@@ -80,6 +80,7 @@ void makePicoDst(const Int_t runnumber = 15140004,
   gSystem->Load("StMtdMatchMaker");
   gSystem->Load("StMtdCalibMaker");
 
+  gSystem->Load("StPicoEvent");
   gSystem->Load("StPicoDstMaker");
 
   chain = new StChain();

@@ -1,6 +1,6 @@
+#include <limits>
+#include "St_base/StMessMgr.h"
 #include "StPicoEmcTrigger.h"
-#include "StPicoDstMaker.h"
-
 
 //----------------------------------------------------------------------------------
 StPicoEmcTrigger::StPicoEmcTrigger(): mFlag(0), mId(0), mAdc(0)
