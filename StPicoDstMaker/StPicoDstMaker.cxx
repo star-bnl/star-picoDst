@@ -106,13 +106,13 @@ StPicoDstMaker::~StPicoDstMaker()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearIndices()
 {
-  for (size_t i = 0; i < nTrk; i++) mIndex2Primary[i] = -1;
-  for (size_t i = 0; i < nTrk; i++) mMap2Track[i] = -1;
+  for (size_t i = 0; i < nTrk; ++i) mIndex2Primary[i] = -1;
+  for (size_t i = 0; i < nTrk; ++i) mMap2Track[i] = -1;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearArrays()
 {
-  for (int i = 0; i < __NALLPICOARRAYS__; i++)
+  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
     mPicoAllArrays[i]->Clear();
     StPicoArrays::picoArrayCounters[i] = 0;
@@ -125,7 +125,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
   static int const specIndex[] = { 0, -1};
 
   if (strncmp(arrType, "St", 2) == 0) arrType += 2; //Ignore first "St"
-  for (int i = 0; specNames[i]; i++)
+  for (int i = 0; specNames[i]; ++i)
   {
     if (strcmp(arrType, specNames[i])) continue;
     char* sta = mStatusArrays + specIndex[i];
@@ -138,7 +138,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
   }
 
   TRegexp re(arrType, 1);
-  for (int i = 0; i < __NALLARRAYS__; i++)
+  for (int i = 0; i < __NALLARRAYS__; ++i)
   {
     Ssiz_t len;
     if (re.Index(StPicoArrays::picoArrayNames[i], &len) < 0)   continue;
@@ -154,7 +154,7 @@ void StPicoDstMaker::setBranchAddresses(TChain* chain)
   if (!chain) return;
   chain->SetBranchStatus("*", 0);
   TString ts;
-  for (int i = 0; i < __NALLPICOARRAYS__; i++)
+  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
     if (mStatusArrays[i] == 0) continue;
     char const* bname = StPicoArrays::picoArrayNames[i];
@@ -241,9 +241,9 @@ Bool_t StPicoDstMaker::initMtd(Int_t const runnumber)
   }
   mtdModuleToQTmap_st* mtdModuleToQTtable = static_cast<mtdModuleToQTmap_st*>(mtdModuleToQTmap->GetTable());
 
-  for (Int_t i = 0; i < 30; i++)
+  for (Int_t i = 0; i < 30; ++i)
   {
-    for (Int_t j = 0; j < 5; j++)
+    for (Int_t j = 0; j < 5; ++j)
     {
       Int_t index = i * 5 + j;
       Int_t qt = mtdModuleToQTtable->qtBoardId[index];
@@ -275,11 +275,11 @@ Bool_t StPicoDstMaker::initMtd(Int_t const runnumber)
     return kStErr;
   }
   mtdQTSlewingCorr_st* mtdQTSlewingCorrtable = static_cast<mtdQTSlewingCorr_st*>(mtdQTSlewingCorr->GetTable());
-  for (int j = 0; j < 4; j++)
+  for (int j = 0; j < 4; ++j)
   {
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 16; ++i)
     {
-      for (Int_t k = 0; k < 8; k++)
+      for (Int_t k = 0; k < 8; ++k)
       {
         Int_t index = j * 16 * 8 + i * 8 + k;
         mQTSlewBinEdge[j][i][k] = (int) mtdQTSlewingCorrtable->slewingBinEdge[index];
@@ -294,11 +294,11 @@ Bool_t StPicoDstMaker::initMtd(Int_t const runnumber)
     {
       St_mtdQTSlewingCorrPart2* mtdQTSlewingCorr2 = static_cast<St_mtdQTSlewingCorrPart2*>(dataset->Find("mtdQTSlewingCorrPart2"));
       mtdQTSlewingCorrPart2_st* mtdQTSlewingCorrtable2 = static_cast<mtdQTSlewingCorrPart2_st*>(mtdQTSlewingCorr2->GetTable());
-      for (int j = 0; j < 4; j++)
+      for (int j = 0; j < 4; ++j)
       {
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 16; ++i)
         {
-          for (Int_t k = 0; k < 8; k++)
+          for (Int_t k = 0; k < 8; ++k)
           {
             Int_t index = j * 16 * 8 + i * 8 + k;
             mQTSlewBinEdge[j + 4][i][k] = (int) mtdQTSlewingCorrtable2->slewingBinEdge[index];
@@ -391,7 +391,7 @@ void StPicoDstMaker::openWrite()
   mTTree = new TTree("PicoDst", "StPicoDst", mSplit);
   mTTree->SetMaxTreeSize(MAXFILESIZE);
   mTTree->SetAutoSave(1000000);
-  for (int i = 0; i < __NALLPICOARRAYS__; i++)
+  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
     if (mStatusArrays[i] == 0)
     {
@@ -406,7 +406,7 @@ void StPicoDstMaker::openWrite()
 void StPicoDstMaker::initEmc()
 {
   mEmcPosition = new StEmcPosition();
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 4; ++i)
   {
     mEmcGeom[i] = StEmcGeom::getEmcGeom(detname[i].Data());
   }
@@ -438,11 +438,10 @@ void StPicoDstMaker::buildEmcIndex()
 void StPicoDstMaker::finishEmc()
 {
   if (mEmcPosition) delete mEmcPosition;
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 4; ++i)
   {
     mEmcGeom[i] = 0;
   }
-  //mEmcDet = 0;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::Clear(char const* )
@@ -557,7 +556,7 @@ Int_t StPicoDstMaker::MakeWrite()
 void StPicoDstMaker::fillTracks()
 {
   Int_t nPrimarys = mMuDst->numberOfPrimaryTracks();
-  for (int i = 0; i < nPrimarys; i++)
+  for (int i = 0; i < nPrimarys; ++i)
   {
     StMuTrack* pTrk = (StMuTrack*)mMuDst->primaryTracks(i);
     if (!pTrk) continue;
@@ -570,7 +569,7 @@ void StPicoDstMaker::fillTracks()
   }
 
   Int_t nGlobals = mMuDst->numberOfGlobalTracks();
-  for (int i = 0; i < nGlobals; i++)
+  for (int i = 0; i < nGlobals; ++i)
   {
     StMuTrack* gTrk = (StMuTrack*)mMuDst->globalTracks(i);
     if (!gTrk) continue;
@@ -651,19 +650,19 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
 {
   *id = -1;
   *adc = 0;
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 5; ++i)
   {
     ene[i] = 0.;
   }
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 4; ++i)
   {
     d[i] = 1.e9;
   }
-  for (int i = 0; i < 2; i++)
+  for (int i = 0; i < 2; ++i)
   {
     nep[i] = 0;
   }
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 3; ++i)
   {
     towid[i] = -1;
   }
@@ -702,16 +701,16 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
     int index = 0;
     float mindist = 1.e9;
     mEmcGeom[0]->getBin(positionBSMDP.phi(), positionBSMDE.pseudoRapidity(), mod, eta, sub); //project on SMD plan
-    for (StSPtrVecEmcPointIterator it = bEmcPoints.begin(); it != bEmcPoints.end(); it++, index++)
+    for (StSPtrVecEmcPointIterator it = bEmcPoints.begin(); it != bEmcPoints.end(); ++it, ++index)
     {
       bool associated = false;
       StPtrVecEmcCluster& bEmcClusters = (*it)->cluster(kBarrelEmcTowerId);
       if (bEmcClusters.size() == 0) continue;
       if (bEmcClusters[0] == NULL) continue;
-      for (StPtrVecEmcClusterIterator cIter = bEmcClusters.begin(); cIter != bEmcClusters.end(); cIter++)
+      for (StPtrVecEmcClusterIterator cIter = bEmcClusters.begin(); cIter != bEmcClusters.end(); ++cIter)
       {
         StPtrVecEmcRawHit& bEmcHits = (*cIter)->hit();
-        for (StPtrVecEmcRawHitIterator hIter = bEmcHits.begin(); hIter != bEmcHits.end(); hIter++)
+        for (StPtrVecEmcRawHitIterator hIter = bEmcHits.begin(); hIter != bEmcHits.end(); ++hIter)
         {
           if (mod == (Int_t)(*hIter)->module() && eta == (Int_t)(*hIter)->eta() && sub == (Int_t)(*hIter)->sub())
           {
@@ -721,7 +720,7 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
         }
         if (associated)
         {
-          for (StPtrVecEmcRawHitIterator hitit = bEmcHits.begin(); hitit != bEmcHits.end(); hitit++)
+          for (StPtrVecEmcRawHitIterator hitit = bEmcHits.begin(); hitit != bEmcHits.end(); ++hitit)
           {
             if ((*hitit)->energy() > ene[0]) ene[0] = (*hitit)->energy();
             if ((int)(*hitit)->adc() > (*adc)) *adc = (*hitit)->adc();
@@ -770,9 +769,9 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
   Float_t etaTemp = 0, phiTemp = 0;
 
   if (mEmcGeom[0]->getId(position.phi(), position.pseudoRapidity(), towerId) == 1) return kTRUE;
-  for (int ieta = -1; ieta < 2; ieta++)
+  for (int ieta = -1; ieta < 2; ++ieta)
   {
-    for (int iphi = -1; iphi < 2; iphi++)
+    for (int iphi = -1; iphi < 2; ++iphi)
     {
       localTowerId++;//loops from 0 to 8
       int nextTowerId = mEmcPosition->getNextTowerId(towerId, ieta, iphi);
@@ -832,7 +831,7 @@ void StPicoDstMaker::fillEvent()
 {
   Int_t nTracks = mPicoArrays[picoTrack]->GetEntries();
 
-  for (int i = 0; i < nTracks; i++)
+  for (int i = 0; i < nTracks; ++i)
   {
     StPicoTrack* t = (StPicoTrack*)mPicoArrays[picoTrack]->UncheckedAt(i);
     if (!t) continue;
@@ -854,7 +853,7 @@ void StPicoDstMaker::fillEmcTrigger()
   int bht2 = trigSimu->bemc->barrelHighTowerTh(2);
   int bht3 = trigSimu->bemc->barrelHighTowerTh(3);
   LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
-  for (int i = 0; i < 4; i++) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
+  for (int i = 0; i < 4; ++i) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
 
   for (int towerId = 1; towerId <= 4800; ++towerId)
   {
@@ -922,7 +921,7 @@ void StPicoDstMaker::fillBTofHits()
     return;
   }
 
-  for (unsigned int i = 0; i < mMuDst->numberOfBTofHit(); i++)
+  for (unsigned int i = 0; i < mMuDst->numberOfBTofHit(); ++i)
   {
     StMuBTofHit* aHit = (StMuBTofHit*)mMuDst->btofHit(i);
     if (aHit->tray() > 120) continue;
@@ -943,7 +942,7 @@ void StPicoDstMaker::fillMtdHits()
 
   // fill MTD hits
   Int_t nMtdHits = mMuDst->numberOfMTDHit();
-  for (Int_t i = 0; i < nMtdHits; i++)
+  for (Int_t i = 0; i < nMtdHits; ++i)
   {
     StMuMtdHit* hit = (StMuMtdHit*)mMuDst->mtdHit(i);
     if (!hit) continue;
@@ -954,10 +953,10 @@ void StPicoDstMaker::fillMtdHits()
 
   // associated MTD hits with PidTraits
   Int_t nMtdPidTraits = mPicoArrays[picoMtdPidTraits]->GetEntries();
-  for (Int_t i = 0; i < nMtdPidTraits; i++)
+  for (Int_t i = 0; i < nMtdPidTraits; ++i)
   {
     StPicoMtdPidTraits* pidTrait = dynamic_cast<StPicoMtdPidTraits*>(mPicoArrays[picoMtdPidTraits]->At(i));
-    for (Int_t j = 0; j < nHits; j++)
+    for (Int_t j = 0; j < nHits; ++j)
     {
       StPicoMtdHit* hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(j));
       if (pidTrait->gChannel() == hit->gChannel())
@@ -980,17 +979,17 @@ void StPicoDstMaker::fillMtdHits()
   Int_t triggerQT[8][2];
   Bool_t triggerBit[8][8];
   Int_t pos1 = 0, pos2 = 0;
-  for (Int_t i = 0; i < 8; i++)
+  for (Int_t i = 0; i < 8; ++i)
   {
-    for (Int_t j = 0; j < 2; j++)
+    for (Int_t j = 0; j < 2; ++j)
       triggerQT[i][j] = 0;
-    for (Int_t j = 0; j < 8; j++)
+    for (Int_t j = 0; j < 8; ++j)
       triggerBit[i][j] = kFALSE;
 
     trigger->getMaximumQTtac(i + 1, pos1, pos2);
     triggerQT[i][0] = pos1;
     triggerQT[i][1] = pos2;
-    for (Int_t j = 0; j < 2; j++)
+    for (Int_t j = 0; j < 2; ++j)
     {
       if (triggerQT[i][j] > 0 && ((trigger->getTF201TriggerBit() >> (i * 2 + j)) & 0x1))
       {
@@ -1001,7 +1000,7 @@ void StPicoDstMaker::fillMtdHits()
 
   vector<Int_t> triggerPos;
   vector<Int_t> hitIndex;
-  for (Int_t i = 0; i < nHits; i++)
+  for (Int_t i = 0; i < nHits; ++i)
   {
     StPicoMtdHit* hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(i));
     Int_t backleg = hit->backleg();
@@ -1025,7 +1024,7 @@ void StPicoDstMaker::fillMtdHits()
   {
     hits.clear();
     hits.push_back(0);
-    for (Int_t j = 1; j < (Int_t)triggerPos.size(); j++)
+    for (Int_t j = 1; j < (Int_t)triggerPos.size(); ++j)
     {
       if (triggerPos[j] == triggerPos[0])
         hits.push_back(j);
