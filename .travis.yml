@@ -1,0 +1,53 @@
+sudo: false
+
+language: cpp
+
+compiler:
+  - gcc
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.8
+    - g++-4.8
+
+branches:
+  only:
+    - master
+
+before_install:
+  - git submodule update --init --recursive
+
+# Make sure cmake picks up the compiler we want
+install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+
+before_script:
+    # Install desired version of ROOT
+  - wget http://root.cern.ch/download/root_v5.34.30.source.tar.gz -P /tmp/
+  - tar -xzf /tmp/root_v5.34.30.source.tar.gz
+  - wget http://root.cern.ch/download/root_v5.34.30.Linux-ubuntu12-x86_64-gcc4.6.tar.gz -P /tmp/
+  - tar -xzf /tmp/root_v5.34.30.Linux-ubuntu12-x86_64-gcc4.6.tar.gz
+  - source ./root/bin/thisroot.sh
+  - root-config --libs
+  - root-config --cflags
+    # Move some ROOT header files to common include directory
+  - rsync -auv root/math/mathmore/inc/Math root/include/
+    # Install dependencies
+  - git clone --depth=1 https://github.com/star-bnl/star-base.git    ext/star-base
+  - git clone --depth=1 https://github.com/star-bnl/star-stevent.git ext/star-stevent
+  - git clone --depth=1 https://github.com/star-bnl/star-muDst.git   ext/star-muDst
+  - git clone --depth=1 https://github.com/star-bnl/star-tables.git  ext/star-tables
+  - git clone --depth=1 https://github.com/star-bnl/star-emc.git     ext/star-emc
+  - git clone --depth=1 https://github.com/star-bnl/star-trigger.git ext/star-trigger
+  - git clone --depth=1 https://github.com/star-bnl/star-daq.git     ext/star-daq
+  - git clone --depth=1 https://github.com/star-bnl/star-pams.git    ext/star-pams
+
+script:
+  - mkdir build/ && cd build/ && pwd
+  - cmake -D STAR_BASE_DIR=ext/star-base -D STAR_STEVENT_DIR=ext/star-stevent -D STAR_MUDST_DIR=ext/star-muDst -D STAR_TABLES_DIR=ext/star-tables -D STAR_EMC_DIR=ext/star-emc -D STAR_TRIGGER_DIR=ext/star-trigger -D STAR_PAMS_DIR=ext/star-pams -D STAR_DAQ_DIR=ext/star-daq ../
+  - cmake -D CMAKE_INSTALL_PREFIX=./ -D CMAKE_BUILD_TYPE=Release ../
+  - make -j4 && make install && make clean
+  - pwd && ls -la ./ && ls -la lib/
