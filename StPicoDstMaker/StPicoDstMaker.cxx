@@ -100,8 +100,6 @@ StPicoDstMaker::StPicoDstMaker(int mode, char const* fileName, char const* name)
 //-----------------------------------------------------------------------
 StPicoDstMaker::~StPicoDstMaker()
 {
-//  if (mIoMode== ioWrite ) closeWrite();
-//  if (mIoMode== ioRead ) closeRead();
   delete mChain;
   delete mPicoDst;
 }
@@ -541,13 +539,11 @@ Int_t StPicoDstMaker::MakeWrite()
   LOG_DEBUG << " eventId = " << muEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
 
   fillTracks();
-
   fillEvent();
-
   fillEmcTrigger();
-  fillMtdTrigger();   // This must be called before fillMtdHits()
+  fillMtdTrigger();
   fillBTOWHits();
-  //fillBTofHits();
+  fillBTofHits();
   fillMtdHits();
 
   if (Debug()) mPicoDst->printTracks();
@@ -648,8 +644,6 @@ void StPicoDstMaker::fillTracks()
       picoTrk->setMtdPidTraitsIndex(mtd_index);
     }
   }
-
-//  cout << "   ++ track branch size = " <<  mPicoArrays[picoTrack]->GetEntries() << endl;
 }
 
 //-----------------------------------------------------------------------
@@ -693,7 +687,7 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
     okBSMDE = mEmcPosition->projTrack(&positionBSMDE, &momentumBSMDE, t, bFld, mEmcGeom[2]->Radius());
     okBSMDP = mEmcPosition->projTrack(&positionBSMDP, &momentumBSMDP, t, bFld, mEmcGeom[3]->Radius());
   }
-//  if(!ok || !okBSMDE || !okBSMDP) {
+
   if (!ok)
   {
     LOG_WARN << " Projection failed for this track ... " << endm;
@@ -825,7 +819,6 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
 
   if (Debug())
   {
-//  if(1) {
     cout << " ====== BEMC results ====== " << endl;
     cout << " Energy = " << ene[0] << " " << ene[1] << " " << ene[2] << " " << ene[3] << " " << ene[4] << endl;
     cout << " BSMD = " << nep[0] << " " << nep[1] << endl;
@@ -847,8 +840,6 @@ void StPicoDstMaker::fillEvent()
   }
   int counter = mPicoArrays[picoEvent]->GetEntries();
   new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(*mMuDst);
-
-//  mPicoDst->Print() ;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillEmcTrigger()
@@ -909,39 +900,7 @@ void StPicoDstMaker::fillMtdTrigger()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillBTOWHits()
 {
-
-#if 0
-  if (!mEmcCollection)
-  {
-    LOG_WARN << " No Emc Collection for this event " << endm;
-    return;
-  }
-
-  StSPtrVecEmcPoint& bEmcPoints = mEmcCollection->barrelPoints();
-
-  for (StSPtrVecEmcPointIterator it = bEmcPoints.begin(); it != bEmcPoints.end(); it++)
-  {
-    StPtrVecEmcCluster& bEmcClusters = (*it)->cluster(kBarrelEmcTowerId);
-    if (bEmcClusters.size() == 0) continue;
-    if (bEmcClusters[0] == NULL) continue;
-    for (StPtrVecEmcClusterIterator cIter = bEmcClusters.begin(); cIter != bEmcClusters.end(); cIter++)
-    {
-      StPtrVecEmcRawHit& bEmcHits = (*cIter)->hit();
-      for (StPtrVecEmcRawHitIterator hIter = bEmcHits.begin(); hIter != bEmcHits.end(); hIter++)
-      {
-        int softId = (*hIter)->softId(1);
-        int adc = (*hIter)->adc();
-        float energy = (*hIter)->energy();
-
-        int counter = mPicoArrays[picoBTOWHit]->GetEntries();
-        new((*(mPicoArrays[picoBTOWHit]))[counter]) StPicoBTOWHit(softId, adc, energy);
-      }
-    }
-  }
-#endif
-
-#if 1
-  for (int i = 0; i < 4800; i++)
+  for (int i = 0; i < 4800; ++i)
   {
     StEmcRawHit* aHit = mEmcIndex[i];
     if (!aHit) continue;
@@ -953,9 +912,6 @@ void StPicoDstMaker::fillBTOWHits()
     int counter = mPicoArrays[picoBTOWHit]->GetEntries();
     new((*(mPicoArrays[picoBTOWHit]))[counter]) StPicoBTOWHit(softId, adc, energy);
   }
-
-#endif
-
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillBTofHits()
