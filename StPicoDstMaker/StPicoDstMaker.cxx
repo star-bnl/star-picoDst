@@ -7,6 +7,7 @@
 
 #include "StChain/StChain.h"
 #include "StarRoot/THack.h"
+#include "St_base/StMessMgr.h"
 
 #include "StEvent/StBTofHeader.h"
 #include "StEvent/StDcaGeometry.h"
@@ -42,19 +43,19 @@
 #include "tables/St_mtdQTSlewingCorr_Table.h"
 #include "tables/St_mtdQTSlewingCorrPart2_Table.h"
 
+#include "StPicoEvent/StPicoEvent.h"
+#include "StPicoEvent/StPicoTrack.h"
+#include "StPicoEvent/StPicoEmcTrigger.h"
+#include "StPicoEvent/StPicoMtdTrigger.h"
+#include "StPicoEvent/StPicoBTOWHit.h"
+#include "StPicoEvent/StPicoBTofHit.h"
+#include "StPicoEvent/StPicoMtdHit.h"
+#include "StPicoEvent/StPicoEmcPidTraits.h"
+#include "StPicoEvent/StPicoBTofPidTraits.h"
+#include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoDstMaker.h"
-#include "StPicoDst.h"
-#include "StPicoEvent.h"
-#include "StPicoTrack.h"
-#include "StPicoEmcTrigger.h"
-#include "StPicoMtdTrigger.h"
-#include "StPicoBTOWHit.h"
-#include "StPicoBTofHit.h"
-#include "StPicoMtdHit.h"
-#include "StPicoEmcPidTraits.h"
-#include "StPicoBTofPidTraits.h"
-#include "StPicoMtdPidTraits.h"
 #include "StPicoArrays.h"
+#include "StPicoDst.h"
 
 
 
