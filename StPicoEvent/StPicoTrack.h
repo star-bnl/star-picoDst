@@ -7,7 +7,6 @@
 #include "StarClassLibrary/StThreeVectorF.hh"
 #include "StarClassLibrary/StThreeVectorD.hh"
 #include "StEvent/StDcaGeometry.h"
-#include "StarClassLibrary/PhysicalConstants.h"
 
 class StMuTrack;
 class StPicoDst;
