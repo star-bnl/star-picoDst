@@ -47,13 +47,13 @@ private:
 
   ClassDef(StPicoMtdPidTraits, 1)
 };
-inline Int_t    StPicoMtdPidTraits::trackIndex()        const { return (Int_t)mTrackIndex; }
-inline Int_t    StPicoMtdPidTraits::mtdHitIndex()       const { return (Int_t)mMtdHitIndex; }
-inline Int_t    StPicoMtdPidTraits::gChannel()          const { return (Int_t)mMtdHitChan; }
-inline Int_t    StPicoMtdPidTraits::backleg()           const { return (Int_t)mMtdHitChan / 60 + 1; }
-inline Int_t    StPicoMtdPidTraits::module()            const { return ((Int_t)mMtdHitChan % 60) / 12 + 1; }
-inline Int_t    StPicoMtdPidTraits::cell()              const { return (Int_t)mMtdHitChan % 12; }
-inline Int_t    StPicoMtdPidTraits::matchFlag()         const { return (Int_t)mMatchFlag; }
+inline Int_t    StPicoMtdPidTraits::trackIndex()        const { return mTrackIndex; }
+inline Int_t    StPicoMtdPidTraits::mtdHitIndex()       const { return mMtdHitIndex; }
+inline Int_t    StPicoMtdPidTraits::gChannel()          const { return mMtdHitChan; }
+inline Int_t    StPicoMtdPidTraits::backleg()           const { return mMtdHitChan / 60 + 1; }
+inline Int_t    StPicoMtdPidTraits::module()            const { return (mMtdHitChan % 60) / 12 + 1; }
+inline Int_t    StPicoMtdPidTraits::cell()              const { return mMtdHitChan % 12; }
+inline Int_t    StPicoMtdPidTraits::matchFlag()         const { return mMatchFlag; }
 inline Float_t  StPicoMtdPidTraits::deltaY()            const { return mDeltaY; }
 inline Float_t  StPicoMtdPidTraits::deltaZ()            const { return mDeltaZ; }
 inline Float_t  StPicoMtdPidTraits::deltaTimeOfFlight() const { return mDeltaTimeOfFlight; }

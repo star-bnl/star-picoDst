@@ -23,8 +23,8 @@ protected:
   ClassDef(StPicoBTofHit, 1)
 };
 
-inline Int_t StPicoBTofHit::id() const { return (Int_t)mId; }
-inline Int_t StPicoBTofHit::tray() const { return (Int_t)mId / 192 + 1; }
-inline Int_t StPicoBTofHit::module() const { return ((Int_t)mId % 192) / 6 + 1; }
-inline Int_t StPicoBTofHit::cell() const { return (Int_t)mId / 6 + 1; }
+inline Int_t StPicoBTofHit::id() const { return mId; }
+inline Int_t StPicoBTofHit::tray() const { return mId / 192 + 1; }
+inline Int_t StPicoBTofHit::module() const { return (mId % 192) / 6 + 1; }
+inline Int_t StPicoBTofHit::cell() const { return mId / 6 + 1; }
 #endif
