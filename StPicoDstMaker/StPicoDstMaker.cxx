@@ -29,8 +29,6 @@
 
 #include "StTriggerUtilities/StTriggerSimuMaker.h"
 #include "StTriggerUtilities/Bemc/StBemcTriggerSimu.h"
-#include "StTriggerUtilities/Eemc/StEemcTriggerSimu.h"
-#include "StTriggerUtilities/Emc/StEmcTriggerSimu.h"
 
 #include "StEmcUtil/geometry/StEmcGeom.h"
 #include "StEmcUtil/others/emcDetectorName.h"
