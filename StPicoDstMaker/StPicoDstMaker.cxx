@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <string>
 #include "TRegexp.h"
 #include "TChain.h"
@@ -460,10 +461,7 @@ void StPicoDstMaker::finishEmc()
 {
   delete mEmcPosition; mEmcPosition = nullptr;
 
-  for (int i = 0; i < 4; ++i)
-  {
-    mEmcGeom[i] = 0;
-  }
+  std::fill_n(mEmcGeom, 4, nullptr);
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::Clear(char const* )
