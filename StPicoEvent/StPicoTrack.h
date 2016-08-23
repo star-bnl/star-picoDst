@@ -6,6 +6,8 @@
 #include "TObject.h"
 #include "StarClassLibrary/StThreeVectorF.hh"
 #include "StarClassLibrary/StThreeVectorD.hh"
+#include "StarClassLibrary/StPhysicalHelixD.hh"
+#include "StarClassLibrary/SystemOfUnits.h"
 #include "StEvent/StDcaGeometry.h"
 
 class StMuTrack;
