@@ -77,11 +77,13 @@ void StPicoTrack::Print(Char_t const* option) const
 {
   if (strcmp(option, "tpc") == 0 || strcmp(option, "") == 0)
   {
-    LOG_INFO << "id=" << id()
-             << " chi2=" << chi2()
+    LOG_INFO << "id: " << id()
+             << " chi2: " << chi2() << "\n"
+             << "pMom: " << pMom()
+             << " nHitsFit: " << nHitsFit()
+             << " nHitsdEdx: " << nHitsDedx() << "\n"
+             << "nSigma pi/K/p/e: " << nSigmaPion()   << "/" << nSigmaKaon() << "/"
+                                    << nSigmaProton() << "/" << nSigmaElectron()
              << endm;
-    LOG_INFO << "pMom=" << pMom() << endm;
-    LOG_INFO << " nHitsFit = " << nHitsFit() << " nHitsdEdx = " << nHitsDedx() << endm;
-    LOG_INFO << " nSigma Pi/K/P/E = " << nSigmaPion() << "/" << nSigmaKaon() << "/" << nSigmaProton() << "/" << nSigmaElectron() << endm;
   }
 }
