@@ -64,7 +64,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mBField(0),
-  mIoMode(0), mProdMode(0), mEmcMode(1), mVtxMode(9999),
+  mIoMode(ioRead), mProdMode(minbias), mEmcMode(1), mVtxMode(9999),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
@@ -493,11 +493,14 @@ void StPicoDstMaker::closeWrite()
 int StPicoDstMaker::Make()
 {
   int returnStarCode = kStOK;
+
   if (mIoMode == ioWrite)
   {
     returnStarCode = MakeWrite();
   }
-  else if (mIoMode == ioRead) returnStarCode = MakeRead();
+  else if (mIoMode == ioRead)
+    returnStarCode = MakeRead();
+
   return returnStarCode;
 }
 //-----------------------------------------------------------------------
