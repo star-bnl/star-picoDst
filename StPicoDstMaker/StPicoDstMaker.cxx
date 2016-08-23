@@ -458,7 +458,8 @@ void StPicoDstMaker::buildEmcIndex()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::finishEmc()
 {
-  if (mEmcPosition) delete mEmcPosition;
+  delete mEmcPosition; mEmcPosition = nullptr;
+
   for (int i = 0; i < 4; ++i)
   {
     mEmcGeom[i] = 0;
