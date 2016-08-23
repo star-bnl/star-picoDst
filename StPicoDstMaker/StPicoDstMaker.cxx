@@ -417,7 +417,7 @@ void StPicoDstMaker::openWrite()
   {
     if (mStatusArrays[i] == 0)
     {
-      cout << " Branch " << StPicoArrays::picoArrayNames[i] << " status is OFF! " << endl;
+      LOG_INFO << " Branch " << StPicoArrays::picoArrayNames[i] << " status is OFF! " << endm;
       continue;
     }
 
@@ -636,7 +636,7 @@ void StPicoDstMaker::fillTracks()
     StDcaGeometry* dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
     if (!dcaG)
     {
-      cout << "No dca Geometry for this track !!! " << i << endm;
+      LOG_WARN << "No dca Geometry for this track !!! " << i << endm;
       continue;
     }
 
@@ -839,13 +839,10 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
   ene[4] = energy2;//2nd closest tower
   towid[2] = localId2;
 
-  if (Debug())
-  {
-    cout << " ====== BEMC results ====== " << endl;
-    cout << " Energy = " << ene[0] << " " << ene[1] << " " << ene[2] << " " << ene[3] << " " << ene[4] << endl;
-    cout << " BSMD = " << nep[0] << " " << nep[1] << endl;
-    cout << " TowerId = " << towid[0] << " " << towid[1] << " " << towid[2] << endl;
-  }
+  LOG_DEBUG << " ====== BEMC results ====== " << "\n"
+            << " Energy = " << ene[0] << " " << ene[1] << " " << ene[2] << " " << ene[3] << " " << ene[4] << "\n"
+            << " BSMD = " << nep[0] << " " << nep[1] << "\n"
+            << " TowerId = " << towid[0] << " " << towid[1] << " " << towid[2] << endm;
 
   return kTRUE;
 }
