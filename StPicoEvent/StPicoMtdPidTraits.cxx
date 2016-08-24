@@ -4,7 +4,7 @@
 #include "StarClassLibrary/PhysicalConstants.h"
 #include "St_base/StMessMgr.h"
 
-#include "StPicoMtdPidTraits.h"
+#include "StPicoEvent/StPicoMtdPidTraits.h"
 
 
 //----------------------------------------------------------------------------------

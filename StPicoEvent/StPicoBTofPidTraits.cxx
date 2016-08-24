@@ -6,7 +6,7 @@
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 #include "St_base/StMessMgr.h"
 
-#include "StPicoBTofPidTraits.h"
+#include "StPicoEvent/StPicoBTofPidTraits.h"
 
 
 //----------------------------------------------------------------------------------

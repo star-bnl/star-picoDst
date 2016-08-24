@@ -51,9 +51,9 @@
 #include "StPicoEvent/StPicoEmcPidTraits.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoEvent/StPicoMtdPidTraits.h"
-#include "StPicoDstMaker.h"
-#include "StPicoArrays.h"
-#include "StPicoDst.h"
+#include "StPicoDstMaker/StPicoDstMaker.h"
+#include "StPicoDstMaker/StPicoArrays.h"
+#include "StPicoDstMaker/StPicoDst.h"
 
 
 

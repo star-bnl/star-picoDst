@@ -1,7 +1,7 @@
 #include <limits>
 
 #include "St_base/StMessMgr.h"
-#include "StPicoBTofHit.h"
+#include "StPicoEvent/StPicoBTofHit.h"
 
 
 StPicoBTofHit::StPicoBTofHit() : mId(0) {}

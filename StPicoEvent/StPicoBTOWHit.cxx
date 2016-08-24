@@ -2,7 +2,7 @@
 
 #include "TMath.h"
 #include "St_base/StMessMgr.h"
-#include "StPicoBTOWHit.h"
+#include "StPicoEvent/StPicoBTOWHit.h"
 
 
 //----------------------------------------------------------------------------------

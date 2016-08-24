@@ -16,7 +16,7 @@ class StPicoMtdPidTraits;
 
 #include "TObject.h"
 #include "TClonesArray.h"
-#include "StPicoArrays.h"
+#include "StPicoDstMaker/StPicoArrays.h"
 
 class StPicoDst : public TObject
 {

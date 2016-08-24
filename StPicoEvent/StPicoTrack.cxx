@@ -2,7 +2,7 @@
 
 #include "TMath.h"
 
-#include "StPicoTrack.h"
+#include "StPicoEvent/StPicoTrack.h"
 #include "St_base/StMessMgr.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 

@@ -7,8 +7,8 @@
 #include "TClonesArray.h"
 
 #include "StChain/StMaker.h"
-#include "StPicoEnumerations.h"
-#include "StPicoArrays.h"
+#include "StPicoDstMaker/StPicoEnumerations.h"
+#include "StPicoDstMaker/StPicoArrays.h"
 
 class TFile;
 class TTree;

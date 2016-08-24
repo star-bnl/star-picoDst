@@ -8,8 +8,8 @@
 #include "StPicoEvent/StPicoEmcPidTraits.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoEvent/StPicoMtdPidTraits.h"
-#include "StPicoDst.h"
-#include "StPicoDstMaker.h"
+#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoDstMaker/StPicoDstMaker.h"
 
 TClonesArray** StPicoDst::picoArrays       = 0;
 

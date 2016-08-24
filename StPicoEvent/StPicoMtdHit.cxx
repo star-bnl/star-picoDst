@@ -3,7 +3,7 @@
 #include "StMuDSTMaker/COMMON/StMuMtdHit.h"
 #include "St_base/StMessMgr.h"
 
-#include "StPicoMtdHit.h"
+#include "StPicoEvent/StPicoMtdHit.h"
 
 
 //----------------------------------------------------------------------------------

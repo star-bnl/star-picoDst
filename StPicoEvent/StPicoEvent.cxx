@@ -6,8 +6,8 @@
 #include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
 #include "StEvent/StBTofHeader.h"
 #include "St_base/StMessMgr.h"
-#include "StPicoUtilities.h"
-#include "StPicoEvent.h"
+#include "StPicoEvent/StPicoUtilities.h"
+#include "StPicoEvent/StPicoEvent.h"
 
 
 StPicoEvent::StPicoEvent():
