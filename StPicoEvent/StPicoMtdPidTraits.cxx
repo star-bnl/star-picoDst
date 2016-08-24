@@ -8,7 +8,7 @@
 
 
 //----------------------------------------------------------------------------------
-StPicoMtdPidTraits::StPicoMtdPidTraits() :
+StPicoMtdPidTraits::StPicoMtdPidTraits() : TObject(),
   mTrackIndex(-1), mMtdHitIndex(-1), mMatchFlag(-1),
   mDeltaY(-999.), mDeltaZ(-999.), mDeltaTimeOfFlight(-999.), mBeta(-999.), mMtdHitChan(-1)
 {
