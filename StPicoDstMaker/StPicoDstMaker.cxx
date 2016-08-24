@@ -228,21 +228,21 @@ Bool_t StPicoDstMaker::initMtd(Int_t const runnumber)
 
   // obtain maps from DB
   for (Int_t i = 0; i < 30; ++i)
+  {
+    for (Int_t j = 0; j < 5; ++j)
     {
-      for (Int_t j = 0; j < 5; ++j)
-	{
-	  mModuleToQT[i][j]    = -1;
-	  mModuleToQTPos[i][j] = -1;
-	}
+      mModuleToQT[i][j]    = -1;
+      mModuleToQTPos[i][j] = -1;
     }
+  }
   for (Int_t i = 0; i < 8; ++i)
+  {
+    for (Int_t j = 0; j < 8; ++j)
     {
-      for (Int_t j = 0; j < 8; ++j)
-	{
-	  mQTtoModule[i][j]    = -1;
-	}
+      mQTtoModule[i][j]    = -1;
     }
-  
+  }
+
 
   LOG_INFO << "Retrieving mtdModuleToQTmap table from database ..." << endm;
   TDataSet* dataset = GetDataBase("Geometry/mtd/mtdModuleToQTmap");
@@ -278,16 +278,16 @@ Bool_t StPicoDstMaker::initMtd(Int_t const runnumber)
 
   // online slewing correction for QT board
   for (int j = 0; j < 8; ++j)
+  {
+    for (int i = 0; i < 16; ++i)
     {
-      for (int i = 0; i < 16; ++i)
-	{
-	  for (Int_t k = 0; k < 8; ++k)
-	    {
-	      mQTSlewBinEdge[j][i][k] = -1;
-	      mQTSlewCorr[j][i][k]    = -1;
-	    }
-	}
+      for (Int_t k = 0; k < 8; ++k)
+      {
+        mQTSlewBinEdge[j][i][k] = -1;
+        mQTSlewCorr[j][i][k]    = -1;
+      }
     }
+  }
 
   LOG_INFO << "Retrieving mtdQTSlewingCorr table from database ..." << endm;
   dataset = GetDataBase("Calibrations/mtd/mtdQTSlewingCorr");
