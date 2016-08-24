@@ -1,4 +1,3 @@
-#include <bitset>
 #include <string>
 #include "TRegexp.h"
 #include "TChain.h"
@@ -228,9 +227,22 @@ Bool_t StPicoDstMaker::initMtd(Int_t const runnumber)
   LOG_INFO << "Run = " << runnumber << " year = " << year << endm;
 
   // obtain maps from DB
-  memset(mModuleToQT, -1, sizeof(mModuleToQT));
-  memset(mModuleToQTPos, -1, sizeof(mModuleToQTPos));
-  memset(mQTtoModule, -1, sizeof(mQTtoModule));
+  for (Int_t i = 0; i < 30; ++i)
+    {
+      for (Int_t j = 0; j < 5; ++j)
+	{
+	  mModuleToQT[i][j]    = -1;
+	  mModuleToQTPos[i][j] = -1;
+	}
+    }
+  for (Int_t i = 0; i < 8; ++i)
+    {
+      for (Int_t j = 0; j < 8; ++j)
+	{
+	  mQTtoModule[i][j]    = -1;
+	}
+    }
+  
 
   LOG_INFO << "Retrieving mtdModuleToQTmap table from database ..." << endm;
   TDataSet* dataset = GetDataBase("Geometry/mtd/mtdModuleToQTmap");
@@ -265,8 +277,18 @@ Bool_t StPicoDstMaker::initMtd(Int_t const runnumber)
   }
 
   // online slewing correction for QT board
-  memset(mQTSlewBinEdge, -1, sizeof(mQTSlewBinEdge));
-  memset(mQTSlewCorr, -1, sizeof(mQTSlewCorr));
+  for (int j = 0; j < 8; ++j)
+    {
+      for (int i = 0; i < 16; ++i)
+	{
+	  for (Int_t k = 0; k < 8; ++k)
+	    {
+	      mQTSlewBinEdge[j][i][k] = -1;
+	      mQTSlewCorr[j][i][k]    = -1;
+	    }
+	}
+    }
+
   LOG_INFO << "Retrieving mtdQTSlewingCorr table from database ..." << endm;
   dataset = GetDataBase("Calibrations/mtd/mtdQTSlewingCorr");
   St_mtdQTSlewingCorr* mtdQTSlewingCorr = static_cast<St_mtdQTSlewingCorr*>(dataset->Find("mtdQTSlewingCorr"));
@@ -916,12 +938,6 @@ void StPicoDstMaker::fillBTOWHits()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillBTofHits()
 {
-  if (!mMuDst)
-  {
-    LOG_WARN << " No MuDst for this event " << endm;
-    return;
-  }
-
   for (unsigned int i = 0; i < mMuDst->numberOfBTofHit(); ++i)
   {
     StMuBTofHit* aHit = (StMuBTofHit*)mMuDst->btofHit(i);
@@ -935,12 +951,6 @@ void StPicoDstMaker::fillBTofHits()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillMtdHits()
 {
-  if (!mMuDst)
-  {
-    LOG_WARN << " No MuDst for this event " << endm;
-    return;
-  }
-
   // fill MTD hits
   Int_t nMtdHits = mMuDst->numberOfMTDHit();
   for (Int_t i = 0; i < nMtdHits; ++i)
@@ -950,16 +960,16 @@ void StPicoDstMaker::fillMtdHits()
     Int_t counter = mPicoArrays[picoMtdHit]->GetEntries();
     new((*(mPicoArrays[picoMtdHit]))[counter]) StPicoMtdHit(hit);
   }
-  Int_t nHits = mPicoArrays[picoMtdHit]->GetEntries();
+  unsigned int nHits = mPicoDst->numberOfMtdHits();
 
   // associated MTD hits with PidTraits
-  Int_t nMtdPidTraits = mPicoArrays[picoMtdPidTraits]->GetEntries();
-  for (Int_t i = 0; i < nMtdPidTraits; ++i)
+  unsigned int nMtdPidTraits = mPicoDst->numberOfMtdPidTraits();
+  for (unsigned int i = 0; i < nMtdPidTraits; ++i)
   {
-    StPicoMtdPidTraits* pidTrait = dynamic_cast<StPicoMtdPidTraits*>(mPicoArrays[picoMtdPidTraits]->At(i));
-    for (Int_t j = 0; j < nHits; ++j)
+    StPicoMtdPidTraits* pidTrait = mPicoDst->mtdPidTraits(i);
+    for (unsigned int j = 0; j < nHits; ++j)
     {
-      StPicoMtdHit* hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(j));
+      StPicoMtdHit* hit = mPicoDst->mtdHit(i);
       if (pidTrait->gChannel() == hit->gChannel())
       {
         pidTrait->setMtdHitIndex(j);
@@ -970,13 +980,13 @@ void StPicoDstMaker::fillMtdHits()
 
 
   // check the firing hits
-  if (mPicoArrays[picoMtdTrigger]->GetEntries() != 1)
+  if (mPicoDst->numberOfMtdTriggers() != 1)
   {
-    LOG_ERROR << "There are " << mPicoArrays[picoMtdTrigger]->GetEntries() << " MTD trigger. Check it!" << endm;
+    LOG_ERROR << "There are " << mPicoDst->numberOfMtdTriggers() << " MTD trigger. Check it!" << endm;
     return;
   }
 
-  StPicoMtdTrigger* trigger = dynamic_cast<StPicoMtdTrigger*>(mPicoArrays[picoMtdTrigger]->At(0));
+  StPicoMtdTrigger* trigger = mPicoDst->mtdTrigger(0);
   Int_t triggerQT[8][2];
   Bool_t triggerBit[8][8];
   Int_t pos1 = 0, pos2 = 0;
@@ -1001,7 +1011,7 @@ void StPicoDstMaker::fillMtdHits()
 
   vector<Int_t> triggerPos;
   vector<Int_t> hitIndex;
-  for (Int_t i = 0; i < nHits; ++i)
+  for (unsigned int i = 0; i < nHits; ++i)
   {
     StPicoMtdHit* hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(i));
     Int_t backleg = hit->backleg();

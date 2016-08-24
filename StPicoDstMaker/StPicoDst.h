@@ -62,6 +62,7 @@ public:
 
   static unsigned int numberOfTracks() { return picoArrays[picoTrack]->GetEntries(); }
   static unsigned int numberOfEmcTriggers() { return picoArrays[picoEmcTrigger]->GetEntries(); }
+  static unsigned int numberOfMtdTriggers() { return picoArrays[picoMtdTrigger]->GetEntries(); }
   static unsigned int numberOfBTOWHits() { return picoArrays[picoBTOWHit]->GetEntries(); }
   static unsigned int numberOfBTofHits() { return picoArrays[picoBTofHit]->GetEntries(); }
   static unsigned int numberOfMtdHits() { return picoArrays[picoMtdHit]->GetEntries(); }
