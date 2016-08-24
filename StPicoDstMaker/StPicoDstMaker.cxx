@@ -99,7 +99,9 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
   static char const* specNames[] = {"EventAll", 0};
   static int const specIndex[] = { 0, StPicoArrays::NAllPicoArrays, -1};
 
-  if (strncmp(arrType, "St", 2) == 0) arrType += 2; //Ignore first "St"
+  if (strncmp(arrType, "St", 2) == 0)
+     arrType += 2; //Ignore first "St"
+
   for (int i = 0; specNames[i]; ++i)
   {
     if (strcmp(arrType, specNames[i])) continue;
@@ -120,6 +122,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
     LOG_INFO << "StPicoDstMaker::SetStatus " << status << " to " << StPicoArrays::picoArrayNames[i] << endm;
     mStatusArrays[i] = status;
   }
+
   if (mIoMode == ioRead)
     setBranchAddresses(mChain);
 }
@@ -876,7 +879,8 @@ void StPicoDstMaker::fillEmcTrigger()
   int const bjpth1 = trigSimu->bemc->barrelJetPatchTh(1);
   int const bjpth2 = trigSimu->bemc->barrelJetPatchTh(2);
 
-  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJetPatchThreshold(i, trigSimu->bemc->barrelJetPatchTh(i));
+  for (int i = 0; i < 3; ++i)
+    mPicoDst->event()->setJetPatchThreshold(i, trigSimu->bemc->barrelJetPatchTh(i));
 
   for(int jp = 0; jp<18; ++jp)
   { // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.
