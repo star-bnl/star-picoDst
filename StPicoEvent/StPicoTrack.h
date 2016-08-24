@@ -11,7 +11,6 @@
 #include "StEvent/StDcaGeometry.h"
 
 class StMuTrack;
-class StPicoDst;
 class StDcaGeometry;
 
 class StPicoTrack : public TObject
