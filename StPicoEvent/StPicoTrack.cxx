@@ -72,6 +72,31 @@ StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, dou
     mMap1 = (UInt_t)(t->topologyMap().data(1));
   }
 }
+
+
+StPicoTrack::StPicoTrack(UShort_t id, UShort_t chi2,
+   const StThreeVectorF& pMomentum, const StThreeVectorF& gMomentum, const StThreeVectorF& origin,
+   UShort_t dedx, Char_t nHitsFit, Char_t nHitsMax, UChar_t nHitsDedx,
+   Short_t nSigmaPion, Short_t nSigmaKaon, Short_t nSigmaProton, Short_t nSigmaElectron,
+   UInt_t map0, UInt_t map1) : TObject(),
+  mId(id),
+  mChi2(chi2),
+  mPMomentum(pMomentum),
+  mGMomentum(gMomentum),
+  mOrigin(origin),
+  mDedx(dedx),
+  mNHitsFit(nHitsFit),
+  mNHitsMax(nHitsMax),
+  mNHitsDedx(nHitsDedx),
+  mNSigmaPion(nSigmaPion),
+  mNSigmaKaon(nSigmaKaon),
+  mNSigmaProton(nSigmaProton),
+  mNSigmaElectron(nSigmaElectron),
+  mMap0(map0), mMap1(map1),
+  mEmcPidTraitsIndex(-1), mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
+{}
+
+
 //----------------------------------------------------------------------------------
 void StPicoTrack::Print(Char_t const* option) const
 {
