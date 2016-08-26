@@ -686,17 +686,22 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
     int index = 0;
     float mindist = 1.e9;
     mEmcGeom[0]->getBin(positionBSMDP.phi(), positionBSMDE.pseudoRapidity(), mod, eta, sub); //project on SMD plan
+    // Loop over all BEMC measurements, aka "points"
     for (StSPtrVecEmcPointIterator it = bEmcPoints.begin(); it != bEmcPoints.end(); ++it, ++index)
     {
       bool associated = false;
+      // Consider only BEMC clusters
       StPtrVecEmcCluster& bEmcClusters = (*it)->cluster(kBarrelEmcTowerId);
       if (bEmcClusters.size() == 0) continue;
       if (bEmcClusters[0] == NULL) continue;
+      // Loop over all BEMC clusters
       for (StPtrVecEmcClusterIterator cIter = bEmcClusters.begin(); cIter != bEmcClusters.end(); ++cIter)
       {
         StPtrVecEmcRawHit& bEmcHits = (*cIter)->hit();
+        // Loop over all hits/towers in the BEMC cluster
         for (StPtrVecEmcRawHitIterator hIter = bEmcHits.begin(); hIter != bEmcHits.end(); ++hIter)
         {
+          // Find BEMC hit matching the track projection to BEMC
           if (mod == (Int_t)(*hIter)->module() && eta == (Int_t)(*hIter)->eta() && sub == (Int_t)(*hIter)->sub())
           {
             associated = true;
@@ -705,9 +710,12 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
         }
         if (associated)
         {
+          // Loop over all hits/towers in the BEMC cluster again
           for (StPtrVecEmcRawHitIterator hitit = bEmcHits.begin(); hitit != bEmcHits.end(); ++hitit)
           {
+            // Save the highest energy among the towers in the BEMC cluster to ene[0]
             if ((*hitit)->energy() > ene[0]) ene[0] = (*hitit)->energy();
+            // Save the highest ADC among the towers in the BEMC cluster to adc
             if ((int)(*hitit)->adc() > (*adc)) *adc = (*hitit)->adc();
           }
         }
