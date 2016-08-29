@@ -71,7 +71,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
   mIndex2Primary{}, mMap2Track{},
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
-  mPicoAllArrays{}, mPicoArrays(mPicoAllArrays), mStatusArrays{}
+  mPicoArrays{}, mStatusArrays{}
 {
   streamerOff();
   createArrays();
@@ -113,7 +113,7 @@ void StPicoDstMaker::clearArrays()
 {
   for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
-    mPicoAllArrays[i]->Clear();
+    mPicoArrays[i]->Clear();
   }
 }
 //-----------------------------------------------------------------------
@@ -165,8 +165,8 @@ void StPicoDstMaker::setBranchAddresses(TChain* chain)
     ts = bname;
     ts += "*";
     chain->SetBranchStatus(ts, 1);
-    chain->SetBranchAddress(bname, mPicoAllArrays + i);
-    assert(tb->GetAddress() == (char*)(mPicoAllArrays + i));
+    chain->SetBranchAddress(bname, mPicoArrays + i);
+    assert(tb->GetAddress() == (char*)(mPicoArrays + i));
   }
   mTTree = mChain->GetTree();
 }
@@ -181,7 +181,7 @@ void StPicoDstMaker::createArrays()
 {
   for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
-    mPicoAllArrays[i] = new TClonesArray(StPicoArrays::picoArrayTypes[i], StPicoArrays::picoArraySizes[i]);
+    mPicoArrays[i] = new TClonesArray(StPicoArrays::picoArrayTypes[i], StPicoArrays::picoArraySizes[i]);
   }
 
   mPicoDst->set(mPicoArrays);
@@ -419,7 +419,7 @@ void StPicoDstMaker::openWrite()
       continue;
     }
 
-    mTTree->Branch(StPicoArrays::picoArrayNames[i], &mPicoAllArrays[i], bufsize, mSplit);
+    mTTree->Branch(StPicoArrays::picoArrayNames[i], &mPicoArrays[i], bufsize, mSplit);
   }
 }
 //-----------------------------------------------------------------------
