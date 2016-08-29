@@ -509,7 +509,6 @@ Int_t StPicoDstMaker::MakeRead()
     return kStWarn;
   }
   mChain->GetEntry(mEventCounter++);
-  mPicoDst->set(mPicoArrays);
   return kStOK;
 }
 //-----------------------------------------------------------------------
