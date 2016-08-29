@@ -1,3 +1,10 @@
+/*!
+ *  \class StPicoMtdHit
+ *
+ *  \brief Class storing MTD hit information in PicoDst.
+ * 
+ */
+
 #ifndef StPicoMtdHit_h
 #define StPicoMtdHit_h
 
@@ -9,27 +16,58 @@ class StPicoMtdHit : public TObject
 {
 public:
   StPicoMtdHit();
+
+  /*!
+   *
+   *  \brief Main constructor
+   *  \param hit Corresponding MTD hit in MuDst
+   */
   StPicoMtdHit(StMuMtdHit const* hit);
+
+  /*!
+   *
+   *  \brief Default destructor
+   */
   virtual ~StPicoMtdHit();
 
   virtual void Print(const Char_t* option = "") const;
 
   void  setTriggerFlag(Int_t const flag);
+
+  /// Return global channel number of the MTD hit
+  /// Its defition is (backleg-1) * 60 + (module-1) * 12 + cell
   Int_t  gChannel()    const;
+
+  /// Return backleg number (1-30) of the MTD hit
   Int_t  backleg()     const;
+
+  /// Return module number (1-5) of the MTD hit
   Int_t  module()      const;
+
+  /// Return cell number (0-11) of the MTD hit
   Int_t  cell()        const;
+
+  /*!
+   *
+   *  \brief Return trigger flag of the MTD hit.
+   *
+   *  The returned value indicates the number of MTD
+   *  hits matched to the same trigger unit that fired
+   *  the MTD trigger. 
+   */
   Int_t  triggerFlag() const;
 
   std::pair<Float_t, Float_t> leadingEdgeTime()  const;
   std::pair<Float_t, Float_t> trailingEdgeTime() const;
+
+  /// Return time-over-threshold of the MTD hit
   std::pair<Float_t, Float_t> tot() const;
 
 protected:
-  Short_t mgChannel; // mgChannel = (backleg-1) * 60 + (module-1) * 12 + cell
-  UChar_t mTriggerFlag; // # of hits in the corresponding trigger unit that fired the trigger
-  std::pair<Float_t, Float_t>  mLeadingEdgeTime;
-  std::pair<Float_t, Float_t>  mTrailingEdgeTime;
+  Short_t mgChannel;    ///< mgChannel = (backleg-1) * 60 + (module-1) * 12 + cell
+  UChar_t mTriggerFlag; ///< # of hits in the corresponding trigger unit that fired the trigger
+  std::pair<Float_t, Float_t>  mLeadingEdgeTime; ///< Leading-edge time for the hit
+  std::pair<Float_t, Float_t>  mTrailingEdgeTime;  ///< Trailing-edge time for the hit
 
   ClassDef(StPicoMtdHit, 1)
 };
