@@ -17,9 +17,6 @@ class StPicoArrays {
 
 ///< maximum sizes of the TClonesArrays
   static int           picoArraySizes[__NALLPICOARRAYS__    ];
-
-///< number of entries in current event, currently not used
-  static int           picoArrayCounters[__NALLPICOARRAYS__    ];
 };
 
 #endif

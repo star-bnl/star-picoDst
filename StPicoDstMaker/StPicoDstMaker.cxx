@@ -114,7 +114,6 @@ void StPicoDstMaker::clearArrays()
   for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
     mPicoAllArrays[i]->Clear();
-    StPicoArrays::picoArrayCounters[i] = 0;
   }
 }
 //-----------------------------------------------------------------------
@@ -183,7 +182,6 @@ void StPicoDstMaker::createArrays()
   for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
     mPicoAllArrays[i] = new TClonesArray(StPicoArrays::picoArrayTypes[i], StPicoArrays::picoArraySizes[i]);
-    StPicoArrays::picoArrayCounters[i] = 0;
   }
 
   mPicoDst->set(mPicoArrays);
