@@ -77,7 +77,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   createArrays();
   mPicoDst = new StPicoDst();
 
-  memset(mStatusArrays, (char)1, sizeof(mStatusArrays));
+  std::fill_n(mStatusArrays, sizeof(mStatusArrays)/sizeof(mStatusArrays[0]), 1);
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(int mode, char const* fileName, char const* name) : StPicoDstMaker(name)
@@ -129,7 +129,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
     if (strcmp(arrType, specNames[i])) continue;
     char* sta = mStatusArrays + specIndex[i];
     int   num = specIndex[i + 1] - specIndex[i];
-    memset(sta, status, num);
+    std::fill_n(sta, num, status);
     LOG_INFO << "StPicoDstMaker::SetStatus " << status << " to " << specNames[i] << endm;
     if (mIoMode == ioRead)
       setBranchAddresses(mChain);
@@ -437,7 +437,7 @@ void StPicoDstMaker::initEmc()
 void StPicoDstMaker::buildEmcIndex()
 {
   StEmcDetector* mEmcDet = mMuDst->emcCollection()->detector(kBarrelEmcTowerId);
-  memset(mEmcIndex, 0, sizeof(mEmcIndex));
+  std::fill_n(mEmcIndex, sizeof(mEmcIndex)/sizeof(mEmcIndex[0]), nullptr);
 
   if (!mEmcDet) return;
   for (size_t iMod = 1; iMod <= mEmcDet->numberOfModules(); ++iMod)
