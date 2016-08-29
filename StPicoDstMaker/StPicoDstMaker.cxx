@@ -966,7 +966,7 @@ void StPicoDstMaker::fillMtdHits()
     StPicoMtdPidTraits* pidTrait = mPicoDst->mtdPidTraits(i);
     for (unsigned int j = 0; j < nHits; ++j)
     {
-      StPicoMtdHit* hit = mPicoDst->mtdHit(i);
+      StPicoMtdHit* hit = mPicoDst->mtdHit(j);
       if (pidTrait->gChannel() == hit->gChannel())
       {
         pidTrait->setMtdHitIndex(j);
@@ -1010,7 +1010,7 @@ void StPicoDstMaker::fillMtdHits()
   vector<Int_t> hitIndex;
   for (unsigned int i = 0; i < nHits; ++i)
   {
-    StPicoMtdHit* hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(i));
+    StPicoMtdHit* hit = mPicoDst->mtdHit(i);
     Int_t backleg = hit->backleg();
     Int_t module  = hit->module();
     Int_t qt = mModuleToQT[backleg - 1][module - 1];
@@ -1040,7 +1040,7 @@ void StPicoDstMaker::fillMtdHits()
 
     for (Int_t k = (Int_t)hits.size() - 1; k > -1; k--)
     {
-      StPicoMtdHit* hit = dynamic_cast<StPicoMtdHit*>(mPicoArrays[picoMtdHit]->At(hitIndex[hits[k]]));
+      StPicoMtdHit* hit = mPicoDst->mtdHit(hitIndex[hits[k]]);
       hit->setTriggerFlag((Int_t)hits.size());
       triggerPos.erase(triggerPos.begin() + hits[k]);
       hitIndex.erase(hitIndex.begin() + hits[k]);
