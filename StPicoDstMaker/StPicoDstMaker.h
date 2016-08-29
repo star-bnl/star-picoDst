@@ -135,9 +135,6 @@ protected:
   Int_t  mQTSlewBinEdge[8][16][8];  // Bin Edge for QT slewing correction
   Int_t  mQTSlewCorr[8][16][8];     // QT Slewing correction
 
-  //
-  friend class StPicoDst;
-
   TClonesArray*   mPicoAllArrays[__NALLPICOARRAYS__];
   TClonesArray**  mPicoArrays;
   char            mStatusArrays[__NALLPICOARRAYS__];

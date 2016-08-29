@@ -24,16 +24,6 @@ void StPicoDst::unset()
   picoArrays   = 0;
 }
 //-----------------------------------------------------------------------
-void StPicoDst::set(StPicoDstMaker* maker)
-{
-  if (!maker)
-  {
-    LOG_WARN << "No PicoDstMaker!" << endm;
-    return;
-  }
-  picoArrays   = maker->mPicoArrays;
-}
-//-----------------------------------------------------------------------
 void StPicoDst::set(TClonesArray** thePicoArrays)
 {
   picoArrays    = thePicoArrays;

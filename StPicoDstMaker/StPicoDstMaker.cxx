@@ -186,7 +186,7 @@ void StPicoDstMaker::createArrays()
     StPicoArrays::picoArrayCounters[i] = 0;
   }
 
-  mPicoDst->set(this);
+  mPicoDst->set(mPicoArrays);
 }
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Init()
@@ -396,7 +396,7 @@ Int_t StPicoDstMaker::openRead()
   if (mChain)
   {
     setBranchAddresses(mChain);
-    mPicoDst->set(this);
+    mPicoDst->set(mPicoArrays);
   }
 
   return kStOK;
@@ -511,7 +511,7 @@ Int_t StPicoDstMaker::MakeRead()
     return kStWarn;
   }
   mChain->GetEntry(mEventCounter++);
-  mPicoDst->set(this);
+  mPicoDst->set(mPicoArrays);
   return kStOK;
 }
 //-----------------------------------------------------------------------
