@@ -18,13 +18,6 @@ class StPicoTrack : public TObject
 public:
   StPicoTrack();
   StPicoTrack(StMuTrack const* globalTrack, StMuTrack const* primaryTrack, double magField, StThreeVectorD const& pVtx, StDcaGeometry const& dcaG);
-
-  StPicoTrack(UShort_t id, UShort_t chi2,
-     const StThreeVectorF& pMomentum, const StThreeVectorF& gMomentum, const StThreeVectorF& origin,
-     UShort_t dedx, Char_t nHitsFit, Char_t nHitsMax, UChar_t nHitsDedx,
-     Short_t nSigmaPion, Short_t nSigmaKaon, Short_t nSigmaProton, Short_t nSigmaElectron,
-     UInt_t map0, UInt_t map1);
-
   virtual ~StPicoTrack() {}
 
   // This class doesn't allocate any data on the heap so the default copy ctor
