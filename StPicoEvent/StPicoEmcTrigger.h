@@ -12,7 +12,7 @@ public:
 
   virtual void Print(const Char_t* option = "") const;  ///< Print trigger info
 
-  Int_t   flag() const;
+  UInt_t   flag() const;
   Int_t   id() const;
   Int_t   adc() const;
 
@@ -23,7 +23,7 @@ protected:
 
   ClassDef(StPicoEmcTrigger, 1)
 };
-inline Int_t StPicoEmcTrigger::flag() const { return (Int_t)mFlag; }
+inline UInt_t StPicoEmcTrigger::flag() const { return (UInt_t)mFlag; }
 inline Int_t StPicoEmcTrigger::id() const { return (Int_t)mId; }
 inline Int_t StPicoEmcTrigger::adc() const { return (Int_t)mAdc; }
 #endif
