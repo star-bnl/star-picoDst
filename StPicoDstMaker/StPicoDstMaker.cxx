@@ -1075,7 +1075,5 @@ bool StPicoDstMaker::selectVertex()
   }
 
   // Retrun false if selected vertex is not valid
-  if (!mMuDst->primaryVertex()) return false;
-  StThreeVectorF pVertex = mMuDst->primaryVertex()->position();
-  return !(fabs(pVertex.x()) < 1.e-5 && fabs(pVertex.y()) < 1.e-5 && fabs(pVertex.z()) < 1.e-5);
+  return mMuDst->primaryVertex() ? true : false;
 }
