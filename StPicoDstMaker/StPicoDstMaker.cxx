@@ -6,7 +6,6 @@
 #include "TBranch.h"
 
 #include "StChain/StChain.h"
-#include "StarRoot/THack.h"
 #include "St_base/StMessMgr.h"
 
 #include "StEvent/StBTofHeader.h"
@@ -567,7 +566,6 @@ Int_t StPicoDstMaker::MakeWrite()
   if (Debug()) mPicoDst->printTracks();
 
   mTTree->Fill();
-  THack::IsTreeWritable(mTTree);
 
   return kStOK;
 }
