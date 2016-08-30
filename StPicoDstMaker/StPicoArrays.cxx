@@ -2,7 +2,7 @@
 
 //              ARRAY NAMES
 //============================================================================================
-const char* StPicoArrays::picoArrayNames [__NALLPICOARRAYS__] = {"Event", "Tracks", "EmcTrigger", "MtdTrigger",
+const char* StPicoArrays::picoArrayNames [__NALLPICOARRAYS__] = {"Event", "Track", "EmcTrigger", "MtdTrigger",
                                                                  "BTOWHit", "BTofHit", "MtdHit",
                                                                  "EmcPidTraits", "BTofPidTraits", "MtdPidTraits"
                                                                 };
