@@ -393,6 +393,8 @@ Int_t StPicoDstMaker::openRead()
   if (mChain)
   {
     setBranchAddresses(mChain);
+    mChain->SetCacheSize(50e6);
+    mChain->AddBranchToCache("*");
     mPicoDst->set(mPicoArrays);
   }
 
