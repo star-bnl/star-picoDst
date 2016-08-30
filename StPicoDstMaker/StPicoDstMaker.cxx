@@ -909,12 +909,12 @@ void StPicoDstMaker::fillEmcTrigger()
   }
 
 
-  // BEMC Jet Patch trigger
-  int const bjpth0 = trigSimu->bemc->barrelJetPatchAdc(0);
-  int const bjpth1 = trigSimu->bemc->barrelJetPatchAdc(1);
-  int const bjpth2 = trigSimu->bemc->barrelJetPatchAdc(2);
+  // BEMC Jet Patch trigger threshold 
+  int const bjpth0 = trigSimu->bemc->barrelJetPatchTh(0);
+  int const bjpth1 = trigSimu->bemc->barrelJetPatchTh(1);
+  int const bjpth2 = trigSimu->bemc->barrelJetPatchTh(2);
 
-  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJP_Th(i, trigSimu->bemc->barrelJetPatchAdc(i));
+  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJP_Th(i, trigSimu->bemc->barrelJetPatchTh(i));
 
   for(int jp = 0; jp<18; ++jp)
   { // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.
