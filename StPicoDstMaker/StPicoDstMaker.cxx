@@ -471,8 +471,7 @@ void StPicoDstMaker::Clear(char const* )
 //_____________________________________________________________________________
 void StPicoDstMaker::closeRead()
 {
-  if (mChain) mChain->Delete();
-  mChain = 0;
+  delete mChain; mChain = nullptr;
 }
 //_____________________________________________________________________________
 void StPicoDstMaker::closeWrite()
