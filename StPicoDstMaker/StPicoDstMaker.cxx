@@ -120,7 +120,7 @@ void StPicoDstMaker::clearArrays()
 void StPicoDstMaker::SetStatus(char const* arrType, int status)
 {
   static char const* specNames[] = {"EventAll", 0};
-  static int const specIndex[] = { 0, -1};
+  static int const specIndex[] = { 0, __NALLPICOARRAYS__, -1};
 
   if (strncmp(arrType, "St", 2) == 0) arrType += 2; //Ignore first "St"
   for (int i = 0; specNames[i]; ++i)
@@ -136,7 +136,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
   }
 
   TRegexp re(arrType, 1);
-  for (int i = 0; i < __NALLARRAYS__; ++i)
+  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
     Ssiz_t len;
     if (re.Index(StPicoArrays::picoArrayNames[i], &len) < 0)   continue;
