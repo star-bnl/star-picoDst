@@ -868,6 +868,7 @@ void StPicoDstMaker::fillEmcTrigger()
   StTriggerSimuMaker* trigSimu = (StTriggerSimuMaker*)GetMaker("StarTrigSimu");
   if (!trigSimu) return;
 
+  // BEMC High Tower trigger
   int bht0 = trigSimu->bemc->barrelHighTowerTh(0);
   int bht1 = trigSimu->bemc->barrelHighTowerTh(1);
   int bht2 = trigSimu->bemc->barrelHighTowerTh(2);
@@ -880,7 +881,7 @@ void StPicoDstMaker::fillEmcTrigger()
     int status;
     trigSimu->bemc->getTables()->getStatus(BTOW, towerId, status);
     int adc = trigSimu->bemc->barrelHighTowerAdc(towerId);
-    int flag = 0;
+    unsigned char flag = 0;
 
     if (adc > bht1)
     {
@@ -906,6 +907,41 @@ void StPicoDstMaker::fillEmcTrigger()
       new((*(mPicoArrays[picoEmcTrigger]))[counter]) StPicoEmcTrigger(flag, towerId, adc);
     }
   }
+
+
+  // BEMC Jet Patch trigger threshold 
+  int const bjpth0 = trigSimu->bemc->barrelJetPatchTh(0);
+  int const bjpth1 = trigSimu->bemc->barrelJetPatchTh(1);
+  int const bjpth2 = trigSimu->bemc->barrelJetPatchTh(2);
+
+  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJP_Th(i, trigSimu->bemc->barrelJetPatchTh(i));
+
+  for(int jp = 0; jp<18; ++jp)
+  { // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.
+    int const jpAdc = trigSimu->bemc->barrelJetPatchAdc(jp);
+
+    unsigned char flag = 0;
+    if(jpAdc > bjpth0)
+    {
+      flag |= 1 << 4;
+    }
+
+    if(jpAdc > bjpth1)
+    {
+      flag |= 1 << 5;
+    }
+
+    if(jpAdc > bjpth2)
+    {
+      flag |= 1 << 6;
+    }
+
+    if(flag & 0x70)
+    {
+      int counter = mPicoArrays[picoEmcTrigger]->GetEntries();
+      new((*(mPicoArrays[picoEmcTrigger]))[counter]) StPicoEmcTrigger(flag, jp, jpAdc);
+    }
+  }     
 }
 
 //-----------------------------------------------------------------------
