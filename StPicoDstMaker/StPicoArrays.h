@@ -9,13 +9,13 @@ enum NPICOARRAYS { __NALLPICOARRAYS__ = 10 };
 class StPicoArrays {
   public:
   StPicoArrays();
-///< names of the TBranches in the TTree/File
+/// names of the TBranches in the TTree/File
   static const char*   picoArrayNames[__NALLPICOARRAYS__];
 
-///< names of the classes, the TClonesArrays are arrays of this type
+/// names of the classes, the TClonesArrays are arrays of this type
   static const char*   picoArrayTypes[__NALLPICOARRAYS__    ];
 
-///< maximum sizes of the TClonesArrays
+/// maximum sizes of the TClonesArrays
   static int           picoArraySizes[__NALLPICOARRAYS__    ];
 };
 
