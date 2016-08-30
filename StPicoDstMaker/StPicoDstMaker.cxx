@@ -868,8 +868,6 @@ void StPicoDstMaker::fillEmcTrigger()
   StTriggerSimuMaker* trigSimu = (StTriggerSimuMaker*)GetMaker("StarTrigSimu");
   if (!trigSimu) return;
 
-  int flag;
-
   // BEMC High Tower trigger
   int bht0 = trigSimu->bemc->barrelHighTowerTh(0);
   int bht1 = trigSimu->bemc->barrelHighTowerTh(1);
@@ -883,7 +881,7 @@ void StPicoDstMaker::fillEmcTrigger()
     int status;
     trigSimu->bemc->getTables()->getStatus(BTOW, towerId, status);
     int adc = trigSimu->bemc->barrelHighTowerAdc(towerId);
-    flag = 0;
+    int flag = 0;
 
     if (adc > bht1)
     {
@@ -912,26 +910,38 @@ void StPicoDstMaker::fillEmcTrigger()
 
 
   // BEMC Jet Patch trigger
-  const int NjpTh = 3;
-  int bjp[NjpTh] = {0};
+  int const bjpth0 = trigSimu->bemc->barrelJetPatchAdc(0);
+  int const bjpth1 = trigSimu->bemc->barrelJetPatchAdc(1);
+  int const bjpth2 = trigSimu->bemc->barrelJetPatchAdc(2);
 
-  for(int ith = 0; ith<NjpTh; ith++) {
-        bjp[ith] =  trigSimu->bemc->barrelJetPatchTh(ith);
-  }
+  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJP_Th(i, trigSimu->bemc->barrelJetPatchAdc(i));
 
-  for (int i = 0; i < NjpTh; ++i) mPicoDst->event()->setJP_Th(i, bjp[i]);
+  for(int jp = 0; jp<18; ++jp)
+  { // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.
+    int const jpAdc = trigSimu->bemc->barrelJetPatchAdc(jp);
 
-  for(int jp = 0; jp<18; jp++) { // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.
-      for(int ith = 0; ith<NjpTh; ith++) {
-            int jpAdc = trigSimu->bemc->barrelJetPatchAdc(jp);
-            if( jpAdc > bjp[ith]) {
-                flag = ith + 16;    // +16 to offset for HT trigger flags		// #Li Yi 2016.08.29 The above HT trigger flag was handled in the way which HT can be directly extracted, but I am not sure how to expand it to more. Leave it as it is now. Please update it. 
-                int counter = mPicoArrays[picoEmcTrigger]->GetEntries();
-                new((*(mPicoArrays[picoEmcTrigger]))[counter]) StPicoEmcTrigger(flag, jp, jpAdc);
-            }
-       }
+    int flag = 0;
+    if(jpAdc > bjpth0)
+    {
+      flag |= 1 << 4;
+    }
+
+    if(jpAdc > bjpth1)
+    {
+      flag |= 1 << 5;
+    }
+
+    if(jpAdc > bjpth2)
+    {
+      flag |= 1 << 6;
+    }
+
+    if(flag & 0x70)
+    {
+      int counter = mPicoArrays[picoEmcTrigger]->GetEntries();
+      new((*(mPicoArrays[picoEmcTrigger]))[counter]) StPicoEmcTrigger(flag, jp, jpAdc);
+    }
   }     
-
 }
 
 //-----------------------------------------------------------------------
