@@ -41,7 +41,7 @@ public:
 
   void setRunNumber(Int_t);
   void setProdMode(Int_t);
-  void setEmcMode(int const mode = 1); // 0:No EMC, 1:EMC On
+  void setEmcMode(bool const mode = true); // 0:No EMC, 1:EMC On
   /// Returns null pointer if no StPicoDst
   StPicoDst* picoDst();
   /// In read mode, returns pointer to the chain of .picoDst.root files

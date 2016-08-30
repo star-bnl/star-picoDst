@@ -579,7 +579,7 @@ void StPicoDstMaker::fillTracks()
   {
     StMuTrack* pTrk = (StMuTrack*)mMuDst->primaryTracks(i);
     if (!pTrk) continue;
-    if (pTrk->id() < 0 || pTrk->id() >= 50000)
+    if (pTrk->id() < 0 || pTrk->id() >= nTrk)
     {
       LOG_WARN << " This primary track has a track id out of the range : " << pTrk->id() << endm;
       continue;
@@ -592,7 +592,7 @@ void StPicoDstMaker::fillTracks()
   {
     StMuTrack* gTrk = (StMuTrack*)mMuDst->globalTracks(i);
     if (!gTrk) continue;
-    if (gTrk->id() < 0 || gTrk->id() >= 50000)
+    if (gTrk->id() < 0 || gTrk->id() >= nTrk)
     {
       LOG_WARN << " This global track has a track id out of the range : " << gTrk->id() << endm;
       continue;
