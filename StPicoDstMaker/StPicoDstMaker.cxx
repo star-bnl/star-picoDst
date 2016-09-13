@@ -6,7 +6,6 @@
 #include "TBranch.h"
 
 #include "StChain/StChain.h"
-#include "StarRoot/THack.h"
 #include "St_base/StMessMgr.h"
 
 #include "StEvent/StBTofHeader.h"
@@ -65,19 +64,19 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mBField(0),
-  mIoMode(ioRead), mProdMode(minbias), mEmcMode(1), mVtxMode(9999),
+  mIoMode(ioRead), mProdMode(minbias), mEmcMode(true), mVtxMode(9999),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
   mIndex2Primary{}, mMap2Track{},
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
-  mPicoAllArrays{}, mPicoArrays(mPicoAllArrays), mStatusArrays{}
+  mPicoArrays{}, mStatusArrays{}
 {
   streamerOff();
   createArrays();
   mPicoDst = new StPicoDst();
 
-  memset(mStatusArrays, (char)1, sizeof(mStatusArrays));
+  std::fill_n(mStatusArrays, sizeof(mStatusArrays)/sizeof(mStatusArrays[0]), 1);
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(int mode, char const* fileName, char const* name) : StPicoDstMaker(name)
@@ -113,15 +112,14 @@ void StPicoDstMaker::clearArrays()
 {
   for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
-    mPicoAllArrays[i]->Clear();
-    StPicoArrays::picoArrayCounters[i] = 0;
+    mPicoArrays[i]->Clear();
   }
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::SetStatus(char const* arrType, int status)
 {
   static char const* specNames[] = {"EventAll", 0};
-  static int const specIndex[] = { 0, -1};
+  static int const specIndex[] = { 0, __NALLPICOARRAYS__, -1};
 
   if (strncmp(arrType, "St", 2) == 0) arrType += 2; //Ignore first "St"
   for (int i = 0; specNames[i]; ++i)
@@ -129,7 +127,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
     if (strcmp(arrType, specNames[i])) continue;
     char* sta = mStatusArrays + specIndex[i];
     int   num = specIndex[i + 1] - specIndex[i];
-    memset(sta, status, num);
+    std::fill_n(sta, num, status);
     LOG_INFO << "StPicoDstMaker::SetStatus " << status << " to " << specNames[i] << endm;
     if (mIoMode == ioRead)
       setBranchAddresses(mChain);
@@ -137,7 +135,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
   }
 
   TRegexp re(arrType, 1);
-  for (int i = 0; i < __NALLARRAYS__; ++i)
+  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
     Ssiz_t len;
     if (re.Index(StPicoArrays::picoArrayNames[i], &len) < 0)   continue;
@@ -166,8 +164,8 @@ void StPicoDstMaker::setBranchAddresses(TChain* chain)
     ts = bname;
     ts += "*";
     chain->SetBranchStatus(ts, 1);
-    chain->SetBranchAddress(bname, mPicoAllArrays + i);
-    assert(tb->GetAddress() == (char*)(mPicoAllArrays + i));
+    chain->SetBranchAddress(bname, mPicoArrays + i);
+    assert(tb->GetAddress() == (char*)(mPicoArrays + i));
   }
   mTTree = mChain->GetTree();
 }
@@ -182,11 +180,10 @@ void StPicoDstMaker::createArrays()
 {
   for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
-    mPicoAllArrays[i] = new TClonesArray(StPicoArrays::picoArrayTypes[i], StPicoArrays::picoArraySizes[i]);
-    StPicoArrays::picoArrayCounters[i] = 0;
+    mPicoArrays[i] = new TClonesArray(StPicoArrays::picoArrayTypes[i], StPicoArrays::picoArraySizes[i]);
   }
 
-  mPicoDst->set(this);
+  mPicoDst->set(mPicoArrays);
 }
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Init()
@@ -396,7 +393,9 @@ Int_t StPicoDstMaker::openRead()
   if (mChain)
   {
     setBranchAddresses(mChain);
-    mPicoDst->set(this);
+    mChain->SetCacheSize(50e6);
+    mChain->AddBranchToCache("*");
+    mPicoDst->set(mPicoArrays);
   }
 
   return kStOK;
@@ -421,7 +420,7 @@ void StPicoDstMaker::openWrite()
       continue;
     }
 
-    mTTree->Branch(StPicoArrays::picoArrayNames[i], &mPicoAllArrays[i], bufsize, mSplit);
+    mTTree->Branch(StPicoArrays::picoArrayNames[i], &mPicoArrays[i], bufsize, mSplit);
   }
 }
 //-----------------------------------------------------------------------
@@ -437,7 +436,7 @@ void StPicoDstMaker::initEmc()
 void StPicoDstMaker::buildEmcIndex()
 {
   StEmcDetector* mEmcDet = mMuDst->emcCollection()->detector(kBarrelEmcTowerId);
-  memset(mEmcIndex, 0, sizeof(mEmcIndex));
+  std::fill_n(mEmcIndex, sizeof(mEmcIndex)/sizeof(mEmcIndex[0]), nullptr);
 
   if (!mEmcDet) return;
   for (size_t iMod = 1; iMod <= mEmcDet->numberOfModules(); ++iMod)
@@ -473,8 +472,7 @@ void StPicoDstMaker::Clear(char const* )
 //_____________________________________________________________________________
 void StPicoDstMaker::closeRead()
 {
-  if (mChain) mChain->Delete();
-  mChain = 0;
+  delete mChain; mChain = nullptr;
 }
 //_____________________________________________________________________________
 void StPicoDstMaker::closeWrite()
@@ -511,7 +509,6 @@ Int_t StPicoDstMaker::MakeRead()
     return kStWarn;
   }
   mChain->GetEntry(mEventCounter++);
-  mPicoDst->set(this);
   return kStOK;
 }
 //-----------------------------------------------------------------------
@@ -571,7 +568,6 @@ Int_t StPicoDstMaker::MakeWrite()
   if (Debug()) mPicoDst->printTracks();
 
   mTTree->Fill();
-  THack::IsTreeWritable(mTTree);
 
   return kStOK;
 }
@@ -583,7 +579,7 @@ void StPicoDstMaker::fillTracks()
   {
     StMuTrack* pTrk = (StMuTrack*)mMuDst->primaryTracks(i);
     if (!pTrk) continue;
-    if (pTrk->id() < 0 || pTrk->id() >= 50000)
+    if (pTrk->id() < 0 || pTrk->id() >= nTrk)
     {
       LOG_WARN << " This primary track has a track id out of the range : " << pTrk->id() << endm;
       continue;
@@ -596,7 +592,7 @@ void StPicoDstMaker::fillTracks()
   {
     StMuTrack* gTrk = (StMuTrack*)mMuDst->globalTracks(i);
     if (!gTrk) continue;
-    if (gTrk->id() < 0 || gTrk->id() >= 50000)
+    if (gTrk->id() < 0 || gTrk->id() >= nTrk)
     {
       LOG_WARN << " This global track has a track id out of the range : " << gTrk->id() << endm;
       continue;
@@ -1115,7 +1111,5 @@ bool StPicoDstMaker::selectVertex()
   }
 
   // Retrun false if selected vertex is not valid
-  if (!mMuDst->primaryVertex()) return false;
-  StThreeVectorF pVertex = mMuDst->primaryVertex()->position();
-  return !(fabs(pVertex.x()) < 1.e-5 && fabs(pVertex.y()) < 1.e-5 && fabs(pVertex.z()) < 1.e-5);
+  return mMuDst->primaryVertex() ? true : false;
 }

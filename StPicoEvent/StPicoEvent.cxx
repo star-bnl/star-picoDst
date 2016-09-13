@@ -42,11 +42,6 @@ StPicoEvent::StPicoEvent(StMuDst const& muDst) : StPicoEvent()
 
   mPrimaryVertex = ev->primaryVertexPosition();
   mPrimaryVertexError = ev->primaryVertexErrors();
-  if (mPrimaryVertex.x() == mPrimaryVertex.y() && mPrimaryVertex.y() == mPrimaryVertex.z())
-  {
-    mPrimaryVertex.set(-999., -999., -999.);
-    mPrimaryVertexError.set(0., 0., 0);
-  }
 
   if (StMuPrimaryVertex* pv = muDst.primaryVertex())
   {

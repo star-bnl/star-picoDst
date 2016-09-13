@@ -41,7 +41,7 @@ public:
 
   void setRunNumber(Int_t);
   void setProdMode(Int_t);
-  void setEmcMode(int const mode = 1); // 0:No EMC, 1:EMC On
+  void setEmcMode(bool const mode = true); // 0:No EMC, 1:EMC On
   /// Returns null pointer if no StPicoDst
   StPicoDst* picoDst();
   /// In read mode, returns pointer to the chain of .picoDst.root files
@@ -109,7 +109,7 @@ protected:
 
   Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write
   Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation, 4: - save only electron or muon candidates
-  Int_t      mEmcMode;        //! EMC ON(=1)/OFF(=0)
+  bool       mEmcMode;        //! EMC ON(=1)/OFF(=0)
   Int_t      mVtxMode;
 
   TString   mInputFileName;        //! *.list - MuDst or picoDst
@@ -135,11 +135,7 @@ protected:
   Int_t  mQTSlewBinEdge[8][16][8];  // Bin Edge for QT slewing correction
   Int_t  mQTSlewCorr[8][16][8];     // QT Slewing correction
 
-  //
-  friend class StPicoDst;
-
-  TClonesArray*   mPicoAllArrays[__NALLPICOARRAYS__];
-  TClonesArray**  mPicoArrays;
+  TClonesArray*   mPicoArrays[__NALLPICOARRAYS__];
   char            mStatusArrays[__NALLPICOARRAYS__];
 
   ClassDef(StPicoDstMaker, 0)
@@ -153,6 +149,6 @@ inline void StPicoDstMaker::setCompression(int comp) { mCompression = comp; }
 inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
 inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
 inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
-inline void StPicoDstMaker::setEmcMode(int const mode) { mEmcMode = mode; }
+inline void StPicoDstMaker::setEmcMode(bool const mode) { mEmcMode = mode; }
 inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; }
 #endif

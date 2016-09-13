@@ -20,17 +20,6 @@ public:
   StPicoTrack(StMuTrack const* globalTrack, StMuTrack const* primaryTrack, double magField, StThreeVectorD const& pVtx, StDcaGeometry const& dcaG);
   virtual ~StPicoTrack() {}
 
-  // This class doesn't allocate any data on the heap so the default copy ctor
-  // and assignment operators are sufficient. The compiler will generate them
-  // by default for this class because the destructor is explicitely defined.
-  // But please note that this auto-generation feature is deprecated, i.e.
-  // it might disappear from future compiler implementations.
-  // Explicitely requesting the defaults as done below is the way to go, however
-  // it currently doesn't work with STAR version of rootcint which is needed for
-  // ROOT I/O on this object.
-  //StPicoTrack(StPicoTrack const&) = default;
-  //StPicoTrack& operator=(StPicoTrack const&) = default;
-
   virtual void Print(Char_t const* option = "") const;  ///< Print track info
 
   Int_t   id() const;

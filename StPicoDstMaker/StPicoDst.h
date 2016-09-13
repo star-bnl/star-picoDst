@@ -24,8 +24,6 @@ public:
   /// constructor
   StPicoDst();
   /// set the pointers to the TClonesArrays
-  static void set(StPicoDstMaker* maker);
-  /// set the pointers to the TClonesArrays
   static void set(TClonesArray**);
   /// resets the pointers to the TClonesArrays to 0
   static void unset();

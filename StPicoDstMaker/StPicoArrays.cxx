@@ -2,7 +2,7 @@
 
 //              ARRAY NAMES
 //============================================================================================
-const char* StPicoArrays::picoArrayNames [__NALLPICOARRAYS__] = {"Event", "Tracks", "EmcTrigger", "MtdTrigger",
+const char* StPicoArrays::picoArrayNames [__NALLPICOARRAYS__] = {"Event", "Track", "EmcTrigger", "MtdTrigger",
                                                                  "BTOWHit", "BTofHit", "MtdHit",
                                                                  "EmcPidTraits", "BTofPidTraits", "MtdPidTraits"
                                                                 };
@@ -23,12 +23,5 @@ int StPicoArrays::picoArraySizes [__NALLPICOARRAYS__    ] = {1, 1000, 100, 100,
                                                              100, 100, 100,
                                                              100, 100, 100
                                                             };
-
-//              ARRAY COUNTERS
-//============================================================================================
-int   StPicoArrays::picoArrayCounters [__NALLPICOARRAYS__ ] = {0, 0, 0, 0,
-                                                               0, 0, 0,
-                                                               0, 0, 0
-                                                              };
 StPicoArrays::StPicoArrays()
 {}
