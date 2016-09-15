@@ -32,41 +32,45 @@ protected:
   /// array of TClonesArrays
   static TClonesArray** picoArrays;
 
+  static TObject* getPicoObject(StPicoArrayType arrayType, unsigned int idx);
+  static unsigned int numberOfEntries(StPicoArrayType arrayType);
+
 public:
   /// returns pointer to the n-th TClonesArray
-  static TClonesArray* picoArray(int type) { return picoArrays[type]; }
+  static TClonesArray* picoArray(StPicoArrayType type) { return picoArrays[static_cast<unsigned int>(type)]; }
 
   /// returns pointer to current StPicoEvent (class holding the event wise information)
-  static StPicoEvent* event() { return (StPicoEvent*)picoArrays[picoEvent]->UncheckedAt(0); }
+  static StPicoEvent* event() { return (StPicoEvent*)getPicoObject(StPicoArrayType::Event, 0); }
   /// return pointer to i-th track
-  static StPicoTrack* track(int i) { return (StPicoTrack*)picoArrays[picoTrack]->UncheckedAt(i); }
+  static StPicoTrack* track(int i) { return (StPicoTrack*)getPicoObject(StPicoArrayType::Track, i); }
   /// return pointer to i-th trigger data
-  static StPicoEmcTrigger* emcTrigger(int i) { return (StPicoEmcTrigger*)picoArrays[picoEmcTrigger]->UncheckedAt(i); }
-  static StPicoMtdTrigger* mtdTrigger(int i) { return (StPicoMtdTrigger*)picoArrays[picoMtdTrigger]->UncheckedAt(i); }
+  static StPicoEmcTrigger* emcTrigger(int i) { return (StPicoEmcTrigger*)getPicoObject(StPicoArrayType::EmcTrigger, i); }
+  static StPicoMtdTrigger* mtdTrigger(int i) { return (StPicoMtdTrigger*)getPicoObject(StPicoArrayType::MtdTrigger, i); }
 
   /// return pointer to i-th btow hit
-  static StPicoBTOWHit* btowHit(int i) { return (StPicoBTOWHit*)picoArrays[picoBTOWHit]->UncheckedAt(i); }
+  static StPicoBTOWHit* btowHit(int i) { return (StPicoBTOWHit*)getPicoObject(StPicoArrayType::BTOWHit, i); }
   /// return pointer to i-th btof hit
-  static StPicoBTofHit* btofHit(int i) { return (StPicoBTofHit*)picoArrays[picoBTofHit]->UncheckedAt(i); }
+  static StPicoBTofHit* btofHit(int i) { return (StPicoBTofHit*)getPicoObject(StPicoArrayType::BTofHit, i); }
   /// return pointer to i-th mtd hit
-  static StPicoMtdHit*  mtdHit(int i) { return (StPicoMtdHit*)picoArrays[picoMtdHit]->UncheckedAt(i); }
+  static StPicoMtdHit*  mtdHit(int i) { return (StPicoMtdHit*)getPicoObject(StPicoArrayType::MtdHit, i); }
 
   /// return pointer to i-th emc pidTraits
-  static StPicoEmcPidTraits* emcPidTraits(int i) { return (StPicoEmcPidTraits*)picoArrays[picoEmcPidTraits]->UncheckedAt(i); }
+  static StPicoEmcPidTraits* emcPidTraits(int i) { return (StPicoEmcPidTraits*)getPicoObject(StPicoArrayType::EmcPidTraits, i); }
   /// return pointer to i-th btof pidTraits
-  static StPicoBTofPidTraits* btofPidTraits(int i) { return (StPicoBTofPidTraits*)picoArrays[picoBTofPidTraits]->UncheckedAt(i); }
+  static StPicoBTofPidTraits* btofPidTraits(int i) { return (StPicoBTofPidTraits*)getPicoObject(StPicoArrayType::BTofPidTraits, i); }
   /// return pointer to i-th mtd pidTraits
-  static StPicoMtdPidTraits* mtdPidTraits(int i) { return (StPicoMtdPidTraits*)picoArrays[picoMtdPidTraits]->UncheckedAt(i); }
+  static StPicoMtdPidTraits* mtdPidTraits(int i) { return (StPicoMtdPidTraits*)getPicoObject(StPicoArrayType::MtdPidTraits, i); }
 
-  static unsigned int numberOfTracks() { return picoArrays[picoTrack]->GetEntries(); }
-  static unsigned int numberOfEmcTriggers() { return picoArrays[picoEmcTrigger]->GetEntries(); }
-  static unsigned int numberOfMtdTriggers() { return picoArrays[picoMtdTrigger]->GetEntries(); }
-  static unsigned int numberOfBTOWHits() { return picoArrays[picoBTOWHit]->GetEntries(); }
-  static unsigned int numberOfBTofHits() { return picoArrays[picoBTofHit]->GetEntries(); }
-  static unsigned int numberOfMtdHits() { return picoArrays[picoMtdHit]->GetEntries(); }
-  static unsigned int numberOfEmcPidTraits() { return picoArrays[picoEmcPidTraits] ->GetEntries(); }
-  static unsigned int numberOfBTofPidTraits() { return picoArrays[picoBTofPidTraits]->GetEntries(); }
-  static unsigned int numberOfMtdPidTraits() { return picoArrays[picoMtdPidTraits] ->GetEntries(); }
+  static unsigned int numberOfEvents() { return numberOfEntries(StPicoArrayType::Event); }
+  static unsigned int numberOfTracks() { return numberOfEntries(StPicoArrayType::Track); }
+  static unsigned int numberOfEmcTriggers() { return numberOfEntries(StPicoArrayType::EmcTrigger); }
+  static unsigned int numberOfMtdTriggers() { return numberOfEntries(StPicoArrayType::MtdTrigger); }
+  static unsigned int numberOfBTOWHits() { return numberOfEntries(StPicoArrayType::BTOWHit); }
+  static unsigned int numberOfBTofHits() { return numberOfEntries(StPicoArrayType::BTofHit); }
+  static unsigned int numberOfMtdHits() { return numberOfEntries(StPicoArrayType::MtdHit); }
+  static unsigned int numberOfEmcPidTraits() { return numberOfEntries(StPicoArrayType::EmcPidTraits); }
+  static unsigned int numberOfBTofPidTraits() { return numberOfEntries(StPicoArrayType::BTofPidTraits); }
+  static unsigned int numberOfMtdPidTraits() { return numberOfEntries(StPicoArrayType::MtdPidTraits); }
 
   void print() const; ///< Print basic event info
   static void printTracks();
@@ -78,5 +82,15 @@ public:
   static void printBTofPidTraits();
   static void printMtdPidTraits();
 };
+
+inline TObject* StPicoDst::getPicoObject(StPicoArrayType arrayType, unsigned int const idx)
+{
+  return picoArrays[static_cast<unsigned int>(arrayType)]->UncheckedAt(idx);
+}
+
+inline unsigned int StPicoDst::numberOfEntries(StPicoArrayType arrayType)
+{
+  return picoArrays[static_cast<unsigned int>(arrayType)]->GetEntries();
+}
 
 #endif

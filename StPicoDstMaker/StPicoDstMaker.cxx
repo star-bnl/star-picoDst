@@ -632,29 +632,30 @@ void StPicoDstMaker::fillTracks()
       continue;
     }
 
-    int counter = mPicoArrays[picoTrack]->GetEntries();
-    new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex()->position(), *dcaG);
+    unsigned int counter = mPicoDst->numberOfTracks();
+    // new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex()->position(), *dcaG);
+    new((*(mPicoDst->picoArray(StPicoArrayType::Track)))[counter]) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex()->position(), *dcaG);
 
-    StPicoTrack* picoTrk = (StPicoTrack*)mPicoArrays[picoTrack]->At(counter);
+    StPicoTrack* picoTrk = (StPicoTrack*)mPicoArrays[static_cast<unsigned>(StPicoArrayType::Track)]->At(counter);
     // Fill pid traits
     if (id >= 0)
     {
-      Int_t emc_index = mPicoArrays[picoEmcPidTraits]->GetEntries();
-      new((*(mPicoArrays[picoEmcPidTraits]))[emc_index]) StPicoEmcPidTraits(counter, id, adc0, e, dist, nhit, ntow);
+      unsigned int emc_index = mPicoDst->numberOfEmcPidTraits();
+      new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::EmcPidTraits)]))[emc_index]) StPicoEmcPidTraits(counter, id, adc0, e, dist, nhit, ntow);
       picoTrk->setEmcPidTraitsIndex(emc_index);
     }
 
     if (gTrk->tofHit())
     {
-      Int_t btof_index = mPicoArrays[picoBTofPidTraits]->GetEntries();
-      new((*(mPicoArrays[picoBTofPidTraits]))[btof_index]) StPicoBTofPidTraits(gTrk, pTrk, counter);
+      unsigned int btof_index = mPicoDst->numberOfBTofPidTraits();
+      new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::BTofPidTraits)]))[btof_index]) StPicoBTofPidTraits(gTrk, pTrk, counter);
       picoTrk->setBTofPidTraitsIndex(btof_index);
     }
 
     if (gTrk->mtdHit())
     {
-      Int_t mtd_index = mPicoArrays[picoMtdPidTraits]->GetEntries();
-      new((*(mPicoArrays[picoMtdPidTraits]))[mtd_index]) StPicoMtdPidTraits(gTrk->mtdHit(), &(gTrk->mtdPidTraits()), counter);
+      unsigned int mtd_index = mPicoDst->numberOfMtdPidTraits();
+      new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::MtdPidTraits)]))[mtd_index]) StPicoMtdPidTraits(gTrk->mtdHit(), &(gTrk->mtdPidTraits()), counter);
       picoTrk->setMtdPidTraitsIndex(mtd_index);
     }
   }
@@ -841,8 +842,8 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillEvent()
 {
-  int counter = mPicoArrays[picoEvent]->GetEntries();
-  new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(*mMuDst);
+  unsigned int counter = mPicoDst->numberOfEvents();
+  new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::Event)]))[counter]) StPicoEvent(*mMuDst);
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillEmcTrigger()
@@ -887,8 +888,8 @@ void StPicoDstMaker::fillEmcTrigger()
 
     if (flag & 0xf)
     {
-      int counter = mPicoArrays[picoEmcTrigger]->GetEntries();
-      new((*(mPicoArrays[picoEmcTrigger]))[counter]) StPicoEmcTrigger(flag, towerId, adc);
+      unsigned int counter = mPicoDst->numberOfEmcTriggers();
+      new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::EmcTrigger)]))[counter]) StPicoEmcTrigger(flag, towerId, adc);
     }
   }
 
@@ -922,8 +923,8 @@ void StPicoDstMaker::fillEmcTrigger()
 
     if(flag & 0x70)
     {
-      int counter = mPicoArrays[picoEmcTrigger]->GetEntries();
-      new((*(mPicoArrays[picoEmcTrigger]))[counter]) StPicoEmcTrigger(flag, jp, jpAdc);
+      unsigned int counter = mPicoDst->numberOfEmcTriggers();
+      new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::EmcTrigger)]))[counter]) StPicoEmcTrigger(flag, jp, jpAdc);
     }
   }     
 }
@@ -931,8 +932,8 @@ void StPicoDstMaker::fillEmcTrigger()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillMtdTrigger()
 {
-  int counter = mPicoArrays[picoMtdTrigger]->GetEntries();
-  new((*(mPicoArrays[picoMtdTrigger]))[counter]) StPicoMtdTrigger(*mMuDst, mQTtoModule, mQTSlewBinEdge, mQTSlewCorr);
+  unsigned int counter = mPicoDst->numberOfMtdTriggers();
+  new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::MtdTrigger)]))[counter]) StPicoMtdTrigger(*mMuDst, mQTtoModule, mQTSlewBinEdge, mQTSlewCorr);
 }
 
 
@@ -948,8 +949,8 @@ void StPicoDstMaker::fillBTOWHits()
     int adc = aHit->adc();
     float energy = aHit->energy();
 
-    int counter = mPicoArrays[picoBTOWHit]->GetEntries();
-    new((*(mPicoArrays[picoBTOWHit]))[counter]) StPicoBTOWHit(softId, adc, energy);
+    unsigned int counter = mPicoDst->numberOfBTOWHits();
+    new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::BTOWHit)]))[counter]) StPicoBTOWHit(softId, adc, energy);
   }
 }
 //-----------------------------------------------------------------------
@@ -961,8 +962,8 @@ void StPicoDstMaker::fillBTofHits()
     if (aHit->tray() > 120) continue;
     int cellId = (aHit->tray() - 1) * 192 + (aHit->module() - 1) * 6 + (aHit->cell() - 1);
 
-    int counter = mPicoArrays[picoBTofHit]->GetEntries();
-    new((*(mPicoArrays[picoBTofHit]))[counter]) StPicoBTofHit(cellId);
+    unsigned int counter = mPicoDst->numberOfBTofHits();
+    new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::BTofHit)]))[counter]) StPicoBTofHit(cellId);
   }
 }
 //-----------------------------------------------------------------------
@@ -974,8 +975,8 @@ void StPicoDstMaker::fillMtdHits()
   {
     StMuMtdHit* hit = (StMuMtdHit*)mMuDst->mtdHit(i);
     if (!hit) continue;
-    Int_t counter = mPicoArrays[picoMtdHit]->GetEntries();
-    new((*(mPicoArrays[picoMtdHit]))[counter]) StPicoMtdHit(hit);
+    unsigned int counter = mPicoDst->numberOfMtdHits();
+    new((*(mPicoArrays[static_cast<unsigned>(StPicoArrayType::MtdHit)]))[counter]) StPicoMtdHit(hit);
   }
   unsigned int nHits = mPicoDst->numberOfMtdHits();
 
