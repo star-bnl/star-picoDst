@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <unordered_map>
 #include <string>
 #include "TRegexp.h"
 #include "TChain.h"
@@ -68,7 +69,6 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
-  mIndex2Primary{},
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
   mPicoArrays{}, mStatusArrays{}
 {
@@ -104,7 +104,6 @@ StPicoDstMaker::~StPicoDstMaker()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearIndices()
 {
-  for (size_t i = 0; i < nTrk; ++i) mIndex2Primary[i] = -1;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearArrays()
@@ -573,17 +572,15 @@ Int_t StPicoDstMaker::MakeWrite()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillTracks()
 {
+  std::unordered_map<unsigned int, unsigned int> index2Primary;
+
   Int_t nPrimarys = mMuDst->numberOfPrimaryTracks();
   for (int i = 0; i < nPrimarys; ++i)
   {
     StMuTrack* pTrk = (StMuTrack*)mMuDst->primaryTracks(i);
     if (!pTrk) continue;
-    if (pTrk->id() < 0 || pTrk->id() >= nTrk)
-    {
-      LOG_WARN << " This primary track has a track id out of the range : " << pTrk->id() << endm;
-      continue;
-    }
-    mIndex2Primary[pTrk->id()] = i;
+
+    index2Primary[pTrk->id()] = i;
   }
 
   Int_t nGlobals = mMuDst->numberOfGlobalTracks();
@@ -596,8 +593,9 @@ void StPicoDstMaker::fillTracks()
       LOG_WARN << " This global track has a track id out of the range : " << gTrk->id() << endm;
       continue;
     }
-    int index = mIndex2Primary[gTrk->id()];
-    StMuTrack* pTrk = (index >= 0) ? (StMuTrack*)mMuDst->primaryTracks(index) : 0;
+
+    StMuTrack const* const pTrk = index2Primary.find(gTrk->id()) != index2Primary.end() ?
+                                  (StMuTrack*)mMuDst->primaryTracks(index2Primary[gTrk->id()]) : nullptr;
 
     int id = -1;
     int adc0;

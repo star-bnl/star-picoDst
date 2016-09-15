@@ -125,8 +125,6 @@ protected:
   int mCompression;
   int mBufferSize;
 
-  Int_t mIndex2Primary[nTrk];
-
   // MTD map from backleg to QT
   Int_t  mModuleToQT[30][5];        // Map from module to QT board index
   Int_t  mModuleToQTPos[30][5];     // Map from module to the position on QA board
