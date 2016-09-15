@@ -14,11 +14,10 @@ class StPicoEmcPidTraits;
 class StPicoBTofPidTraits;
 class StPicoMtdPidTraits;
 
-#include "TObject.h"
 #include "TClonesArray.h"
 #include "StPicoDstMaker/StPicoArrays.h"
 
-class StPicoDst : public TObject
+class StPicoDst
 {
 public:
   StPicoDst() {}
@@ -78,8 +77,6 @@ public:
   static void printEmcPidTraits();
   static void printBTofPidTraits();
   static void printMtdPidTraits();
-
-  ClassDef(StPicoDst, 1)
 };
 
 #endif
