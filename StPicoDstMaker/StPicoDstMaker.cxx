@@ -68,7 +68,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
-  mIndex2Primary{}, mMap2Track{},
+  mIndex2Primary{},
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
   mPicoArrays{}, mStatusArrays{}
 {
@@ -105,7 +105,6 @@ StPicoDstMaker::~StPicoDstMaker()
 void StPicoDstMaker::clearIndices()
 {
   for (size_t i = 0; i < nTrk; ++i) mIndex2Primary[i] = -1;
-  for (size_t i = 0; i < nTrk; ++i) mMap2Track[i] = -1;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearArrays()
@@ -845,14 +844,6 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillEvent()
 {
-  Int_t nTracks = mPicoArrays[picoTrack]->GetEntries();
-
-  for (int i = 0; i < nTracks; ++i)
-  {
-    StPicoTrack* t = (StPicoTrack*)mPicoArrays[picoTrack]->UncheckedAt(i);
-    if (!t) continue;
-    mMap2Track[t->id()] = i;     // map2track index - used for v0 branch
-  }
   int counter = mPicoArrays[picoEvent]->GetEntries();
   new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(*mMuDst);
 }
