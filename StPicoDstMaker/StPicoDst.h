@@ -21,8 +21,9 @@ class StPicoMtdPidTraits;
 class StPicoDst : public TObject
 {
 public:
-  /// constructor
-  StPicoDst();
+  StPicoDst() {}
+  virtual ~StPicoDst() {}
+
   /// set the pointers to the TClonesArrays
   static void set(TClonesArray**);
   /// resets the pointers to the TClonesArrays to 0
