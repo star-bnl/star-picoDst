@@ -102,10 +102,6 @@ StPicoDstMaker::~StPicoDstMaker()
   delete mPicoDst;
 }
 //-----------------------------------------------------------------------
-void StPicoDstMaker::clearIndices()
-{
-}
-//-----------------------------------------------------------------------
 void StPicoDstMaker::clearArrays()
 {
   for (int i = 0; i < __NALLPICOARRAYS__; ++i)
@@ -544,8 +540,6 @@ Int_t StPicoDstMaker::MakeWrite()
     mEmcCollection = mMuDst->emcCollection();
     if (mEmcCollection) buildEmcIndex();
   }
-
-  clearIndices();
 
   Int_t refMult = muEvent->refMult();
   mBField = muEvent->magneticField();

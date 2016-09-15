@@ -70,7 +70,6 @@ protected:
   void setBranchAddresses();
   void closeRead();
   void setBranchAddresses(TChain*);
-  void clearIndices();
 
   void buildEmcIndex();
   void initEmc();
