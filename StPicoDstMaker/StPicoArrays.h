@@ -2,8 +2,9 @@
 #define StPicoArrays_h
 
 enum class StPicoArrayType : unsigned int {Event=0, Track, EmcTrigger, MtdTrigger,
-                                            BTOWHit, BTofHit, MtdHit,
-		                                        EmcPidTraits, BTofPidTraits, MtdPidTraits};
+                                           BTOWHit, BTofHit, MtdHit,
+                                           EmcPidTraits, BTofPidTraits, MtdPidTraits};
+
 enum NPICOARRAYS { __NALLPICOARRAYS__ = 10 };
 
 class StPicoArrays {

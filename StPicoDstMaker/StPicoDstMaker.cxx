@@ -633,7 +633,6 @@ void StPicoDstMaker::fillTracks()
     }
 
     unsigned int counter = mPicoDst->numberOfTracks();
-    // new((*(mPicoArrays[picoTrack]))[counter]) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex()->position(), *dcaG);
     void *memptr = getPlacement(StPicoArrayType::Track, counter);
     new(memptr) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex()->position(), *dcaG);
 
