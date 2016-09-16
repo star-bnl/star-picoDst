@@ -3,7 +3,7 @@
 
 enum picoDstTypes {picoEvent=0, picoTrack, picoEmcTrigger, picoMtdTrigger,
 		   picoBTOWHit, picoBTofHit, picoMtdHit,
-		   picoEmcPidTraits, picoBTofPidTraits, picoMtdPidTraits};
+		   picoBEmcPidTraits, picoBTofPidTraits, picoMtdPidTraits};
 enum NPICOARRAYS { __NALLPICOARRAYS__ = 10 };
 
 class StPicoArrays {

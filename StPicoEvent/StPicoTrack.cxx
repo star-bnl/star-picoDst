@@ -23,7 +23,7 @@ StPicoTrack::StPicoTrack() : TObject(), mId(0), mChi2(std::numeric_limits<unsign
   mDedx(0.), mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mCharge(0),
   mNSigmaPion(std::numeric_limits<short>::max()), mNSigmaKaon(std::numeric_limits<short>::max()),
   mNSigmaProton(std::numeric_limits<short>::max()), mNSigmaElectron(std::numeric_limits<short>::max()),
-  mTopologyMap{}, mEmcPidTraitsIndex(-1), mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
+  mTopologyMap{}, mBEmcPidTraitsIndex(-1), mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
 {
 }
 

@@ -75,11 +75,11 @@ public:
   bool isPrimary() const;
 
   // MTD pid traits
-  void setEmcPidTraitsIndex(Int_t index);
+  void setBEmcPidTraitsIndex(Int_t index);
   void setBTofPidTraitsIndex(Int_t index);
   void setMtdPidTraitsIndex(Int_t index);
 
-  Int_t emcPidTraitsIndex() const;
+  Int_t bemcPidTraitsIndex() const;
   Int_t bTofPidTraitsIndex() const;
   Int_t mtdPidTraitsIndex() const;
 
@@ -101,14 +101,14 @@ protected:
   UInt_t   mTopologyMap[2];   // Toplogy Map data0 and data1. See StEvent/StTrackTopologyMap.cxx
 
   // pidTraits
-  Short_t  mEmcPidTraitsIndex;  // index of the EMC  pidTratis in the event
+  Short_t  mBEmcPidTraitsIndex;  // index of the EMC  pidTratis in the event
   Short_t  mBTofPidTraitsIndex; // index of the BTOF pidTratis in the event
   Short_t  mMtdPidTraitsIndex;  // index of the MTD  pidTratis in the event
 
   ClassDef(StPicoTrack, 1)
 };
 
-inline void StPicoTrack::setEmcPidTraitsIndex(Int_t index) { mEmcPidTraitsIndex = (Short_t)index; }
+inline void StPicoTrack::setBEmcPidTraitsIndex(Int_t index) { mBEmcPidTraitsIndex = (Short_t)index; }
 inline void StPicoTrack::setBTofPidTraitsIndex(Int_t index) { mBTofPidTraitsIndex = (Short_t)index; }
 inline void StPicoTrack::setMtdPidTraitsIndex(Int_t index) { mMtdPidTraitsIndex = (Short_t)index; }
 inline Int_t   StPicoTrack::id() const { return mId; }
@@ -130,7 +130,7 @@ inline Float_t StPicoTrack::nSigmaKaon() const { return mNSigmaKaon / 100.f; }
 inline Float_t StPicoTrack::nSigmaProton() const { return mNSigmaProton / 100.f; }
 inline Float_t StPicoTrack::nSigmaElectron() const { return mNSigmaElectron / 100.f; }
 inline UInt_t  StPicoTrack::topologyMap(unsigned int idx) const { return mTopologyMap[idx]; }
-inline Int_t   StPicoTrack::emcPidTraitsIndex() const { return mEmcPidTraitsIndex; }
+inline Int_t   StPicoTrack::bemcPidTraitsIndex() const { return mBEmcPidTraitsIndex; }
 inline Int_t   StPicoTrack::bTofPidTraitsIndex() const { return mBTofPidTraitsIndex; }
 inline Int_t   StPicoTrack::mtdPidTraitsIndex() const { return mMtdPidTraitsIndex; }
 inline bool    StPicoTrack::hasPxl1Hit() const { return hftHitsMap() >> 0 & 0x1; }

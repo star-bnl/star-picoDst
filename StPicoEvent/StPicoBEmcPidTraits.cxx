@@ -2,11 +2,11 @@
 #include "TMath.h"
 #include "St_base/StMessMgr.h"
 
-#include "StPicoEvent/StPicoEmcPidTraits.h"
+#include "StPicoEvent/StPicoBEmcPidTraits.h"
 
 
 //----------------------------------------------------------------------------------
-StPicoEmcPidTraits::StPicoEmcPidTraits() :
+StPicoBEmcPidTraits::StPicoBEmcPidTraits() :
   mTrackIndex(-1),
   mBEMCId(-9999), mBTOWADC0(-9999), mBTOWE0(-9999), mBTOWE(-9999),
   mBEMCDistZ(-9999), mBEMCDistPhi(-9999),
@@ -19,7 +19,7 @@ StPicoEmcPidTraits::StPicoEmcPidTraits() :
 }
 
 //----------------------------------------------------------------------------------
-StPicoEmcPidTraits::StPicoEmcPidTraits(Int_t index, Int_t id, Int_t adc0, Float_t const* e, Float_t const* dist, Int_t const* nhit, Int_t const* ntow): StPicoEmcPidTraits()
+StPicoBEmcPidTraits::StPicoBEmcPidTraits(Int_t index, Int_t id, Int_t adc0, Float_t const* e, Float_t const* dist, Int_t const* nhit, Int_t const* ntow): StPicoBEmcPidTraits()
 {
   mTrackIndex = (index > std::numeric_limits<short>::max()) ? -1 : (Short_t)index;
 
@@ -44,13 +44,13 @@ StPicoEmcPidTraits::StPicoEmcPidTraits(Int_t index, Int_t id, Int_t adc0, Float_
 }
 
 //----------------------------------------------------------------------------------
-StPicoEmcPidTraits::~StPicoEmcPidTraits()
+StPicoBEmcPidTraits::~StPicoBEmcPidTraits()
 {
   // destructor
 }
 
 //----------------------------------------------------------------------------------
-void StPicoEmcPidTraits::Print(const Char_t* option) const
+void StPicoBEmcPidTraits::Print(const Char_t* option) const
 {
   LOG_INFO << "Matched track index = " << mTrackIndex << endm;
   LOG_INFO << " BEMC Id = " << bemcId() << " BTOW ADC0 = " << adc0() << " energy0 = " << e0() << " e = " << e() << endm;

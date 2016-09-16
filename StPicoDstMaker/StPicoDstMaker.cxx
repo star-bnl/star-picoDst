@@ -48,7 +48,7 @@
 #include "StPicoEvent/StPicoBTOWHit.h"
 #include "StPicoEvent/StPicoBTofHit.h"
 #include "StPicoEvent/StPicoMtdHit.h"
-#include "StPicoEvent/StPicoEmcPidTraits.h"
+#include "StPicoEvent/StPicoBEmcPidTraits.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
@@ -176,7 +176,7 @@ void  StPicoDstMaker::streamerOff()
   StPicoEmcTrigger::Class()->IgnoreTObjectStreamer();
   StPicoMtdTrigger::Class()->IgnoreTObjectStreamer();
   StPicoBTofPidTraits::Class()->IgnoreTObjectStreamer();
-  StPicoEmcPidTraits::Class()->IgnoreTObjectStreamer();
+  StPicoBEmcPidTraits::Class()->IgnoreTObjectStreamer();
   StPicoMtdPidTraits::Class()->IgnoreTObjectStreamer();
 }
 //-----------------------------------------------------------------------
@@ -639,9 +639,9 @@ void StPicoDstMaker::fillTracks()
     // Fill pid traits
     if (id >= 0)
     {
-      Int_t emc_index = mPicoArrays[picoEmcPidTraits]->GetEntries();
-      new((*(mPicoArrays[picoEmcPidTraits]))[emc_index]) StPicoEmcPidTraits(counter, id, adc0, e, dist, nhit, ntow);
-      picoTrk->setEmcPidTraitsIndex(emc_index);
+      Int_t bemc_index = mPicoArrays[picoBEmcPidTraits]->GetEntries();
+      new((*(mPicoArrays[picoBEmcPidTraits]))[bemc_index]) StPicoBEmcPidTraits(counter, id, adc0, e, dist, nhit, ntow);
+      picoTrk->setBEmcPidTraitsIndex(bemc_index);
     }
 
     if (gTrk->tofHit())

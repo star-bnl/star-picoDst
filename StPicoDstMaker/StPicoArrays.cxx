@@ -11,7 +11,7 @@ const char* StPicoArrays::picoArrayNames [__NALLPICOARRAYS__] = {"Event", "Track
 //============================================================================================
 const char* StPicoArrays::picoArrayTypes [__NALLPICOARRAYS__] = {"StPicoEvent", "StPicoTrack", "StPicoEmcTrigger", "StPicoMtdTrigger",
                                                                  "StPicoBTOWHit", "StPicoBTofHit", "StPicoMtdHit",
-                                                                 "StPicoEmcPidTraits", "StPicoBTofPidTraits", "StPicoMtdPidTraits"
+                                                                 "StPicoBEmcPidTraits", "StPicoBTofPidTraits", "StPicoMtdPidTraits"
                                                                 };
 
 //              ARRAY SIZES
