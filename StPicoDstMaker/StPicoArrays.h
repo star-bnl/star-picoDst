@@ -1,9 +1,6 @@
 #ifndef StPicoArrays_h
 #define StPicoArrays_h
 
-enum picoDstTypes {picoEvent=0, picoTrack, picoEmcTrigger, picoMtdTrigger,
-		   picoBTOWHit, picoBTofHit, picoMtdHit,
-		   picoEmcPidTraits, picoBTofPidTraits, picoMtdPidTraits};
 enum NPICOARRAYS { __NALLPICOARRAYS__ = 10 };
 
 class StPicoArrays {
@@ -17,6 +14,10 @@ class StPicoArrays {
 
 /// maximum sizes of the TClonesArrays
   static int           picoArraySizes[__NALLPICOARRAYS__    ];
+
+  enum TypeIndex {Event=0, Track, EmcTrigger, MtdTrigger,
+                  BTOWHit, BTofHit, MtdHit,
+                  EmcPidTraits, BTofPidTraits, MtdPidTraits};
 };
 
 #endif
