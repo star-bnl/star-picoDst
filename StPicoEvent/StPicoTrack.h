@@ -45,10 +45,10 @@ public:
   UInt_t  topologyMap(unsigned int) const;
 
   StPhysicalHelixD helix(float B) const;
-  bool isPxl1() const;
-  bool isPxl2() const;
-  bool isIst() const;
-  bool isSst() const;
+  bool hasPxl1Hit() const;
+  bool hasPxl2Hit() const;
+  bool hasIstHit() const;
+  bool hasSstHit() const;
   bool isHft() const;
   bool isHFTTrack() const;
 
@@ -114,11 +114,11 @@ inline UInt_t  StPicoTrack::topologyMap(unsigned int idx) const { return mTopolo
 inline Int_t   StPicoTrack::emcPidTraitsIndex() const { return mEmcPidTraitsIndex; }
 inline Int_t   StPicoTrack::bTofPidTraitsIndex() const { return mBTofPidTraitsIndex; }
 inline Int_t   StPicoTrack::mtdPidTraitsIndex() const { return mMtdPidTraitsIndex; }
-inline bool    StPicoTrack::isPxl1() const { return hftHitsMap() >> 0 & 0x1; }
-inline bool    StPicoTrack::isPxl2() const { return hftHitsMap() >> 1 & 0x3; }
-inline bool    StPicoTrack::isIst()  const { return hftHitsMap() >> 3 & 0x3; }
-inline bool    StPicoTrack::isSst()  const { return hftHitsMap() >> 5 & 0x3; }
-inline bool    StPicoTrack::isHft() const { return isPxl1() && isPxl2() && (isIst() || isSst()); }
+inline bool    StPicoTrack::hasPxl1Hit() const { return hftHitsMap() >> 0 & 0x1; }
+inline bool    StPicoTrack::hasPxl2Hit() const { return hftHitsMap() >> 1 & 0x3; }
+inline bool    StPicoTrack::hasIstHit()  const { return hftHitsMap() >> 3 & 0x3; }
+inline bool    StPicoTrack::hasSstHit()  const { return hftHitsMap() >> 5 & 0x3; }
+inline bool    StPicoTrack::isHft() const { return hasPxl1Hit() && hasPxl2Hit() && (hasIstHit() || hasSstHit()); }
 inline bool StPicoTrack::isHFTTrack() const { return isHft(); }
 
 /**
