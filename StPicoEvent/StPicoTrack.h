@@ -70,6 +70,7 @@ protected:
   Char_t   mNHitsFit;         // q*nHitsFit - TPC
   Char_t   mNHitsMax;         // nHitsMax - TPC
   UChar_t  mNHitsDedx;        // nHitsDedx - TPC
+  Char_t   mCharge;
   Short_t  mNSigmaPion;       // nsigmaPi * 100
   Short_t  mNSigmaKaon;       // nsigmaK * 100
   Short_t  mNSigmaProton;     // nsigmaP * 100
@@ -96,7 +97,7 @@ inline StThreeVectorF const& StPicoTrack::pMom() const { return mPMomentum; }
 inline StThreeVectorF const& StPicoTrack::gMom() const { return mGMomentum; }
 inline StThreeVectorF const& StPicoTrack::origin() const { return mOrigin; }
 inline StThreeVectorF const& StPicoTrack::dca() const { return mOrigin; }
-inline Short_t StPicoTrack::charge() const { return (mNHitsFit > 0) ? +1 : -1; }
+inline Short_t StPicoTrack::charge() const { return static_cast<Short_t>(mCharge); }
 inline Int_t   StPicoTrack::nHitsFit() const { return (mNHitsFit > 0) ? (Int_t)mNHitsFit : (Int_t)(-1 * mNHitsFit); }
 inline Int_t   StPicoTrack::nHitsMax() const { return mNHitsMax; }
 inline Int_t   StPicoTrack::nHitsDedx() const { return mNHitsDedx; }
