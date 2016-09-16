@@ -13,7 +13,7 @@ StPicoTrack::StPicoTrack() : TObject(), mId(0), mChi2(std::numeric_limits<unsign
   mDedx(0), mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mCharge(0),
   mNSigmaPion(std::numeric_limits<short>::max()), mNSigmaKaon(std::numeric_limits<short>::max()),
   mNSigmaProton(std::numeric_limits<short>::max()), mNSigmaElectron(std::numeric_limits<short>::max()),
-  mMap0(0), mMap1(0), mEmcPidTraitsIndex(-1), mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
+  mTopologyMap{}, mEmcPidTraitsIndex(-1), mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
 {
 }
 
@@ -70,8 +70,8 @@ StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, dou
     mNSigmaProton   = (fabs(t->nSigmaProton() * 100.)   > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaProton() * 100.));
     mNSigmaElectron = (fabs(t->nSigmaElectron() * 100.) > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaElectron() * 100.));
 
-    mMap0 = (UInt_t)(t->topologyMap().data(0));
-    mMap1 = (UInt_t)(t->topologyMap().data(1));
+    mTopologyMap[0] = (UInt_t)(t->topologyMap().data(0));
+    mTopologyMap[1] = (UInt_t)(t->topologyMap().data(1));
   }
 }
 //----------------------------------------------------------------------------------

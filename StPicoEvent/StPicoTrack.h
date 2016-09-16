@@ -42,8 +42,7 @@ public:
   Float_t nSigmaProton() const;
   Float_t nSigmaElectron() const;
 
-  UInt_t  map0() const;
-  UInt_t  map1() const;
+  UInt_t  topologyMap(unsigned int) const;
 
   StPhysicalHelixD helix(float B) const;
   bool isHFTTrack() const;
@@ -75,8 +74,7 @@ protected:
   Short_t  mNSigmaKaon;       // nsigmaK * 100
   Short_t  mNSigmaProton;     // nsigmaP * 100
   Short_t  mNSigmaElectron;   // nsigmaE * 100
-  UInt_t   mMap0;             // TopologyMap data0
-  UInt_t   mMap1;             // TopologyMap data1
+  UInt_t   mTopologyMap[2];   // Toplogy Map data0 and data1. See StEvent/StTrackTopologyMap.cxx
 
   // pidTraits
   Short_t  mEmcPidTraitsIndex;  // index of the EMC  pidTratis in the event
@@ -101,14 +99,13 @@ inline Short_t StPicoTrack::charge() const { return static_cast<Short_t>(mCharge
 inline Int_t   StPicoTrack::nHitsFit() const { return (mNHitsFit > 0) ? (Int_t)mNHitsFit : (Int_t)(-1 * mNHitsFit); }
 inline Int_t   StPicoTrack::nHitsMax() const { return mNHitsMax; }
 inline Int_t   StPicoTrack::nHitsDedx() const { return mNHitsDedx; }
-inline UInt_t  StPicoTrack::hftHitsMap() const { return mMap0 >> 1 & 0x7F; }
+inline UInt_t  StPicoTrack::hftHitsMap() const { return topologyMap(0) >> 1 & 0x7F; }
 inline Float_t StPicoTrack::dEdx() const { return mDedx / 1000.f; }
 inline Float_t StPicoTrack::nSigmaPion() const { return mNSigmaPion / 100.f; }
 inline Float_t StPicoTrack::nSigmaKaon() const { return mNSigmaKaon / 100.f; }
 inline Float_t StPicoTrack::nSigmaProton() const { return mNSigmaProton / 100.f; }
 inline Float_t StPicoTrack::nSigmaElectron() const { return mNSigmaElectron / 100.f; }
-inline UInt_t  StPicoTrack::map0() const { return mMap0; }
-inline UInt_t  StPicoTrack::map1() const { return mMap1; }
+inline UInt_t  StPicoTrack::topologyMap(unsigned int idx) const { return mTopologyMap[idx]; }
 inline Int_t   StPicoTrack::emcPidTraitsIndex() const { return mEmcPidTraitsIndex; }
 inline Int_t   StPicoTrack::bTofPidTraitsIndex() const { return mBTofPidTraitsIndex; }
 inline Int_t   StPicoTrack::mtdPidTraitsIndex() const { return mMtdPidTraitsIndex; }
