@@ -24,7 +24,7 @@ void StPicoDst::set(TClonesArray** thePicoArrays)
   picoArrays    = thePicoArrays;
 }
 //-----------------------------------------------------------------------
-void StPicoDst::Print(Option_t* option) const
+void StPicoDst::print() const
 {
   LOG_INFO << "\n=========== event header =============\n\n";
   LOG_INFO << " fill/run/event Id = " << event()->fillId() << "/" << event()->runId() << "/" << event()->eventId() << "\n";

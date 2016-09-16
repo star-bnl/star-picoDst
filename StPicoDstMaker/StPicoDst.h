@@ -21,7 +21,7 @@ class StPicoDst
 {
 public:
   StPicoDst() {}
-  virtual ~StPicoDst() {}
+  ~StPicoDst() {}
 
   /// set the pointers to the TClonesArrays
   static void set(TClonesArray**);
@@ -68,7 +68,7 @@ public:
   static unsigned int numberOfBTofPidTraits() { return picoArrays[picoBTofPidTraits]->GetEntries(); }
   static unsigned int numberOfMtdPidTraits() { return picoArrays[picoMtdPidTraits] ->GetEntries(); }
 
-  virtual void Print(Option_t* option = "") const; ///< Print basic event info
+  void print() const; ///< Print basic event info
   static void printTracks();
   static void printTriggers();
   static void printBTOWHits();
