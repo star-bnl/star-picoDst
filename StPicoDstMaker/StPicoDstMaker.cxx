@@ -166,8 +166,18 @@ void StPicoDstMaker::setBranchAddresses(TChain* chain)
 //-----------------------------------------------------------------------
 void  StPicoDstMaker::streamerOff()
 {
+  // This is to to save space on the file. No need for TObject bits for this structure.
+  // see: https://root.cern.ch/doc/master/classTClass.html#a606b0442d6fec4b1cd52f43bca73aa51
   StPicoEvent::Class()->IgnoreTObjectStreamer();
   StPicoTrack::Class()->IgnoreTObjectStreamer();
+  StPicoBTofHit::Class()->IgnoreTObjectStreamer();
+  StPicoBTOWHit::Class()->IgnoreTObjectStreamer();
+  StPicoMtdHit::Class()->IgnoreTObjectStreamer();
+  StPicoEmcTrigger::Class()->IgnoreTObjectStreamer();
+  StPicoMtdTrigger::Class()->IgnoreTObjectStreamer();
+  StPicoBTofPidTraits::Class()->IgnoreTObjectStreamer();
+  StPicoEmcPidTraits::Class()->IgnoreTObjectStreamer();
+  StPicoMtdPidTraits::Class()->IgnoreTObjectStreamer();
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::createArrays()
