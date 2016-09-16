@@ -582,11 +582,6 @@ void StPicoDstMaker::fillTracks()
   {
     StMuTrack* gTrk = (StMuTrack*)mMuDst->globalTracks(i);
     if (!gTrk) continue;
-    if (gTrk->id() < 0 || gTrk->id() >= nTrk)
-    {
-      LOG_WARN << " This global track has a track id out of the range : " << gTrk->id() << endm;
-      continue;
-    }
 
     StMuTrack const* const pTrk = index2Primary.find(gTrk->id()) != index2Primary.end() ?
                                   (StMuTrack*)mMuDst->primaryTracks(index2Primary[gTrk->id()]) : nullptr;
