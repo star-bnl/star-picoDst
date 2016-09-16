@@ -28,7 +28,7 @@ StPicoEvent::StPicoEvent():
   mZdcSumAdcEast(0), mZdcSumAdcWest(0),
   mZdcSmdEastHorizontal{}, mZdcSmdEastVertical{}, mZdcSmdWestHorizontal{}, mZdcSmdWestVertical{},
   mBbcAdcEast{}, mBbcAdcWest{},
-  mHT_Th{}
+  mHighTowerThreshold{}, mJetPatchThreshold{}
 {}
 
 StPicoEvent::StPicoEvent(StMuDst const& muDst) : StPicoEvent()

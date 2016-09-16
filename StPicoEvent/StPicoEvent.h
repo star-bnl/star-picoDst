@@ -95,15 +95,14 @@ public:
   UShort_t bbcAdcEast(const Int_t i) const;
   UShort_t bbcAdcWest(const Int_t i) const;
 
-  Int_t   ht_th(const Int_t i) const;
-  Int_t   jp_th(const Int_t i) const;
+  Int_t   highTowerThreshold(const Int_t i) const;
+  Int_t   jetPatchThreshold(const Int_t i) const;
 
   int      year() const;
   int      day() const;
 
-// set functions for trigger thresholds
-  void     setHT_Th(const Int_t i, const Int_t th);
-  void     setJP_Th(const Int_t i, const Int_t th);
+  void     setHighTowerThreshold(const Int_t i, const Int_t th);
+  void     setJetPatchThreshold(const Int_t i, const Int_t th);
 
 protected:
   Int_t    mRunId;
@@ -172,9 +171,9 @@ protected:
   UShort_t mBbcAdcWest[24];
 
   // Online HT thresholds
-  UChar_t mHT_Th[4];
+  UChar_t mHighTowerThreshold[4];
   // Online JP thresholds BEMC only
-  UChar_t mJP_Th[4];
+  UChar_t mJetPatchThreshold[4];
 
   ClassDef(StPicoEvent, 1)
 };
@@ -258,8 +257,8 @@ inline Float_t  StPicoEvent::ZdcSmdWestVertical(int i) const { return (Float_t)m
 inline UShort_t StPicoEvent::bbcAdcEast(const Int_t i) const { return mBbcAdcEast[i]; }
 inline UShort_t StPicoEvent::bbcAdcWest(const Int_t i) const { return mBbcAdcWest[i]; }
 
-inline Int_t   StPicoEvent::ht_th(const Int_t i) const { return mHT_Th[i]; }
-inline void StPicoEvent::setHT_Th(const Int_t i, const Int_t th) { mHT_Th[i] = (UChar_t)th; }
-inline Int_t   StPicoEvent::jp_th(const Int_t i) const { return mJP_Th[i]; }
-inline void StPicoEvent::setJP_Th(const Int_t i, const Int_t th) { mJP_Th[i] = (UChar_t)th; }
+inline Int_t   StPicoEvent::highTowerThreshold(const Int_t i) const { return mHighTowerThreshold[i]; }
+inline void StPicoEvent::setHighTowerThreshold(const Int_t i, const Int_t th) { mHighTowerThreshold[i] = (UChar_t)th; }
+inline Int_t   StPicoEvent::jetPatchThreshold(const Int_t i) const { return mJetPatchThreshold[i]; }
+inline void StPicoEvent::setJetPatchThreshold(const Int_t i, const Int_t th) { mJetPatchThreshold[i] = (UChar_t)th; }
 #endif
