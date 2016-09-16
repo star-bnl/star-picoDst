@@ -9,6 +9,7 @@
 #include "StChain/StMaker.h"
 #include "StPicoDstMaker/StPicoEnumerations.h"
 #include "StPicoDstMaker/StPicoArrays.h"
+#include "StPicoDstMaker/StPicoDst.h"
 
 class TFile;
 class TTree;
@@ -18,7 +19,6 @@ class StEmcCollection;
 class StEmcPosition;
 class StEmcGeom;
 class StEmcRawHit;
-class StPicoDst;
 class StPicoEvent;
 
 
@@ -134,6 +134,10 @@ protected:
   TClonesArray*   mPicoArrays[__NALLPICOARRAYS__];
   char            mStatusArrays[__NALLPICOARRAYS__];
 
+private:
+
+  TClonesArray& getPicoArray(StPicoArrayType type);
+
   ClassDef(StPicoDstMaker, 0)
 };
 
@@ -147,4 +151,10 @@ inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
 inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
 inline void StPicoDstMaker::setEmcMode(bool const mode) { mEmcMode = mode; }
 inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; }
+
+inline TClonesArray& StPicoDstMaker::getPicoArray(StPicoArrayType type)
+{
+  return *mPicoDst->picoArray(type);
+}
+
 #endif
