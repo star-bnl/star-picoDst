@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <unordered_map>
 #include <string>
 #include "TRegexp.h"
 #include "TChain.h"
@@ -68,7 +69,6 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
-  mIndex2Primary{}, mMap2Track{},
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
   mPicoArrays{}, mStatusArrays{}
 {
@@ -100,12 +100,6 @@ StPicoDstMaker::~StPicoDstMaker()
 {
   delete mChain;
   delete mPicoDst;
-}
-//-----------------------------------------------------------------------
-void StPicoDstMaker::clearIndices()
-{
-  for (size_t i = 0; i < nTrk; ++i) mIndex2Primary[i] = -1;
-  for (size_t i = 0; i < nTrk; ++i) mMap2Track[i] = -1;
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearArrays()
@@ -172,8 +166,18 @@ void StPicoDstMaker::setBranchAddresses(TChain* chain)
 //-----------------------------------------------------------------------
 void  StPicoDstMaker::streamerOff()
 {
+  // This is to to save space on the file. No need for TObject bits for this structure.
+  // see: https://root.cern.ch/doc/master/classTClass.html#a606b0442d6fec4b1cd52f43bca73aa51
   StPicoEvent::Class()->IgnoreTObjectStreamer();
   StPicoTrack::Class()->IgnoreTObjectStreamer();
+  StPicoBTofHit::Class()->IgnoreTObjectStreamer();
+  StPicoBTOWHit::Class()->IgnoreTObjectStreamer();
+  StPicoMtdHit::Class()->IgnoreTObjectStreamer();
+  StPicoEmcTrigger::Class()->IgnoreTObjectStreamer();
+  StPicoMtdTrigger::Class()->IgnoreTObjectStreamer();
+  StPicoBTofPidTraits::Class()->IgnoreTObjectStreamer();
+  StPicoEmcPidTraits::Class()->IgnoreTObjectStreamer();
+  StPicoMtdPidTraits::Class()->IgnoreTObjectStreamer();
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::createArrays()
@@ -547,8 +551,6 @@ Int_t StPicoDstMaker::MakeWrite()
     if (mEmcCollection) buildEmcIndex();
   }
 
-  clearIndices();
-
   Int_t refMult = muEvent->refMult();
   mBField = muEvent->magneticField();
 
@@ -574,17 +576,15 @@ Int_t StPicoDstMaker::MakeWrite()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillTracks()
 {
+  std::unordered_map<unsigned int, unsigned int> index2Primary;
+
   Int_t nPrimarys = mMuDst->numberOfPrimaryTracks();
   for (int i = 0; i < nPrimarys; ++i)
   {
     StMuTrack* pTrk = (StMuTrack*)mMuDst->primaryTracks(i);
     if (!pTrk) continue;
-    if (pTrk->id() < 0 || pTrk->id() >= nTrk)
-    {
-      LOG_WARN << " This primary track has a track id out of the range : " << pTrk->id() << endm;
-      continue;
-    }
-    mIndex2Primary[pTrk->id()] = i;
+
+    index2Primary[pTrk->id()] = i;
   }
 
   Int_t nGlobals = mMuDst->numberOfGlobalTracks();
@@ -592,13 +592,9 @@ void StPicoDstMaker::fillTracks()
   {
     StMuTrack* gTrk = (StMuTrack*)mMuDst->globalTracks(i);
     if (!gTrk) continue;
-    if (gTrk->id() < 0 || gTrk->id() >= nTrk)
-    {
-      LOG_WARN << " This global track has a track id out of the range : " << gTrk->id() << endm;
-      continue;
-    }
-    int index = mIndex2Primary[gTrk->id()];
-    StMuTrack* pTrk = (index >= 0) ? (StMuTrack*)mMuDst->primaryTracks(index) : 0;
+
+    StMuTrack const* const pTrk = index2Primary.find(gTrk->id()) != index2Primary.end() ?
+                                  (StMuTrack*)mMuDst->primaryTracks(index2Primary[gTrk->id()]) : nullptr;
 
     int id = -1;
     int adc0;
@@ -845,14 +841,6 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillEvent()
 {
-  Int_t nTracks = mPicoArrays[picoTrack]->GetEntries();
-
-  for (int i = 0; i < nTracks; ++i)
-  {
-    StPicoTrack* t = (StPicoTrack*)mPicoArrays[picoTrack]->UncheckedAt(i);
-    if (!t) continue;
-    mMap2Track[t->id()] = i;     // map2track index - used for v0 branch
-  }
   int counter = mPicoArrays[picoEvent]->GetEntries();
   new((*(mPicoArrays[picoEvent]))[counter]) StPicoEvent(*mMuDst);
 }
@@ -870,7 +858,7 @@ void StPicoDstMaker::fillEmcTrigger()
   int bht2 = trigSimu->bemc->barrelHighTowerTh(2);
   int bht3 = trigSimu->bemc->barrelHighTowerTh(3);
   LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
-  for (int i = 0; i < 4; ++i) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
+  for (int i = 0; i < 4; ++i) mPicoDst->event()->setHighTowerThreshold(i, trigSimu->bemc->barrelHighTowerTh(i));
 
   for (int towerId = 1; towerId <= 4800; ++towerId)
   {
@@ -910,7 +898,7 @@ void StPicoDstMaker::fillEmcTrigger()
   int const bjpth1 = trigSimu->bemc->barrelJetPatchTh(1);
   int const bjpth2 = trigSimu->bemc->barrelJetPatchTh(2);
 
-  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJP_Th(i, trigSimu->bemc->barrelJetPatchTh(i));
+  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJetPatchThreshold(i, trigSimu->bemc->barrelJetPatchTh(i));
 
   for(int jp = 0; jp<18; ++jp)
   { // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.

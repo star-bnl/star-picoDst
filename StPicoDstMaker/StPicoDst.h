@@ -14,15 +14,15 @@ class StPicoEmcPidTraits;
 class StPicoBTofPidTraits;
 class StPicoMtdPidTraits;
 
-#include "TObject.h"
 #include "TClonesArray.h"
 #include "StPicoDstMaker/StPicoArrays.h"
 
-class StPicoDst : public TObject
+class StPicoDst
 {
 public:
-  /// constructor
-  StPicoDst();
+  StPicoDst() {}
+  ~StPicoDst() {}
+
   /// set the pointers to the TClonesArrays
   static void set(TClonesArray**);
   /// resets the pointers to the TClonesArrays to 0
@@ -68,7 +68,7 @@ public:
   static unsigned int numberOfBTofPidTraits() { return picoArrays[picoBTofPidTraits]->GetEntries(); }
   static unsigned int numberOfMtdPidTraits() { return picoArrays[picoMtdPidTraits] ->GetEntries(); }
 
-  virtual void Print(Option_t* option = "") const; ///< Print basic event info
+  void print() const; ///< Print basic event info
   static void printTracks();
   static void printTriggers();
   static void printBTOWHits();
@@ -77,8 +77,6 @@ public:
   static void printEmcPidTraits();
   static void printBTofPidTraits();
   static void printMtdPidTraits();
-
-  ClassDef(StPicoDst, 1)
 };
 
 #endif

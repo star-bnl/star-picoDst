@@ -70,7 +70,6 @@ protected:
   void setBranchAddresses();
   void closeRead();
   void setBranchAddresses(TChain*);
-  void clearIndices();
 
   void buildEmcIndex();
   void initEmc();
@@ -124,9 +123,6 @@ protected:
   int mSplit;
   int mCompression;
   int mBufferSize;
-
-  Int_t mIndex2Primary[nTrk];
-  Int_t mMap2Track[nTrk];
 
   // MTD map from backleg to QT
   Int_t  mModuleToQT[30][5];        // Map from module to QT board index

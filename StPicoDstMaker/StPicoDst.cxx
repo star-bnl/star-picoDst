@@ -14,11 +14,6 @@
 TClonesArray** StPicoDst::picoArrays       = 0;
 
 //-----------------------------------------------------------------------
-StPicoDst::StPicoDst()
-{
-  /* no-op */
-}
-//-----------------------------------------------------------------------
 void StPicoDst::unset()
 {
   picoArrays   = 0;
@@ -29,13 +24,13 @@ void StPicoDst::set(TClonesArray** thePicoArrays)
   picoArrays    = thePicoArrays;
 }
 //-----------------------------------------------------------------------
-void StPicoDst::Print(Option_t* option) const
+void StPicoDst::print() const
 {
   LOG_INFO << "\n=========== event header =============\n\n";
   LOG_INFO << " fill/run/event Id = " << event()->fillId() << "/" << event()->runId() << "/" << event()->eventId() << "\n";
   LOG_INFO << " vertex = " << event()->primaryVertex() << "\n";
   LOG_INFO << " refMult = " << event()->refMult() << " refMultFtpc = " << event()->refMultFtpc() << "\n";
-  LOG_INFO << " nVpdHits e/w = " << event()->nVpdHitsEast() << "/" << event()->nVpdHitsWest() << " nT0 = " << event()->nT0() << " vzVpd = " << event()->vzVpd() << "\n";
+  LOG_INFO << " nVpdHits e/w = " << event()->nVpdHitsEast() << "/" << event()->nVpdHitsWest() << " nTofT0 = " << event()->nTofT0() << " vzVpd = " << event()->vzVpd() << "\n";
   LOG_INFO << "=====================================\n\n";
 }
 //-----------------------------------------------------------------------
