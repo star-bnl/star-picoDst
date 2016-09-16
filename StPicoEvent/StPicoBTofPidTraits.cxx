@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ * $Id$
+ *
+ * Author: Xin Dong (xdong@lbl.gov)
+ ***************************************************************************
+ *
+ * Holds BTOF PID information for a StPicoTrack
+ */
+
 #include <limits>
 #include "TMath.h"
 
@@ -73,3 +83,9 @@ void StPicoBTofPidTraits::Print(const Char_t* option) const
   LOG_INFO << " BTOF cellId = " << btofCellId() << " tof = " << btof() << " beta = " << btofBeta() << endm;
   LOG_INFO << " BTOF match = " << btofMatchFlag() << " yLocal/zLocal " << btofYLocal() << " " << btofZLocal() << endm;
 }
+
+/***************************************************************************
+ *
+ * $Log$
+ *
+ ***************************************************************************/

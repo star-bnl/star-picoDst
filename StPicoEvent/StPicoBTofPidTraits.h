@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ * $Id$
+ *
+ * Author: Xin Dong (xdong@lbl.gov)
+ ***************************************************************************
+ *
+ * Holds BTOF PID information for a StPicoTrack
+ */
+
 #ifndef StPicoBTofPidTraits_h
 #define StPicoBTofPidTraits_h
 
@@ -13,6 +23,7 @@ public:
   virtual ~StPicoBTofPidTraits();
   virtual void Print(const Char_t* option = "") const;
 
+  /// StPicoTrack index in picoDst event
   Int_t   trackIndex() const;
   Int_t   btofCellId() const;
   Int_t   btofMatchFlag() const;
@@ -45,3 +56,9 @@ inline Float_t StPicoBTofPidTraits::btofYLocal() const { return (Float_t)mBTofYL
 inline Float_t StPicoBTofPidTraits::btofZLocal() const { return (Float_t)mBTofZLocal / 1000.; }
 inline StThreeVectorF StPicoBTofPidTraits::btofHitPos() const { return StThreeVectorF(mBTofHitPosX / 100., mBTofHitPosY / 100., mBTofHitPosZ / 100.); }
 #endif
+
+/***************************************************************************
+ *
+ * $Log$
+ *
+ ***************************************************************************/
