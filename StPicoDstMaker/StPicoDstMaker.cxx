@@ -637,7 +637,8 @@ void StPicoDstMaker::fillTracks()
     void *memptr = getPlacement(StPicoArrayType::Track, counter);
     new(memptr) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex()->position(), *dcaG);
 
-    StPicoTrack* picoTrk = (StPicoTrack*)mPicoArrays[static_cast<unsigned>(StPicoArrayType::Track)]->At(counter);
+    StPicoTrack* picoTrk = mPicoDst->track(counter);
+
     // Fill pid traits
     if (id >= 0)
     {
