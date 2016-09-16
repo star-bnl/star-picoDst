@@ -137,6 +137,7 @@ protected:
 private:
 
   TClonesArray& getPicoArray(StPicoArrayType type);
+  TObject* getPlacement(StPicoArrayType type, unsigned int objIndex);
 
   ClassDef(StPicoDstMaker, 0)
 };
@@ -155,6 +156,11 @@ inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; 
 inline TClonesArray& StPicoDstMaker::getPicoArray(StPicoArrayType type)
 {
   return *mPicoDst->picoArray(type);
+}
+
+inline TObject* StPicoDstMaker::getPlacement(StPicoArrayType type, unsigned int objIndex)
+{
+  return getPicoArray(type)[objIndex];
 }
 
 #endif
