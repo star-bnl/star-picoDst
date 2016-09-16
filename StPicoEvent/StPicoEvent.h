@@ -72,7 +72,7 @@ public:
 
   Int_t    nVpdHitsEast() const;
   Int_t    nVpdHitsWest() const;
-  Int_t    nT0() const;
+  Int_t    nTofT0() const;
   Float_t  vzVpd() const;
 
   Float_t  ZDCx() const;
@@ -146,7 +146,7 @@ protected:
 
   UChar_t  mNVpdHitsEast;
   UChar_t  mNVpdHitsWest;
-  UShort_t mNT0;             // number of T0 particles in BTOF self calibration
+  UShort_t mNTofT0;             // number of T0 particles in BTOF self calibration
   Float_t  mVzVpd;
 
   UInt_t  mZDCx;
@@ -234,7 +234,7 @@ inline Int_t    StPicoEvent::numberOfSsdHits() const { return (Int_t)(mNHitsHFT[
 
 inline Int_t    StPicoEvent::nVpdHitsEast() const { return (Int_t)mNVpdHitsEast; }
 inline Int_t    StPicoEvent::nVpdHitsWest() const { return (Int_t)mNVpdHitsWest; }
-inline Int_t    StPicoEvent::nT0() const { return (Int_t)mNT0; }
+inline Int_t    StPicoEvent::nTofT0() const { return (Int_t)mNTofT0; }
 inline Float_t  StPicoEvent::vzVpd() const { return mVzVpd; }
 
 inline Float_t  StPicoEvent::ZDCx() const { return (Float_t)mZDCx; }

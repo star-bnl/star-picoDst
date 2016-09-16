@@ -30,7 +30,7 @@ void StPicoDst::Print(Option_t* option) const
   LOG_INFO << " fill/run/event Id = " << event()->fillId() << "/" << event()->runId() << "/" << event()->eventId() << "\n";
   LOG_INFO << " vertex = " << event()->primaryVertex() << "\n";
   LOG_INFO << " refMult = " << event()->refMult() << " refMultFtpc = " << event()->refMultFtpc() << "\n";
-  LOG_INFO << " nVpdHits e/w = " << event()->nVpdHitsEast() << "/" << event()->nVpdHitsWest() << " nT0 = " << event()->nT0() << " vzVpd = " << event()->vzVpd() << "\n";
+  LOG_INFO << " nVpdHits e/w = " << event()->nVpdHitsEast() << "/" << event()->nVpdHitsWest() << " nTofT0 = " << event()->nTofT0() << " vzVpd = " << event()->vzVpd() << "\n";
   LOG_INFO << "=====================================\n\n";
 }
 //-----------------------------------------------------------------------

@@ -22,7 +22,7 @@ StPicoEvent::StPicoEvent():
   mRefMult4NegEast(0), mRefMult4PosEast(0), mRefMult4NegWest(0), mRefMult4PosWest(0),
   mRefMultHalfNegEast(0), mRefMultHalfPosEast(0), mRefMultHalfNegWest(0), mRefMultHalfPosWest(0),
   mGRefMult(0), mNumberOfGlobalTracks(0), mbTofTrayMultiplicity(0), mNHitsHFT{},
-  mNVpdHitsEast(0), mNVpdHitsWest(0), mNT0(0), mVzVpd(-999.),
+  mNVpdHitsEast(0), mNVpdHitsWest(0), mNTofT0(0), mVzVpd(-999.),
   mZDCx(0), mBBCx(0), mBackgroundRate(0), mBbcBlueBackgroundRate(0), mBbcYellowBackgroundRate(0),
   mBbcEastRate(0), mBbcWestRate(0), mZdcEastRate(0), mZdcWestRate(0),
   mZdcSumAdcEast(0), mZdcSumAdcWest(0),
@@ -85,7 +85,7 @@ StPicoEvent::StPicoEvent(StMuDst const& muDst) : StPicoEvent()
   {
     mNVpdHitsEast = (UChar_t)(header->numberOfVpdHits(east));
     mNVpdHitsWest = (UChar_t)(header->numberOfVpdHits(west));
-    mNT0 = (UShort_t)(header->nTzero());
+    mNTofT0 = (UShort_t)(header->nTzero());
     mVzVpd = header->vpdVz();
   }
 
