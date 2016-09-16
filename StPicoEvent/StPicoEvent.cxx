@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ * $Id$
+ *
+ * Author: Xin Dong (xdong@lbl.gov), Mustafa Mustafa (mmustafa@lbl.gov)
+ ***************************************************************************
+ *
+ * Class holding event level variables for PicoDst production
+ */
+
 #include <algorithm>
 #include <limits>
 #include "StEvent/StEventTypes.h"
@@ -142,3 +152,9 @@ bool StPicoEvent::isTrigger(unsigned int id) const
 {
   return std::find(mTriggerIds.begin(), mTriggerIds.end(), id) != mTriggerIds.end();
 }
+
+/***************************************************************************
+ *
+ * $Log$
+ *
+ ***************************************************************************/
