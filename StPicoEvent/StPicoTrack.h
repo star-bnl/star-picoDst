@@ -51,6 +51,7 @@ public:
   bool hasSstHit() const;
   bool isHft() const;
   bool isHFTTrack() const;
+  bool hasHft4Layers() const;
 
   /** Checks whether this track is associated with a primary vertex. */
   bool isPrimary() const;
@@ -119,7 +120,8 @@ inline bool    StPicoTrack::hasPxl2Hit() const { return hftHitsMap() >> 1 & 0x3;
 inline bool    StPicoTrack::hasIstHit()  const { return hftHitsMap() >> 3 & 0x3; }
 inline bool    StPicoTrack::hasSstHit()  const { return hftHitsMap() >> 5 & 0x3; }
 inline bool    StPicoTrack::isHft() const { return hasPxl1Hit() && hasPxl2Hit() && (hasIstHit() || hasSstHit()); }
-inline bool StPicoTrack::isHFTTrack() const { return isHft(); }
+inline bool    StPicoTrack::isHFTTrack() const { return isHft(); }
+inline bool    StPicoTrack::hasHft4Layers() const { return hasPxl1Hit() && hasPxl2Hit() && hasIstHit() && hasSstHit(); }
 
 /**
  * The default "primary" momentum is (0, 0, 0) but it is expected to have
