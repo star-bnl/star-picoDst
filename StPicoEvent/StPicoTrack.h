@@ -70,7 +70,7 @@ protected:
   StThreeVectorF mPMomentum;  // primary momentum, (0.,0.,0.) if none
   StThreeVectorF mGMomentum;  // global momentum at dca to primary vertex
   StThreeVectorF mOrigin;     // origin at dca to primary vertex
-  UShort_t mDedx;             // dEdx*1000
+  Float_t  mDedx;             // dEdx in nominal STAR units: GeV/cm
   Char_t   mNHitsFit;         // q*nHitsFit - TPC
   Char_t   mNHitsMax;         // nHitsMax - TPC
   UChar_t  mNHitsDedx;        // nHitsDedx - TPC
@@ -105,7 +105,7 @@ inline Int_t   StPicoTrack::nHitsFit() const { return (mNHitsFit > 0) ? (Int_t)m
 inline Int_t   StPicoTrack::nHitsMax() const { return mNHitsMax; }
 inline Int_t   StPicoTrack::nHitsDedx() const { return mNHitsDedx; }
 inline UInt_t  StPicoTrack::hftHitsMap() const { return topologyMap(0) >> 1 & 0x7F; }
-inline Float_t StPicoTrack::dEdx() const { return mDedx / 1000.f; }
+inline Float_t StPicoTrack::dEdx() const { return mDedx;}
 inline Float_t StPicoTrack::nSigmaPion() const { return mNSigmaPion / 100.f; }
 inline Float_t StPicoTrack::nSigmaKaon() const { return mNSigmaKaon / 100.f; }
 inline Float_t StPicoTrack::nSigmaProton() const { return mNSigmaProton / 100.f; }
