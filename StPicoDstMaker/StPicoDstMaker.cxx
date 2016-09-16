@@ -104,7 +104,7 @@ StPicoDstMaker::~StPicoDstMaker()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::clearArrays()
 {
-  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
+  for (int i = 0; i < StPicoArrays::NAllPicoArrays; ++i)
   {
     mPicoArrays[i]->Clear();
   }
@@ -113,7 +113,7 @@ void StPicoDstMaker::clearArrays()
 void StPicoDstMaker::SetStatus(char const* arrType, int status)
 {
   static char const* specNames[] = {"EventAll", 0};
-  static int const specIndex[] = { 0, __NALLPICOARRAYS__, -1};
+  static int const specIndex[] = { 0, StPicoArrays::NAllPicoArrays, -1};
 
   if (strncmp(arrType, "St", 2) == 0) arrType += 2; //Ignore first "St"
   for (int i = 0; specNames[i]; ++i)
@@ -129,7 +129,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
   }
 
   TRegexp re(arrType, 1);
-  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
+  for (int i = 0; i < StPicoArrays::NAllPicoArrays; ++i)
   {
     Ssiz_t len;
     if (re.Index(StPicoArrays::picoArrayNames[i], &len) < 0)   continue;
@@ -145,7 +145,7 @@ void StPicoDstMaker::setBranchAddresses(TChain* chain)
   if (!chain) return;
   chain->SetBranchStatus("*", 0);
   TString ts;
-  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
+  for (int i = 0; i < StPicoArrays::NAllPicoArrays; ++i)
   {
     if (mStatusArrays[i] == 0) continue;
     char const* bname = StPicoArrays::picoArrayNames[i];
@@ -172,7 +172,7 @@ void  StPicoDstMaker::streamerOff()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::createArrays()
 {
-  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
+  for (int i = 0; i < StPicoArrays::NAllPicoArrays; ++i)
   {
     mPicoArrays[i] = new TClonesArray(StPicoArrays::picoArrayTypes[i], StPicoArrays::picoArraySizes[i]);
   }
@@ -406,7 +406,7 @@ void StPicoDstMaker::openWrite()
   mTTree = new TTree("PicoDst", "StPicoDst", mSplit);
   mTTree->SetMaxTreeSize(MAXFILESIZE);
   mTTree->SetAutoSave(1000000);
-  for (int i = 0; i < __NALLPICOARRAYS__; ++i)
+  for (int i = 0; i < StPicoArrays::NAllPicoArrays; ++i)
   {
     if (mStatusArrays[i] == 0)
     {
