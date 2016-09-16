@@ -45,6 +45,11 @@ public:
   UInt_t  topologyMap(unsigned int) const;
 
   StPhysicalHelixD helix(float B) const;
+  bool isPxl1() const;
+  bool isPxl2() const;
+  bool isIst() const;
+  bool isSst() const;
+  bool isHft() const;
   bool isHFTTrack() const;
 
   /** Checks whether this track is associated with a primary vertex. */
@@ -109,12 +114,12 @@ inline UInt_t  StPicoTrack::topologyMap(unsigned int idx) const { return mTopolo
 inline Int_t   StPicoTrack::emcPidTraitsIndex() const { return mEmcPidTraitsIndex; }
 inline Int_t   StPicoTrack::bTofPidTraitsIndex() const { return mBTofPidTraitsIndex; }
 inline Int_t   StPicoTrack::mtdPidTraitsIndex() const { return mMtdPidTraitsIndex; }
-
-inline bool StPicoTrack::isHFTTrack() const
-{
-  UInt_t const hitsMap = hftHitsMap();
-  return (hitsMap >> 0 & 0x1) && (hitsMap >> 1 & 0x3) && (hitsMap >> 3 & 0x3);
-}
+inline bool    StPicoTrack::isPxl1() const { return hftHitsMap() >> 0 & 0x1; }
+inline bool    StPicoTrack::isPxl2() const { return hftHitsMap() >> 1 & 0x3; }
+inline bool    StPicoTrack::isIst()  const { return hftHitsMap() >> 3 & 0x3; }
+inline bool    StPicoTrack::isSst()  const { return hftHitsMap() >> 5 & 0x3; }
+inline bool    StPicoTrack::isHft() const { return isPxl1() && isPxl2() && (isIst() || isSst()); }
+inline bool StPicoTrack::isHFTTrack() const { return isHft(); }
 
 /**
  * The default "primary" momentum is (0, 0, 0) but it is expected to have
