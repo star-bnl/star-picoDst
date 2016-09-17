@@ -1,13 +1,3 @@
-/***************************************************************************
- *
- * $Id$
- *
- * Author: Xin Dong (xdong@lbl.gov), Mustafa Mustafa (mmustafa@lbl.gov)
- ***************************************************************************
- *
- * Class holding event level variables for PicoDst production
- */
-
 #ifndef StPicoEvent_h
 #define StPicoEvent_h
 
@@ -272,9 +262,3 @@ inline void StPicoEvent::setHighTowerThreshold(const Int_t i, const Int_t th) { 
 inline Int_t   StPicoEvent::jetPatchThreshold(const Int_t i) const { return mJetPatchThreshold[i]; }
 inline void StPicoEvent::setJetPatchThreshold(const Int_t i, const Int_t th) { mJetPatchThreshold[i] = (UChar_t)th; }
 #endif
-
-/***************************************************************************
- *
- * $Log$
- *
- ***************************************************************************/
