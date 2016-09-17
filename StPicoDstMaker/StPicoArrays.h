@@ -1,9 +1,10 @@
 #ifndef StPicoArrays_h
 #define StPicoArrays_h
 
-enum picoDstTypes {picoEvent=0, picoTrack, picoEmcTrigger, picoMtdTrigger,
-		   picoBTOWHit, picoBTofHit, picoMtdHit,
-		   picoEmcPidTraits, picoBTofPidTraits, picoMtdPidTraits};
+enum class StPicoArrayType : unsigned int {Event=0, Track, EmcTrigger, MtdTrigger,
+                                           BTOWHit, BTofHit, MtdHit,
+                                           EmcPidTraits, BTofPidTraits, MtdPidTraits};
+
 enum NPICOARRAYS { __NALLPICOARRAYS__ = 10 };
 
 class StPicoArrays {
