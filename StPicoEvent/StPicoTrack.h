@@ -17,18 +17,24 @@ class StPicoTrack : public TObject
 {
 public:
   StPicoTrack();
+  /// ctor. Note: primary track should be associated with the StPicoEvent::mPrimaryVertex
   StPicoTrack(StMuTrack const* globalTrack, StMuTrack const* primaryTrack, double magField, StThreeVectorD const& pVtx, StDcaGeometry const& dcaG);
   virtual ~StPicoTrack() {}
 
   virtual void Print(Char_t const* option = "") const;  ///< Print track info
 
+  /// track id, copied from StMuTrack, StTrack
   Int_t   id() const;
   Float_t chi2() const;
+  /// primary momentum, only if track is primary with selected vertex StPicoEvent::mPrimaryVertex
+  StThreeVectorF const& pMom() const;
+  /// global momentum at point of DCA to StPicoEvent::mPrimaryVertex
+  StThreeVectorF const& gMom() const;
   Float_t gPt() const;
   Float_t gPtot() const;
-  StThreeVectorF const& pMom() const;
-  StThreeVectorF const& gMom() const;
+  /// global momentum at point of DCA to pVtx, B should be in kilogauss
   StThreeVectorF gMom(StThreeVectorF const& pVtx, float B) const;
+  /// origin at DCA to StPicoEvent::mPrimaryVertex
   StThreeVectorF const& origin() const;
   StThreeVectorF const& dca() const;
   Short_t charge() const;
@@ -42,8 +48,10 @@ public:
   Float_t nSigmaProton() const;
   Float_t nSigmaElectron() const;
 
+  /// track topology map, seet StEvent/StTrackTopologyMap.cxx
   UInt_t  topologyMap(unsigned int) const;
 
+  /// helix at point of DCA to StPicoEvent::mPrimaryVertex
   StPhysicalHelixD helix(float B) const;
   bool hasPxl1Hit() const;
   bool hasPxl2Hit() const;
@@ -66,13 +74,13 @@ public:
   Int_t mtdPidTraitsIndex() const;
 
 protected:
-  UShort_t mId;               // track Id
+  UShort_t mId;               // track Id, copied from StMuTrack, StTrack
   UShort_t mChi2;             // chi2*1000
   StThreeVectorF mPMomentum;  // primary momentum, (0.,0.,0.) if none
-  StThreeVectorF mGMomentum;  // global momentum at dca to primary vertex
+  StThreeVectorF mGMomentum;  // global momentum at point of DCA to StPicoEvent::mPrimaryVertex
   StThreeVectorF mOrigin;     // origin at dca to primary vertex
   Float_t  mDedx;             // dEdx in nominal STAR units: GeV/cm
-  Char_t   mNHitsFit;         // q*nHitsFit - TPC
+  Char_t   mNHitsFit;         // nHitsFit - TPC
   Char_t   mNHitsMax;         // nHitsMax - TPC
   UChar_t  mNHitsDedx;        // nHitsDedx - TPC
   Char_t   mCharge;
