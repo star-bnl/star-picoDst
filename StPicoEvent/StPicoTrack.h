@@ -1,13 +1,3 @@
-/***************************************************************************
- *
- * $Id$
- *
- * Author: Xin Dong (xdong@lbl.gov), Mustafa Mustafa (mmustafa@lbl.gov)
- ***************************************************************************
- *
- * Class holding track variables for PicoDst production
- */
-
 #ifndef StPicoTrack_h
 #define StPicoTrack_h
 
@@ -162,9 +152,3 @@ inline StPhysicalHelixD StPicoTrack::helix(float const B) const
   return StPhysicalHelixD(mGMomentum, mOrigin, B * kilogauss, static_cast<float>(charge()));
 }
 #endif
-
-/***************************************************************************
- *
- * $Log$
- *
- ***************************************************************************/
