@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ * $Id$
+ *
+ * Author: Xin Dong (xdong@lbl.gov), Mustafa Mustafa (mmustafa@lbl.gov)
+ ***************************************************************************
+ *
+ * Class holding track variables for PicoDst production
+ */
+
 #include <limits>
 
 #include "TMath.h"
@@ -86,3 +96,9 @@ void StPicoTrack::Print(Char_t const* option) const
                                   << nSigmaProton() << "/" << nSigmaElectron()
            << endm;
 }
+
+/***************************************************************************
+ *
+ * $Log$
+ *
+ ***************************************************************************/
