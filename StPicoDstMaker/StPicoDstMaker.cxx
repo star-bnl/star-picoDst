@@ -5,6 +5,7 @@
 #include "TChain.h"
 #include "TTree.h"
 #include "TBranch.h"
+#include "TObjectSet.h"
 
 #include "StChain/StChain.h"
 #include "St_base/StMessMgr.h"
@@ -17,7 +18,6 @@
 #include "StEvent/StEmcModule.h"
 #include "StEvent/StEmcRawHit.h"
 
-#include "StMuDSTMaker/COMMON/StMuDstMaker.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StMuDSTMaker/COMMON/StMuBTofHit.h"
@@ -518,17 +518,13 @@ Int_t StPicoDstMaker::MakeRead()
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::MakeWrite()
 {
-  StMuDstMaker* muDstMaker = (StMuDstMaker*)GetMaker("MuDst");
-  if (!muDstMaker)
-  {
-    LOG_WARN << " No MuDstMaker " << endm;
-    return kStWarn;
-  }
-  mMuDst = muDstMaker->muDst();
-  if (!mMuDst)
-  {
-    LOG_WARN << " No MuDst " << endm;
-    return kStWarn;
+  TObjectSet *muDst = static_cast<TObjectSet*>( GetDataSet("muDst") );
+
+  mMuDst = muDst ? static_cast<StMuDst*>( muDst->GetObject() ) : nullptr;
+
+  if (!muDst || !mMuDst) {
+    LOG_ERROR << "No \"StMuDst\" object found in this event. It is usually created by StMuDstMaker" << endm;
+    return kStErr;
   }
 
   StMuEvent* muEvent = mMuDst->event();
