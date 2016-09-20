@@ -576,6 +576,9 @@ Int_t StPicoDstMaker::MakeWrite()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillTracks()
 {
+  // We save primary tracks associated with the selected primary vertex only
+  // don't use StMuTrack::primary(), it returns primary tracks associated with 
+  // all vertices
   std::unordered_map<unsigned int, unsigned int> index2Primary;
 
   Int_t nPrimarys = mMuDst->numberOfPrimaryTracks();
