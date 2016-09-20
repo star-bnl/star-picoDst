@@ -549,7 +549,7 @@ Int_t StPicoDstMaker::MakeWrite()
   Int_t refMult = muEvent->refMult();
   mBField = muEvent->magneticField();
 
-  StThreeVectorF pVtx(0., 0., 0.);
+  StThreeVectorF pVtx(-999., -999., -999.);
   if (mMuDst->primaryVertex()) pVtx = mMuDst->primaryVertex()->position();
 
   LOG_DEBUG << " eventId = " << muEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
