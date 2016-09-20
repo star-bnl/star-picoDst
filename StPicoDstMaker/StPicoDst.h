@@ -7,7 +7,7 @@ class StPicoEvent;
 class StPicoTrack;
 class StPicoEmcTrigger;
 class StPicoMtdTrigger;
-class StPicoBTOWHit;
+class StPicoBTowHit;
 class StPicoBTofHit;
 class StPicoMtdHit;
 class StPicoBEmcPidTraits;
@@ -45,7 +45,7 @@ public:
   static StPicoMtdTrigger* mtdTrigger(int i) { return (StPicoMtdTrigger*)picoArrays[picoMtdTrigger]->UncheckedAt(i); }
 
   /// return pointer to i-th btow hit
-  static StPicoBTOWHit* btowHit(int i) { return (StPicoBTOWHit*)picoArrays[picoBTOWHit]->UncheckedAt(i); }
+  static StPicoBTowHit* btowHit(int i) { return (StPicoBTowHit*)picoArrays[picoBTOWHit]->UncheckedAt(i); }
   /// return pointer to i-th btof hit
   static StPicoBTofHit* btofHit(int i) { return (StPicoBTofHit*)picoArrays[picoBTofHit]->UncheckedAt(i); }
   /// return pointer to i-th mtd hit

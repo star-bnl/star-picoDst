@@ -2,7 +2,7 @@
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEmcTrigger.h"
-#include "StPicoEvent/StPicoBTOWHit.h"
+#include "StPicoEvent/StPicoBTowHit.h"
 #include "StPicoEvent/StPicoBTofHit.h"
 #include "StPicoEvent/StPicoMtdHit.h"
 #include "StPicoEvent/StPicoBEmcPidTraits.h"

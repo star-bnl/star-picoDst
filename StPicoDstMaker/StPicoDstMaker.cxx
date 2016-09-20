@@ -45,7 +45,7 @@
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEmcTrigger.h"
 #include "StPicoEvent/StPicoMtdTrigger.h"
-#include "StPicoEvent/StPicoBTOWHit.h"
+#include "StPicoEvent/StPicoBTowHit.h"
 #include "StPicoEvent/StPicoBTofHit.h"
 #include "StPicoEvent/StPicoMtdHit.h"
 #include "StPicoEvent/StPicoBEmcPidTraits.h"
@@ -167,7 +167,7 @@ void  StPicoDstMaker::streamerOff()
   StPicoEvent::Class()->IgnoreTObjectStreamer();
   StPicoTrack::Class()->IgnoreTObjectStreamer();
   StPicoBTofHit::Class()->IgnoreTObjectStreamer();
-  StPicoBTOWHit::Class()->IgnoreTObjectStreamer();
+  StPicoBTowHit::Class()->IgnoreTObjectStreamer();
   StPicoMtdHit::Class()->IgnoreTObjectStreamer();
   StPicoEmcTrigger::Class()->IgnoreTObjectStreamer();
   StPicoMtdTrigger::Class()->IgnoreTObjectStreamer();
@@ -947,7 +947,7 @@ void StPicoDstMaker::fillBTOWHits()
     float energy = aHit->energy();
 
     int counter = mPicoArrays[picoBTOWHit]->GetEntries();
-    new((*(mPicoArrays[picoBTOWHit]))[counter]) StPicoBTOWHit(softId, adc, energy);
+    new((*(mPicoArrays[picoBTOWHit]))[counter]) StPicoBTowHit(softId, adc, energy);
   }
 }
 //-----------------------------------------------------------------------
