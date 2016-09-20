@@ -182,6 +182,12 @@ Int_t StPicoDstMaker::Init()
     mOutputFileName = mInputFileName;
     mOutputFileName.ReplaceAll("MuDst.root", "picoDst.root");
 
+    if (mOutputFileName == mInputFileName)
+    {
+      LOG_ERROR << "Input file is not a MuDst ... " << endm;
+      return kStErr;
+    }
+
     openWrite();
     initEmc();
   }
