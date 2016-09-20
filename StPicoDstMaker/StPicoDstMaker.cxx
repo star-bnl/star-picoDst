@@ -77,18 +77,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
 StPicoDstMaker::StPicoDstMaker(int mode, char const* fileName, char const* name) : StPicoDstMaker(name)
 {
   mIoMode = mode;
-
-  if (mIoMode == ioWrite)
-  {
-    TString inputDirFile = fileName;  // input is actually the full name including path
-    mInputFileName = inputDirFile(inputDirFile.Index("st_"), inputDirFile.Length());
-    mOutputFileName = mInputFileName;
-    mOutputFileName.ReplaceAll("MuDst.root", "picoDst.root");
-  }
-  else if (mIoMode == ioRead)
-  {
-    mInputFileName = fileName;
-  }
+  mInputFileName = fileName;
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::~StPicoDstMaker()
@@ -187,15 +176,20 @@ void StPicoDstMaker::createArrays()
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Init()
 {
-  if (mIoMode == ioRead)
+  if (mIoMode == ioWrite)
   {
-    openRead();     // if read
-  }
-  else if (mIoMode == ioWrite)
-  {
+    mInputFileName = mInputFileName(mInputFileName.Index("st_"), mInputFileName.Length());
+    mOutputFileName = mInputFileName;
+    mOutputFileName.ReplaceAll("MuDst.root", "picoDst.root");
+
     openWrite();
     initEmc();
   }
+  else if (mIoMode == ioRead)
+  {
+    openRead();
+  }
+
   return kStOK;
 }
 
