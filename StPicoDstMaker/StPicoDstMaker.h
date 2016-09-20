@@ -40,7 +40,6 @@ public:
   void SetStatus(char const* arrType, int status);
 
   void setRunNumber(Int_t);
-  void setProdMode(Int_t);
   void setEmcMode(bool const mode = true); // 0:No EMC, 1:EMC On
   /// Returns null pointer if no StPicoDst
   StPicoDst* picoDst();
@@ -95,8 +94,6 @@ protected:
   bool selectVertex();
 
   enum ioMode {ioRead, ioWrite};
-  // production modes for different data sets
-  enum prodMode {minbias, central, ht, minbias2};
 
   StMuDst*   mMuDst;
   StEmcCollection* mEmcCollection;
@@ -107,7 +104,6 @@ protected:
   Float_t    mBField;
 
   Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write
-  Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation, 4: - save only electron or muon candidates
   bool       mEmcMode;        //! EMC ON(=1)/OFF(=0)
   Int_t      mVtxMode;
 
@@ -144,7 +140,6 @@ inline void StPicoDstMaker::setSplit(int split) { mSplit = split; }
 inline void StPicoDstMaker::setCompression(int comp) { mCompression = comp; }
 inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
 inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
-inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
 inline void StPicoDstMaker::setEmcMode(bool const mode) { mEmcMode = mode; }
 inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; }
 #endif

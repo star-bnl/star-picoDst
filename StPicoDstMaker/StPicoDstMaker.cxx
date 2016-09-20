@@ -61,7 +61,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mBField(0),
-  mIoMode(ioRead), mProdMode(minbias), mEmcMode(true), mVtxMode(9999),
+  mIoMode(ioRead), mEmcMode(true), mVtxMode(9999),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
@@ -601,26 +601,6 @@ void StPicoDstMaker::fillTracks()
     int nhit[2];
     int ntow[3];
     if (mEmcMode) getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
-
-    if (mProdMode == 4)
-    {
-      // save only electron or muon candidates
-      Double_t nsigmaE = gTrk->nSigmaElectron();
-      Double_t beta = (gTrk) ? gTrk->btofPidTraits().beta() : -999.;
-
-      // running on st_mtd data
-      Bool_t isTPC = kFALSE, isTOF = kFALSE, isEMC = kFALSE, isMTD = kFALSE;
-      if (gTrk->index2MtdHit() >= 0) isMTD = kTRUE;
-      if (nsigmaE >= -3 && nsigmaE <= 3)   isTPC = kTRUE;
-      if (TMath::Abs(1 / beta - 1) < 0.05) isTOF = kTRUE;
-      if (gTrk->pt() > 1.5 && id >= 0)   isEMC = kTRUE;
-
-      if (!((isTPC && isTOF) ||
-            (isTPC && isEMC) ||
-            isMTD)
-         )
-        continue;
-    }
 
     if (gTrk->index2Cov() < 0) continue;
     StDcaGeometry* dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
