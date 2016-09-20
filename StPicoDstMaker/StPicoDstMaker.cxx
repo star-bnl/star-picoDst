@@ -56,10 +56,6 @@
 #include "StPicoDstMaker/StPicoDst.h"
 
 
-
-// Set maximum file size to 1.9 GB (Root has a 2GB limit)
-#define MAXFILESIZE 1900000000
-
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
@@ -414,7 +410,6 @@ void StPicoDstMaker::openWrite()
   int bufsize = mBufferSize;
   if (mSplit) bufsize /= 4;
   mTTree = new TTree("PicoDst", "StPicoDst", mSplit);
-  mTTree->SetMaxTreeSize(MAXFILESIZE);
   mTTree->SetAutoSave(1000000);
   for (int i = 0; i < __NALLPICOARRAYS__; ++i)
   {
