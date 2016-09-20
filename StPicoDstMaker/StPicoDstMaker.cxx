@@ -63,7 +63,6 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mPicoDst(nullptr), mBField(0),
   mIoMode(ioRead), mVtxMode(9999),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
-  mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
   mPicoArrays{}, mStatusArrays{}

@@ -39,7 +39,6 @@ public:
   void printArrays();
   void SetStatus(char const* arrType, int status);
 
-  void setRunNumber(Int_t);
   /// Returns null pointer if no StPicoDst
   StPicoDst* picoDst();
   /// In read mode, returns pointer to the chain of .picoDst.root files
@@ -108,7 +107,6 @@ protected:
   TString   mInputFileName;        //! *.list - MuDst or picoDst
   TString   mOutputFileName;       //! FileName
   TFile*    mOutputFile;
-  Int_t     mRunNumber;
 
   TChain*   mChain;
   TTree*    mTTree;
@@ -137,6 +135,5 @@ inline TTree* StPicoDstMaker::tree() { return mTTree; }
 inline void StPicoDstMaker::setSplit(int split) { mSplit = split; }
 inline void StPicoDstMaker::setCompression(int comp) { mCompression = comp; }
 inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
-inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
 inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; }
 #endif

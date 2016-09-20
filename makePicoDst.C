@@ -105,7 +105,6 @@ void makePicoDst(const Int_t runnumber = 15140004,
 
   StPicoDstMaker* picoMaker = new StPicoDstMaker(1, inputFile, "picoDst");
   picoMaker->setVtxMode((int)PicoVtxAuAu200);
-  picoMaker->setRunNumber(runnumber);
 //        picoMaker->SetDebug(1);
 
   chain->Init();
