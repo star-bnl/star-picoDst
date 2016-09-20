@@ -2,16 +2,16 @@
 
 #include "TMath.h"
 #include "St_base/StMessMgr.h"
-#include "StPicoEvent/StPicoBTOWHit.h"
+#include "StPicoEvent/StPicoBTowHit.h"
 
 
 //----------------------------------------------------------------------------------
-StPicoBTOWHit::StPicoBTOWHit(): mId(0), mAdc(0), mE(0)
+StPicoBTowHit::StPicoBTowHit(): mId(0), mAdc(0), mE(0)
 {
 }
 
 //----------------------------------------------------------------------------------
-StPicoBTOWHit::StPicoBTOWHit(int id, int adc, float e): StPicoBTOWHit()
+StPicoBTowHit::StPicoBTowHit(int id, int adc, float e): StPicoBTowHit()
 {
   if (id  < 0 || adc < 0) return;
 
@@ -21,13 +21,13 @@ StPicoBTOWHit::StPicoBTOWHit(int id, int adc, float e): StPicoBTOWHit()
 }
 
 //----------------------------------------------------------------------------------
-StPicoBTOWHit::~StPicoBTOWHit()
+StPicoBTowHit::~StPicoBTowHit()
 {
   /* noop */
 }
 
 //----------------------------------------------------------------------------------
-void StPicoBTOWHit::Print(const Char_t* option) const
+void StPicoBTowHit::Print(const Char_t* option) const
 {
   LOG_INFO << " Id = " << id() << " Adc = " << adc() << " Energy = " << energy() << endm;
 }

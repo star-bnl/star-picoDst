@@ -2,10 +2,10 @@
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEmcTrigger.h"
-#include "StPicoEvent/StPicoBTOWHit.h"
+#include "StPicoEvent/StPicoBTowHit.h"
 #include "StPicoEvent/StPicoBTofHit.h"
 #include "StPicoEvent/StPicoMtdHit.h"
-#include "StPicoEvent/StPicoEmcPidTraits.h"
+#include "StPicoEvent/StPicoBEmcPidTraits.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoDstMaker/StPicoDst.h"
@@ -24,13 +24,13 @@ void StPicoDst::set(TClonesArray** thePicoArrays)
   picoArrays    = thePicoArrays;
 }
 //-----------------------------------------------------------------------
-void StPicoDst::Print(Option_t* option) const
+void StPicoDst::print() const
 {
   LOG_INFO << "\n=========== event header =============\n\n";
   LOG_INFO << " fill/run/event Id = " << event()->fillId() << "/" << event()->runId() << "/" << event()->eventId() << "\n";
   LOG_INFO << " vertex = " << event()->primaryVertex() << "\n";
   LOG_INFO << " refMult = " << event()->refMult() << " refMultFtpc = " << event()->refMultFtpc() << "\n";
-  LOG_INFO << " nVpdHits e/w = " << event()->nVpdHitsEast() << "/" << event()->nVpdHitsWest() << " nT0 = " << event()->nT0() << " vzVpd = " << event()->vzVpd() << "\n";
+  LOG_INFO << " nVpdHits e/w = " << event()->nVpdHitsEast() << "/" << event()->nVpdHitsWest() << " nTofT0 = " << event()->nTofT0() << " vzVpd = " << event()->vzVpd() << "\n";
   LOG_INFO << "=====================================\n\n";
 }
 //-----------------------------------------------------------------------
@@ -132,19 +132,19 @@ void StPicoDst::printMtdHits()
   LOG_INFO << endm;
 }
 //-----------------------------------------------------------------------
-void StPicoDst::printEmcPidTraits()
+void StPicoDst::printBEmcPidTraits()
 {
-  if (numberOfEmcPidTraits() == 0)
+  if (numberOfBEmcPidTraits() == 0)
   {
-    LOG_INFO << "No Emc pidTraits found!" << endm;
+    LOG_INFO << "No BEmc pidTraits found!" << endm;
     return;
   }
 
-  LOG_INFO << "\n+++++++++ Emc pidTraits list ( " << numberOfEmcPidTraits() << " entries )\n\n";
-  for (UInt_t i_t = 0; i_t < numberOfEmcPidTraits(); i_t++)
+  LOG_INFO << "\n+++++++++ BEmc pidTraits list ( " << numberOfBEmcPidTraits() << " entries )\n\n";
+  for (UInt_t i_t = 0; i_t < numberOfBEmcPidTraits(); i_t++)
   {
-    LOG_INFO << "+++ EmcPidTraits " << i_t << "\n";
-    emcPidTraits(i_t)->Print();
+    LOG_INFO << "+++ BEmcPidTraits " << i_t << "\n";
+    bemcPidTraits(i_t)->Print();
     LOG_INFO << "\n";
   }
 

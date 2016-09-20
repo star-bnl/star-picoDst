@@ -45,10 +45,10 @@
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEmcTrigger.h"
 #include "StPicoEvent/StPicoMtdTrigger.h"
-#include "StPicoEvent/StPicoBTOWHit.h"
+#include "StPicoEvent/StPicoBTowHit.h"
 #include "StPicoEvent/StPicoBTofHit.h"
 #include "StPicoEvent/StPicoMtdHit.h"
-#include "StPicoEvent/StPicoEmcPidTraits.h"
+#include "StPicoEvent/StPicoBEmcPidTraits.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
@@ -56,18 +56,13 @@
 #include "StPicoDstMaker/StPicoDst.h"
 
 
-
-// Set maximum file size to 1.9 GB (Root has a 2GB limit)
-#define MAXFILESIZE 1900000000
-
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mBField(0),
-  mIoMode(ioRead), mProdMode(minbias), mEmcMode(true), mVtxMode(9999),
+  mIoMode(ioWrite), mVtxMode(9999),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
-  mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
   mPicoArrays{}, mStatusArrays{}
@@ -82,18 +77,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
 StPicoDstMaker::StPicoDstMaker(int mode, char const* fileName, char const* name) : StPicoDstMaker(name)
 {
   mIoMode = mode;
-
-  if (mIoMode == ioWrite)
-  {
-    TString inputDirFile = fileName;  // input is actually the full name including path
-    mInputFileName = inputDirFile(inputDirFile.Index("st_"), inputDirFile.Length());
-    mOutputFileName = mInputFileName;
-    mOutputFileName.ReplaceAll("MuDst.root", "picoDst.root");
-  }
-  else if (mIoMode == ioRead)
-  {
-    mInputFileName = fileName;
-  }
+  mInputFileName = fileName;
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::~StPicoDstMaker()
@@ -166,8 +150,18 @@ void StPicoDstMaker::setBranchAddresses(TChain* chain)
 //-----------------------------------------------------------------------
 void  StPicoDstMaker::streamerOff()
 {
+  // This is to to save space on the file. No need for TObject bits for this structure.
+  // see: https://root.cern.ch/doc/master/classTClass.html#a606b0442d6fec4b1cd52f43bca73aa51
   StPicoEvent::Class()->IgnoreTObjectStreamer();
   StPicoTrack::Class()->IgnoreTObjectStreamer();
+  StPicoBTofHit::Class()->IgnoreTObjectStreamer();
+  StPicoBTowHit::Class()->IgnoreTObjectStreamer();
+  StPicoMtdHit::Class()->IgnoreTObjectStreamer();
+  StPicoEmcTrigger::Class()->IgnoreTObjectStreamer();
+  StPicoMtdTrigger::Class()->IgnoreTObjectStreamer();
+  StPicoBTofPidTraits::Class()->IgnoreTObjectStreamer();
+  StPicoBEmcPidTraits::Class()->IgnoreTObjectStreamer();
+  StPicoMtdPidTraits::Class()->IgnoreTObjectStreamer();
 }
 //-----------------------------------------------------------------------
 void StPicoDstMaker::createArrays()
@@ -182,15 +176,26 @@ void StPicoDstMaker::createArrays()
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Init()
 {
-  if (mIoMode == ioRead)
+  if (mIoMode == ioWrite)
   {
-    openRead();     // if read
-  }
-  else if (mIoMode == ioWrite)
-  {
+    mInputFileName = mInputFileName(mInputFileName.Index("st_"), mInputFileName.Length());
+    mOutputFileName = mInputFileName;
+    mOutputFileName.ReplaceAll("MuDst.root", "picoDst.root");
+
+    if (mOutputFileName == mInputFileName)
+    {
+      LOG_ERROR << "Input file is not a MuDst ... " << endm;
+      return kStErr;
+    }
+
     openWrite();
-    if (mEmcMode) initEmc();
+    initEmc();
   }
+  else if (mIoMode == ioRead)
+  {
+    openRead();
+  }
+
   return kStOK;
 }
 
@@ -335,7 +340,7 @@ Int_t StPicoDstMaker::Finish()
   else if (mIoMode == ioWrite)
   {
     closeWrite();
-    if (mEmcMode) finishEmc();
+    finishEmc();
   }
   return kStOK;
 }
@@ -404,7 +409,6 @@ void StPicoDstMaker::openWrite()
   int bufsize = mBufferSize;
   if (mSplit) bufsize /= 4;
   mTTree = new TTree("PicoDst", "StPicoDst", mSplit);
-  mTTree->SetMaxTreeSize(MAXFILESIZE);
   mTTree->SetAutoSave(1000000);
   for (int i = 0; i < StPicoArrays::NAllPicoArrays; ++i)
   {
@@ -535,16 +539,13 @@ Int_t StPicoDstMaker::MakeWrite()
     return kStOK;
   }
 
-  if (mEmcMode)
-  {
-    mEmcCollection = mMuDst->emcCollection();
-    if (mEmcCollection) buildEmcIndex();
-  }
+  mEmcCollection = mMuDst->emcCollection();
+  if (mEmcCollection) buildEmcIndex();
 
   Int_t refMult = muEvent->refMult();
   mBField = muEvent->magneticField();
 
-  StThreeVectorF pVtx(0., 0., 0.);
+  StThreeVectorF pVtx(-999., -999., -999.);
   if (mMuDst->primaryVertex()) pVtx = mMuDst->primaryVertex()->position();
 
   LOG_DEBUG << " eventId = " << muEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
@@ -566,6 +567,9 @@ Int_t StPicoDstMaker::MakeWrite()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::fillTracks()
 {
+  // We save primary tracks associated with the selected primary vertex only
+  // don't use StMuTrack::primary(), it returns primary tracks associated with 
+  // all vertices
   std::unordered_map<unsigned int, unsigned int> index2Primary;
 
   Int_t nPrimarys = mMuDst->numberOfPrimaryTracks();
@@ -582,11 +586,6 @@ void StPicoDstMaker::fillTracks()
   {
     StMuTrack* gTrk = (StMuTrack*)mMuDst->globalTracks(i);
     if (!gTrk) continue;
-    if (gTrk->id() < 0 || gTrk->id() >= nTrk)
-    {
-      LOG_WARN << " This global track has a track id out of the range : " << gTrk->id() << endm;
-      continue;
-    }
 
     StMuTrack const* const pTrk = index2Primary.find(gTrk->id()) != index2Primary.end() ?
                                   (StMuTrack*)mMuDst->primaryTracks(index2Primary[gTrk->id()]) : nullptr;
@@ -597,27 +596,7 @@ void StPicoDstMaker::fillTracks()
     float dist[4];
     int nhit[2];
     int ntow[3];
-    if (mEmcMode) getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
-
-    if (mProdMode == 4)
-    {
-      // save only electron or muon candidates
-      Double_t nsigmaE = gTrk->nSigmaElectron();
-      Double_t beta = (gTrk) ? gTrk->btofPidTraits().beta() : -999.;
-
-      // running on st_mtd data
-      Bool_t isTPC = kFALSE, isTOF = kFALSE, isEMC = kFALSE, isMTD = kFALSE;
-      if (gTrk->index2MtdHit() >= 0) isMTD = kTRUE;
-      if (nsigmaE >= -3 && nsigmaE <= 3)   isTPC = kTRUE;
-      if (TMath::Abs(1 / beta - 1) < 0.05) isTOF = kTRUE;
-      if (gTrk->pt() > 1.5 && id >= 0)   isEMC = kTRUE;
-
-      if (!((isTPC && isTOF) ||
-            (isTPC && isEMC) ||
-            isMTD)
-         )
-        continue;
-    }
+    getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
 
     if (gTrk->index2Cov() < 0) continue;
     StDcaGeometry* dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
@@ -634,9 +613,9 @@ void StPicoDstMaker::fillTracks()
     // Fill pid traits
     if (id >= 0)
     {
-      Int_t emc_index = mPicoArrays[StPicoArrays::EmcPidTraits]->GetEntries();
-      new((*(mPicoArrays[StPicoArrays::EmcPidTraits]))[emc_index]) StPicoEmcPidTraits(counter, id, adc0, e, dist, nhit, ntow);
-      picoTrk->setEmcPidTraitsIndex(emc_index);
+      Int_t bemc_index = mPicoArrays[StPicoArrays::BEmcPidTraits]->GetEntries();
+      new((*(mPicoArrays[StPicoArrays::BEmcPidTraits]))[bemc_index]) StPicoBEmcPidTraits(counter, id, adc0, e, dist, nhit, ntow);
+      picoTrk->setBEmcPidTraitsIndex(bemc_index);
     }
 
     if (gTrk->tofHit())
@@ -853,7 +832,7 @@ void StPicoDstMaker::fillEmcTrigger()
   int bht2 = trigSimu->bemc->barrelHighTowerTh(2);
   int bht3 = trigSimu->bemc->barrelHighTowerTh(3);
   LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
-  for (int i = 0; i < 4; ++i) mPicoDst->event()->setHT_Th(i, trigSimu->bemc->barrelHighTowerTh(i));
+  for (int i = 0; i < 4; ++i) mPicoDst->event()->setHighTowerThreshold(i, trigSimu->bemc->barrelHighTowerTh(i));
 
   for (int towerId = 1; towerId <= 4800; ++towerId)
   {
@@ -893,7 +872,7 @@ void StPicoDstMaker::fillEmcTrigger()
   int const bjpth1 = trigSimu->bemc->barrelJetPatchTh(1);
   int const bjpth2 = trigSimu->bemc->barrelJetPatchTh(2);
 
-  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJP_Th(i, trigSimu->bemc->barrelJetPatchTh(i));
+  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJetPatchThreshold(i, trigSimu->bemc->barrelJetPatchTh(i));
 
   for(int jp = 0; jp<18; ++jp)
   { // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.
@@ -943,8 +922,8 @@ void StPicoDstMaker::fillBTOWHits()
     int adc = aHit->adc();
     float energy = aHit->energy();
 
-    int counter = mPicoArrays[StPicoArrays::BTOWHit]->GetEntries();
-    new((*(mPicoArrays[StPicoArrays::BTOWHit]))[counter]) StPicoBTOWHit(softId, adc, energy);
+    int counter = mPicoArrays[StPicoArrays::BTowHit]->GetEntries();
+    new((*(mPicoArrays[StPicoArrays::BTowHit]))[counter]) StPicoBTowHit(softId, adc, energy);
   }
 }
 //-----------------------------------------------------------------------

@@ -9,7 +9,7 @@ class StPicoBTofPidTraits : public TObject
 {
 public:
   StPicoBTofPidTraits();
-  StPicoBTofPidTraits(const StMuTrack* , const StMuTrack*, const Int_t index);
+  StPicoBTofPidTraits(const StMuTrack* globalTrack, const StMuTrack* primarayTrack, const Int_t idx2PicoTrack);
   virtual ~StPicoBTofPidTraits();
   virtual void Print(const Char_t* option = "") const;
 

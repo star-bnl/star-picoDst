@@ -23,9 +23,9 @@ StPicoBTofPidTraits::StPicoBTofPidTraits() :
 //----------------------------------------------------------------------------------
 StPicoBTofPidTraits::StPicoBTofPidTraits(const StMuTrack* gTrack,
     const StMuTrack* pTrack,
-    const Int_t index): StPicoBTofPidTraits()
+    const Int_t idx2PicoTrack): StPicoBTofPidTraits()
 {
-  mTrackIndex = (index > std::numeric_limits<short>::max()) ? -1 : (Short_t)index;
+  mTrackIndex = (idx2PicoTrack > std::numeric_limits<short>::max()) ? -1 : (Short_t)idx2PicoTrack;
 
   StMuBTofHit* btofHit = (StMuBTofHit*)gTrack->tofHit();
   Int_t tray         = btofHit->tray();
