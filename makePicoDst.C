@@ -10,9 +10,7 @@ class StMuDstMaker;
 
 StChain* chain;
 void makePicoDst(const Int_t runnumber = 15140004,
-                 const Char_t *inputFile = "root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu_200_production_low_2014/ReversedFullField/P15ic/2014/140/15140004/st_physics_15140004_raw_1000016.MuDst.root",
-                 const int emcMode = 1
-                )
+    const Char_t *inputFile = "root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu_200_production_low_2014/ReversedFullField/P15ic/2014/140/15140004/st_physics_15140004_raw_1000016.MuDst.root")
 {
   Int_t nEvents = 1e5;
 
@@ -37,31 +35,26 @@ void makePicoDst(const Int_t runnumber = 15140004,
   gSystem->Load("StStrangeMuDstMaker");
   gSystem->Load("StMuDSTMaker");
 
-  if (emcMode)
-  {
-    gSystem->Load("StTpcDb");
-    gSystem->Load("StMcEvent");
-    gSystem->Load("StMcEventMaker");
-    gSystem->Load("StDaqLib");
-    gSystem->Load("libgen_Tables");
-    gSystem->Load("libsim_Tables");
-    gSystem->Load("libglobal_Tables");
-    gSystem->Load("StEmcTriggerMaker");
-    gSystem->Load("StEmcUtil");
-    gSystem->Load("StEmcRawMaker");
-    gSystem->Load("StEmcADCtoEMaker");
-    gSystem->Load("StPreEclMaker");
-    gSystem->Load("StEpcMaker");
-    gSystem->Load("StEmcSimulatorMaker");
-    gSystem->Load("StEmcUtil");
-    gSystem->Load("StDbBroker");
-    gSystem->Load("StDetectorDbMaker");
-    gSystem->Load("StDbUtilities");
-    gSystem->Load("StEEmcUtil");
-    gSystem->Load("StEEmcDbMaker");
-    gSystem->Load("St_db_Maker");
-    gSystem->Load("StTriggerUtilities");
-  }
+  gSystem->Load("StTpcDb");
+  gSystem->Load("StMcEvent");
+  gSystem->Load("StMcEventMaker");
+  gSystem->Load("StDaqLib");
+  gSystem->Load("libgen_Tables");
+  gSystem->Load("libsim_Tables");
+  gSystem->Load("libglobal_Tables");
+  gSystem->Load("StEmcTriggerMaker");
+  gSystem->Load("StEmcRawMaker");
+  gSystem->Load("StEmcADCtoEMaker");
+  gSystem->Load("StPreEclMaker");
+  gSystem->Load("StEpcMaker");
+  gSystem->Load("StEmcSimulatorMaker");
+  gSystem->Load("StDbBroker");
+  gSystem->Load("StDetectorDbMaker");
+  gSystem->Load("StDbUtilities");
+  gSystem->Load("StEEmcUtil");
+  gSystem->Load("StEEmcDbMaker");
+  gSystem->Load("St_db_Maker");
+  gSystem->Load("StTriggerUtilities");
 
   gSystem->Load("StMagF");
   gSystem->Load("StMtdUtil");
@@ -84,30 +77,27 @@ void makePicoDst(const Int_t runnumber = 15140004,
   MuDstMaker->SetStatus("Emc*", 1);
   MuDstMaker->SetStatus("MTD*", 1);
 
-  if (emcMode)
-  {
-    St_db_Maker* dbMk = new St_db_Maker("db", "MySQL:StarDb", "$STAR/StarDb", "StarDb");
+  St_db_Maker* dbMk = new St_db_Maker("db", "MySQL:StarDb", "$STAR/StarDb", "StarDb");
 
-    // Endcap database
-    StEEmcDbMaker* eemcDb = new StEEmcDbMaker;
+  // Endcap database
+  StEEmcDbMaker* eemcDb = new StEEmcDbMaker;
 
-    StEmcADCtoEMaker* adc2e = new StEmcADCtoEMaker();
-    adc2e->setPrint(false);
-    adc2e->saveAllStEvent(true);
+  StEmcADCtoEMaker* adc2e = new StEmcADCtoEMaker();
+  adc2e->setPrint(false);
+  adc2e->saveAllStEvent(true);
 
-    StPreEclMaker* pre_ecl = new StPreEclMaker();
-    pre_ecl->setPrint(kFALSE);
-    StEpcMaker* epc = new StEpcMaker();
-    epc->setPrint(kFALSE);
+  StPreEclMaker* pre_ecl = new StPreEclMaker();
+  pre_ecl->setPrint(kFALSE);
+  StEpcMaker* epc = new StEpcMaker();
+  epc->setPrint(kFALSE);
 
-    // Trigger simulator
-    StTriggerSimuMaker* trigSimu = new StTriggerSimuMaker;
-    trigSimu->setMC(false);
-    trigSimu->useBemc();
-    trigSimu->useEemc();
-    trigSimu->useOnlineDB();
-    trigSimu->bemc->setConfig(StBemcTriggerSimu::kOffline);
-  }
+  // Trigger simulator
+  StTriggerSimuMaker* trigSimu = new StTriggerSimuMaker;
+  trigSimu->setMC(false);
+  trigSimu->useBemc();
+  trigSimu->useEemc();
+  trigSimu->useOnlineDB();
+  trigSimu->bemc->setConfig(StBemcTriggerSimu::kOffline);
 
   StMagFMaker* magfMk = new StMagFMaker;
   StMtdMatchMaker* mtdMatchMaker = new StMtdMatchMaker();
@@ -116,7 +106,6 @@ void makePicoDst(const Int_t runnumber = 15140004,
   StPicoDstMaker* picoMaker = new StPicoDstMaker(1, inputFile, "picoDst");
   picoMaker->setVtxMode((int)PicoVtxAuAu200);
   picoMaker->setRunNumber(runnumber);
-  picoMaker->setEmcMode(emcMode); // 0-No EMC, 1-EMC ON
 //        picoMaker->SetDebug(1);
 
   chain->Init();

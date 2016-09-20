@@ -40,7 +40,6 @@ public:
   void SetStatus(char const* arrType, int status);
 
   void setRunNumber(Int_t);
-  void setEmcMode(bool const mode = true); // 0:No EMC, 1:EMC On
   /// Returns null pointer if no StPicoDst
   StPicoDst* picoDst();
   /// In read mode, returns pointer to the chain of .picoDst.root files
@@ -104,7 +103,6 @@ protected:
   Float_t    mBField;
 
   Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write
-  bool       mEmcMode;        //! EMC ON(=1)/OFF(=0)
   Int_t      mVtxMode;
 
   TString   mInputFileName;        //! *.list - MuDst or picoDst
@@ -140,6 +138,5 @@ inline void StPicoDstMaker::setSplit(int split) { mSplit = split; }
 inline void StPicoDstMaker::setCompression(int comp) { mCompression = comp; }
 inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
 inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
-inline void StPicoDstMaker::setEmcMode(bool const mode) { mEmcMode = mode; }
 inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; }
 #endif

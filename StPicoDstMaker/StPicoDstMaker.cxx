@@ -61,7 +61,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(nullptr), mBField(0),
-  mIoMode(ioRead), mEmcMode(true), mVtxMode(9999),
+  mIoMode(ioRead), mVtxMode(9999),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mRunNumber(0),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
@@ -195,7 +195,7 @@ Int_t StPicoDstMaker::Init()
   else if (mIoMode == ioWrite)
   {
     openWrite();
-    if (mEmcMode) initEmc();
+    initEmc();
   }
   return kStOK;
 }
@@ -341,7 +341,7 @@ Int_t StPicoDstMaker::Finish()
   else if (mIoMode == ioWrite)
   {
     closeWrite();
-    if (mEmcMode) finishEmc();
+    finishEmc();
   }
   return kStOK;
 }
@@ -540,11 +540,8 @@ Int_t StPicoDstMaker::MakeWrite()
     return kStOK;
   }
 
-  if (mEmcMode)
-  {
-    mEmcCollection = mMuDst->emcCollection();
-    if (mEmcCollection) buildEmcIndex();
-  }
+  mEmcCollection = mMuDst->emcCollection();
+  if (mEmcCollection) buildEmcIndex();
 
   Int_t refMult = muEvent->refMult();
   mBField = muEvent->magneticField();
@@ -600,7 +597,7 @@ void StPicoDstMaker::fillTracks()
     float dist[4];
     int nhit[2];
     int ntow[3];
-    if (mEmcMode) getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
+    getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
 
     if (gTrk->index2Cov() < 0) continue;
     StDcaGeometry* dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
