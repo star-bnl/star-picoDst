@@ -26,7 +26,7 @@ class StPicoDstMaker : public StMaker
 {
 public:
   enum PicoIoMode {IoWrite=1, IoRead=2};
-  enum PicoVtxMode {NotSet=0,AuAu200=1};
+  enum PicoVtxMode {NotSet=0, Default=1, AuAu200=2};
 
   StPicoDstMaker(char const* name = "PicoDst");
   StPicoDstMaker(PicoIoMode ioMode, char const* fileName = "", char const* name = "PicoDst");

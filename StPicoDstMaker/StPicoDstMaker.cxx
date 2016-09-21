@@ -226,6 +226,11 @@ int StPicoDstMaker::setVtxModeAttr()
       setVtxMode(PicoVtxMode::AuAu200);
       return kStOK;
     }
+    else if (strcmp(vtxMode->GetTitle(), "PicoVtxDefault") == 0)
+    {
+      setVtxMode(PicoVtxMode::Default);
+      return kStOK;
+    }
   }
 
   return kStErr;
@@ -1072,7 +1077,12 @@ void StPicoDstMaker::fillMtdHits()
 
 bool StPicoDstMaker::selectVertex()
 {
-  if (mVtxMode == PicoVtxMode::AuAu200)
+  if (mVtxMode == PicoVtxMode::Default)
+  {
+    // choose the default vertex, i.e. the first vertex
+    mMuDst->setVertexIndex(0);
+  }
+  else if (mVtxMode == PicoVtxMode::AuAu200)
   {
     StBTofHeader const* mBTofHeader = mMuDst->btofHeader();
 
