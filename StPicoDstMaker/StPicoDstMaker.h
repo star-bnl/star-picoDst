@@ -91,6 +91,7 @@ protected:
   void fillMtdHits();
 
   bool getBEMC(StMuTrack* , int*, int*, float*, float*, int*, int*);
+  int  setVtxModeAttr();
   bool selectVertex();
 
   StMuDst*   mMuDst;

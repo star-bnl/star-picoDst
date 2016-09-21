@@ -9,6 +9,7 @@
 
 #include "StChain/StChain.h"
 #include "St_base/StMessMgr.h"
+#include "StarRoot/TAttr.h"
 
 #include "StEvent/StBTofHeader.h"
 #include "StEvent/StDcaGeometry.h"
@@ -180,6 +181,16 @@ Int_t StPicoDstMaker::Init()
   switch(StMaker::m_Mode)
   {
     case PicoIoMode::IoWrite:
+
+      if (mVtxMode == PicoVtxMode::NotSet)
+      {
+        if(setVtxModeAttr() != kStOK)
+        {
+          LOG_ERROR << "Pico Vertex Mode is not set ... " << endm;
+          return kStErr;
+        }
+      }
+
       mInputFileName = mInputFileName(mInputFileName.Index("st_"), mInputFileName.Length());
       mOutputFileName = mInputFileName;
       mOutputFileName.ReplaceAll("MuDst.root", "picoDst.root");
@@ -204,6 +215,20 @@ Int_t StPicoDstMaker::Init()
   }
 
   return kStOK;
+}
+
+int StPicoDstMaker::setVtxModeAttr()
+{
+  if(TObject* vtxMode = (TObject*)(GetAttr()->FindObject("picovtxmode")))
+  {
+    if (strcmp(vtxMode->GetTitle(),"PicoVtxAuAu200") == 0)
+    {
+      setVtxMode(PicoVtxMode::AuAu200);
+      return kStOK;
+    }
+  }
+
+  return kStErr;
 }
 
 //-----------------------------------------------------------------------
