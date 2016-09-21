@@ -5,8 +5,6 @@
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 
-std::unordered_map<std::string, unsigned int> calculateRefMult(const StMuDst& muDst);
-
 namespace StPicoUtilities
 {
     std::unordered_map<std::string, unsigned int> calculateRefMult(const StMuDst& muDst)
