@@ -59,7 +59,7 @@ StPicoEvent::StPicoEvent(StMuDst const& muDst) : StPicoEvent()
   mRefMultNeg = (UShort_t)(ev->refMultNeg());
   mRefMultPos = (UShort_t)(ev->refMultPos());
 
-  std::unordered_map<std::string, unsigned int> custom_refMult = (std::unordered_map<std::string, unsigned int> )StPicoUtilities::calculateRefMult(muDst);
+  auto custom_refMult = StPicoUtilities::calculateRefMult(muDst);
   mRefMult2NegEast = custom_refMult["refMult2NegEast"];
   mRefMult2PosEast = custom_refMult["refMult2PosEast"];
   mRefMult2NegWest = custom_refMult["refMult2NegWest"];
