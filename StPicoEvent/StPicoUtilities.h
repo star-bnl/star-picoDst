@@ -62,15 +62,15 @@ namespace StPicoUtilities
                 if (charge > 0 && eta > -1.0 && eta < 0 && nsigmaproton < (-3.0) && M2 < 0.4) ++custom_refMult["refMult3PosEast"];
                 if (charge < 0 && eta > 0 && eta < 1.0 && nsigmaproton < (-3.0) && M2 < 0.4) ++custom_refMult["refMult3NegWest"]; 
                 if (charge > 0 && eta > 0 && eta < 1.0 && nsigmaproton < (-3.0) && M2 < 0.4) ++custom_refMult["refMult3PosWest"];
-                if (charge < 0 && eta < 0) ++custom_refMult["refMultHalfNegEast"];
-                if (charge > 0 && eta < 0) ++custom_refMult["refMultHalfPosEast"];
-                if (charge < 0 && eta > 0) ++custom_refMult["refMultHalfNegWest"];
-                if (charge > 0 && eta > 0) ++custom_refMult["refMultHalfPosWest"];
+                if (charge < 0 && eta < 0 && eta > -1.0) ++custom_refMult["refMultHalfNegEast"];
+                if (charge > 0 && eta < 0 && eta > -1.0) ++custom_refMult["refMultHalfPosEast"];
+                if (charge < 0 && eta > 0 && eta < 1.0) ++custom_refMult["refMultHalfNegWest"];
+                if (charge > 0 && eta > 0 && eta < 1.0) ++custom_refMult["refMultHalfPosWest"];
             }
 
             if(track->nHitsFit(kTpcId) >= 15)
             {
-                if (M2 <= 990)
+                if (M2 <= -990)
                 {
                     if (charge < 0 && eta > -1.0 && eta < 0 && (nsigmakaon > 3 || nsigmakaon < -3)) ++custom_refMult["refMult4NegEast"];
                     if (charge > 0 && eta > -1.0 && eta < 0 && (nsigmakaon > 3 || nsigmakaon < -3)) ++custom_refMult["refMult4PosEast"];
