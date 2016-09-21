@@ -61,7 +61,7 @@
 StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
-  mPicoDst(nullptr), mBField(0),
+  mPicoDst(new StPicoDst()), mBField(0),
   mVtxMode(PicoVtxMode::NotSet),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
@@ -70,7 +70,6 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
 {
   streamerOff();
   createArrays();
-  mPicoDst = new StPicoDst();
 
   std::fill_n(mStatusArrays, sizeof(mStatusArrays)/sizeof(mStatusArrays[0]), 1);
 }
@@ -100,7 +99,9 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
   static char const* specNames[] = {"EventAll", 0};
   static int const specIndex[] = { 0, StPicoArrays::NAllPicoArrays, -1};
 
-  if (strncmp(arrType, "St", 2) == 0) arrType += 2; //Ignore first "St"
+  if (strncmp(arrType, "St", 2) == 0)
+     arrType += 2; //Ignore first "St"
+
   for (int i = 0; specNames[i]; ++i)
   {
     if (strcmp(arrType, specNames[i])) continue;
@@ -720,17 +721,22 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
     int index = 0;
     float mindist = 1.e9;
     mEmcGeom[0]->getBin(positionBSMDP.phi(), positionBSMDE.pseudoRapidity(), mod, eta, sub); //project on SMD plan
+    // Loop over all BEMC measurements, aka "points"
     for (StSPtrVecEmcPointIterator it = bEmcPoints.begin(); it != bEmcPoints.end(); ++it, ++index)
     {
       bool associated = false;
+      // Consider only BEMC clusters
       StPtrVecEmcCluster& bEmcClusters = (*it)->cluster(kBarrelEmcTowerId);
       if (bEmcClusters.size() == 0) continue;
       if (bEmcClusters[0] == NULL) continue;
+      // Loop over all BEMC clusters
       for (StPtrVecEmcClusterIterator cIter = bEmcClusters.begin(); cIter != bEmcClusters.end(); ++cIter)
       {
         StPtrVecEmcRawHit& bEmcHits = (*cIter)->hit();
+        // Loop over all hits/towers in the BEMC cluster
         for (StPtrVecEmcRawHitIterator hIter = bEmcHits.begin(); hIter != bEmcHits.end(); ++hIter)
         {
+          // Find BEMC hit matching the track projection to BEMC
           if (mod == (Int_t)(*hIter)->module() && eta == (Int_t)(*hIter)->eta() && sub == (Int_t)(*hIter)->sub())
           {
             associated = true;
@@ -739,9 +745,12 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
         }
         if (associated)
         {
+          // Loop over all hits/towers in the BEMC cluster again
           for (StPtrVecEmcRawHitIterator hitit = bEmcHits.begin(); hitit != bEmcHits.end(); ++hitit)
           {
+            // Save the highest energy among the towers in the BEMC cluster to ene[0]
             if ((*hitit)->energy() > ene[0]) ene[0] = (*hitit)->energy();
+            // Save the highest ADC among the towers in the BEMC cluster to adc
             if ((int)(*hitit)->adc() > (*adc)) *adc = (*hitit)->adc();
           }
         }
@@ -902,7 +911,8 @@ void StPicoDstMaker::fillEmcTrigger()
   int const bjpth1 = trigSimu->bemc->barrelJetPatchTh(1);
   int const bjpth2 = trigSimu->bemc->barrelJetPatchTh(2);
 
-  for (int i = 0; i < 3; ++i) mPicoDst->event()->setJetPatchThreshold(i, trigSimu->bemc->barrelJetPatchTh(i));
+  for (int i = 0; i < 3; ++i)
+    mPicoDst->event()->setJetPatchThreshold(i, trigSimu->bemc->barrelJetPatchTh(i));
 
   for(int jp = 0; jp<18; ++jp)
   { // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.

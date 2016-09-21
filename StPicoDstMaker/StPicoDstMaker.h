@@ -90,7 +90,27 @@ protected:
   void fillBTofHits();
   void fillMtdHits();
 
-  bool getBEMC(StMuTrack* , int*, int*, float*, float*, int*, int*);
+ /**
+  * Returns various measurements by the BEMC and BSMD detectors corresponding to
+  * a given global track.
+  *
+  * param[in]   t        A global track
+  * param[out]  id >= 0  Indicates that a BEMC tower matching track t has been found
+  * param[out]  adc      The largest ADC value of a tower in the BEMC cluster matching track t
+  * param[out]  ene[0]   The highest energy tower in the BEMC cluster matching track t
+  * param[out]  ene[1]   The total energy of the BEMC cluster containing the matching tower
+  * param[out]  ene[2]   The energy deposited in the (closest) BEMC tower matching track t
+  * param[out]  ene[3]   The energy deposited in the second closest BEMC tower matching track t
+  * param[out]  ene[4]   The energy deposited in the third closest BEMC tower matching track t
+  * param[out]  d[0]     The distance [cm] along z from the track t projection onto BSMD to the BEMC cluster matching track t
+  * param[out]  d[1]     The distance [rad] along phi similar to d[0]
+  * param[out]  d[2]     The distance [rad] along eta between the track t projection onto BEMC and the matched BEMC tower center
+  * param[out]  d[3]     The distance [rad] along phi similar to d[2]
+  * param[out]  nep[0]   The number of eta strips in the BSMD cluster corresponding to the BEMC cluster matching track t
+  * param[out]  nep[1]   The number of phi strips in the BSMD cluster corresponding to the BEMC cluster matching track t
+  * param[out]  towid[]  Unique ids of the three BEMC towers identified for ene[2], ene[3], and ene[4]
+  */
+  bool getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float* d, int* nep, int* towid);
   int  setVtxModeAttr();
   bool selectVertex();
 
