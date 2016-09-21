@@ -7,7 +7,6 @@
 #include "TClonesArray.h"
 
 #include "StChain/StMaker.h"
-#include "StPicoDstMaker/StPicoEnumerations.h"
 #include "StPicoDstMaker/StPicoArrays.h"
 
 class TFile;
@@ -27,6 +26,7 @@ class StPicoDstMaker : public StMaker
 {
 public:
   enum PicoIoMode {IoWrite=1, IoRead=2};
+  enum PicoVtxMode {NotSet=0,AuAu200=1};
 
   StPicoDstMaker(char const* name = "PicoDst");
   StPicoDstMaker(PicoIoMode ioMode, char const* fileName = "", char const* name = "PicoDst");
@@ -55,7 +55,7 @@ public:
   /// Sets the compression level for the file and all branches. 0 means no compression, 9 is the higher compression level.
   void setCompression(int comp = 9);
 
-  void setVtxMode(int);
+  void setVtxMode(PicoVtxMode);
 
 protected:
 
@@ -101,7 +101,7 @@ protected:
   StPicoDst* mPicoDst;
   Float_t    mBField;
 
-  Int_t      mVtxMode;
+  PicoVtxMode mVtxMode;
 
   TString   mInputFileName;        //! *.list - MuDst or picoDst
   TString   mOutputFileName;       //! FileName
@@ -134,5 +134,5 @@ inline TTree* StPicoDstMaker::tree() { return mTTree; }
 inline void StPicoDstMaker::setSplit(int split) { mSplit = split; }
 inline void StPicoDstMaker::setCompression(int comp) { mCompression = comp; }
 inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
-inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; }
+inline void StPicoDstMaker::setVtxMode(PicoVtxMode const vtxMode) { mVtxMode = vtxMode; }
 #endif
