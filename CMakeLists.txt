@@ -77,10 +77,10 @@ add_library (
 root_generate_linkdef_and_dictionary(
 	StPicoEvent
 	HEADERS
-	StPicoEvent/StPicoBTOWHit.h
+	StPicoEvent/StPicoBTowHit.h
 	StPicoEvent/StPicoBTofHit.h
 	StPicoEvent/StPicoBTofPidTraits.h
-	StPicoEvent/StPicoEmcPidTraits.h
+	StPicoEvent/StPicoBEmcPidTraits.h
 	StPicoEvent/StPicoEmcTrigger.h
 	StPicoEvent/StPicoEvent.h
 	StPicoEvent/StPicoMtdHit.h
@@ -92,10 +92,10 @@ root_generate_linkdef_and_dictionary(
 add_library (
 	StPicoEvent
 	SHARED
-	StPicoEvent/StPicoBTOWHit.cxx
+	StPicoEvent/StPicoBTowHit.cxx
 	StPicoEvent/StPicoBTofHit.cxx
 	StPicoEvent/StPicoBTofPidTraits.cxx
-	StPicoEvent/StPicoEmcPidTraits.cxx
+	StPicoEvent/StPicoBEmcPidTraits.cxx
 	StPicoEvent/StPicoEmcTrigger.cxx
 	StPicoEvent/StPicoEvent.cxx
 	StPicoEvent/StPicoMtdHit.cxx
