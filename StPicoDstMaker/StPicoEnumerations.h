@@ -1,6 +1,6 @@
 #ifndef StPicoEnumerations_h
 #define StPicoEnumerations_h
 
-enum StPicoVtx {PicoVtxAuAu200};
+enum StPicoVtx {PicoVtxDefault, PicoVtxAuAu200};
 
 #endif
