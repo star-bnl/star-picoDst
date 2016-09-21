@@ -60,7 +60,7 @@
 StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
-  mPicoDst(nullptr), mBField(0),
+  mPicoDst(new StPicoDst()), mBField(0),
   mIoMode(ioWrite), mVtxMode(9999),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
@@ -69,7 +69,6 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
 {
   streamerOff();
   createArrays();
-  mPicoDst = new StPicoDst();
 
   std::fill_n(mStatusArrays, sizeof(mStatusArrays)/sizeof(mStatusArrays[0]), 1);
 }
