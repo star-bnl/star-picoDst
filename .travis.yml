@@ -4,6 +4,7 @@ language: cpp
 
 compiler:
   - gcc
+  - clang
 
 addons:
   apt:
@@ -26,15 +27,23 @@ install:
 
 before_script:
     # Install desired version of ROOT
+  - mkdir -p /tmp/root_v5.34.30
   - wget http://root.cern.ch/download/root_v5.34.30.source.tar.gz -P /tmp/
-  - tar -xzf /tmp/root_v5.34.30.source.tar.gz
+  - tar -xzf /tmp/root_v5.34.30.source.tar.gz -C /tmp/root_v5.34.30/ --strip-components=1
   - wget http://root.cern.ch/download/root_v5.34.30.Linux-ubuntu12-x86_64-gcc4.6.tar.gz -P /tmp/
-  - tar -xzf /tmp/root_v5.34.30.Linux-ubuntu12-x86_64-gcc4.6.tar.gz
-  - source ./root/bin/thisroot.sh
-  - root-config --libs
-  - root-config --cflags
+  - tar -xzf /tmp/root_v5.34.30.Linux-ubuntu12-x86_64-gcc4.6.tar.gz -C /tmp/root_v5.34.30/ --strip-components=1
     # Move some ROOT header files to common include directory
-  - rsync -auv root/math/mathmore/inc/Math root/include/
+  - rsync -auv /tmp/root_v5.34.30/math/mathmore/inc/Math /tmp/root_v5.34.30/include/
+
+    # Install ROOT v6
+  - mkdir -p /tmp/root_v6.06.06
+  - wget http://root.cern.ch/download/root_v6.06.06.source.tar.gz -P /tmp/
+  - tar -xzf /tmp/root_v6.06.06.source.tar.gz -C /tmp/root_v6.06.06/ --strip-components=1
+  - wget http://root.cern.ch/download/root_v6.06.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz -P /tmp/
+  - tar -xzf /tmp/root_v6.06.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz -C /tmp/root_v6.06.06/ --strip-components=1
+    # Move some ROOT header files to common include directory
+  - rsync -auv /tmp/root_v6.06.06/math/mathmore/inc/Math /tmp/root_v6.06.06/include/
+
     # Install dependencies
   - git clone --depth=1 https://github.com/star-bnl/star-base.git    ext/star-base
   - git clone --depth=1 https://github.com/star-bnl/star-stevent.git ext/star-stevent
@@ -46,6 +55,23 @@ before_script:
   - git clone --depth=1 https://github.com/star-bnl/star-pams.git    ext/star-pams
 
 script:
+    # Build libs with ROOT v5
+  - source /tmp/root_v5.34.30/bin/thisroot.sh
+  - root-config --libs
+  - root-config --cflags
+  - mkdir build/ && cd build/ && pwd
+  - cmake -D STAR_BASE_DIR=ext/star-base -D STAR_STEVENT_DIR=ext/star-stevent -D STAR_MUDST_DIR=ext/star-muDst -D STAR_TABLES_DIR=ext/star-tables -D STAR_EMC_DIR=ext/star-emc -D STAR_TRIGGER_DIR=ext/star-trigger -D STAR_PAMS_DIR=ext/star-pams -D STAR_DAQ_DIR=ext/star-daq ../
+  - cmake -D CMAKE_INSTALL_PREFIX=./ -D CMAKE_BUILD_TYPE=Release ../
+  - make -j4 && make install && make clean
+  - pwd && ls -la ./ && ls -la lib/
+
+    # Clean-up before next build
+  - cd ../ && rm -fr build/
+
+    # Build libs with ROOT v6
+  - source /tmp/root_v6.06.06/bin/thisroot.sh
+  - root-config --libs
+  - root-config --cflags
   - mkdir build/ && cd build/ && pwd
   - cmake -D STAR_BASE_DIR=ext/star-base -D STAR_STEVENT_DIR=ext/star-stevent -D STAR_MUDST_DIR=ext/star-muDst -D STAR_TABLES_DIR=ext/star-tables -D STAR_EMC_DIR=ext/star-emc -D STAR_TRIGGER_DIR=ext/star-trigger -D STAR_PAMS_DIR=ext/star-pams -D STAR_DAQ_DIR=ext/star-daq ../
   - cmake -D CMAKE_INSTALL_PREFIX=./ -D CMAKE_BUILD_TYPE=Release ../

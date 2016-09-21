@@ -1,3 +1,11 @@
+/*!
+ *  \class StPicoMtdPidTraits
+ *
+ *  \brief Class storing the matching information
+ *  between TPC tracks and MTD hits for muon PID.
+ * 
+ */
+
 #ifndef StPicoMtdPidTraits_h
 #define StPicoMtdPidTraits_h
 
@@ -9,8 +17,24 @@ class StPicoMtdPidTraits : public TObject
 {
 public:
   StPicoMtdPidTraits();
-  StPicoMtdPidTraits(const StMuMtdHit* , const StMuMtdPidTraits*, const Int_t index);
+
+  /*!
+   *
+   *  \brief Default constructor
+   *  \param hit Pointer to the MTD hit in MuDst
+   *  \param trait Pointer to the MtdPidTrait in MuDst
+   *  \param index Index to the associated TPC track
+   */
+  StPicoMtdPidTraits(const StMuMtdHit* hit, const StMuMtdPidTraits* trait, const Int_t index);
+
+
+  /*!
+   *
+   *  \brief Default destructor
+   */
   virtual ~StPicoMtdPidTraits();
+
+
   virtual void Print(const Char_t* option = "") const;
 
   // Matching information
@@ -36,24 +60,24 @@ public:
   void    setBeta(Float_t beta);
 
 private:
-  Short_t   mTrackIndex;            // Index to the associated track in the event
-  Short_t   mMtdHitIndex;           // Index to the associated hit in the event
-  Char_t    mMatchFlag;             // Matching flag indicating multiple matches
-  Float_t   mDeltaY;                // DeltaY between matched track-hit pair
-  Float_t   mDeltaZ;                // DeltaZ between matched track-hit pair
-  Float_t   mDeltaTimeOfFlight;     // Difference between measured and expected time-of-flight
-  Float_t   mBeta;                  // Beta of matched tracks
-  Short_t   mMtdHitChan;            // (backleg-1) * 60 + (module-1) * 12 + cell
+  Short_t   mTrackIndex;            ///< Index to the associated track in the event
+  Short_t   mMtdHitIndex;           ///< Index to the associated MTD hit in the event
+  Char_t    mMatchFlag;             ///< Matching flag indicating multiple matches
+  Float_t   mDeltaY;                ///< DeltaY between matched track-hit pair
+  Float_t   mDeltaZ;                ///< DeltaZ between matched track-hit pair
+  Float_t   mDeltaTimeOfFlight;     ///< Difference between measured and expected time-of-flight
+  Float_t   mBeta;                  ///< Beta of matched tracks
+  Short_t   mMtdHitChan;            ///< (backleg-1) * 60 + (module-1) * 12 + cell
 
   ClassDef(StPicoMtdPidTraits, 1)
 };
-inline Int_t    StPicoMtdPidTraits::trackIndex()        const { return (Int_t)mTrackIndex; }
-inline Int_t    StPicoMtdPidTraits::mtdHitIndex()       const { return (Int_t)mMtdHitIndex; }
-inline Int_t    StPicoMtdPidTraits::gChannel()          const { return (Int_t)mMtdHitChan; }
-inline Int_t    StPicoMtdPidTraits::backleg()           const { return (Int_t)mMtdHitChan / 60 + 1; }
-inline Int_t    StPicoMtdPidTraits::module()            const { return ((Int_t)mMtdHitChan % 60) / 12 + 1; }
-inline Int_t    StPicoMtdPidTraits::cell()              const { return (Int_t)mMtdHitChan % 12; }
-inline Int_t    StPicoMtdPidTraits::matchFlag()         const { return (Int_t)mMatchFlag; }
+inline Int_t    StPicoMtdPidTraits::trackIndex()        const { return mTrackIndex; }
+inline Int_t    StPicoMtdPidTraits::mtdHitIndex()       const { return mMtdHitIndex; }
+inline Int_t    StPicoMtdPidTraits::gChannel()          const { return mMtdHitChan; }
+inline Int_t    StPicoMtdPidTraits::backleg()           const { return mMtdHitChan / 60 + 1; }
+inline Int_t    StPicoMtdPidTraits::module()            const { return (mMtdHitChan % 60) / 12 + 1; }
+inline Int_t    StPicoMtdPidTraits::cell()              const { return mMtdHitChan % 12; }
+inline Int_t    StPicoMtdPidTraits::matchFlag()         const { return mMatchFlag; }
 inline Float_t  StPicoMtdPidTraits::deltaY()            const { return mDeltaY; }
 inline Float_t  StPicoMtdPidTraits::deltaZ()            const { return mDeltaZ; }
 inline Float_t  StPicoMtdPidTraits::deltaTimeOfFlight() const { return mDeltaTimeOfFlight; }

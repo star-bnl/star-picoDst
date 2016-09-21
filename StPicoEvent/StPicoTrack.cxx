@@ -1,84 +1,90 @@
 #include <limits>
-#include "StPicoTrack.h"
+
+#include "TMath.h"
+
+#include "StPicoEvent/StPicoTrack.h"
 #include "St_base/StMessMgr.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 
 
 //----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack() : mId(0), mChi2(std::numeric_limits<unsigned short>::max()),
+StPicoTrack::StPicoTrack() : TObject(),
+  mId(0),
+  mChi2(std::numeric_limits<unsigned short>::max()),
   mPMomentum(0., 0., 0.), mGMomentum(0., 0., 0.), mOrigin(0., 0., 0.),
-  mDedx(0), mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mNSigmaPion(std::numeric_limits<short>::max()), mNSigmaKaon(std::numeric_limits<short>::max()),
-  mNSigmaProton(std::numeric_limits<short>::max()), mNSigmaElectron(std::numeric_limits<short>::max()),
-  mMap0(0), mMap1(0), mEmcPidTraitsIndex(-1), mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
+  mDedx(0.), mNHitsFit(0), mNHitsMax(0), mNHitsDedx(0), mCharge(0),
+  mNSigmaPion(std::numeric_limits<short>::max()),
+  mNSigmaKaon(std::numeric_limits<short>::max()),
+  mNSigmaProton(std::numeric_limits<short>::max()),
+  mNSigmaElectron(std::numeric_limits<short>::max()),
+  mTopologyMap{}, mBEmcPidTraitsIndex(-1), mBTofPidTraitsIndex(-1), mMtdPidTraitsIndex(-1)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// t - the global track.  p - the associated primary track from the first primary vertex
-/////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack(StMuTrack const* const t, StMuTrack const* const p, double const B, StThreeVectorD const& pVtx, StDcaGeometry const& dcaG)
+StPicoTrack::StPicoTrack(StMuTrack const* const gTrk, StMuTrack const* const pTrk, double const B, StThreeVectorD const& pVtx, StDcaGeometry const& dcaG)
   : StPicoTrack()
 {
-  if (!t || t->type() != global || (p && (p->type() != primary || p->id() != t->id())))
+  if (!gTrk || gTrk->type() != global || (pTrk && (pTrk->type() != primary || pTrk->id() != gTrk->id())))
   {
     LOG_WARN << " Bad StPicoTrack constructor ...... Check!" << endm;
   }
   else
   {
-    mId        = (UShort_t)t->id();
-    mChi2      = (t->chi2() * 1000. > std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)(TMath::Nint(t->chi2() * 1000.));
-    if (p)
+    mId        = (UShort_t)gTrk->id();
+    mChi2      = (gTrk->chi2() * 1000. > std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)(TMath::Nint(gTrk->chi2() * 1000.));
+
+    if (pTrk)
     {
-      mPMomentum = p->p();
+      mPMomentum = pTrk->p();
     }
 
+    // Calculate global momentum and position at point of DCA to the pVtx
     StPhysicalHelixD gHelix = dcaG.helix();
     gHelix.moveOrigin(gHelix.pathLength(pVtx));
     mGMomentum = gHelix.momentum(B * kilogauss);
     mOrigin = gHelix.origin();
 
-    int q      = t->charge();
-    mDedx      = (t->dEdx() * 1e6 * 1000. > std::numeric_limits<unsigned short>::max()) ? 0 : (UShort_t)(TMath::Nint(t->dEdx() * 1e6 * 1000.));
-    int flag = t->flag();
+    mDedx      = gTrk->dEdx();
+    int flag = gTrk->flag();
     if (flag / 100 < 7) // TPC tracks
     {
-      mNHitsFit  = (Char_t)(t->nHitsFit(kTpcId) * q);
-      mNHitsMax  = (UChar_t)(t->nHitsPoss(kTpcId));
+      mNHitsFit  = (Char_t)(gTrk->nHitsFit(kTpcId));
+      mNHitsMax  = (UChar_t)(gTrk->nHitsPoss(kTpcId));
     }
     else     // FTPC tracks
     {
-      if (t->helix().momentum(B * kilogauss).pseudoRapidity() > 0.)
+      if (gTrk->helix().momentum(B * kilogauss).pseudoRapidity() > 0.)
       {
-        mNHitsFit  = (Char_t)(t->nHitsFit(kFtpcWestId) * q);
-        mNHitsMax  = (UChar_t)(t->nHitsPoss(kFtpcWestId));
+        mNHitsFit  = (Char_t)(gTrk->nHitsFit(kFtpcWestId));
+        mNHitsMax  = (UChar_t)(gTrk->nHitsPoss(kFtpcWestId));
       }
       else
       {
-        mNHitsFit  = (Char_t)(t->nHitsFit(kFtpcEastId) * q);
-        mNHitsMax  = (UChar_t)(t->nHitsPoss(kFtpcEastId));
+        mNHitsFit  = (Char_t)(gTrk->nHitsFit(kFtpcEastId));
+        mNHitsMax  = (UChar_t)(gTrk->nHitsPoss(kFtpcEastId));
       }
     }
-    mNHitsDedx = (Char_t)(t->nHitsDedx());
-    mNSigmaPion     = (fabs(t->nSigmaPion() * 100.)     > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaPion() * 100.));
-    mNSigmaKaon     = (fabs(t->nSigmaKaon() * 100.)     > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaKaon() * 100.));
-    mNSigmaProton   = (fabs(t->nSigmaProton() * 100.)   > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaProton() * 100.));
-    mNSigmaElectron = (fabs(t->nSigmaElectron() * 100.) > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(t->nSigmaElectron() * 100.));
+    mNHitsDedx = (Char_t)(gTrk->nHitsDedx());
+    mCharge    = (Char_t)(gTrk->charge());
+    mNSigmaPion     = (fabs(gTrk->nSigmaPion() * 100.)     > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrk->nSigmaPion() * 100.));
+    mNSigmaKaon     = (fabs(gTrk->nSigmaKaon() * 100.)     > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrk->nSigmaKaon() * 100.));
+    mNSigmaProton   = (fabs(gTrk->nSigmaProton() * 100.)   > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrk->nSigmaProton() * 100.));
+    mNSigmaElectron = (fabs(gTrk->nSigmaElectron() * 100.) > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrk->nSigmaElectron() * 100.));
 
-    mMap0 = (UInt_t)(t->topologyMap().data(0));
-    mMap1 = (UInt_t)(t->topologyMap().data(1));
+    mTopologyMap[0] = (UInt_t)(gTrk->topologyMap().data(0));
+    mTopologyMap[1] = (UInt_t)(gTrk->topologyMap().data(1));
   }
 }
 //----------------------------------------------------------------------------------
 void StPicoTrack::Print(Char_t const* option) const
 {
-  if (strcmp(option, "tpc") == 0 || strcmp(option, "") == 0)
-  {
-    LOG_INFO << "id=" << id()
-             << " chi2=" << chi2()
-             << endm;
-    LOG_INFO << "pMom=" << pMom() << endm;
-    LOG_INFO << " nHitsFit = " << nHitsFit() << " nHitsdEdx = " << nHitsDedx() << endm;
-    LOG_INFO << " nSigma Pi/K/P/E = " << nSigmaPion() << "/" << nSigmaKaon() << "/" << nSigmaProton() << "/" << nSigmaElectron() << endm;
-  }
+  LOG_INFO << "id: " << id()
+           << " chi2: " << chi2() << "\n"
+           << "pMom: " << pMom()
+           << " nHitsFit: " << nHitsFit()
+           << " nHitsdEdx: " << nHitsDedx() << "\n"
+           << "nSigma pi/K/p/e: " << nSigmaPion()   << "/" << nSigmaKaon() << "/"
+                                  << nSigmaProton() << "/" << nSigmaElectron()
+           << endm;
 }

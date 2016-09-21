@@ -7,8 +7,8 @@
 #include "TClonesArray.h"
 
 #include "StChain/StMaker.h"
-#include "StPicoEnumerations.h"
-#include "StPicoArrays.h"
+#include "StPicoDstMaker/StPicoEnumerations.h"
+#include "StPicoDstMaker/StPicoArrays.h"
 
 class TFile;
 class TTree;
@@ -39,9 +39,6 @@ public:
   void printArrays();
   void SetStatus(char const* arrType, int status);
 
-  void setRunNumber(Int_t);
-  void setProdMode(Int_t);
-  void setEmcMode(int const mode = 1); // 0:No EMC, 1:EMC On
   /// Returns null pointer if no StPicoDst
   StPicoDst* picoDst();
   /// In read mode, returns pointer to the chain of .picoDst.root files
@@ -70,7 +67,6 @@ protected:
   void setBranchAddresses();
   void closeRead();
   void setBranchAddresses(TChain*);
-  void clearIndices();
 
   void buildEmcIndex();
   void initEmc();
@@ -92,12 +88,30 @@ protected:
   void fillBTofHits();
   void fillMtdHits();
 
-  bool getBEMC(StMuTrack* , int*, int*, float*, float*, int*, int*);
+ /**
+  * Returns various measurements by the BEMC and BSMD detectors corresponding to
+  * a given global track.
+  *
+  * param[in]   t        A global track
+  * param[out]  id >= 0  Indicates that a BEMC tower matching track t has been found
+  * param[out]  adc      The largest ADC value of a tower in the BEMC cluster matching track t
+  * param[out]  ene[0]   The highest energy tower in the BEMC cluster matching track t
+  * param[out]  ene[1]   The total energy of the BEMC cluster containing the matching tower
+  * param[out]  ene[2]   The energy deposited in the (closest) BEMC tower matching track t
+  * param[out]  ene[3]   The energy deposited in the second closest BEMC tower matching track t
+  * param[out]  ene[4]   The energy deposited in the third closest BEMC tower matching track t
+  * param[out]  d[0]     The distance [cm] along z from the track t projection onto BSMD to the BEMC cluster matching track t
+  * param[out]  d[1]     The distance [rad] along phi similar to d[0]
+  * param[out]  d[2]     The distance [rad] along eta between the track t projection onto BEMC and the matched BEMC tower center
+  * param[out]  d[3]     The distance [rad] along phi similar to d[2]
+  * param[out]  nep[0]   The number of eta strips in the BSMD cluster corresponding to the BEMC cluster matching track t
+  * param[out]  nep[1]   The number of phi strips in the BSMD cluster corresponding to the BEMC cluster matching track t
+  * param[out]  towid[]  Unique ids of the three BEMC towers identified for ene[2], ene[3], and ene[4]
+  */
+  bool getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float* d, int* nep, int* towid);
   bool selectVertex();
 
   enum ioMode {ioRead, ioWrite};
-  // production modes for different data sets
-  enum prodMode {minbias, central, ht, minbias2};
 
   StMuDst*   mMuDst;
   StEmcCollection* mEmcCollection;
@@ -108,14 +122,11 @@ protected:
   Float_t    mBField;
 
   Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write
-  Int_t      mProdMode;       //! prod mode: 0: - mb, 1: - central, 2: - ht, 3: - mb2, mb with phi weight and q-vector calculation, 4: - save only electron or muon candidates
-  Int_t      mEmcMode;        //! EMC ON(=1)/OFF(=0)
   Int_t      mVtxMode;
 
   TString   mInputFileName;        //! *.list - MuDst or picoDst
   TString   mOutputFileName;       //! FileName
   TFile*    mOutputFile;
-  Int_t     mRunNumber;
 
   TChain*   mChain;
   TTree*    mTTree;
@@ -125,9 +136,6 @@ protected:
   int mCompression;
   int mBufferSize;
 
-  Int_t mIndex2Primary[nTrk];
-  Int_t mMap2Track[nTrk];
-
   // MTD map from backleg to QT
   Int_t  mModuleToQT[30][5];        // Map from module to QT board index
   Int_t  mModuleToQTPos[30][5];     // Map from module to the position on QA board
@@ -135,12 +143,8 @@ protected:
   Int_t  mQTSlewBinEdge[8][16][8];  // Bin Edge for QT slewing correction
   Int_t  mQTSlewCorr[8][16][8];     // QT Slewing correction
 
-  //
-  friend class StPicoDst;
-
-  TClonesArray*   mPicoAllArrays[__NALLPICOARRAYS__];
-  TClonesArray**  mPicoArrays;
-  char            mStatusArrays[__NALLPICOARRAYS__];
+  TClonesArray*   mPicoArrays[StPicoArrays::NAllPicoArrays];
+  char            mStatusArrays[StPicoArrays::NAllPicoArrays];
 
   ClassDef(StPicoDstMaker, 0)
 };
@@ -151,8 +155,5 @@ inline TTree* StPicoDstMaker::tree() { return mTTree; }
 inline void StPicoDstMaker::setSplit(int split) { mSplit = split; }
 inline void StPicoDstMaker::setCompression(int comp) { mCompression = comp; }
 inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
-inline void StPicoDstMaker::setRunNumber(int run) { mRunNumber = run; }
-inline void StPicoDstMaker::setProdMode(int val) { mProdMode = val; }
-inline void StPicoDstMaker::setEmcMode(int const mode) { mEmcMode = mode; }
 inline void StPicoDstMaker::setVtxMode(int const vtxMode) { mVtxMode = vtxMode; }
 #endif

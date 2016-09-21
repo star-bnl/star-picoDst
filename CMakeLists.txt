@@ -58,28 +58,52 @@ include_directories(
 )
 
 
-root_generate_linkdef_and_dictionary(StPicoDstMaker HEADERS "StPicoDstMaker/*.h")
+root_generate_linkdef_and_dictionary(
+	StPicoDstMaker
+	HEADERS
+	StPicoDstMaker/StPicoDst.h
+	StPicoDstMaker/StPicoDstMaker.h
+)
 
 add_library (
 	StPicoDstMaker
 	SHARED
 	StPicoDstMaker/StPicoArrays.cxx
-	StPicoDstMaker/StPicoBTOWHit.cxx
-	StPicoDstMaker/StPicoBTofHit.cxx
-	StPicoDstMaker/StPicoBTofPidTraits.cxx
-	StPicoDstMaker/StPicoConstants.cxx
-	StPicoDstMaker/StPicoCut.cxx
 	StPicoDstMaker/StPicoDst.cxx
 	StPicoDstMaker/StPicoDstMaker.cxx
-	StPicoDstMaker/StPicoEmcPidTraits.cxx
-	StPicoDstMaker/StPicoEmcTrigger.cxx
-	StPicoDstMaker/StPicoEvent.cxx
-	StPicoDstMaker/StPicoMtdHit.cxx
-	StPicoDstMaker/StPicoMtdPidTraits.cxx
-	StPicoDstMaker/StPicoMtdTrigger.cxx
-	StPicoDstMaker/StPicoTrack.cxx
 	StPicoDstMaker_dict.cxx
 )
 
+root_generate_linkdef_and_dictionary(
+	StPicoEvent
+	HEADERS
+	StPicoEvent/StPicoBTowHit.h
+	StPicoEvent/StPicoBTofHit.h
+	StPicoEvent/StPicoBTofPidTraits.h
+	StPicoEvent/StPicoBEmcPidTraits.h
+	StPicoEvent/StPicoEmcTrigger.h
+	StPicoEvent/StPicoEvent.h
+	StPicoEvent/StPicoMtdHit.h
+	StPicoEvent/StPicoMtdPidTraits.h
+	StPicoEvent/StPicoMtdTrigger.h
+	StPicoEvent/StPicoTrack.h
+)
 
-install(TARGETS StPicoDstMaker DESTINATION "${STAR_ADDITIONAL_INSTALL_PREFIX}/lib")
+add_library (
+	StPicoEvent
+	SHARED
+	StPicoEvent/StPicoBTowHit.cxx
+	StPicoEvent/StPicoBTofHit.cxx
+	StPicoEvent/StPicoBTofPidTraits.cxx
+	StPicoEvent/StPicoBEmcPidTraits.cxx
+	StPicoEvent/StPicoEmcTrigger.cxx
+	StPicoEvent/StPicoEvent.cxx
+	StPicoEvent/StPicoMtdHit.cxx
+	StPicoEvent/StPicoMtdPidTraits.cxx
+	StPicoEvent/StPicoMtdTrigger.cxx
+	StPicoEvent/StPicoTrack.cxx
+	StPicoEvent_dict.cxx
+)
+
+
+install(TARGETS StPicoDstMaker StPicoEvent DESTINATION "${STAR_ADDITIONAL_INSTALL_PREFIX}/lib")
