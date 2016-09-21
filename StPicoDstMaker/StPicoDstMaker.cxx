@@ -1051,7 +1051,12 @@ void StPicoDstMaker::fillMtdHits()
 
 bool StPicoDstMaker::selectVertex()
 {
-  if (mVtxMode == PicoVtxAuAu200)
+  if (mVtxMode == PicoVtxDefault)
+  {
+    // choose the default vertex, i.e. the first vertex
+    mMuDst->setVertexIndex(0);
+  }
+  else if (mVtxMode == PicoVtxAuAu200)
   {
     StBTofHeader const* mBTofHeader = mMuDst->btofHeader();
 
@@ -1071,7 +1076,6 @@ bool StPicoDstMaker::selectVertex()
         }
       }
     }
-
   }
   else // default case
   {
