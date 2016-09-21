@@ -2,6 +2,7 @@
 #define StPicoUtilities_h
 #include <unordered_map>
 #include <string>
+#include <cmath>
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 
@@ -43,11 +44,9 @@ namespace StPicoUtilities
             const Double_t charge = track->charge();
             const Double_t nsigmaproton= track->nSigmaProton();
             const Double_t nsigmakaon= track->nSigmaKaon();
-            const Double_t p = track->momentum().mag();
-            const Double_t beta = track->btofPidTraits().beta();
-            Double_t  M2;
-            if (beta <= 1.e-5) M2 = -999.;
-            else M2 = p * p * (pow(1. / beta, 2) - 1);
+
+            double const beta = track->btofPidTraits().beta();
+            double const mass2 = beta <= 1.e-5 ? -999. : track->momentum().mag2() * (std::pow(1./beta, 2) - 1);
 
             // finally, check nHitsfit, charge, eta, pid, if a track satisfies gets inside the if, count it.
             if(track->nHitsFit(kTpcId) >= 10)
@@ -56,10 +55,10 @@ namespace StPicoUtilities
                 if (charge > 0 && eta > -1.0 && eta < -0.5) ++custom_refMult["refMult2PosEast"];
                 if (charge < 0 && eta > 0.5 && eta < 1.0) ++custom_refMult["refMult2NegWest"];
                 if (charge > 0 && eta > 0.5 && eta < 1.0) ++custom_refMult["refMult2PosWest"] ;
-                if (charge < 0 && eta > -1.0 && eta < 0 && nsigmaproton < (-3.0) && M2 < 0.4) ++custom_refMult["refMult3NegEast"];
-                if (charge > 0 && eta > -1.0 && eta < 0 && nsigmaproton < (-3.0) && M2 < 0.4) ++custom_refMult["refMult3PosEast"];
-                if (charge < 0 && eta > 0 && eta < 1.0 && nsigmaproton < (-3.0) && M2 < 0.4) ++custom_refMult["refMult3NegWest"]; 
-                if (charge > 0 && eta > 0 && eta < 1.0 && nsigmaproton < (-3.0) && M2 < 0.4) ++custom_refMult["refMult3PosWest"];
+                if (charge < 0 && eta > -1.0 && eta < 0 && nsigmaproton < (-3.0) && mass2 < 0.4) ++custom_refMult["refMult3NegEast"];
+                if (charge > 0 && eta > -1.0 && eta < 0 && nsigmaproton < (-3.0) && mass2 < 0.4) ++custom_refMult["refMult3PosEast"];
+                if (charge < 0 && eta > 0 && eta < 1.0 && nsigmaproton < (-3.0) && mass2 < 0.4) ++custom_refMult["refMult3NegWest"]; 
+                if (charge > 0 && eta > 0 && eta < 1.0 && nsigmaproton < (-3.0) && mass2 < 0.4) ++custom_refMult["refMult3PosWest"];
                 if (charge < 0 && eta < 0 && eta > -1.0) ++custom_refMult["refMultHalfNegEast"];
                 if (charge > 0 && eta < 0 && eta > -1.0) ++custom_refMult["refMultHalfPosEast"];
                 if (charge < 0 && eta > 0 && eta < 1.0) ++custom_refMult["refMultHalfNegWest"];
@@ -68,7 +67,7 @@ namespace StPicoUtilities
 
             if(track->nHitsFit(kTpcId) >= 15)
             {
-                if (M2 <= -990)
+                if (mass2 <= -990)
                 {
                     if (charge < 0 && eta > -1.0 && eta < 0 && (nsigmakaon > 3 || nsigmakaon < -3)) ++custom_refMult["refMult4NegEast"];
                     if (charge > 0 && eta > -1.0 && eta < 0 && (nsigmakaon > 3 || nsigmakaon < -3)) ++custom_refMult["refMult4PosEast"];
@@ -77,10 +76,10 @@ namespace StPicoUtilities
                 }
                 else
                 {
-                    if ( charge < 0 && eta > -1.0 && eta < 0 && (M2 > 0.6 || M2 < 0.1)) ++custom_refMult["refMult4NegEast"];
-                    if ( charge > 0 && eta > -1.0 && eta < 0 && (M2 > 0.6 || M2 < 0.1)) ++custom_refMult["refMult4PosEast"];
-                    if ( charge < 0 && eta > 0 && eta < 1.0 && (M2 > 0.6 || M2 < 0.1)) ++custom_refMult["refMult4NegWest"];
-                    if ( charge > 0 && eta > 0 && eta < 1.0 && (M2 > 0.6 || M2 < 0.1)) ++custom_refMult["refMult4PosWest"];
+                    if ( charge < 0 && eta > -1.0 && eta < 0 && (mass2 > 0.6 || mass2 < 0.1)) ++custom_refMult["refMult4NegEast"];
+                    if ( charge > 0 && eta > -1.0 && eta < 0 && (mass2 > 0.6 || mass2 < 0.1)) ++custom_refMult["refMult4PosEast"];
+                    if ( charge < 0 && eta > 0 && eta < 1.0 && (mass2 > 0.6 || mass2 < 0.1)) ++custom_refMult["refMult4NegWest"];
+                    if ( charge > 0 && eta > 0 && eta < 1.0 && (mass2 > 0.6 || mass2 < 0.1)) ++custom_refMult["refMult4PosWest"];
                 }
             }
         }
