@@ -102,7 +102,7 @@ void makePicoDst(const Char_t *inputFile = "root://xrdstar.rcf.bnl.gov:1095//hom
   StMtdMatchMaker* mtdMatchMaker = new StMtdMatchMaker();
   StMtdCalibMaker* mtdCalibMaker = new StMtdCalibMaker("mtdcalib");
 
-  StPicoDstMaker* picoMaker = new StPicoDstMaker(1, inputFile, "picoDst");
+  StPicoDstMaker* picoMaker = new StPicoDstMaker(StPicoDstMaker::IoWrite, inputFile, "picoDst");
   picoMaker->setVtxMode((int)PicoVtxAuAu200);
 //        picoMaker->SetDebug(1);
 

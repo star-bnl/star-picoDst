@@ -26,8 +26,10 @@ class StPicoEvent;
 class StPicoDstMaker : public StMaker
 {
 public:
+  enum PicoIoMode {IoWrite=1, IoRead=2};
+
   StPicoDstMaker(char const* name = "PicoDst");
-  StPicoDstMaker(int mode, char const* fileName = "", char const* name = "PicoDst");
+  StPicoDstMaker(PicoIoMode ioMode, char const* fileName = "", char const* name = "PicoDst");
   virtual ~StPicoDstMaker();
 
   virtual Int_t Init();
@@ -91,8 +93,6 @@ protected:
   bool getBEMC(StMuTrack* , int*, int*, float*, float*, int*, int*);
   bool selectVertex();
 
-  enum ioMode {ioRead, ioWrite};
-
   StMuDst*   mMuDst;
   StEmcCollection* mEmcCollection;
   StEmcPosition*   mEmcPosition;
@@ -101,7 +101,6 @@ protected:
   StPicoDst* mPicoDst;
   Float_t    mBField;
 
-  Int_t      mIoMode;         //! I/O mode:  0: - read,   1: - write
   Int_t      mVtxMode;
 
   TString   mInputFileName;        //! *.list - MuDst or picoDst
