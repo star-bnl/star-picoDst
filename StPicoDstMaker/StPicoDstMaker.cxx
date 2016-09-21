@@ -9,6 +9,7 @@
 
 #include "StChain/StChain.h"
 #include "St_base/StMessMgr.h"
+#include "StarRoot/TAttr.h"
 
 #include "StEvent/StBTofHeader.h"
 #include "StEvent/StDcaGeometry.h"
@@ -61,7 +62,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(new StPicoDst()), mBField(0),
-  mIoMode(ioWrite), mVtxMode(9999),
+  mVtxMode(PicoVtxMode::NotSet),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
@@ -73,9 +74,9 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   std::fill_n(mStatusArrays, sizeof(mStatusArrays)/sizeof(mStatusArrays[0]), 1);
 }
 //-----------------------------------------------------------------------
-StPicoDstMaker::StPicoDstMaker(int mode, char const* fileName, char const* name) : StPicoDstMaker(name)
+StPicoDstMaker::StPicoDstMaker(PicoIoMode ioMode, char const* fileName, char const* name) : StPicoDstMaker(name)
 {
-  mIoMode = mode;
+  StMaker::m_Mode = ioMode;
   mInputFileName = fileName;
 }
 //-----------------------------------------------------------------------
@@ -108,7 +109,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
     int   num = specIndex[i + 1] - specIndex[i];
     std::fill_n(sta, num, status);
     LOG_INFO << "StPicoDstMaker::SetStatus " << status << " to " << specNames[i] << endm;
-    if (mIoMode == ioRead)
+    if (StMaker::m_Mode == PicoIoMode::IoRead)
       setBranchAddresses(mChain);
     return;
   }
@@ -122,7 +123,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
     mStatusArrays[i] = status;
   }
 
-  if (mIoMode == ioRead)
+  if (StMaker::m_Mode == PicoIoMode::IoRead)
     setBranchAddresses(mChain);
 }
 //-----------------------------------------------------------------------
@@ -178,33 +179,65 @@ void StPicoDstMaker::createArrays()
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Init()
 {
-  if (mIoMode == ioWrite)
+  switch(StMaker::m_Mode)
   {
-    mInputFileName = mInputFileName(mInputFileName.Index("st_"), mInputFileName.Length());
-    mOutputFileName = mInputFileName;
-    mOutputFileName.ReplaceAll("MuDst.root", "picoDst.root");
+    case PicoIoMode::IoWrite:
 
-    if (mOutputFileName == mInputFileName)
-    {
-      LOG_ERROR << "Input file is not a MuDst ... " << endm;
+      if (mVtxMode == PicoVtxMode::NotSet)
+      {
+        if(setVtxModeAttr() != kStOK)
+        {
+          LOG_ERROR << "Pico Vertex Mode is not set ... " << endm;
+          return kStErr;
+        }
+      }
+
+      mInputFileName = mInputFileName(mInputFileName.Index("st_"), mInputFileName.Length());
+      mOutputFileName = mInputFileName;
+      mOutputFileName.ReplaceAll("MuDst.root", "picoDst.root");
+
+      if (mOutputFileName == mInputFileName)
+      {
+        LOG_ERROR << "Input file is not a MuDst ... " << endm;
+        return kStErr;
+      }
+
+      openWrite();
+      initEmc();
+      break;
+
+    case PicoIoMode::IoRead:
+      openRead();
+      break;
+
+    default:
+      LOG_ERROR << "Pico IO mode is not set ... " << endm;
       return kStErr;
-    }
-
-    openWrite();
-    initEmc();
-  }
-  else if (mIoMode == ioRead)
-  {
-    openRead();
   }
 
   return kStOK;
 }
 
+int StPicoDstMaker::setVtxModeAttr()
+{
+  if (strcmp(SAttr("PicoVtxMode"),"PicoVtxDefault") == 0)
+  {
+    setVtxMode(PicoVtxMode::Default);
+    return kStOK;
+  }
+  else if (strcmp(SAttr("PicoVtxMode"), "PicoVtxAuAu200") == 0)
+  {
+    setVtxMode(PicoVtxMode::AuAu200);
+    return kStOK;
+  }
+
+  return kStErr;
+}
+
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::InitRun(Int_t const runnumber)
 {
-  if (mIoMode == ioWrite)
+  if (StMaker::m_Mode == PicoIoMode::IoWrite)
   {
     if (!initMtd(runnumber))
     {
@@ -335,11 +368,11 @@ Bool_t StPicoDstMaker::initMtd(Int_t const runnumber)
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Finish()
 {
-  if (mIoMode == ioRead)
+  if (StMaker::m_Mode == PicoIoMode::IoRead)
   {
     closeRead();
   }
-  else if (mIoMode == ioWrite)
+  else if (StMaker::m_Mode == PicoIoMode::IoWrite)
   {
     closeWrite();
     finishEmc();
@@ -465,7 +498,7 @@ void StPicoDstMaker::finishEmc()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::Clear(char const* )
 {
-  if (mIoMode == ioRead)
+  if (StMaker::m_Mode == PicoIoMode::IoRead)
     return;
   clearArrays();
 }
@@ -477,7 +510,7 @@ void StPicoDstMaker::closeRead()
 //_____________________________________________________________________________
 void StPicoDstMaker::closeWrite()
 {
-  if (mIoMode == ioWrite)
+  if (StMaker::m_Mode == PicoIoMode::IoWrite)
   {
     if (mOutputFile)
     {
@@ -491,11 +524,11 @@ int StPicoDstMaker::Make()
 {
   int returnStarCode = kStOK;
 
-  if (mIoMode == ioWrite)
+  if (StMaker::m_Mode == PicoIoMode::IoWrite)
   {
     returnStarCode = MakeWrite();
   }
-  else if (mIoMode == ioRead)
+  else if (StMaker::m_Mode == PicoIoMode::IoRead)
     returnStarCode = MakeRead();
 
   return returnStarCode;
@@ -1051,7 +1084,12 @@ void StPicoDstMaker::fillMtdHits()
 
 bool StPicoDstMaker::selectVertex()
 {
-  if (mVtxMode == PicoVtxAuAu200)
+  if (mVtxMode == PicoVtxMode::Default)
+  {
+    // choose the default vertex, i.e. the first vertex
+    mMuDst->setVertexIndex(0);
+  }
+  else if (mVtxMode == PicoVtxMode::AuAu200)
   {
     StBTofHeader const* mBTofHeader = mMuDst->btofHeader();
 

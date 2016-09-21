@@ -1,6 +1,5 @@
 
 #include <TSystem>
-#include "StRoot/StPicoDstMaker/StPicoEnumerations.h"
 
 class StMaker;
 class StChain;
@@ -102,8 +101,8 @@ void makePicoDst(const Char_t *inputFile = "root://xrdstar.rcf.bnl.gov:1095//hom
   StMtdMatchMaker* mtdMatchMaker = new StMtdMatchMaker();
   StMtdCalibMaker* mtdCalibMaker = new StMtdCalibMaker("mtdcalib");
 
-  StPicoDstMaker* picoMaker = new StPicoDstMaker(1, inputFile, "picoDst");
-  picoMaker->setVtxMode((int)PicoVtxAuAu200);
+  StPicoDstMaker* picoMaker = new StPicoDstMaker(StPicoDstMaker::IoWrite, inputFile, "picoDst");
+  picoMaker->setVtxMode((int)(StPicoDstMaker::PicoVtxMode::AuAu200));
 //        picoMaker->SetDebug(1);
 
   chain->Init();
