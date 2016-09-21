@@ -219,18 +219,15 @@ Int_t StPicoDstMaker::Init()
 
 int StPicoDstMaker::setVtxModeAttr()
 {
-  if(TObject* vtxMode = (TObject*)(GetAttr()->FindObject("picovtxmode")))
+  if (strcmp(SAttr("PicoVtxMode"),"PicoVtxDefault") == 0)
   {
-    if (strcmp(vtxMode->GetTitle(),"PicoVtxAuAu200") == 0)
-    {
-      setVtxMode(PicoVtxMode::AuAu200);
-      return kStOK;
-    }
-    else if (strcmp(vtxMode->GetTitle(), "PicoVtxDefault") == 0)
-    {
-      setVtxMode(PicoVtxMode::Default);
-      return kStOK;
-    }
+    setVtxMode(PicoVtxMode::Default);
+    return kStOK;
+  }
+  else if (strcmp(SAttr("PicoVtxMode"), "PicoVtxAuAu200") == 0)
+  {
+    setVtxMode(PicoVtxMode::AuAu200);
+    return kStOK;
   }
 
   return kStErr;
