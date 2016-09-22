@@ -76,7 +76,7 @@ StPicoEvent::StPicoEvent(StMuDst const& muDst) : StPicoEvent()
   mRefMultHalfPosEast = custom_refMult["refMultHalfPosEast"];
   mRefMultHalfNegWest = custom_refMult["refMultHalfNegWest"];
   mRefMultHalfPosWest = custom_refMult["refMultHalfPosWest"];
- 
+
   mGRefMult = (UShort_t)ev->grefmult();
   mNumberOfGlobalTracks = muDst.numberOfGlobalTracks();
   mbTofTrayMultiplicity = ev->btofTrayMultiplicity() ;
