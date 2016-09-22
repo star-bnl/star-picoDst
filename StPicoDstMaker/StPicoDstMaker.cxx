@@ -567,6 +567,7 @@ Int_t StPicoDstMaker::MakeWrite()
     return kStWarn;
   }
 
+  int const originalVertexId = mMuDst->currentVertexIndex();
   if (!selectVertex())
   {
     LOG_INFO << "Vertex is not valid" << endm;
@@ -595,6 +596,8 @@ Int_t StPicoDstMaker::MakeWrite()
   if (Debug()) mPicoDst->printTracks();
 
   mTTree->Fill();
+
+  mMuDst->setVertexIndex(originalVertexId);
 
   return kStOK;
 }
