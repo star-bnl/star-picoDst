@@ -37,50 +37,27 @@ namespace StPicoUtilities
             if (!track) continue;
 
             // these first 3 checks are suitable for all refMult
-            if (track->flag() < 0 || fabs(track->momentum().mag()) < 1.e-10 || track->dca().mag() > 3) continue;
+            if (track->flag() < 0 || fabs(track->momentum().mag()) < 1.e-10
+                || track->dca().mag() > 3 || fabs(track->momentum().pseudoRapidity()) > 1) continue;
 
-            // calculation for mass square
-            const Double_t eta = track->momentum().pseudoRapidity() ;
-            const Double_t charge = track->charge();
-            const Double_t nsigmaproton= track->nSigmaProton();
-            const Double_t nsigmakaon= track->nSigmaKaon();
+            double const eta = track->momentum().pseudoRapidity() ;
+            std::string chargeName = track->charge() > 0 ? "Pos" : "Neg";
+            std::string tpcHalfName = eta > 0 ? "West" : "East";
 
             double const beta = track->btofPidTraits().beta();
             double const mass2 = beta <= 1.e-5 ? -999. : track->momentum().mag2() * (std::pow(1./beta, 2) - 1);
 
-            // finally, check nHitsfit, charge, eta, pid, if a track satisfies gets inside the if, count it.
             if(track->nHitsFit(kTpcId) >= 10)
             {
-                if (charge < 0 && eta > -1.0 && eta < -0.5) ++custom_refMult["refMult2NegEast"];
-                if (charge > 0 && eta > -1.0 && eta < -0.5) ++custom_refMult["refMult2PosEast"];
-                if (charge < 0 && eta > 0.5 && eta < 1.0) ++custom_refMult["refMult2NegWest"];
-                if (charge > 0 && eta > 0.5 && eta < 1.0) ++custom_refMult["refMult2PosWest"] ;
-                if (charge < 0 && eta > -1.0 && eta < 0 && nsigmaproton < (-3.0) && mass2 < 0.4) ++custom_refMult["refMult3NegEast"];
-                if (charge > 0 && eta > -1.0 && eta < 0 && nsigmaproton < (-3.0) && mass2 < 0.4) ++custom_refMult["refMult3PosEast"];
-                if (charge < 0 && eta > 0 && eta < 1.0 && nsigmaproton < (-3.0) && mass2 < 0.4) ++custom_refMult["refMult3NegWest"]; 
-                if (charge > 0 && eta > 0 && eta < 1.0 && nsigmaproton < (-3.0) && mass2 < 0.4) ++custom_refMult["refMult3PosWest"];
-                if (charge < 0 && eta < 0 && eta > -1.0) ++custom_refMult["refMultHalfNegEast"];
-                if (charge > 0 && eta < 0 && eta > -1.0) ++custom_refMult["refMultHalfPosEast"];
-                if (charge < 0 && eta > 0 && eta < 1.0) ++custom_refMult["refMultHalfNegWest"];
-                if (charge > 0 && eta > 0 && eta < 1.0) ++custom_refMult["refMultHalfPosWest"];
+              custom_refMult["refMultHalf"+chargeName+tpcHalfName] += 1;
+              if(fabs(eta) > 0.5) custom_refMult["refMult2"+chargeName+tpcHalfName] += 1;
+              if(track->nSigmaProton() < -3. && mass2 < 0.4) custom_refMult["refMult3"+chargeName+tpcHalfName] += 1;
             }
 
             if(track->nHitsFit(kTpcId) >= 15)
             {
-                if (mass2 <= -990)
-                {
-                    if (charge < 0 && eta > -1.0 && eta < 0 && (nsigmakaon > 3 || nsigmakaon < -3)) ++custom_refMult["refMult4NegEast"];
-                    if (charge > 0 && eta > -1.0 && eta < 0 && (nsigmakaon > 3 || nsigmakaon < -3)) ++custom_refMult["refMult4PosEast"];
-                    if (charge < 0 && eta > 0 && eta < 1.0 && (nsigmakaon > 3 || nsigmakaon < -3)) ++custom_refMult["refMult4NegWest"];
-                    if (charge > 0 && eta > 0 && eta < 1.0 && (nsigmakaon > 3 || nsigmakaon < -3)) ++custom_refMult["refMult4PosWest"];
-                }
-                else
-                {
-                    if ( charge < 0 && eta > -1.0 && eta < 0 && (mass2 > 0.6 || mass2 < 0.1)) ++custom_refMult["refMult4NegEast"];
-                    if ( charge > 0 && eta > -1.0 && eta < 0 && (mass2 > 0.6 || mass2 < 0.1)) ++custom_refMult["refMult4PosEast"];
-                    if ( charge < 0 && eta > 0 && eta < 1.0 && (mass2 > 0.6 || mass2 < 0.1)) ++custom_refMult["refMult4NegWest"];
-                    if ( charge > 0 && eta > 0 && eta < 1.0 && (mass2 > 0.6 || mass2 < 0.1)) ++custom_refMult["refMult4PosWest"];
-                }
+              if((mass2 <= -990. && fabs(track->nSigmaKaon()) > 3) ||
+                 (mass2 >  -990. && (mass2 > 0.6 || mass2 < 0.1))) custom_refMult["refMult4"+chargeName+tpcHalfName] += 1;
             }
         }
         return custom_refMult;
