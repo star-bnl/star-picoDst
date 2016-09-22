@@ -10,7 +10,6 @@ namespace StPicoUtilities
 {
     std::unordered_map<std::string, unsigned int> calculateRefMult(const StMuDst& muDst)
     {
-        // in your function define a map of all the refMults you want
         std::unordered_map<std::string, unsigned int> custom_refMult = 
         {
             {"refMult2NegEast", 0},
@@ -36,7 +35,7 @@ namespace StPicoUtilities
             StMuTrack* track = muDst.primaryTracks(itrk) ;
             if (!track) continue;
 
-            // these first 3 checks are suitable for all refMult
+            // these first 3 checks are used for all refMult
             if (track->flag() < 0 || fabs(track->momentum().mag()) < 1.e-10
                 || track->dca().mag() > 3 || fabs(track->momentum().pseudoRapidity()) > 1) continue;
 
