@@ -71,7 +71,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   streamerOff();
   createArrays();
 
-  std::fill_n(mStatusArrays, sizeof(mStatusArrays)/sizeof(mStatusArrays[0]), 1);
+  std::fill_n(mStatusArrays, sizeof(mStatusArrays) / sizeof(mStatusArrays[0]), 1);
 }
 //-----------------------------------------------------------------------
 StPicoDstMaker::StPicoDstMaker(PicoIoMode ioMode, char const* fileName, char const* name) : StPicoDstMaker(name)
@@ -100,7 +100,7 @@ void StPicoDstMaker::SetStatus(char const* arrType, int status)
   static int const specIndex[] = { 0, StPicoArrays::NAllPicoArrays, -1};
 
   if (strncmp(arrType, "St", 2) == 0)
-     arrType += 2; //Ignore first "St"
+    arrType += 2; //Ignore first "St"
 
   for (int i = 0; specNames[i]; ++i)
   {
@@ -179,13 +179,13 @@ void StPicoDstMaker::createArrays()
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::Init()
 {
-  switch(StMaker::m_Mode)
+  switch (StMaker::m_Mode)
   {
     case PicoIoMode::IoWrite:
 
       if (mVtxMode == PicoVtxMode::NotSet)
       {
-        if(setVtxModeAttr() != kStOK)
+        if (setVtxModeAttr() != kStOK)
         {
           LOG_ERROR << "Pico Vertex Mode is not set ... " << endm;
           return kStErr;
@@ -220,7 +220,7 @@ Int_t StPicoDstMaker::Init()
 
 int StPicoDstMaker::setVtxModeAttr()
 {
-  if (strcmp(SAttr("PicoVtxMode"),"PicoVtxDefault") == 0)
+  if (strcmp(SAttr("PicoVtxMode"), "PicoVtxDefault") == 0)
   {
     setVtxMode(PicoVtxMode::Default);
     return kStOK;
@@ -409,7 +409,7 @@ Int_t StPicoDstMaker::openRead()
           ++nFile;
         }
 
-        if(ftmp) ftmp->Close();
+        if (ftmp) ftmp->Close();
       }
     }
 
@@ -469,7 +469,7 @@ void StPicoDstMaker::initEmc()
 void StPicoDstMaker::buildEmcIndex()
 {
   StEmcDetector* mEmcDet = mMuDst->emcCollection()->detector(kBarrelEmcTowerId);
-  std::fill_n(mEmcIndex, sizeof(mEmcIndex)/sizeof(mEmcIndex[0]), nullptr);
+  std::fill_n(mEmcIndex, sizeof(mEmcIndex) / sizeof(mEmcIndex[0]), nullptr);
 
   if (!mEmcDet) return;
   for (size_t iMod = 1; iMod <= mEmcDet->numberOfModules(); ++iMod)
@@ -491,12 +491,13 @@ void StPicoDstMaker::buildEmcIndex()
 //-----------------------------------------------------------------------
 void StPicoDstMaker::finishEmc()
 {
-  delete mEmcPosition; mEmcPosition = nullptr;
+  delete mEmcPosition;
+  mEmcPosition = nullptr;
 
   std::fill_n(mEmcGeom, 4, nullptr);
 }
 //-----------------------------------------------------------------------
-void StPicoDstMaker::Clear(char const* )
+void StPicoDstMaker::Clear(char const*)
 {
   if (StMaker::m_Mode == PicoIoMode::IoRead)
     return;
@@ -505,7 +506,8 @@ void StPicoDstMaker::Clear(char const* )
 //_____________________________________________________________________________
 void StPicoDstMaker::closeRead()
 {
-  delete mChain; mChain = nullptr;
+  delete mChain;
+  mChain = nullptr;
 }
 //_____________________________________________________________________________
 void StPicoDstMaker::closeWrite()
@@ -547,11 +549,12 @@ Int_t StPicoDstMaker::MakeRead()
 //-----------------------------------------------------------------------
 Int_t StPicoDstMaker::MakeWrite()
 {
-  TObjectSet *muDst = static_cast<TObjectSet*>( GetDataSet("muDst") );
+  TObjectSet *muDst = static_cast<TObjectSet*>(GetDataSet("muDst"));
 
-  mMuDst = muDst ? static_cast<StMuDst*>( muDst->GetObject() ) : nullptr;
+  mMuDst = muDst ? static_cast<StMuDst*>(muDst->GetObject()) : nullptr;
 
-  if (!muDst || !mMuDst) {
+  if (!muDst || !mMuDst)
+  {
     LOG_ERROR << "No \"StMuDst\" object found in this event. It is usually created by StMuDstMaker" << endm;
     return kStErr;
   }
@@ -599,7 +602,7 @@ Int_t StPicoDstMaker::MakeWrite()
 void StPicoDstMaker::fillTracks()
 {
   // We save primary tracks associated with the selected primary vertex only
-  // don't use StMuTrack::primary(), it returns primary tracks associated with 
+  // don't use StMuTrack::primary(), it returns primary tracks associated with
   // all vertices
   std::unordered_map<unsigned int, unsigned int> index2Primary;
 
@@ -906,7 +909,7 @@ void StPicoDstMaker::fillEmcTrigger()
   }
 
 
-  // BEMC Jet Patch trigger threshold 
+  // BEMC Jet Patch trigger threshold
   int const bjpth0 = trigSimu->bemc->barrelJetPatchTh(0);
   int const bjpth1 = trigSimu->bemc->barrelJetPatchTh(1);
   int const bjpth2 = trigSimu->bemc->barrelJetPatchTh(2);
@@ -914,32 +917,33 @@ void StPicoDstMaker::fillEmcTrigger()
   for (int i = 0; i < 3; ++i)
     mPicoDst->event()->setJetPatchThreshold(i, trigSimu->bemc->barrelJetPatchTh(i));
 
-  for(int jp = 0; jp<18; ++jp)
-  { // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.
+  for (int jp = 0; jp < 18; ++jp)
+  {
+    // BEMC: 12 Jet Patch + 6 overlap Jet Patches. As no EEMC information is recorded in Pico tree, not EEMC trigger information also.
     int const jpAdc = trigSimu->bemc->barrelJetPatchAdc(jp);
 
     unsigned char flag = 0;
-    if(jpAdc > bjpth0)
+    if (jpAdc > bjpth0)
     {
       flag |= 1 << 4;
     }
 
-    if(jpAdc > bjpth1)
+    if (jpAdc > bjpth1)
     {
       flag |= 1 << 5;
     }
 
-    if(jpAdc > bjpth2)
+    if (jpAdc > bjpth2)
     {
       flag |= 1 << 6;
     }
 
-    if(flag & 0x70)
+    if (flag & 0x70)
     {
       int counter = mPicoArrays[StPicoArrays::EmcTrigger]->GetEntries();
       new((*(mPicoArrays[StPicoArrays::EmcTrigger]))[counter]) StPicoEmcTrigger(flag, jp, jpAdc);
     }
-  }     
+  }
 }
 
 //-----------------------------------------------------------------------
