@@ -1100,7 +1100,7 @@ bool StPicoDstMaker::selectVertex()
   {
     StBTofHeader const* mBTofHeader = mMuDst->btofHeader();
 
-    if (mBTofHeader && fabs(mBTofHeader->vpdVz()) < 100)
+    if (mBTofHeader && fabs(mBTofHeader->vpdVz()) < 200)
     {
       float vzVpd = mBTofHeader->vpdVz();
 
