@@ -578,6 +578,7 @@ Int_t StPicoDstMaker::MakeWrite()
   if (!selectVertex())
   {
     LOG_INFO << "Vertex is not valid" << endm;
+    mMuDst->setVertexIndex(originalVertexId);
     return kStOK;
   }
 
@@ -634,15 +635,7 @@ void StPicoDstMaker::fillTracks()
     StMuTrack const* const pTrk = index2Primary.find(gTrk->id()) != index2Primary.end() ?
                                   (StMuTrack*)mMuDst->primaryTracks(index2Primary[gTrk->id()]) : nullptr;
 
-    int id = -1;
-    int adc0;
-    float e[5];
-    float dist[4];
-    int nhit[2];
-    int ntow[3];
-    getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
-
-    if (gTrk->index2Cov() < 0) continue;
+        if (gTrk->index2Cov() < 0) continue;
     StDcaGeometry* dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
     if (!dcaG)
     {
@@ -654,12 +647,25 @@ void StPicoDstMaker::fillTracks()
     new((*(mPicoArrays[StPicoArrays::Track]))[counter]) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex()->position(), *dcaG);
 
     StPicoTrack* picoTrk = (StPicoTrack*)mPicoArrays[StPicoArrays::Track]->At(counter);
+
     // Fill pid traits
-    if (id >= 0)
+    if(mEmcCollection)
     {
-      Int_t bemc_index = mPicoArrays[StPicoArrays::BEmcPidTraits]->GetEntries();
-      new((*(mPicoArrays[StPicoArrays::BEmcPidTraits]))[bemc_index]) StPicoBEmcPidTraits(counter, id, adc0, e, dist, nhit, ntow);
-      picoTrk->setBEmcPidTraitsIndex(bemc_index);
+      int id = -1;
+      int adc0;
+      float e[5];
+      float dist[4];
+      int nhit[2];
+      int ntow[3];
+
+      getBEMC(gTrk, &id, &adc0, e, dist, nhit, ntow);
+
+      if (id >= 0)
+      {
+        Int_t bemc_index = mPicoArrays[StPicoArrays::BEmcPidTraits]->GetEntries();
+        new((*(mPicoArrays[StPicoArrays::BEmcPidTraits]))[bemc_index]) StPicoBEmcPidTraits(counter, id, adc0, e, dist, nhit, ntow);
+        picoTrk->setBEmcPidTraitsIndex(bemc_index);
+      }
     }
 
     if (gTrk->tofHit())
@@ -1098,6 +1104,8 @@ void StPicoDstMaker::fillMtdHits()
 
 bool StPicoDstMaker::selectVertex()
 {
+  mMuDst->setVertexIndex(-1);
+
   if (mVtxMode == PicoVtxMode::Default)
   {
     // choose the default vertex, i.e. the first vertex
