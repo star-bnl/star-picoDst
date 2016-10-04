@@ -582,9 +582,6 @@ Int_t StPicoDstMaker::MakeWrite()
     return kStOK;
   }
 
-  mEmcCollection = mMuDst->emcCollection();
-  if (mEmcCollection) buildEmcIndex();
-
   Int_t refMult = muEvent->refMult();
   mBField = muEvent->magneticField();
 
@@ -593,11 +590,19 @@ Int_t StPicoDstMaker::MakeWrite()
 
   LOG_DEBUG << " eventId = " << muEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
 
+  mEmcCollection = mMuDst->emcCollection();
+  if (mEmcCollection) 
+  {
+    // build EmcIndex before ::fillTracks()
+    buildEmcIndex();
+    // fill BTOW hits only if ::buildEmcIndex() has been called for this event
+    fillBTOWHits();
+  }
+
   fillTracks();
   fillEvent();
   fillEmcTrigger();
   fillMtdTrigger();
-  fillBTOWHits();
   fillBTofHits();
   fillMtdHits();
 
@@ -1104,7 +1109,7 @@ void StPicoDstMaker::fillMtdHits()
 
 bool StPicoDstMaker::selectVertex()
 {
-  mMuDst->setVertexIndex(-1);
+  mMuDst->setVertexIndex(-2);
 
   if (mVtxMode == PicoVtxMode::Default)
   {
@@ -1140,5 +1145,5 @@ bool StPicoDstMaker::selectVertex()
   }
 
   // Retrun false if selected vertex is not valid
-  return mMuDst->primaryVertex() ? true : false;
+  return (mMuDst->currentVertexIndex() !=-2 && mMuDst->primaryVertex())? true : false;
 }
