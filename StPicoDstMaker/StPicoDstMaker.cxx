@@ -1116,8 +1116,13 @@ bool StPicoDstMaker::selectVertex()
     // choose the default vertex, i.e. the first vertex
     mMuDst->setVertexIndex(0);
   }
-  else if (mVtxMode == PicoVtxMode::Vpd)
+  else if (mVtxMode == PicoVtxMode::Vpd || mVtxMode == PicoVtxMode::VpdOrDefault)
   {
+    if(mVtxMode == PicoVtxMode::VpdOrDefault)
+    {
+      mMuDst->setVertexIndex(0);
+    }
+
     StBTofHeader const* mBTofHeader = mMuDst->btofHeader();
 
     if (mBTofHeader && fabs(mBTofHeader->vpdVz()) < 200)
@@ -1135,10 +1140,6 @@ bool StPicoDstMaker::selectVertex()
           break;
         }
       }
-    }
-    else
-    {
-      mMuDst->setVertexIndex(0);
     }
   }
   else // default case
