@@ -1136,7 +1136,10 @@ bool StPicoDstMaker::selectVertex()
         }
       }
     }
-
+    else
+    {
+      mMuDst->setVertexIndex(0);
+    }
   }
   else // default case
   {
