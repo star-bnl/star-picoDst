@@ -239,6 +239,13 @@ int StPicoDstMaker::setVtxModeAttr()
     LOG_INFO << " PicoVtxVpd is being used " << endm;
     return kStOK;
   }
+  else if (strcmp(SAttr("PicoVtxMode"), "PicoVtxVpdOrDefault") == 0)
+  {
+    setVtxMode(PicoVtxMode::VpdOrDefault);
+    LOG_INFO << " PicoVtxVpdOrDefault is being used " << endm;
+    return kStOK;
+  }
+
 
   return kStErr;
 }
