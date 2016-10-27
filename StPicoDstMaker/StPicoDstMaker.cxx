@@ -239,6 +239,13 @@ int StPicoDstMaker::setVtxModeAttr()
     LOG_INFO << " PicoVtxVpd is being used " << endm;
     return kStOK;
   }
+  else if (strcmp(SAttr("PicoVtxMode"), "PicoVtxVpdOrDefault") == 0)
+  {
+    setVtxMode(PicoVtxMode::VpdOrDefault);
+    LOG_INFO << " PicoVtxVpdOrDefault is being used " << endm;
+    return kStOK;
+  }
+
 
   return kStErr;
 }
@@ -260,9 +267,9 @@ Int_t StPicoDstMaker::InitRun(Int_t const runnumber)
 //_____________________________________________________________________________
 Bool_t StPicoDstMaker::initMtd(Int_t const runnumber)
 {
-  // Dec. 1st is the assumed to the start a new running year
+  // Oct. 1st is the start of a new running year
   int year = runnumber / 1e6 + 1999;
-  if ((runnumber % 1000) / 1000 > 334) year += 1;
+  if ((runnumber % 1000000) / 1000 >= 273) year += 1;
   LOG_INFO << "Run = " << runnumber << " year = " << year << endm;
 
   // obtain maps from DB
@@ -1116,8 +1123,13 @@ bool StPicoDstMaker::selectVertex()
     // choose the default vertex, i.e. the first vertex
     mMuDst->setVertexIndex(0);
   }
-  else if (mVtxMode == PicoVtxMode::Vpd)
+  else if (mVtxMode == PicoVtxMode::Vpd || mVtxMode == PicoVtxMode::VpdOrDefault)
   {
+    if(mVtxMode == PicoVtxMode::VpdOrDefault)
+    {
+      mMuDst->setVertexIndex(0);
+    }
+
     StBTofHeader const* mBTofHeader = mMuDst->btofHeader();
 
     if (mBTofHeader && fabs(mBTofHeader->vpdVz()) < 200)
@@ -1136,7 +1148,6 @@ bool StPicoDstMaker::selectVertex()
         }
       }
     }
-
   }
   else // default case
   {
