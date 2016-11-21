@@ -75,6 +75,7 @@ void makePicoDst(const Char_t *inputFile = "root://xrdstar.rcf.bnl.gov:1095//hom
   MuDstMaker->SetStatus("BTof*", 1);
   MuDstMaker->SetStatus("Emc*", 1);
   MuDstMaker->SetStatus("MTD*", 1);
+  MuDstMaker->SetStatus("pp2pp",1); //add RP collection
 
   St_db_Maker* dbMk = new St_db_Maker("db", "MySQL:StarDb", "$STAR/StarDb", "StarDb");
 

@@ -120,7 +120,6 @@ protected:
   /// vertex selection mode `mVtxMode` specified by the user.
   bool selectVertex();
 
-  void setRpMode(const Int_t mode=1); // 0:No RP, 1:RP On
 
   StMuDst*   mMuDst;
   StEmcCollection* mEmcCollection;
@@ -131,7 +130,6 @@ protected:
   Float_t    mBField;
 
   PicoVtxMode mVtxMode;
-  Int_t       mRpMode;       //! RP ON(=1)/OFF(=0);
 
   TString   mInputFileName;        //! *.list - MuDst or picoDst
   TString   mOutputFileName;       //! FileName

@@ -131,6 +131,10 @@ StPicoEvent::StPicoEvent(StMuDst const& muDst) : StPicoEvent()
     if (eastWest == 0) mBbcAdcEast[pmtId] = bbc.adc(i) ;
     else                mBbcAdcWest[pmtId] = bbc.adc(i) ;
   }
+
+  mRpTriggerWord = (const_cast< StTriggerData *> (ev->triggerData() ) )->pp2ppDSM(0);
+  mBcNumber = ev->l0Trigger().bunchCrossingId7bit(ev->runId());
+  StPicoUtilities::numberTofMatchedTracks(muDst, mNVerticesBTofMatched, mNBTofMatchedPrimaryTracks);
 }
 
 StPicoEvent::~StPicoEvent()

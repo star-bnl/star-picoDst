@@ -67,7 +67,6 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mEmcGeom{}, mEmcIndex{},
   mPicoDst(new StPicoDst()), mBField(0),
   mVtxMode(PicoVtxMode::NotSet), // This should always be ::NotSet, do not change it, see ::Init()
-  mRpMode(0),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
@@ -623,7 +622,7 @@ Int_t StPicoDstMaker::MakeWrite()
   mBbcFiller.Fill(*mMuDst);
   mEpdFiller.Fill(*mMuDst);
 
-  if (mRpMode) { fillRpsCollection(); }
+  fillRpsCollection();
 
   if (Debug()) mPicoDst->printTracks();
 
