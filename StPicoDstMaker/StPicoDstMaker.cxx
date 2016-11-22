@@ -1164,6 +1164,23 @@ bool StPicoDstMaker::selectVertex()
       }
     }
   }
+  else if(mVtxMode == PicoVtxMode::BTof)
+  {
+     for(Int_t iVtx = 0; iVtx < (Int_t)mMuDst->numberOfPrimaryVertices();iVtx++){
+       if(selectedVertex) break;
+       mMuDst->setVertexIndex(iVtx);
+       for (Int_t ipr = 0; ipr < mMuDst->primaryTracks()->GetEntries(); ++ipr) {
+               const StMuTrack*  track = dynamic_cast<StMuTrack *>(mMuDst->primaryTracks(ipr));
+               if(!track)continue;
+               if( track->btofPidTraits().matchFlag() != 0 ){
+                       selectedVertex = mMuDst->primaryVertex();
+                       break;
+               }
+
+       }
+
+     }
+  }
   else // default case
   {
     LOG_ERROR << "Pico Vtx Mode not set!" << endm;
