@@ -82,6 +82,10 @@ private:
   Int_t MakeRead();
   Int_t MakeWrite();
 
+  //for reading
+  void fillEventHeader() const; //changes "global" variable, not this maker
+
+  //for writing
   void fillTracks();
   void fillEvent();
   void fillEmcTrigger();
