@@ -54,6 +54,12 @@ void loadLibs()
   gSystem->Load("StMtdMatchMaker");
   gSystem->Load("StMtdCalibMaker");
 
+  //FMS
+  gSystem->Load("StEventMaker");
+  gSystem->Load("libStFmsUtil");
+  gSystem->Load("StFmsHitMaker");
+  gSystem->Load("libStFmsDbMaker");
+
   gSystem->Load("libStPicoEvent");
   gSystem->Load("libStPicoDstMaker");
 
@@ -90,6 +96,12 @@ void makePicoDst(const Char_t *inputFile, int nEvents = 100000)
   MuDstMaker->SetStatus("MTD*", 1);
 
   St_db_Maker* dbMk = new St_db_Maker("db", "MySQL:StarDb", "$STAR/StarDb", "StarDb");
+
+  //Makers needed for FMS
+  //TODO:remove dependence on StEvent(Maker)
+  StFmsDbMaker* fmsdb = new StFmsDbMaker("fmsDb");  
+  StEventMaker* eventMk = new StEventMaker();
+  StFmsHitMaker* fmshitMk = new StFmsHitMaker();
 
   // Endcap database
   StEEmcDbMaker* eemcDb = new StEEmcDbMaker();
