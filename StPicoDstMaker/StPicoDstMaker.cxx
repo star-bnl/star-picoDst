@@ -630,7 +630,6 @@ Int_t StPicoDstMaker::MakeWrite()
   fillMtdHits();
   mBbcFiller.fill(*mMuDst);
   mEpdFiller.fill(*mMuDst);
-  fillFmsHits();
 
   // Could be a good idea to move this call to Init() or InitRun()
   StFmsDbMaker* fmsDbMaker = static_cast<StFmsDbMaker*>(GetMaker("fmsDb"));
@@ -1206,38 +1205,4 @@ bool StPicoDstMaker::selectVertex()
 
   // Retrun false if selected vertex is not valid
   return selectedVertex ? true : false;
-}
-
-void StPicoDstMaker::fillFmsHits()
-{
-  /*
-  StFmsDbMaker* fmsDb=static_cast<StFmsDbMaker*>(GetMaker("fmsDb"));//can save this into a member variable
-  if(!fmsDb){
-    LOG_ERROR<<"fillFmsHits::Failed to get StFmsDbMaker"<<endm;
-    return;
-  }
-  */
-
-  StEvent* event = (StEvent*) GetInputDS("StEvent");
-  if(!event) {
-    LOG_ERROR << "No StEvent found" << endm;
-    return;
-  }
-  StFmsCollection* fmsColl = event->fmsCollection();
-  if(!fmsColl){
-    LOG_ERROR << "No StFmsCollection found" << endm;
-    return;
-  }
-
-
-  //const int nHits=gRandom->Poisson(10);
-  //LOG_INFO<<"Filling FMS hits. nHits= "<<nHits<<endm;
-  const StSPtrVecFmsHit& hits=fmsColl->hits();
-  for(unsigned int i=0;i<fmsColl->numberOfHits();i++) {
-    const int counter = mPicoArrays[StPicoArrays::FmsHit]->GetEntries();
-    //LOG_INFO<<"counter= "<<counter<<endm;
-    new((*(mPicoArrays[StPicoArrays::FmsHit]))[counter]) StPicoFmsHit(hits[i]->detectorId(),
-                                                                      hits[i]->channel(),
-                                                                      hits[i]->adc());
-  }
 }
