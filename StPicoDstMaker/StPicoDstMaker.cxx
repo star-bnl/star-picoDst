@@ -586,7 +586,7 @@ Int_t StPicoDstMaker::MakeRead()
 //_____________________________________________________________________________
 Int_t StPicoDstMaker::MakeWrite()
 {
-  WhiteBoard("muDst", &mMuDst);
+  StMaker::WhiteBoard("muDst", &mMuDst);
 
   if (!mMuDst)
   {
@@ -721,7 +721,7 @@ void StPicoDstMaker::fillTracks()
 }
 
 //_____________________________________________________________________________
-bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float* d, int* nep, int* towid)
+bool StPicoDstMaker::getBEMC(const StMuTrack* t, int* id, int* adc, float* ene, float* d, int* nep, int* towid)
 {
   *id = -1;
   *adc = 0;
