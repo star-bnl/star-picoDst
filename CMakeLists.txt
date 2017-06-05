@@ -47,6 +47,7 @@ include_directories(
 	${STAR_MUDST_DIR}
 	${STAR_TABLES_DIR}
 	${STAR_EMC_DIR}
+	${STAR_FMS_DIR}
 	${STAR_TRIGGER_DIR}
 	${STAR_PAMS_DIR}/global/inc
 	${STAR_DAQ_DIR}
