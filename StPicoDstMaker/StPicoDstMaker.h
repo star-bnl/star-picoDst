@@ -41,6 +41,8 @@ public:
   virtual Int_t Finish();
 
   void printArrays();
+
+  /// Enables or disables branches matching a simple regex pattern in reading mode
   void SetStatus(char const* branchNameRegex, int enable);
 
   /// Returns null pointer if no StPicoDst
@@ -119,12 +121,18 @@ protected:
   /// vertex selection mode `mVtxMode` specified by the user.
   bool selectVertex();
 
-  StMuDst*   mMuDst;
+  /// A pointer to the main input source containing all muDst `TObjArray`s
+  /// filled from corresponding muDst branches
+  StMuDst*  mMuDst;
+
   StEmcCollection* mEmcCollection;
   StEmcPosition*   mEmcPosition;
   StEmcGeom*       mEmcGeom[4];
   StEmcRawHit*     mEmcIndex[4800];
+
+  /// A pointer to the main input/outpur picoDst structure containing all `TObjArray`s
   StPicoDst* mPicoDst;
+
   Float_t    mBField;
 
   PicoVtxMode mVtxMode;
@@ -137,9 +145,14 @@ protected:
   TTree*    mTTree;
 
   int mEventCounter;
+
+  /// Parameters to control the storage of picoDst tree in write mode. Have no
+  /// effect when reading .picoDst.root files
+  ///@{
   int mSplit;
   int mCompression;
   int mBufferSize;
+  ///@}
 
   // MTD map from backleg to QT
   Int_t  mModuleToQT[30][5];        // Map from module to QT board index
@@ -157,6 +170,7 @@ protected:
   ClassDef(StPicoDstMaker, 0)
 };
 
+
 inline StPicoDst* StPicoDstMaker::picoDst() { return mPicoDst; }
 inline TChain* StPicoDstMaker::chain() { return mChain; }
 inline TTree* StPicoDstMaker::tree() { return mTTree; }
@@ -164,4 +178,5 @@ inline void StPicoDstMaker::setSplit(int split) { mSplit = split; }
 inline void StPicoDstMaker::setCompression(int comp) { mCompression = comp; }
 inline void StPicoDstMaker::setBufferSize(int buf) { mBufferSize = buf; }
 inline void StPicoDstMaker::setVtxMode(const PicoVtxMode vtxMode) { mVtxMode = vtxMode; }
+
 #endif

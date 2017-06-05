@@ -31,8 +31,10 @@ void StPicoEpdFiller::Fill(const StMuDst& muDst)
 
   // EPD tiles
   // here, the "ADC","TDC" and"TAC" can be a little subtle...
-  for (Short_t PP = 3; PP < 6; PP++) { // the "real" position number is this plus 1
-    for (Short_t TT = 0; TT < 31; TT++) {
+  for (Short_t PP = 3; PP < 6; PP++) // the "real" position number is this plus 1
+  {
+    for (Short_t TT = 0; TT < 31; TT++)
+    {
       ADC = trg->fmsADC(5, mEPDMap[0][PP][TT].qt_board_address, mEPDMap[0][PP][TT].qt_channel_ADC, 0);
       TDC = trg->fmsTDC(5, mEPDMap[0][PP][TT].qt_board_address, mEPDMap[0][PP][TT].qt_channel_ADC, 0);
       HasTAC = (mEPDMap[0][PP][TT].qt_channel_TAC > 0);

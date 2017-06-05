@@ -98,7 +98,20 @@ void StPicoDstMaker::clearArrays()
     mPicoArrays[i]->Clear();
   }
 }
-//_____________________________________________________________________________
+
+
+/**
+ * Allows one to disable/enable branches matching a simple regex pattern
+ * `branchNameRegex` when reading picoDst.root files. For example,
+ *
+ * ~~~ {.cpp}
+ * StPicoDstMaker::SetStatus("*", 0);      // Disables all branches
+ * StPicoDstMaker::SetStatus("Emc*", 1);   // Enables branches starting with "Emc"
+ * ~~~
+ *
+ * Note that if the first two characters in `branchNameRegex` are "St" they will
+ * be ignored, i.e. "StBTof*" is the same as "BTof*".
+ */
 void StPicoDstMaker::SetStatus(char const* branchNameRegex, int enable)
 {
   static char const* specNames[] = {"EventAll", 0};
@@ -203,8 +216,9 @@ Int_t StPicoDstMaker::Init()
         // No input file
         mOutputFileName = GetChainOpt()->GetFileOut();
         mOutputFileName.ReplaceAll(".root", ".picoDst.root");
-      } else {
-
+      }
+      else
+      {
         mInputFileName = mInputFileName(mInputFileName.Index("st_"), mInputFileName.Length());
         mOutputFileName = mInputFileName;
         mOutputFileName.ReplaceAll("MuDst.root", "picoDst.root");
@@ -231,6 +245,7 @@ Int_t StPicoDstMaker::Init()
   return kStOK;
 }
 
+
 int StPicoDstMaker::setVtxModeAttr()
 {
   if (strcmp(SAttr("PicoVtxMode"), "PicoVtxDefault") == 0)
@@ -251,7 +266,6 @@ int StPicoDstMaker::setVtxModeAttr()
     LOG_INFO << " PicoVtxVpdOrDefault is being used " << endm;
     return kStOK;
   }
-
 
   return kStErr;
 }
@@ -482,6 +496,7 @@ void StPicoDstMaker::openWrite()
 void StPicoDstMaker::initEmc()
 {
   mEmcPosition = new StEmcPosition();
+
   for (int i = 0; i < 4; ++i)
   {
     mEmcGeom[i] = StEmcGeom::getEmcGeom(detname[i].Data());
@@ -655,7 +670,8 @@ void StPicoDstMaker::fillTracks()
     StMuTrack const* const pTrk = index2Primary.find(gTrk->id()) != index2Primary.end() ?
                                   (StMuTrack*)mMuDst->primaryTracks(index2Primary[gTrk->id()]) : nullptr;
 
-        if (gTrk->index2Cov() < 0) continue;
+    if (gTrk->index2Cov() < 0) continue;
+
     StDcaGeometry* dcaG = mMuDst->covGlobTracks(gTrk->index2Cov());
     if (!dcaG)
     {
@@ -669,7 +685,7 @@ void StPicoDstMaker::fillTracks()
     StPicoTrack* picoTrk = (StPicoTrack*)mPicoArrays[StPicoArrays::Track]->At(counter);
 
     // Fill pid traits
-    if(mEmcCollection)
+    if (mEmcCollection)
     {
       int id = -1;
       int adc0;
@@ -990,8 +1006,9 @@ void StPicoDstMaker::fillBTOWHits()
     StEmcRawHit* aHit = mEmcIndex[i];
     if (!aHit) continue;
     if (aHit->energy() < 0.2) continue; // remove noise towers
-    int softId = aHit->softId(1);
-    int adc = aHit->adc();
+
+    int   softId = aHit->softId(1);
+    int   adc    = aHit->adc();
     float energy = aHit->energy();
 
     int counter = mPicoArrays[StPicoArrays::BTowHit]->GetEntries();
