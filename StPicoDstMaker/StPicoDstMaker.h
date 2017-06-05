@@ -41,7 +41,7 @@ public:
   virtual Int_t Finish();
 
   void printArrays();
-  void SetStatus(char const* arrType, int status);
+  void SetStatus(char const* branchNameRegex, int enable);
 
   /// Returns null pointer if no StPicoDst
   StPicoDst* picoDst();

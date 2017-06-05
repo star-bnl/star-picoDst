@@ -99,33 +99,33 @@ void StPicoDstMaker::clearArrays()
   }
 }
 //_____________________________________________________________________________
-void StPicoDstMaker::SetStatus(char const* arrType, int status)
+void StPicoDstMaker::SetStatus(char const* branchNameRegex, int enable)
 {
   static char const* specNames[] = {"EventAll", 0};
   static int const specIndex[] = { 0, StPicoArrays::NAllPicoArrays, -1};
 
-  if (strncmp(arrType, "St", 2) == 0)
-    arrType += 2; //Ignore first "St"
+  if (strncmp(branchNameRegex, "St", 2) == 0)
+    branchNameRegex += 2; //Ignore first "St"
 
   for (int i = 0; specNames[i]; ++i)
   {
-    if (strcmp(arrType, specNames[i])) continue;
+    if (strcmp(branchNameRegex, specNames[i])) continue;
     char* sta = mStatusArrays + specIndex[i];
     int   num = specIndex[i + 1] - specIndex[i];
-    std::fill_n(sta, num, status);
-    LOG_INFO << "StPicoDstMaker::SetStatus " << status << " to " << specNames[i] << endm;
+    std::fill_n(sta, num, enable);
+    LOG_INFO << "StPicoDstMaker::SetStatus " << enable << " to " << specNames[i] << endm;
     if (StMaker::m_Mode == PicoIoMode::IoRead)
       setBranchAddresses(mChain);
     return;
   }
 
-  TRegexp re(arrType, 1);
+  TRegexp re(branchNameRegex, 1);
   for (int i = 0; i < StPicoArrays::NAllPicoArrays; ++i)
   {
     Ssiz_t len;
     if (re.Index(StPicoArrays::picoArrayNames[i], &len) < 0)   continue;
-    LOG_INFO << "StPicoDstMaker::SetStatus " << status << " to " << StPicoArrays::picoArrayNames[i] << endm;
-    mStatusArrays[i] = status;
+    LOG_INFO << "StPicoDstMaker::SetStatus " << enable << " to " << StPicoArrays::picoArrayNames[i] << endm;
+    mStatusArrays[i] = enable;
   }
 
   if (StMaker::m_Mode == PicoIoMode::IoRead)
@@ -724,15 +724,18 @@ bool StPicoDstMaker::getBEMC(StMuTrack* t, int* id, int* adc, float* ene, float*
   StThreeVectorD position, momentum;
   StThreeVectorD positionBSMDE, momentumBSMDE;
   StThreeVectorD positionBSMDP, momentumBSMDP;
-  Double_t bFld = mBField * kilogauss / tesla; // bFld in Tesla
+
+  double magneticField = mBField * kilogauss / tesla; // in Tesla
+
   bool ok       = false;
   bool okBSMDE  = false;
   bool okBSMDP  = false;
+
   if (mEmcPosition)
   {
-    ok      = mEmcPosition->projTrack(&position, &momentum, t, bFld, mEmcGeom[0]->Radius());
-    okBSMDE = mEmcPosition->projTrack(&positionBSMDE, &momentumBSMDE, t, bFld, mEmcGeom[2]->Radius());
-    okBSMDP = mEmcPosition->projTrack(&positionBSMDP, &momentumBSMDP, t, bFld, mEmcGeom[3]->Radius());
+    ok      = mEmcPosition->projTrack(&position,      &momentum,      t, magneticField, mEmcGeom[0]->Radius());
+    okBSMDE = mEmcPosition->projTrack(&positionBSMDE, &momentumBSMDE, t, magneticField, mEmcGeom[2]->Radius());
+    okBSMDP = mEmcPosition->projTrack(&positionBSMDP, &momentumBSMDP, t, magneticField, mEmcGeom[3]->Radius());
   }
 
   if (!ok)
