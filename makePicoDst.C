@@ -92,7 +92,7 @@ void makePicoDst(const Char_t *inputFile, int nEvents = 100000)
   St_db_Maker* dbMk = new St_db_Maker("db", "MySQL:StarDb", "$STAR/StarDb", "StarDb");
 
   // Endcap database
-  StEEmcDbMaker* eemcDb = new StEEmcDbMaker;
+  StEEmcDbMaker* eemcDb = new StEEmcDbMaker();
 
   StEmcADCtoEMaker* adc2e = new StEmcADCtoEMaker();
   adc2e->setPrint(false);
@@ -104,14 +104,14 @@ void makePicoDst(const Char_t *inputFile, int nEvents = 100000)
   epc->setPrint(kFALSE);
 
   // Trigger simulator
-  StTriggerSimuMaker* trigSimu = new StTriggerSimuMaker;
+  StTriggerSimuMaker* trigSimu = new StTriggerSimuMaker();
   trigSimu->setMC(false);
   trigSimu->useBemc();
   trigSimu->useEemc();
   trigSimu->useOfflineDB();
   trigSimu->bemc->setConfig(StBemcTriggerSimu::kOffline);
 
-  StMagFMaker* magfMk = new StMagFMaker;
+  StMagFMaker* magfMk = new StMagFMaker();
   StMtdMatchMaker* mtdMatchMaker = new StMtdMatchMaker();
   StMtdCalibMaker* mtdCalibMaker = new StMtdCalibMaker("mtdcalib");
 
