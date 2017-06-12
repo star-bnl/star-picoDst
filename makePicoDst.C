@@ -38,7 +38,7 @@ void loadLibs()
   gSystem->Load("StEmcTriggerMaker");
   gSystem->Load("StEmcRawMaker");
   gSystem->Load("StEmcADCtoEMaker");
-  gSystem->Load("StPreEclMaker");
+  gSystem->Load("StPreEclMaker");  // XXX: loaded twice !
   gSystem->Load("StEpcMaker");
   gSystem->Load("StEmcSimulatorMaker");
   gSystem->Load("StDbBroker");
