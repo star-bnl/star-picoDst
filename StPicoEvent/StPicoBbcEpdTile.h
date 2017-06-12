@@ -1,4 +1,4 @@
-/* 
+/*
    EPD and BBC tile class for STAR picoDst
    Total size of this object is 6 bytes
 
@@ -17,15 +17,15 @@
 
 class StPicoBbcEpdTile : public TObject
 {
- public:
+public:
 
   StPicoBbcEpdTile();
   StPicoBbcEpdTile(Short_t ID, Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC);
   virtual ~StPicoBbcEpdTile();
 
-  virtual void Print(const Char_t* option="") const;
+  virtual void Print(const Char_t *option = "") const;
 
-  void setId(Short_t ID);  
+  void setId(Short_t ID);
   void setQTdata(Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC);
 
   Bool_t hasTAC() const;
@@ -41,32 +41,32 @@ class StPicoBbcEpdTile : public TObject
   Short_t EpdPP() const;         // 1...12
   Short_t EpdTT() const;         // 1...31
 
- protected:
+protected:
   // mId:
   // * for EPD: 100*PP+TT
   // * for BBC: Phototube #
   // * sign for both, +/- = West/East
   // PP, TT, Phototube indices start at 1, not zero.
-  Short_t mId;    
+  Short_t mId;
   ULong_t mQTdata; // bits 0-11 are ADC;  bits 12-23 are TAC;  bits 24-28 are TDC;  bit 29 is noTAC flag
 
-  ClassDef(StPicoBbcEpdTile,1)
+  ClassDef(StPicoBbcEpdTile, 1)
 };
 
-inline void StPicoBbcEpdTile::setId(Short_t ID){mId=ID;}
+inline void StPicoBbcEpdTile::setId(Short_t ID) {mId = ID;}
 
-inline Bool_t  StPicoBbcEpdTile::isEast() const {return (mId<0);}
-inline Bool_t  StPicoBbcEpdTile::isBbc() const {return (abs(mId)<100);}
-inline Bool_t  StPicoBbcEpdTile::isEpd() const {return (abs(mId)>100);}
+inline Bool_t  StPicoBbcEpdTile::isEast() const {return (mId < 0);}
+inline Bool_t  StPicoBbcEpdTile::isBbc() const {return (abs(mId) < 100);}
+inline Bool_t  StPicoBbcEpdTile::isEpd() const {return (abs(mId) > 100);}
 inline Short_t StPicoBbcEpdTile::id() const {return mId;}
 
-inline Short_t StPicoBbcEpdTile::BbcPmtNumber() const {return abs(mId)<100 ? abs(100) : -999;}
-inline Short_t StPicoBbcEpdTile::EpdPP() const {return abs(mId)>100 ? abs(mId/100) : -999;}
-inline Short_t StPicoBbcEpdTile::EpdTT() const {return abs(mId)>100 ? abs(mId%100): -999;}
+inline Short_t StPicoBbcEpdTile::BbcPmtNumber() const {return abs(mId) < 100 ? abs(100) : -999;}
+inline Short_t StPicoBbcEpdTile::EpdPP() const {return abs(mId) > 100 ? abs(mId / 100) : -999;}
+inline Short_t StPicoBbcEpdTile::EpdTT() const {return abs(mId) > 100 ? abs(mId % 100) : -999;}
 
 inline Short_t StPicoBbcEpdTile::adc() const {Short_t x = (mQTdata & 0x0FFF); return x;}
-inline Short_t StPicoBbcEpdTile::tac() const {Short_t x = ((mQTdata>>12) & 0x0FFF); return x;}
-inline Short_t StPicoBbcEpdTile::tdc() const {Short_t x = ((mQTdata>>24) & 0x001F); return x;}
-inline Bool_t  StPicoBbcEpdTile::hasTAC() const {return ((mQTdata>>29&0x1)!=0);}
+inline Short_t StPicoBbcEpdTile::tac() const {Short_t x = ((mQTdata >> 12) & 0x0FFF); return x;}
+inline Short_t StPicoBbcEpdTile::tdc() const {Short_t x = ((mQTdata >> 24) & 0x001F); return x;}
+inline Bool_t  StPicoBbcEpdTile::hasTAC() const {return ((mQTdata >> 29 & 0x1) != 0);}
 
 #endif
