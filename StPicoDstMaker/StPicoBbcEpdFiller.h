@@ -16,20 +16,17 @@
    isBbc().
 */
 
-#include "StMaker.h"
 #include "StPicoBbcEpdTile.h"
 
 class TClonesArray;
 class StTriggerData;
 
-class StPicoBbcEpdFiller : public StMaker
+class StPicoBbcEpdFiller
 {
 public:
   StPicoBbcEpdFiller(Short_t year = 2017);
   virtual ~StPicoBbcEpdFiller();
-  virtual Int_t Init() {return kStOK;}
   virtual Int_t Make();
-  virtual Int_t Finish() {return kStOK;}
 
   TClonesArray *BbcEpdTileCollection() {return mTileCollection;}
 
@@ -45,7 +42,6 @@ private:
 
   void SetDefaultMapping_30may2017();
 
-  ClassDef(StPicoBbcEpdFiller, 1)
 };
 
 #endif

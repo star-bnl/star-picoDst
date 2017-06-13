@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include "StMaker.h"
 #include "StEventTypes.h"
 #include "StEvent/StTriggerData.h"
 #include "TClonesArray.h"
@@ -9,7 +8,6 @@
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StPicoBbcEpdFiller.h"
 
-ClassImp(StPicoBbcEpdFiller)
 
 StBeamDirection eastwestdir(int ew)
 {
