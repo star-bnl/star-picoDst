@@ -16,10 +16,7 @@
    isBbc().
 */
 
-#include "StPicoBbcEpdTile.h"
 
-class TClonesArray;
-class StTriggerData;
 class StMuDst;
 class StPicoDst;
 
