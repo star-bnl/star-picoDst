@@ -7,9 +7,9 @@
 #include "StMuDSTMaker/COMMON/StMuDstMaker.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
-#include "StPicoBbcEpdMaker.h"
+#include "StPicoBbcEpdFiller.h"
 
-ClassImp(StPicoBbcEpdMaker)
+ClassImp(StPicoBbcEpdFiller)
 
 StBeamDirection eastwestdir(int ew)
 {
@@ -18,14 +18,14 @@ StBeamDirection eastwestdir(int ew)
   return west;
 };
 
-StPicoBbcEpdMaker::StPicoBbcEpdMaker(Short_t year)
+StPicoBbcEpdFiller::StPicoBbcEpdFiller(Short_t year)
 {
   mTileCollection = new TClonesArray("StPicoBbcEpdTile", 200);;
 
   if (year == 2017) this->SetDefaultMapping_30may2017();
 }
 
-StPicoBbcEpdMaker::~StPicoBbcEpdMaker()
+StPicoBbcEpdFiller::~StPicoBbcEpdFiller()
 {
   mTileCollection->Clear();
   delete mTileCollection;
@@ -34,7 +34,7 @@ StPicoBbcEpdMaker::~StPicoBbcEpdMaker()
   */
 }
 
-Int_t StPicoBbcEpdMaker::Make()
+Int_t StPicoBbcEpdFiller::Make()
 {
   mTileCollection->Clear();
 
@@ -85,7 +85,7 @@ Int_t StPicoBbcEpdMaker::Make()
   return 1;
 }
 
-void StPicoBbcEpdMaker::SetDefaultMapping_30may2017()
+void StPicoBbcEpdFiller::SetDefaultMapping_30may2017()
 {
   // until we get the Database integrated _OR_ a standard set of access functions for EPD data in the StTriggerData object,
   // we need a map array relating PP/TT with QT/channel.  Prashanth had been using map.txt files, but this will not work

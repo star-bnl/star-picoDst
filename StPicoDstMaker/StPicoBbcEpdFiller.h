@@ -1,5 +1,5 @@
-#ifndef ___STAR_StPicoBbcEpdMaker
-#define ___STAR_StPicoBbcEpdMaker
+#ifndef StPicoBbcEpdFiller_h
+#define StPicoBbcEpdFiller_h
 
 /*
    this makes a TClonesArray of StPicoBbcEpdTile objects
@@ -22,11 +22,11 @@
 class TClonesArray;
 class StTriggerData;
 
-class StPicoBbcEpdMaker : public StMaker
+class StPicoBbcEpdFiller : public StMaker
 {
 public:
-  StPicoBbcEpdMaker(Short_t year = 2017);
-  virtual ~StPicoBbcEpdMaker();
+  StPicoBbcEpdFiller(Short_t year = 2017);
+  virtual ~StPicoBbcEpdFiller();
   virtual Int_t Init() {return kStOK;}
   virtual Int_t Make();
   virtual Int_t Finish() {return kStOK;}
@@ -45,7 +45,7 @@ private:
 
   void SetDefaultMapping_30may2017();
 
-  ClassDef(StPicoBbcEpdMaker, 1)
+  ClassDef(StPicoBbcEpdFiller, 1)
 };
 
 #endif
