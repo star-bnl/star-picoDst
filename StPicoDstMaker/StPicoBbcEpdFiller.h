@@ -27,7 +27,7 @@ class StPicoDst;
 class StPicoBbcEpdFiller
 {
 public:
-  StPicoBbcEpdFiller(StPicoDst& picoDst, Short_t year = 2017);
+  StPicoBbcEpdFiller(StPicoDst& picoDst, int year = 2017);
 
   void Fill(const StMuDst& muDst);
 

@@ -17,10 +17,10 @@ StBeamDirection eastwestdir(int ew)
   return west;
 };
 
-StPicoBbcEpdFiller::StPicoBbcEpdFiller(StPicoDst& picoDst, Short_t year) :
+StPicoBbcEpdFiller::StPicoBbcEpdFiller(StPicoDst& picoDst, int year) :
   mPicoDst(picoDst)
 {
-  if (year == 2017) this->SetDefaultMapping_30may2017();
+  if (year == 2017)  SetDefaultMapping_30may2017();
 }
 
 
