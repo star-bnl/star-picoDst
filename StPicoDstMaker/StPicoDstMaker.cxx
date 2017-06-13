@@ -47,6 +47,7 @@
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEmcTrigger.h"
 #include "StPicoEvent/StPicoMtdTrigger.h"
+#include "StPicoEvent/StPicoBbcEpdTile.h"
 #include "StPicoEvent/StPicoBTowHit.h"
 #include "StPicoEvent/StPicoBTofHit.h"
 #include "StPicoEvent/StPicoMtdHit.h"
@@ -67,7 +68,8 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
-  mPicoArrays{}, mStatusArrays{}
+  mPicoArrays{}, mStatusArrays{},
+  mBbcEpdFiller(*mPicoDst)
 {
   streamerOff();
   createArrays();
@@ -161,6 +163,7 @@ void  StPicoDstMaker::streamerOff()
   StPicoBTofHit::Class()->IgnoreTObjectStreamer();
   StPicoBTowHit::Class()->IgnoreTObjectStreamer();
   StPicoMtdHit::Class()->IgnoreTObjectStreamer();
+  StPicoBbcEpdTile::Class()->IgnoreTObjectStreamer();
   StPicoEmcTrigger::Class()->IgnoreTObjectStreamer();
   StPicoMtdTrigger::Class()->IgnoreTObjectStreamer();
   StPicoBTofPidTraits::Class()->IgnoreTObjectStreamer();
@@ -612,6 +615,7 @@ Int_t StPicoDstMaker::MakeWrite()
   fillMtdTrigger();
   fillBTofHits();
   fillMtdHits();
+  mBbcEpdFiller.Fill(*mMuDst);
 
   if (Debug()) mPicoDst->printTracks();
 
