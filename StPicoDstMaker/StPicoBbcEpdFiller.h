@@ -20,13 +20,16 @@
 
 class TClonesArray;
 class StTriggerData;
+class StMuDst;
+
 
 class StPicoBbcEpdFiller
 {
 public:
   StPicoBbcEpdFiller(Short_t year = 2017);
   virtual ~StPicoBbcEpdFiller();
-  virtual Int_t Make();
+
+  void Fill(const StMuDst& muDst);
 
   TClonesArray *BbcEpdTileCollection() {return mTileCollection;}
 

@@ -32,13 +32,11 @@ StPicoBbcEpdFiller::~StPicoBbcEpdFiller()
   */
 }
 
-Int_t StPicoBbcEpdFiller::Make()
+void StPicoBbcEpdFiller::Fill(const StMuDst& muDst)
 {
   mTileCollection->Clear();
 
-  StMuDstMaker *muDstMaker = (StMuDstMaker *) GetMaker("MuDst");
-  StMuDst *muDst = muDstMaker->muDst();
-  StMuEvent *Event = muDst->event();
+  StMuEvent *Event = muDst.event();
   StTriggerData *trg = const_cast<StTriggerData *>(Event->triggerData());
 
   Short_t ADC, TDC, TAC, ID;
@@ -79,8 +77,6 @@ Int_t StPicoBbcEpdFiller::Make()
       new((*mTileCollection)[ntiles++]) StPicoBbcEpdTile(ID, ADC, TAC, TDC, HasTAC);
     }
   }
-
-  return 1;
 }
 
 void StPicoBbcEpdFiller::SetDefaultMapping_30may2017()
