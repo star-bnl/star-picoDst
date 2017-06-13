@@ -7,6 +7,7 @@
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StPicoBbcEpdFiller.h"
+#include "StPicoDstMaker/StPicoDst.h"
 
 
 StBeamDirection eastwestdir(int ew)
@@ -16,7 +17,8 @@ StBeamDirection eastwestdir(int ew)
   return west;
 };
 
-StPicoBbcEpdFiller::StPicoBbcEpdFiller(Short_t year)
+StPicoBbcEpdFiller::StPicoBbcEpdFiller(StPicoDst& picoDst, Short_t year) :
+  mPicoDst(picoDst)
 {
   mTileCollection = new TClonesArray("StPicoBbcEpdTile", 200);;
 

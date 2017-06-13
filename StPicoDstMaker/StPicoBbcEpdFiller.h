@@ -21,12 +21,13 @@
 class TClonesArray;
 class StTriggerData;
 class StMuDst;
+class StPicoDst;
 
 
 class StPicoBbcEpdFiller
 {
 public:
-  StPicoBbcEpdFiller(Short_t year = 2017);
+  StPicoBbcEpdFiller(StPicoDst& picoDst, Short_t year = 2017);
   virtual ~StPicoBbcEpdFiller();
 
   void Fill(const StMuDst& muDst);
@@ -34,6 +35,9 @@ public:
   TClonesArray *BbcEpdTileCollection() {return mTileCollection;}
 
 private:
+
+  StPicoDst&  mPicoDst;
+
   TClonesArray *mTileCollection;
   struct EPDAnalysisMap {
     Short_t qt_board_address; // channel number used in QT board or other physical numbering scheme 0x10...
