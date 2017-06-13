@@ -20,23 +20,13 @@ StBeamDirection eastwestdir(int ew)
 StPicoBbcEpdFiller::StPicoBbcEpdFiller(StPicoDst& picoDst, Short_t year) :
   mPicoDst(picoDst)
 {
-  mTileCollection = new TClonesArray("StPicoBbcEpdTile", 200);;
-
   if (year == 2017) this->SetDefaultMapping_30may2017();
 }
 
-StPicoBbcEpdFiller::~StPicoBbcEpdFiller()
-{
-  mTileCollection->Clear();
-  delete mTileCollection;
-  /* note that I do not delete the contents.
-     I am assuming that someone else deletes the contents
-  */
-}
 
 void StPicoBbcEpdFiller::Fill(const StMuDst& muDst)
 {
-  mTileCollection->Clear();
+  TClonesArray *mTileCollection = mPicoDst.picoArray(StPicoArrays::BbcEpdTile);
 
   StMuEvent *Event = muDst.event();
   StTriggerData *trg = const_cast<StTriggerData *>(Event->triggerData());
