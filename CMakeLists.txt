@@ -71,6 +71,7 @@ add_library (
 	StPicoDstMaker/StPicoArrays.cxx
 	StPicoDstMaker/StPicoDst.cxx
 	StPicoDstMaker/StPicoDstMaker.cxx
+	StPicoDstMaker/StPicoBbcEpdFiller.cxx
 	StPicoDstMaker_dict.cxx
 )
 
@@ -86,6 +87,7 @@ root_generate_linkdef_and_dictionary(
 	StPicoEvent/StPicoMtdHit.h
 	StPicoEvent/StPicoMtdPidTraits.h
 	StPicoEvent/StPicoMtdTrigger.h
+	StPicoEvent/StPicoBbcEpdTile.h
 	StPicoEvent/StPicoTrack.h
 )
 
@@ -101,6 +103,7 @@ add_library (
 	StPicoEvent/StPicoMtdHit.cxx
 	StPicoEvent/StPicoMtdPidTraits.cxx
 	StPicoEvent/StPicoMtdTrigger.cxx
+	StPicoEvent/StPicoBbcEpdTile.cxx
 	StPicoEvent/StPicoTrack.cxx
 	StPicoEvent_dict.cxx
 )
