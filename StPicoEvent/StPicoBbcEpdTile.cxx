@@ -24,10 +24,6 @@ StPicoBbcEpdTile::StPicoBbcEpdTile(Short_t ID, Short_t ADC, Short_t TAC, Short_t
   */
 }
 
-StPicoBbcEpdTile::~StPicoBbcEpdTile()
-{
-  /* no-op */
-}
 
 void StPicoBbcEpdTile::setQTdata(Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC)
 {

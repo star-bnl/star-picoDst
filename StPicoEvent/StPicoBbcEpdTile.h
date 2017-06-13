@@ -21,7 +21,6 @@ public:
 
   StPicoBbcEpdTile();
   StPicoBbcEpdTile(Short_t ID, Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC);
-  virtual ~StPicoBbcEpdTile();
 
   virtual void Print(const Char_t *option = "") const;
 
