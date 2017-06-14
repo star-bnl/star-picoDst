@@ -59,8 +59,10 @@ void makePicoDst(const Char_t *inputFile = "root://xrdstar.rcf.bnl.gov:1095//hom
   gSystem->Load("StMtdMatchMaker");
   gSystem->Load("StMtdCalibMaker");
 
-  gSystem->Load("StPicoEvent");
-  gSystem->Load("StPicoDstMaker");
+  gSystem->Load("libStPicoEvent");
+  gSystem->Load("libStPicoDstMaker");
+
+  gSystem->ListLibraries();
 
   chain = new StChain();
 
