@@ -24,8 +24,8 @@ void loadLibs()
   gSystem->Load("StTofUtil");
   gSystem->Load("StPmdUtil");
   gSystem->Load("StPreEclMaker");
-  gSystem->Load("StStrangeMuDstMaker");
-  gSystem->Load("StMuDSTMaker");
+  gSystem->Load("libStStrangeMuDstMaker");
+  gSystem->Load("libStMuDSTMaker");
   gSystem->Load("libStarAgmlUtil");
 
   gSystem->Load("StTpcDb");
