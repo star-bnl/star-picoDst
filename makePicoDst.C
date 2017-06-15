@@ -8,10 +8,9 @@ class StMuDstMaker;
 
 
 StChain* chain;
-void makePicoDst(const Char_t *inputFile = "root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu_200_production_low_2014/ReversedFullField/P15ic/2014/140/15140004/st_physics_15140004_raw_1000016.MuDst.root")
+void makePicoDst(const Char_t *inputFile = "root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu_200_production_low_2014/ReversedFullField/P15ic/2014/140/15140004/st_physics_15140004_raw_1000016.MuDst.root",
+  int nEvents = 100000)
 {
-  Int_t nEvents = 1e5;
-
   gSystem->Load("libTable");
   gSystem->Load("libPhysics");
   gSystem->Load("St_base");
