@@ -55,9 +55,7 @@ void loadLibs()
   gSystem->Load("libStMtdCalibMaker");
 
   //FMS
-  gSystem->Load("StEventMaker");
   gSystem->Load("libStFmsUtil");
-  gSystem->Load("StFmsHitMaker");
   gSystem->Load("libStFmsDbMaker");
 
   gSystem->Load("libStPicoEvent");
@@ -100,8 +98,6 @@ void makePicoDst(const Char_t *inputFile, int nEvents = 100000)
   //Makers needed for FMS
   //TODO:remove dependence on StEvent(Maker)
   StFmsDbMaker* fmsdb = new StFmsDbMaker("fmsDb");  
-  StEventMaker* eventMk = new StEventMaker();
-  StFmsHitMaker* fmshitMk = new StFmsHitMaker();
 
   // Endcap database
   StEEmcDbMaker* eemcDb = new StEEmcDbMaker();

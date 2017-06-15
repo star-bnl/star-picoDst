@@ -64,10 +64,6 @@
 #include "StPicoDstMaker/StPicoArrays.h"
 #include "StPicoDstMaker/StPicoDst.h"
 
-//For FMS access
-#include "StEvent/StEvent.h"
-#include "StFmsCollection.h"
-#include "StFmsHit.h"
 #include "StFmsDbMaker/StFmsDbMaker.h"
 
 //_____________________________________________________________________________
