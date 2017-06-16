@@ -42,7 +42,7 @@ protected:
 
 inline bool StPicoBbcTile::isEast() const {return (mId < 0);}
 
-inline int  StPicoBbcTile::pmtNumber() const {return abs(mId) < 100 ? abs(100) : -999;}
+inline int  StPicoBbcTile::pmtNumber() const { return mId; }
 
 inline int  StPicoBbcTile::adc() const { return mQTdata & 0x0FFF; }
 inline int  StPicoBbcTile::tac() const { return (mQTdata >> 12) & 0x0FFF; }

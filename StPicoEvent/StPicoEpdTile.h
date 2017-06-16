@@ -46,8 +46,8 @@ protected:
 
 inline bool StPicoEpdTile::isEast() const {return (mId < 0);}
 
-inline int  StPicoEpdTile::PP() const {return abs(mId) > 100 ? abs(mId / 100) : -999;}
-inline int  StPicoEpdTile::TT() const {return abs(mId) > 100 ? abs(mId % 100) : -999;}
+inline int  StPicoEpdTile::PP() const { return mId / 100; }
+inline int  StPicoEpdTile::TT() const { return mId % 100; }
 
 inline int  StPicoEpdTile::adc() const { return mQTdata & 0x0FFF; }
 inline int  StPicoEpdTile::tac() const { return (mQTdata >> 12) & 0x0FFF; }
