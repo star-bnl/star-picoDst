@@ -8,7 +8,8 @@
 
 #include "StChain/StMaker.h"
 #include "StPicoDstMaker/StPicoArrays.h"
-#include "StPicoDstMaker/StPicoBbcEpdFiller.h"
+#include "StPicoDstMaker/StPicoBbcFiller.h"
+#include "StPicoDstMaker/StPicoEpdFiller.h"
 
 class TFile;
 class TTree;
@@ -150,7 +151,8 @@ protected:
   TClonesArray*   mPicoArrays[StPicoArrays::NAllPicoArrays];
   char            mStatusArrays[StPicoArrays::NAllPicoArrays];
 
-  StPicoBbcEpdFiller  mBbcEpdFiller;
+  StPicoBbcFiller  mBbcFiller;
+  StPicoEpdFiller  mEpdFiller;
 
   ClassDef(StPicoDstMaker, 0)
 };
