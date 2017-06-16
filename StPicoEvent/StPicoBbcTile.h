@@ -21,8 +21,6 @@ public:
 
   virtual void Print(const Char_t *option = "") const;
 
-  void setQTdata(Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC);
-
   Bool_t hasTAC() const;
   Short_t adc() const;
   Short_t tac() const;

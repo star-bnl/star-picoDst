@@ -24,9 +24,6 @@ public:
 
   virtual void Print(const Char_t *option = "") const;
 
-  void setQTdata(Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC);
-  void setPPandTTandEW(Short_t PP, Short_t TT, Short_t EW);
-
   Bool_t hasTAC() const;
   Short_t adc() const;
   Short_t tac() const;
@@ -47,7 +44,6 @@ protected:
   ClassDef(StPicoEpdTile, 1)
 };
 
-inline void    StPicoEpdTile::setPPandTTandEW(Short_t PP, Short_t TT, Short_t EW) {mId = 100 * PP + TT; if (EW < 0) {mId *= -1;};}
 inline Bool_t  StPicoEpdTile::isEast() const {return (mId < 0);}
 
 inline Short_t StPicoEpdTile::PP() const {return abs(mId) > 100 ? abs(mId / 100) : -999;}

@@ -14,14 +14,6 @@ StPicoEpdTile::StPicoEpdTile(int PP, int TT, int EW, int ADC, int TAC, int TDC, 
 }
 
 
-void StPicoEpdTile::setQTdata(Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC)
-{
-  ULong_t uADC = ADC;
-  ULong_t uTDC = TDC;
-  ULong_t uTAC = TAC;
-  mQTdata = (uADC & 0xFFF) + ((uTAC & 0xFFF) << 12) + ((uTDC & 0x1F) << 24) + (hasTAC ? (1 << 29) : 0);
-}
-
 void StPicoEpdTile::Print(const Char_t *option) const
 {
 
