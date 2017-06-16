@@ -5,49 +5,29 @@
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 
-#include "StPicoDstMaker/StPicoBbcEpdFiller.h"
+#include "StPicoDstMaker/StPicoEpdFiller.h"
 #include "StPicoDstMaker/StPicoDst.h"
-#include "StPicoEvent/StPicoBbcEpdTile.h"
+#include "StPicoEvent/StPicoEpdTile.h"
 
 
-StBeamDirection eastwestdir(int ew)
-{
-  if (ew == 0) return east;
 
-  return west;
-};
-
-StPicoBbcEpdFiller::StPicoBbcEpdFiller(StPicoDst& picoDst, int year) :
+StPicoEpdFiller::StPicoEpdFiller(StPicoDst& picoDst, int year) :
   mPicoDst(picoDst)
 {
   if (year == 2017)  SetDefaultMapping_30may2017();
 }
 
 
-void StPicoBbcEpdFiller::Fill(const StMuDst& muDst)
+void StPicoEpdFiller::Fill(const StMuDst& muDst)
 {
-  TClonesArray *mTileCollection = mPicoDst.picoArray(StPicoArrays::BbcEpdTile);
+  TClonesArray *mTileCollection = mPicoDst.picoArray(StPicoArrays::EpdTile);
 
   StMuEvent *Event = muDst.event();
   StTriggerData *trg = const_cast<StTriggerData *>(Event->triggerData());
 
-  Short_t ADC, TDC, TAC, ID;
+  Short_t ADC, TDC, TAC;
   Short_t ntiles = 0;
   Bool_t HasTAC;
-  // BBC tiles
-
-  for (Int_t ew = 0; ew < 2; ew++) {
-    Short_t sign = ew = 0 ? -1 : +1;
-
-    for (Int_t pmt = 0; pmt < 24; pmt++) {
-      ADC = trg->bbcADC(eastwestdir(ew), pmt + 1, 0);
-      TAC = trg->bbcTDC(eastwestdir(ew), pmt + 1, 0); // yes I know the method says "TDC" but it's the TAC
-      TDC = trg->bbcTDC5bit(eastwestdir(ew), pmt + 1);
-      ID = sign * (pmt + 1);
-      HasTAC = kTRUE;
-      new((*mTileCollection)[ntiles++]) StPicoBbcEpdTile(ID, ADC, TAC, TDC, HasTAC);
-    }
-  }
 
   // EPD tiles
   // here, the "ADC","TDC" and"TAC" can be a little subtle...
@@ -62,16 +42,15 @@ void StPicoBbcEpdFiller::Fill(const StMuDst& muDst)
       else
       {TAC = 0;}
 
-      Short_t sign = -1; // always East for 2017
-      ID = sign * ((PP + 1) * 100 + (TT + 1));
+      Short_t EW = -1; // always East for 2017
       //      cout << "Maker making a PicoTile with PP/TT/ID= " << PP << "/" << TT << "/" <<  ID
       //      	   << "ADC=" << ADC << " TDC=" << TDC << " TAC=" << TAC << endl;
-      new((*mTileCollection)[ntiles++]) StPicoBbcEpdTile(ID, ADC, TAC, TDC, HasTAC);
+      new((*mTileCollection)[ntiles++]) StPicoEpdTile(PP, TT, EW, ADC, TAC, TDC, HasTAC);
     }
   }
 }
 
-void StPicoBbcEpdFiller::SetDefaultMapping_30may2017()
+void StPicoEpdFiller::SetDefaultMapping_30may2017()
 {
   // until we get the Database integrated _OR_ a standard set of access functions for EPD data in the StTriggerData object,
   // we need a map array relating PP/TT with QT/channel.  Prashanth had been using map.txt files, but this will not work

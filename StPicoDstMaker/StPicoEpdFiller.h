@@ -1,8 +1,8 @@
-#ifndef StPicoBbcEpdFiller_h
-#define StPicoBbcEpdFiller_h
+#ifndef StPicoEpdFiller_h
+#define StPicoEpdFiller_h
 
 /*
-   this makes a TClonesArray of StPicoBbcEpdTile objects
+   this makes a TClonesArray of StPicoEpdTile objects
    that make up the BBC and EPD detectors.  The tile
    objects for these two detectors are the same, hence
    the name.
@@ -21,10 +21,10 @@ class StMuDst;
 class StPicoDst;
 
 
-class StPicoBbcEpdFiller
+class StPicoEpdFiller
 {
 public:
-  StPicoBbcEpdFiller(StPicoDst& picoDst, int year = 2017);
+  StPicoEpdFiller(StPicoDst& picoDst, int year = 2017);
 
   void Fill(const StMuDst& muDst);
 
