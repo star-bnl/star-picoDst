@@ -21,13 +21,13 @@ public:
 
   virtual void Print(const Char_t *option = "") const;
 
-  Bool_t hasTAC() const;
-  Short_t adc() const;
-  Short_t tac() const;
-  Short_t tdc() const;
-  Bool_t isEast() const;
+  bool hasTAC() const;
+  int  adc() const;
+  int  tac() const;
+  int  tdc() const;
+  bool isEast() const;
 
-  Short_t pmtNumber() const;  // 1...32
+  int pmtNumber() const;  // 1...32
 
 protected:
   // mId:
@@ -40,13 +40,13 @@ protected:
 };
 
 
-inline Bool_t  StPicoBbcTile::isEast() const {return (mId < 0);}
+inline bool StPicoBbcTile::isEast() const {return (mId < 0);}
 
-inline Short_t StPicoBbcTile::pmtNumber() const {return abs(mId) < 100 ? abs(100) : -999;}
+inline int  StPicoBbcTile::pmtNumber() const {return abs(mId) < 100 ? abs(100) : -999;}
 
-inline Short_t StPicoBbcTile::adc() const {Short_t x = (mQTdata & 0x0FFF); return x;}
-inline Short_t StPicoBbcTile::tac() const {Short_t x = ((mQTdata >> 12) & 0x0FFF); return x;}
-inline Short_t StPicoBbcTile::tdc() const {Short_t x = ((mQTdata >> 24) & 0x001F); return x;}
-inline Bool_t  StPicoBbcTile::hasTAC() const {return ((mQTdata >> 29 & 0x1) != 0);}
+inline int  StPicoBbcTile::adc() const { return mQTdata & 0x0FFF; }
+inline int  StPicoBbcTile::tac() const { return (mQTdata >> 12) & 0x0FFF; }
+inline int  StPicoBbcTile::tdc() const { return (mQTdata >> 24) & 0x001F; }
+inline bool StPicoBbcTile::hasTAC() const { return (mQTdata >> 29) & 0x1; }
 
 #endif

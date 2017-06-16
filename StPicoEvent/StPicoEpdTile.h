@@ -24,14 +24,14 @@ public:
 
   virtual void Print(const Char_t *option = "") const;
 
-  Bool_t hasTAC() const;
-  Short_t adc() const;
-  Short_t tac() const;
-  Short_t tdc() const;
-  Bool_t isEast() const;
+  bool hasTAC() const;
+  int  adc() const;
+  int  tac() const;
+  int  tdc() const;
+  bool isEast() const;
 
-  Short_t PP() const;         // 1...12
-  Short_t TT() const;         // 1...31
+  int PP() const;         // 1...12
+  int TT() const;         // 1...31
 
 protected:
   // mId:
@@ -44,14 +44,14 @@ protected:
   ClassDef(StPicoEpdTile, 1)
 };
 
-inline Bool_t  StPicoEpdTile::isEast() const {return (mId < 0);}
+inline bool StPicoEpdTile::isEast() const {return (mId < 0);}
 
-inline Short_t StPicoEpdTile::PP() const {return abs(mId) > 100 ? abs(mId / 100) : -999;}
-inline Short_t StPicoEpdTile::TT() const {return abs(mId) > 100 ? abs(mId % 100) : -999;}
+inline int  StPicoEpdTile::PP() const {return abs(mId) > 100 ? abs(mId / 100) : -999;}
+inline int  StPicoEpdTile::TT() const {return abs(mId) > 100 ? abs(mId % 100) : -999;}
 
-inline Short_t StPicoEpdTile::adc() const {Short_t x = (mQTdata & 0x0FFF); return x;}
-inline Short_t StPicoEpdTile::tac() const {Short_t x = ((mQTdata >> 12) & 0x0FFF); return x;}
-inline Short_t StPicoEpdTile::tdc() const {Short_t x = ((mQTdata >> 24) & 0x001F); return x;}
-inline Bool_t  StPicoEpdTile::hasTAC() const {return ((mQTdata >> 29 & 0x1) != 0);}
+inline int  StPicoEpdTile::adc() const { return mQTdata & 0x0FFF; }
+inline int  StPicoEpdTile::tac() const { return (mQTdata >> 12) & 0x0FFF; }
+inline int  StPicoEpdTile::tdc() const { return (mQTdata >> 24) & 0x001F; }
+inline bool StPicoEpdTile::hasTAC() const { return (mQTdata >> 29) & 0x1; }
 
 #endif
