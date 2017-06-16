@@ -6,10 +6,11 @@ StPicoEpdTile::StPicoEpdTile() : mId(0), mQTdata(0)
   /* no-op */
 }
 
-StPicoEpdTile::StPicoEpdTile(Short_t PP, Short_t TT, Short_t EW, Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC)
+
+StPicoEpdTile::StPicoEpdTile(int PP, int TT, int EW, int ADC, int TAC, int TDC, bool hasTAC) :
+  mId( (100*PP + TT)*EW ),
+  mQTdata( (ADC & 0x0FFF) | (TAC & 0x0FFF) << 12 | (TDC & 0x001F) << 24 | hasTAC << 29 )
 {
-  this->setPPandTTandEW(PP, TT, EW);
-  this->setQTdata(ADC, TAC, TDC, hasTAC);
 }
 
 

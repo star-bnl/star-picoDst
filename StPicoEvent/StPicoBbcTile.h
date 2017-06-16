@@ -17,7 +17,7 @@ class StPicoBbcTile : public TObject
 public:
 
   StPicoBbcTile();
-  StPicoBbcTile(Short_t ID, Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC);
+  StPicoBbcTile(int ID, int ADC, int TAC, int TDC, bool hasTAC);
 
   virtual void Print(const Char_t *option = "") const;
 
