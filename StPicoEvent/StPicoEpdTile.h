@@ -32,9 +32,7 @@ public:
   Short_t tac() const;
   Short_t tdc() const;
   Bool_t isEast() const;
-  Short_t id() const;
 
-  Short_t ID() const;
   Short_t PP() const;         // 1...12
   Short_t TT() const;         // 1...31
 
@@ -51,9 +49,7 @@ protected:
 
 inline void    StPicoEpdTile::setPPandTTandEW(Short_t PP, Short_t TT, Short_t EW) {mId = 100 * PP + TT; if (EW < 0) {mId *= -1;};}
 inline Bool_t  StPicoEpdTile::isEast() const {return (mId < 0);}
-inline Short_t StPicoEpdTile::id() const {return mId;}
 
-inline Short_t StPicoEpdTile::ID() const {return mId;}
 inline Short_t StPicoEpdTile::PP() const {return abs(mId) > 100 ? abs(mId / 100) : -999;}
 inline Short_t StPicoEpdTile::TT() const {return abs(mId) > 100 ? abs(mId % 100) : -999;}
 

@@ -21,7 +21,6 @@ public:
 
   virtual void Print(const Char_t *option = "") const;
 
-  void setId(Short_t ID);
   void setQTdata(Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC);
 
   Bool_t hasTAC() const;
@@ -29,7 +28,6 @@ public:
   Short_t tac() const;
   Short_t tdc() const;
   Bool_t isEast() const;
-  Short_t id() const;
 
   Short_t pmtNumber() const;  // 1...32
 
@@ -43,10 +41,8 @@ protected:
   ClassDef(StPicoBbcTile, 1)
 };
 
-inline void StPicoBbcTile::setId(Short_t ID) {mId = ID;}
 
 inline Bool_t  StPicoBbcTile::isEast() const {return (mId < 0);}
-inline Short_t StPicoBbcTile::id() const {return mId;}
 
 inline Short_t StPicoBbcTile::pmtNumber() const {return abs(mId) < 100 ? abs(100) : -999;}
 
