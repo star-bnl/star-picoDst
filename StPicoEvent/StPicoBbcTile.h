@@ -33,7 +33,7 @@ protected:
   // mId:
   // * for BBC: Phototube #
   // * sign for both, +/- = West/East
-  Short_t mId;
+  Char_t  mId;
   ULong_t mQTdata; // bits 0-11 are ADC;  bits 12-23 are TAC;  bits 24-28 are TDC;  bit 29 is noTAC flag
 
   ClassDef(StPicoBbcTile, 1)
