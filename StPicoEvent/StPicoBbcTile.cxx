@@ -1,12 +1,12 @@
 #include "St_base/StMessMgr.h"
-#include "StPicoEvent/StPicoBbcEpdTile.h"
+#include "StPicoEvent/StPicoBbcTile.h"
 
-StPicoBbcEpdTile::StPicoBbcEpdTile() : mId(0), mQTdata(0)
+StPicoBbcTile::StPicoBbcTile() : mId(0), mQTdata(0)
 {
   /* no-op */
 }
 
-StPicoBbcEpdTile::StPicoBbcEpdTile(Short_t ID, Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC)
+StPicoBbcTile::StPicoBbcTile(Short_t ID, Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC)
 {
   mId = ID;
   this->setQTdata(ADC, TAC, TDC, hasTAC);
@@ -23,7 +23,7 @@ StPicoBbcEpdTile::StPicoBbcEpdTile(Short_t ID, Short_t ADC, Short_t TAC, Short_t
 }
 
 
-void StPicoBbcEpdTile::setQTdata(Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC)
+void StPicoBbcTile::setQTdata(Short_t ADC, Short_t TAC, Short_t TDC, Bool_t hasTAC)
 {
   ULong_t uADC = ADC;
   ULong_t uTDC = TDC;
@@ -31,7 +31,7 @@ void StPicoBbcEpdTile::setQTdata(Short_t ADC, Short_t TAC, Short_t TDC, Bool_t h
   mQTdata = (uADC & 0xFFF) + ((uTAC & 0xFFF) << 12) + ((uTDC & 0x1F) << 24) + (hasTAC ? (1 << 29) : 0);
 }
 
-void StPicoBbcEpdTile::Print(const Char_t *option) const
+void StPicoBbcTile::Print(const Char_t *option) const
 {
 
   /*  --- this below does not compile so I am skipping it.
