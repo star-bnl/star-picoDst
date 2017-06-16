@@ -1,9 +1,9 @@
-#ifndef StPicoBbcEpdFiller_h
-#define StPicoBbcEpdFiller_h
+#ifndef StPicoBbcFiller_h
+#define StPicoBbcFiller_h
 
 /*
-   this makes a TClonesArray of StPicoBbcEpdTile objects
-   that make up the BBC and EPD detectors.  The tile
+   this makes a TClonesArray of StPicoBbcTile objects
+   that make up the BBC detector.  The tile
    objects for these two detectors are the same, hence
    the name.
 
@@ -21,26 +21,16 @@ class StMuDst;
 class StPicoDst;
 
 
-class StPicoBbcEpdFiller
+class StPicoBbcFiller
 {
 public:
-  StPicoBbcEpdFiller(StPicoDst& picoDst, int year = 2017);
+  StPicoBbcFiller(StPicoDst& picoDst, int year = 2017);
 
   void Fill(const StMuDst& muDst);
 
 private:
 
   StPicoDst&  mPicoDst;
-
-  struct EPDAnalysisMap {
-    Short_t qt_board_address; // channel number used in QT board or other physical numbering scheme 0x10...
-    Short_t qt_channel_ADC; // QT board channel used 0....31
-    Short_t qt_channel_TAC; // QT board channel used 0....31
-  };
-
-  EPDAnalysisMap mEPDMap[2][12][31];
-
-  void SetDefaultMapping_30may2017();
 
 };
 
