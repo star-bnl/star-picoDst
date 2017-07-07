@@ -204,13 +204,10 @@ Int_t StPicoDstMaker::Init()
   {
     case PicoIoMode::IoWrite:
 
-      if (mVtxMode == PicoVtxMode::NotSet)
+      if (mVtxMode == PicoVtxMode::NotSet && setVtxModeAttr() != kStOK)
       {
-        if (setVtxModeAttr() != kStOK)
-        {
-          LOG_ERROR << "Pico Vertex Mode is not set ... " << endm;
-          return kStErr;
-        }
+        LOG_ERROR << "Pico Vertex Mode is not set ... " << endm;
+        return kStErr;
       }
 
       if (mInputFileName.Length() == 0) {
