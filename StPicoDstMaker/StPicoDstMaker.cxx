@@ -1158,25 +1158,9 @@ bool StPicoDstMaker::selectVertex()
       mMuDst->setVertexIndex(0);
     }
 
-    StBTofHeader const* mBTofHeader = mMuDst->btofHeader();
+    selectedVertex = findVpdVertex(*mMuDst);
 
-    if (mBTofHeader && fabs(mBTofHeader->vpdVz()) < 200)
-    {
-      float vzVpd = mBTofHeader->vpdVz();
-
-      for (unsigned int iVtx = 0; iVtx < mMuDst->numberOfPrimaryVertices(); ++iVtx)
-      {
-        StMuPrimaryVertex* vtx = mMuDst->primaryVertex(iVtx);
-        if (!vtx) continue;
-
-        if (fabs(vzVpd - vtx->position().z()) < 3.)
-        {
-          mMuDst->setVertexIndex(iVtx);
-          selectedVertex = mMuDst->primaryVertex();
-          break;
-        }
-      }
-    }
+    mMuDst->setVertexIndex( mMuDst->primaryVertices()->IndexOf(selectedVertex) );
   }
   else // default case
   {
@@ -1185,4 +1169,28 @@ bool StPicoDstMaker::selectVertex()
 
   // Retrun false if selected vertex is not valid
   return selectedVertex ? true : false;
+}
+
+
+StMuPrimaryVertex* StPicoDstMaker::findVpdVertex(const StMuDst& muDst) const
+{
+  StBTofHeader const* mBTofHeader = muDst.btofHeader();
+
+  if (mBTofHeader && fabs(mBTofHeader->vpdVz()) < 200)
+  {
+    float vzVpd = mBTofHeader->vpdVz();
+
+    for (unsigned int iVtx = 0; iVtx < muDst.numberOfPrimaryVertices(); ++iVtx)
+    {
+      StMuPrimaryVertex* vtx = muDst.primaryVertex(iVtx);
+      if (!vtx) continue;
+
+      if (fabs(vzVpd - vtx->position().z()) < 3.)
+      {
+        return vtx;
+      }
+    }
+  }
+
+  return nullptr;
 }

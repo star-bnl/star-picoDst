@@ -15,6 +15,7 @@ class TFile;
 class TTree;
 class StMuDst;
 class StMuTrack;
+class StMuPrimaryVertex;
 class StEmcCollection;
 class StEmcPosition;
 class StEmcGeom;
@@ -127,6 +128,10 @@ protected:
 
   /// A pointer to the main input/outpur picoDst structure containing all `TObjArray`s
   StPicoDst*  mPicoDst;
+
+  /// Finds a primary vertex in the list of muDst vertices that matches the VPD
+  /// vertex
+  StMuPrimaryVertex* findVpdVertex(const StMuDst& muDst) const;
 
   StEmcCollection* mEmcCollection;
   StEmcPosition*   mEmcPosition;
