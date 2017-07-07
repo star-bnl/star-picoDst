@@ -1145,20 +1145,20 @@ bool StPicoDstMaker::selectVertex()
 {
   StMuPrimaryVertex* selectedVertex = nullptr;
 
-  if (mVtxMode == PicoVtxMode::Default)
+  switch (mVtxMode)
   {
+  case PicoVtxMode::Default:
     // choose the default vertex, i.e. the first vertex
     mMuDst->setVertexIndex(0);
     selectedVertex = mMuDst->primaryVertex();
-  }
-  else if (mVtxMode == PicoVtxMode::Vpd)
-  {
-    selectedVertex = findVpdVertex(*mMuDst);
+    break;
 
+  case PicoVtxMode::Vpd:
+    selectedVertex = findVpdVertex(*mMuDst);
     mMuDst->setVertexIndex( mMuDst->primaryVertices()->IndexOf(selectedVertex) );
-  }
-  else if (mVtxMode == PicoVtxMode::VpdOrDefault)
-  {
+    break;
+
+  case PicoVtxMode::VpdOrDefault:
     selectedVertex = findVpdVertex(*mMuDst);
 
     if (selectedVertex)
@@ -1170,9 +1170,9 @@ bool StPicoDstMaker::selectVertex()
       mMuDst->setVertexIndex(0);
       selectedVertex = mMuDst->primaryVertex();
     }
-  }
-  else // default case
-  {
+    break;
+
+  default:
     LOG_ERROR << "Pico Vtx Mode not set!" << endm;
   }
 
