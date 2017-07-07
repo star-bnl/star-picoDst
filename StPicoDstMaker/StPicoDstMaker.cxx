@@ -1149,27 +1149,22 @@ bool StPicoDstMaker::selectVertex()
   {
   case PicoVtxMode::Default:
     // choose the default vertex, i.e. the first vertex
-    mMuDst->setVertexIndex(0);
-    selectedVertex = mMuDst->primaryVertex();
+    selectedVertex = StMuDst::setCurrentVertex(0);
     break;
 
   case PicoVtxMode::Vpd:
     selectedVertex = findVpdVertex(*mMuDst);
-    mMuDst->setVertexIndex( mMuDst->primaryVertices()->IndexOf(selectedVertex) );
+    StMuDst::setCurrentVertex(selectedVertex);
     break;
 
   case PicoVtxMode::VpdOrDefault:
     selectedVertex = findVpdVertex(*mMuDst);
 
     if (selectedVertex)
-    {
-      mMuDst->setVertexIndex( mMuDst->primaryVertices()->IndexOf(selectedVertex) );
-    }
+      StMuDst::setCurrentVertex(selectedVertex);
     else
-    {
-      mMuDst->setVertexIndex(0);
-      selectedVertex = mMuDst->primaryVertex();
-    }
+      selectedVertex = StMuDst::setCurrentVertex(0);
+
     break;
 
   default:
