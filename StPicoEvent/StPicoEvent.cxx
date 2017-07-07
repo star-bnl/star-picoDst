@@ -42,11 +42,11 @@ StPicoEvent::StPicoEvent(StMuDst const& muDst) : StPicoEvent()
   mFillId = ev->runInfo().beamFillNumber(blue);
   mBField = ev->magneticField();
 
-  mPrimaryVertex = ev->primaryVertexPosition();
-  mPrimaryVertexError = ev->primaryVertexErrors();
-
   if (StMuPrimaryVertex* pv = muDst.primaryVertex())
   {
+    mPrimaryVertex = ev->primaryVertexPosition();
+    mPrimaryVertexError = ev->primaryVertexErrors();
+
     mRanking = pv->ranking();
     mNBEMCMatch = pv->nBEMCMatch();
     mNBTOFMatch = pv->nBTOFMatch();
