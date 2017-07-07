@@ -1176,20 +1176,18 @@ StMuPrimaryVertex* StPicoDstMaker::findVpdVertex(const StMuDst& muDst) const
 {
   StBTofHeader const* mBTofHeader = muDst.btofHeader();
 
-  if (mBTofHeader && fabs(mBTofHeader->vpdVz()) < 200)
+  if (!mBTofHeader || fabs(mBTofHeader->vpdVz()) >= 200)
+    return nullptr;
+
+  float vzVpd = mBTofHeader->vpdVz();
+
+  for (unsigned int iVtx = 0; iVtx < muDst.numberOfPrimaryVertices(); ++iVtx)
   {
-    float vzVpd = mBTofHeader->vpdVz();
+    StMuPrimaryVertex* vtx = muDst.primaryVertex(iVtx);
 
-    for (unsigned int iVtx = 0; iVtx < muDst.numberOfPrimaryVertices(); ++iVtx)
-    {
-      StMuPrimaryVertex* vtx = muDst.primaryVertex(iVtx);
-      if (!vtx) continue;
+    if (!vtx || fabs(vzVpd - vtx->position().z()) >= 3.) continue;
 
-      if (fabs(vzVpd - vtx->position().z()) < 3.)
-      {
-        return vtx;
-      }
-    }
+    return vtx;
   }
 
   return nullptr;
