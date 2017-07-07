@@ -9,6 +9,7 @@
 #include "StarClassLibrary/SystemOfUnits.h"
 
 
+class StDcaGeometry;
 class StMuPrimaryVertex;
 class StMuTrack;
 class StDcaGeometry;
