@@ -1151,16 +1151,25 @@ bool StPicoDstMaker::selectVertex()
     mMuDst->setVertexIndex(0);
     selectedVertex = mMuDst->primaryVertex();
   }
-  else if (mVtxMode == PicoVtxMode::Vpd || mVtxMode == PicoVtxMode::VpdOrDefault)
+  else if (mVtxMode == PicoVtxMode::Vpd)
   {
-    if(mVtxMode == PicoVtxMode::VpdOrDefault)
-    {
-      mMuDst->setVertexIndex(0);
-    }
-
     selectedVertex = findVpdVertex(*mMuDst);
 
     mMuDst->setVertexIndex( mMuDst->primaryVertices()->IndexOf(selectedVertex) );
+  }
+  else if (mVtxMode == PicoVtxMode::VpdOrDefault)
+  {
+    selectedVertex = findVpdVertex(*mMuDst);
+
+    if (selectedVertex)
+    {
+      mMuDst->setVertexIndex( mMuDst->primaryVertices()->IndexOf(selectedVertex) );
+    }
+    else
+    {
+      mMuDst->setVertexIndex(0);
+      selectedVertex = mMuDst->primaryVertex();
+    }
   }
   else // default case
   {
