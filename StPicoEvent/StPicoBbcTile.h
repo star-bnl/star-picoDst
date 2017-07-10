@@ -1,12 +1,3 @@
-/*
-   BBC tile class for STAR picoDst
-   Total size of this object is 6 bytes
-
-   If all BBC inner tiles are saved, this makes 2*16*6 = 192 bytes
-   Usually outer BBC tiles will not be saved, but if they are then this makes 384 bytes
-
-   - Mike Lisa 20 May 2017
-*/
 #ifndef StPicoBbcTile_h
 #define StPicoBbcTile_h
 
@@ -18,6 +9,15 @@
 using namespace StarPicoDst;
 
 
+/**
+ * BBC tile class for STAR picoDst
+ * Total size of this object is 5 bytes
+ *
+ * If all BBC inner tiles are saved, this makes 2*16*5 = 160 bytes
+ * Usually outer BBC tiles will not be saved, but if they are then this makes 384 bytes
+ *
+ * - Mike Lisa 20 May 2017
+ */
 class StPicoBbcTile : public TObject
 {
 public:
@@ -36,11 +36,13 @@ public:
   int pmtNumber() const;  // 1...32
 
 protected:
-  // mId:
-  // * for BBC: Phototube #
-  // * sign for both, +/- = West/East
+
+  /// Phototube #: [1, 32], sign: +/- = West/East
   Char_t  mId;
-  ULong_t mQTdata; // bits 0-11 are ADC;  bits 12-23 are TAC;  bits 24-28 are TDC;  bit 29 is noTAC flag
+
+  /// Packed channel data: bits  0-11 are ADC; bits 12-23 are TAC;
+  ///                      bits 24-28 are TDC; bit 29 is noTAC flag
+  ULong_t mQTdata;
 
   ClassDef(StPicoBbcTile, 1)
 };
