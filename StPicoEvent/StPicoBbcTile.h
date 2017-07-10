@@ -10,6 +10,7 @@
 #ifndef StPicoBbcTile_h
 #define StPicoBbcTile_h
 
+#include <cstdlib>
 #include "TObject.h"
 
 #include "StPicoEvent/StPicoCommon.h"
@@ -47,7 +48,7 @@ protected:
 
 inline DetectorSide StPicoBbcTile::side() const { return mId < 0 ? DetectorSide::East : DetectorSide::West;}
 
-inline int  StPicoBbcTile::pmtNumber() const { return mId; }
+inline int  StPicoBbcTile::pmtNumber() const { return std::abs( (int)mId ); }
 
 inline int  StPicoBbcTile::adc() const { return mQTdata & 0x0FFF; }
 inline int  StPicoBbcTile::tac() const { return (mQTdata >> 12) & 0x0FFF; }
