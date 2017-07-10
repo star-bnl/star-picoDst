@@ -35,6 +35,7 @@ public:
   int  tdc() const;
   DetectorSide side() const;
 
+  int id() const;
   int PP() const;         // 1...12
   int TT() const;         // 1...31
 
@@ -51,6 +52,7 @@ protected:
 
 inline DetectorSide StPicoEpdTile::side() const { return mId < 0 ? DetectorSide::East : DetectorSide::West;}
 
+inline int  StPicoEpdTile::id() const { return mId; }
 inline int  StPicoEpdTile::PP() const { return mId / 100; }
 inline int  StPicoEpdTile::TT() const { return mId % 100; }
 
