@@ -15,12 +15,17 @@
 
 #include "TObject.h"
 
+#include "StPicoEvent/StPicoCommon.h"
+
+using namespace StarPicoDst;
+
+
 class StPicoEpdTile : public TObject
 {
 public:
 
   StPicoEpdTile();
-  StPicoEpdTile(int PP, int TT, int EW, int ADC, int TAC, int TDC, bool hasTAC);
+  StPicoEpdTile(int PP, int TT, DetectorSide EW, int ADC, int TAC, int TDC, bool hasTAC);
 
   virtual void Print(const Char_t *option = "") const;
 
@@ -28,7 +33,7 @@ public:
   int  adc() const;
   int  tac() const;
   int  tdc() const;
-  bool isEast() const;
+  DetectorSide side() const;
 
   int PP() const;         // 1...12
   int TT() const;         // 1...31
@@ -44,7 +49,7 @@ protected:
   ClassDef(StPicoEpdTile, 1)
 };
 
-inline bool StPicoEpdTile::isEast() const {return (mId < 0);}
+inline DetectorSide StPicoEpdTile::side() const { return mId < 0 ? DetectorSide::East : DetectorSide::West;}
 
 inline int  StPicoEpdTile::PP() const { return mId / 100; }
 inline int  StPicoEpdTile::TT() const { return mId % 100; }
@@ -53,5 +58,6 @@ inline int  StPicoEpdTile::adc() const { return mQTdata & 0x0FFF; }
 inline int  StPicoEpdTile::tac() const { return (mQTdata >> 12) & 0x0FFF; }
 inline int  StPicoEpdTile::tdc() const { return (mQTdata >> 24) & 0x001F; }
 inline bool StPicoEpdTile::hasTAC() const { return (mQTdata >> 29) & 0x1; }
+
 
 #endif

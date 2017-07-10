@@ -12,6 +12,11 @@
 
 #include "TObject.h"
 
+#include "StPicoEvent/StPicoCommon.h"
+
+using namespace StarPicoDst;
+
+
 class StPicoBbcTile : public TObject
 {
 public:
@@ -25,7 +30,7 @@ public:
   int  adc() const;
   int  tac() const;
   int  tdc() const;
-  bool isEast() const;
+  DetectorSide side() const;
 
   int pmtNumber() const;  // 1...32
 
@@ -40,7 +45,7 @@ protected:
 };
 
 
-inline bool StPicoBbcTile::isEast() const {return (mId < 0);}
+inline DetectorSide StPicoBbcTile::side() const { return mId < 0 ? DetectorSide::East : DetectorSide::West;}
 
 inline int  StPicoBbcTile::pmtNumber() const { return mId; }
 

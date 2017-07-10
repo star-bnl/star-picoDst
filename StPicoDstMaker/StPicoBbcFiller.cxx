@@ -8,14 +8,16 @@
 #include "StPicoDstMaker/StPicoBbcFiller.h"
 #include "StPicoDstMaker/StPicoDst.h"
 #include "StPicoEvent/StPicoBbcTile.h"
+#include "StPicoEvent/StPicoCommon.h"
+
+using namespace StarPicoDst;
 
 
-StBeamDirection eastwestdir(int ew)
+StBeamDirection eastwestdir(DetectorSide ew)
 {
-  if (ew == 0) return east;
+  return ew == DetectorSide::East ? StBeamDirection::east : StBeamDirection::west;
+}
 
-  return west;
-};
 
 StPicoBbcFiller::StPicoBbcFiller(StPicoDst& picoDst, int year) :
   mPicoDst(picoDst)
@@ -35,14 +37,14 @@ void StPicoBbcFiller::Fill(const StMuDst& muDst)
   Bool_t HasTAC;
   // BBC tiles
 
-  for (Int_t ew = 0; ew < 2; ew++) {
-    Short_t sign = ew = 0 ? -1 : +1;
-
-    for (Int_t pmt = 0; pmt < 24; pmt++) {
+  for (DetectorSide ew : detectorSides)
+  {
+    for (Int_t pmt = 0; pmt < 24; pmt++)
+    {
       ADC = trg->bbcADC(eastwestdir(ew), pmt + 1, 0);
       TAC = trg->bbcTDC(eastwestdir(ew), pmt + 1, 0); // yes I know the method says "TDC" but it's the TAC
       TDC = trg->bbcTDC5bit(eastwestdir(ew), pmt + 1);
-      ID = sign * (pmt + 1);
+      ID = ew * (pmt + 1);
       HasTAC = kTRUE;
       new((*mTileCollection)[ntiles++]) StPicoBbcTile(ID, ADC, TAC, TDC, HasTAC);
     }

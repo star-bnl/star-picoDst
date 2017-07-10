@@ -42,7 +42,7 @@ void StPicoEpdFiller::Fill(const StMuDst& muDst)
       else
       {TAC = 0;}
 
-      Short_t EW = -1; // always East for 2017
+      DetectorSide EW = DetectorSide::East; // always East for 2017
       //      cout << "Maker making a PicoTile with PP/TT/ID= " << PP << "/" << TT << "/" <<  ID
       //      	   << "ADC=" << ADC << " TDC=" << TDC << " TAC=" << TAC << endl;
       new((*mTileCollection)[ntiles++]) StPicoEpdTile(PP, TT, EW, ADC, TAC, TDC, HasTAC);
