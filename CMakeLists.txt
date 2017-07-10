@@ -100,6 +100,7 @@ add_library (
 	StPicoEvent/StPicoBTofHit.cxx
 	StPicoEvent/StPicoBTofPidTraits.cxx
 	StPicoEvent/StPicoBEmcPidTraits.cxx
+	StPicoEvent/StPicoCommon.cxx
 	StPicoEvent/StPicoEmcTrigger.cxx
 	StPicoEvent/StPicoEvent.cxx
 	StPicoEvent/StPicoMtdHit.cxx
