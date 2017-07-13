@@ -26,6 +26,7 @@ void loadLibs()
   gSystem->Load("StPreEclMaker");
   gSystem->Load("StStrangeMuDstMaker");
   gSystem->Load("StMuDSTMaker");
+  gSystem->Load("libStarAgmlUtil");
 
   gSystem->Load("StTpcDb");
   gSystem->Load("StMcEvent");
@@ -57,6 +58,17 @@ void loadLibs()
   gSystem->Load("libStPicoDstMaker");
 
   gSystem->ListLibraries();
+}
+
+
+void loadAgML( const char* name=0 )
+{
+  gROOT->LoadMacro("bfc.C");
+  bfc(0,"agml nodefault mysql");
+
+  AgModule::SetStacker( new StarTGeoStacker() );
+
+  if (name) StarGeometry::Construct(name);
 }
 
 
@@ -108,6 +120,9 @@ void makePicoDst(const Char_t *inputFile, int nEvents = 100000)
 
   chain->Init();
   cout << "chain->Init();" << endl;
+
+  loadAgML("y2017");
+
   int total = 0;
   for (Int_t i = 0; i < nEvents; i++)
   {
