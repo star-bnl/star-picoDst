@@ -95,7 +95,7 @@ void makePicoDst(const Char_t *inputFile = "root://xrdstar.rcf.bnl.gov:1095//hom
   trigSimu->setMC(false);
   trigSimu->useBemc();
   trigSimu->useEemc();
-  trigSimu->useOnlineDB();
+  trigSimu->useOfflineDB();
   trigSimu->bemc->setConfig(StBemcTriggerSimu::kOffline);
 
   StMagFMaker* magfMk = new StMagFMaker;
