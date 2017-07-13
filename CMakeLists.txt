@@ -72,6 +72,7 @@ add_library (
 	StPicoDstMaker/StPicoDstMaker.cxx
 	StPicoDstMaker/StPicoBbcFiller.cxx
 	StPicoDstMaker/StPicoEpdFiller.cxx
+	StPicoDstMaker/StPicoFmsFiller.cxx
 	StPicoDstMaker_dict.cxx
 )
 
