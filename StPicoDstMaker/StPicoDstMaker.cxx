@@ -624,7 +624,7 @@ Int_t StPicoDstMaker::MakeWrite()
     // build EmcIndex before ::fillTracks()
     buildEmcIndex();
     // fill BTOW hits only if ::buildEmcIndex() has been called for this event
-    fillBTOWHits();
+    fillBTowHits();
   }
 
   fillTracks();
@@ -633,8 +633,8 @@ Int_t StPicoDstMaker::MakeWrite()
   fillMtdTrigger();
   fillBTofHits();
   fillMtdHits();
-  mBbcFiller.Fill(*mMuDst);
-  mEpdFiller.Fill(*mMuDst);
+  mBbcFiller.fill(*mMuDst);
+  mEpdFiller.fill(*mMuDst);
 
   if (Debug()) mPicoDst->printTracks();
 
@@ -999,7 +999,7 @@ void StPicoDstMaker::fillMtdTrigger()
 
 
 //_____________________________________________________________________________
-void StPicoDstMaker::fillBTOWHits()
+void StPicoDstMaker::fillBTowHits()
 {
   for (int i = 0; i < 4800; ++i)
   {

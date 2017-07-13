@@ -16,7 +16,7 @@ public:
 
   StPicoEpdFiller(StPicoDst& picoDst, int year = 2017);
 
-  void Fill(const StMuDst& muDst);
+  void fill(const StMuDst& muDst);
 
 private:
 
@@ -31,7 +31,7 @@ private:
 
   EPDAnalysisMap mEPDMap[2][12][31];
 
-  void SetDefaultMapping_30may2017();
+  void setDefaultMapping_30may2017();
 
 };
 

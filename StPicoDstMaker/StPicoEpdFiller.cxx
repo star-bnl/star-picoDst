@@ -14,11 +14,11 @@
 StPicoEpdFiller::StPicoEpdFiller(StPicoDst& picoDst, int year) :
   mPicoDst(picoDst)
 {
-  if (year == 2017)  SetDefaultMapping_30may2017();
+  if (year == 2017)  setDefaultMapping_30may2017();
 }
 
 
-void StPicoEpdFiller::Fill(const StMuDst& muDst)
+void StPicoEpdFiller::fill(const StMuDst& muDst)
 {
   TClonesArray *mTileCollection = mPicoDst.picoArray(StPicoArrays::EpdTile);
 
@@ -50,7 +50,8 @@ void StPicoEpdFiller::Fill(const StMuDst& muDst)
   }
 }
 
-void StPicoEpdFiller::SetDefaultMapping_30may2017()
+
+void StPicoEpdFiller::setDefaultMapping_30may2017()
 {
   // until we get the Database integrated _OR_ a standard set of access functions for EPD data in the StTriggerData object,
   // we need a map array relating PP/TT with QT/channel.  Prashanth had been using map.txt files, but this will not work

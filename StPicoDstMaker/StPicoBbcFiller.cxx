@@ -25,12 +25,12 @@ StPicoBbcFiller::StPicoBbcFiller(StPicoDst& picoDst, int year) :
 }
 
 
-void StPicoBbcFiller::Fill(const StMuDst& muDst)
+void StPicoBbcFiller::fill(const StMuDst& muDst)
 {
   TClonesArray *mTileCollection = mPicoDst.picoArray(StPicoArrays::BbcTile);
 
-  StMuEvent *Event = muDst.event();
-  StTriggerData *trg = const_cast<StTriggerData *>(Event->triggerData());
+  StMuEvent *event = muDst.event();
+  StTriggerData *trg = const_cast<StTriggerData *>(event->triggerData());
 
   int nTiles = 0;
 

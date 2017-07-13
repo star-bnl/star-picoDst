@@ -16,7 +16,7 @@ public:
 
   StPicoBbcFiller(StPicoDst& picoDst, int year = 2017);
 
-  void Fill(const StMuDst& muDst);
+  void fill(const StMuDst& muDst);
 
 private:
 

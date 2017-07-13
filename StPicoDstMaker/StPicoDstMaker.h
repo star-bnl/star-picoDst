@@ -90,7 +90,7 @@ protected:
   void fillEvent();
   void fillEmcTrigger();
   void fillMtdTrigger();
-  void fillBTOWHits();
+  void fillBTowHits();
   void fillBTofHits();
   void fillMtdHits();
 
