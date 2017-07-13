@@ -32,6 +32,7 @@
 #include "StMuDSTMaker/COMMON/StMuMtdPidTraits.h"
 #include "StMuDSTMaker/COMMON/StMuEmcCollection.h"
 #include "StMuDSTMaker/COMMON/StMuEmcPoint.h"
+#include "StMuDSTMaker/COMMON/StMuFmsUtil.h"
 
 #include "StTriggerUtilities/StTriggerSimuMaker.h"
 #include "StTriggerUtilities/Bemc/StBemcTriggerSimu.h"
@@ -81,7 +82,8 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
   mPicoArrays{}, mStatusArrays{},
   mBbcFiller(*mPicoDst),
-  mEpdFiller(*mPicoDst)
+  mEpdFiller(*mPicoDst),
+  mFmsFiller(*mPicoDst)
 {
   streamerOff();
   createArrays();
@@ -629,6 +631,14 @@ Int_t StPicoDstMaker::MakeWrite()
   mBbcFiller.fill(*mMuDst);
   mEpdFiller.fill(*mMuDst);
   fillFmsHits();
+
+  // Could be a good idea to move this call to Init() or InitRun()
+  StFmsDbMaker* fmsDbMaker = static_cast<StFmsDbMaker*>(GetMaker("fmsDb"));
+
+  if (fmsDbMaker)
+    StMuFmsUtil::recoverMuFmsCollection(*mMuDst, fmsDbMaker);
+
+  mFmsFiller.fill(*mMuDst);
 
   if (Debug()) mPicoDst->printTracks();
 
