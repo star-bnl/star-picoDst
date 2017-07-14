@@ -1,6 +1,3 @@
-
-#include "TSystem.h"
-
 class StMaker;
 class StChain;
 class StPicoDstMaker;
@@ -108,7 +105,6 @@ void makePicoDst(const Char_t *inputFile, int nEvents = 100000)
 
   StPicoDstMaker* picoMaker = new StPicoDstMaker(StPicoDstMaker::IoWrite, inputFile, "picoDst");
   picoMaker->setVtxMode((int)(StPicoDstMaker::PicoVtxMode::Default));
-//        picoMaker->SetDebug(1);
 
   chain->Init();
   cout << "chain->Init();" << endl;
@@ -128,7 +124,6 @@ void makePicoDst(const Char_t *inputFile, int nEvents = 100000)
     }
 
     total++;
-
   }
 
   cout << "****************************************** " << endl;
