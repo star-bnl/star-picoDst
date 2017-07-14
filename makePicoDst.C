@@ -7,9 +7,6 @@ class StPicoDstMaker;
 class StMuDstMaker;
 
 
-StChain* chain;
-
-
 void loadLibs()
 {
   gSystem->Load("libTable");
@@ -70,7 +67,7 @@ void makePicoDst(const Char_t *inputFile, int nEvents = 100000)
 {
   loadLibs();
 
-  chain = new StChain();
+  StChain* chain = new StChain();
 
   StMuDstMaker* MuDstMaker = new StMuDstMaker(0, 0, "", inputFile, "MuDst", 100);
   MuDstMaker->SetStatus("*", 0);
