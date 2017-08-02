@@ -611,15 +611,11 @@ Int_t StPicoDstMaker::MakeWrite()
     return kStOK;
   }
 
-  Int_t refMult = muEvent->refMult();
   mBField = muEvent->magneticField();
 
-  StThreeVectorF pVtx(-999., -999., -999.);
-  if (mMuDst->primaryVertex()) pVtx = mMuDst->primaryVertex()->position();
-
-  LOG_DEBUG << " eventId = " << muEvent->eventId() << " refMult = " << refMult << " vtx = " << pVtx << endm;
 
   mEmcCollection = mMuDst->emcCollection();
+
   if (mEmcCollection) 
   {
     // build EmcIndex before ::fillTracks()
