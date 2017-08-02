@@ -52,8 +52,9 @@ void StPicoFmsHit::loadFmsDbMaker()
 
   fmsDbMaker=static_cast<StFmsDbMaker*>(StMaker::GetChain()->GetMaker("fmsDb"));
 
-  if(fmsDbMaker)
+  if(fmsDbMaker) {
     LOG_INFO<<"StPicoFmsHit::loadFmsDbMaker(): found fmsDb"<<endm;
+  }
   else{
     LOG_ERROR<<"StPicoFmsHit::loadFmsDbMaker(): failed to get fmsDb!"<<endm;
     noFmsDbMaker=true;
