@@ -1,3 +1,9 @@
 [submodule "star-cmake"]
 	path = star-cmake
 	url = https://github.com/star-bnl/star-cmake.git
+[submodule "star-fms"]
+	path = star-fms
+	url = https://github.com/star-bnl/star-fms.git
+[submodule "star-muDst"]
+	path = star-muDst
+	url = https://github.com/star-bnl/star-muDst.git

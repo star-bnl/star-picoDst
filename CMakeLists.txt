@@ -44,10 +44,10 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${STAR_BASE_DIR}
 	${STAR_STEVENT_DIR}
-	${STAR_MUDST_DIR}
+	star-muDst/
 	${STAR_TABLES_DIR}
 	${STAR_EMC_DIR}
-	${STAR_FMS_DIR}
+	star-fms/
 	${STAR_TRIGGER_DIR}
 	${STAR_PAMS_DIR}/global/inc
 	${STAR_DAQ_DIR}
@@ -57,6 +57,10 @@ include_directories(
 	$ENV{STAR}/.$ENV{STAR_HOST_SYS}/include/tables
 	$ENV{STAR}/StRoot
 )
+
+
+add_subdirectory(star-fms/)
+add_subdirectory(star-muDst/)
 
 
 root_generate_linkdef_and_dictionary(
