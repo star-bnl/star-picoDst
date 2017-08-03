@@ -8,51 +8,51 @@ void loadLibs()
 {
   gSystem->Load("libTable");
   gSystem->Load("libPhysics");
-  gSystem->Load("St_base");
-  gSystem->Load("StChain");
-  gSystem->Load("St_Tables");
-  gSystem->Load("StUtilities");        // new addition 22jul99
-  gSystem->Load("StTreeMaker");
-  gSystem->Load("StIOMaker");
-  gSystem->Load("StarClassLibrary");
-  gSystem->Load("StTriggerDataMaker"); // new starting from April 2003
-  gSystem->Load("StBichsel");
-  gSystem->Load("StEvent");
-  gSystem->Load("StEventUtilities");
-  gSystem->Load("StDbLib");
-  gSystem->Load("StEmcUtil");
-  gSystem->Load("StTofUtil");
-  gSystem->Load("StPmdUtil");
-  gSystem->Load("StPreEclMaker");
+  gSystem->Load("libSt_base");
+  gSystem->Load("libStChain");
+  gSystem->Load("libSt_Tables");
+  gSystem->Load("libStUtilities");        // new addition 22jul99
+  gSystem->Load("libStTreeMaker");
+  gSystem->Load("libStIOMaker");
+  gSystem->Load("libStarClassLibrary");
+  gSystem->Load("libStTriggerDataMaker"); // new starting from April 2003
+  gSystem->Load("libStBichsel");
+  gSystem->Load("libStEvent");
+  gSystem->Load("libStEventUtilities");
+  gSystem->Load("libStDbLib");
+  gSystem->Load("libStEmcUtil");
+  gSystem->Load("libStTofUtil");
+  gSystem->Load("libStPmdUtil");
+  gSystem->Load("libStPreEclMaker");
   gSystem->Load("libStStrangeMuDstMaker");
   gSystem->Load("libStMuDSTMaker");
   gSystem->Load("libStarAgmlUtil");
 
-  gSystem->Load("StTpcDb");
-  gSystem->Load("StMcEvent");
-  gSystem->Load("StMcEventMaker");
-  gSystem->Load("StDaqLib");
+  gSystem->Load("libStTpcDb");
+  gSystem->Load("libStMcEvent");
+  gSystem->Load("libStMcEventMaker");
+  gSystem->Load("libStDaqLib");
   gSystem->Load("libgen_Tables");
   gSystem->Load("libsim_Tables");
   gSystem->Load("libglobal_Tables");
-  gSystem->Load("StEmcTriggerMaker");
-  gSystem->Load("StEmcRawMaker");
-  gSystem->Load("StEmcADCtoEMaker");
-  gSystem->Load("StPreEclMaker");  // XXX: loaded twice !
-  gSystem->Load("StEpcMaker");
-  gSystem->Load("StEmcSimulatorMaker");
-  gSystem->Load("StDbBroker");
-  gSystem->Load("StDetectorDbMaker");
-  gSystem->Load("StDbUtilities");
-  gSystem->Load("StEEmcUtil");
-  gSystem->Load("StEEmcDbMaker");
-  gSystem->Load("St_db_Maker");
-  gSystem->Load("StTriggerUtilities");
+  gSystem->Load("libStEmcTriggerMaker");
+  gSystem->Load("libStEmcRawMaker");
+  gSystem->Load("libStEmcADCtoEMaker");
+  gSystem->Load("libStPreEclMaker");  // XXX: loaded twice !
+  gSystem->Load("libStEpcMaker");
+  gSystem->Load("libStEmcSimulatorMaker");
+  gSystem->Load("libStDbBroker");
+  gSystem->Load("libStDetectorDbMaker");
+  gSystem->Load("libStDbUtilities");
+  gSystem->Load("libStEEmcUtil");
+  gSystem->Load("libStEEmcDbMaker");
+  gSystem->Load("libSt_db_Maker");
+  gSystem->Load("libStTriggerUtilities");
 
-  gSystem->Load("StMagF");
-  gSystem->Load("StMtdUtil");
-  gSystem->Load("StMtdMatchMaker");
-  gSystem->Load("StMtdCalibMaker");
+  gSystem->Load("libStMagF");
+  gSystem->Load("libStMtdUtil");
+  gSystem->Load("libStMtdMatchMaker");
+  gSystem->Load("libStMtdCalibMaker");
 
   //FMS
   gSystem->Load("StEventMaker");
