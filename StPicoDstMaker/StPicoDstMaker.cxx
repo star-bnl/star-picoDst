@@ -1107,7 +1107,7 @@ void StPicoDstMaker::fillMtdHits()
   }
 
   vector<Int_t> hits;
-  hits.clear();
+
   while (triggerPos.size() > 0)
   {
     hits.clear();
