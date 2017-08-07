@@ -37,12 +37,12 @@ void StPicoBbcFiller::fill(const StMuDst& muDst)
   // Loop over BBC tiles
   for (DetectorSide ew : detectorSides)
   {
-    for (Int_t pmtId = 0; pmtId < 24; pmtId++)
+    for (Int_t pmtId = 1; pmtId <= 24; pmtId++)
     {
-      int ADC = trg->bbcADC(eastwestdir(ew), pmtId + 1, 0);
-      int TAC = trg->bbcTDC(eastwestdir(ew), pmtId + 1, 0); // yes I know the method says "TDC" but it's the TAC
-      int TDC = trg->bbcTDC5bit(eastwestdir(ew), pmtId + 1);
-      int ID  = ew * (pmtId + 1);
+      int ADC = trg->bbcADC(eastwestdir(ew), pmtId, 0);
+      int TAC = trg->bbcTDC(eastwestdir(ew), pmtId, 0); // yes I know the method says "TDC" but it's the TAC
+      int TDC = trg->bbcTDC5bit(eastwestdir(ew), pmtId);
+      int ID  = ew * pmtId;
       bool hasTAC = kTRUE;
 
       new((*mTileCollection)[nTiles++]) StPicoBbcTile(ID, ADC, TAC, TDC, hasTAC);

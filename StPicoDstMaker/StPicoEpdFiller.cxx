@@ -29,11 +29,11 @@ void StPicoEpdFiller::fill(const StMuDst& muDst)
 
   // Loop over EPD tiles
   // here, the "ADC","TDC" and"TAC" can be a little subtle...
-  for (Short_t positionId = 3; positionId < 6; positionId++) // the "real" position number is this plus 1
+  for (Short_t positionId = 4; positionId <= 6; positionId++) // the "real" position number is this plus 1
   {
-    for (Short_t tileId = 0; tileId < 31; tileId++)
+    for (Short_t tileId = 1; tileId <= 31; tileId++)
     {
-      EpdAnalysisMap& epdMap = mEpdMap[0][positionId][tileId];
+      EpdAnalysisMap& epdMap = mEpdMap[0][positionId-1][tileId-1];
 
       int ADC = trg->fmsADC(5, epdMap.qt_board_address, epdMap.qt_channel_ADC, 0);
       int TDC = trg->fmsTDC(5, epdMap.qt_board_address, epdMap.qt_channel_ADC, 0);
