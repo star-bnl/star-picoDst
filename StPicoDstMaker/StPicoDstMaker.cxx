@@ -62,9 +62,10 @@
 
 //_____________________________________________________________________________
 StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
-  mMuDst(nullptr), mEmcCollection(nullptr), mEmcPosition(nullptr),
+  mMuDst(nullptr), mPicoDst(new StPicoDst()),
+  mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
-  mPicoDst(new StPicoDst()), mBField(0),
+  mBField(0),
   mVtxMode(PicoVtxMode::NotSet), // This should always be ::NotSet, do not change it, see ::Init()
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),

@@ -125,13 +125,13 @@ protected:
   /// filled from corresponding muDst branches
   StMuDst*  mMuDst;
 
+  /// A pointer to the main input/outpur picoDst structure containing all `TObjArray`s
+  StPicoDst*  mPicoDst;
+
   StEmcCollection* mEmcCollection;
   StEmcPosition*   mEmcPosition;
   StEmcGeom*       mEmcGeom[4];
   StEmcRawHit*     mEmcIndex[4800];
-
-  /// A pointer to the main input/outpur picoDst structure containing all `TObjArray`s
-  StPicoDst* mPicoDst;
 
   Float_t    mBField;
 
