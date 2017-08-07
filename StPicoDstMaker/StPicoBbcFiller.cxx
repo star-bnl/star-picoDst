@@ -37,7 +37,7 @@ void StPicoBbcFiller::fill(const StMuDst& muDst)
   // Loop over BBC tiles
   for (DetectorSide ew : detectorSides)
   {
-    for (Int_t pmtId = 1; pmtId <= 24; pmtId++)
+    for (int pmtId = 1; pmtId <= 24; pmtId++)
     {
       int ADC = trg->bbcADC(eastwestdir(ew), pmtId, 0);
       int TAC = trg->bbcTDC(eastwestdir(ew), pmtId, 0); // yes I know the method says "TDC" but it's the TAC
