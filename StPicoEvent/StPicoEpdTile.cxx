@@ -9,8 +9,8 @@ StPicoEpdTile::StPicoEpdTile() : mId(0), mQTdata(0)
 }
 
 
-StPicoEpdTile::StPicoEpdTile(int PP, int TT, DetectorSide EW, int ADC, int TAC, int TDC, bool hasTAC) :
-  mId( (100*PP + TT)*EW ),
+StPicoEpdTile::StPicoEpdTile(int positionId, int tileId, DetectorSide EW, int ADC, int TAC, int TDC, bool hasTAC) :
+  mId( (100*positionId + tileId)*EW ),
   mQTdata( (ADC & 0x0FFF) | (TAC & 0x0FFF) << 12 | (TDC & 0x001F) << 24 | hasTAC << 29 )
 {
 }

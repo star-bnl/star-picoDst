@@ -29,11 +29,11 @@ void StPicoEpdFiller::fill(const StMuDst& muDst)
 
   // Loop over EPD tiles
   // here, the "ADC","TDC" and"TAC" can be a little subtle...
-  for (Short_t PP = 3; PP < 6; PP++) // the "real" position number is this plus 1
+  for (Short_t positionId = 3; positionId < 6; positionId++) // the "real" position number is this plus 1
   {
-    for (Short_t TT = 0; TT < 31; TT++)
+    for (Short_t tileId = 0; tileId < 31; tileId++)
     {
-      EpdAnalysisMap& epdMap = mEpdMap[0][PP][TT];
+      EpdAnalysisMap& epdMap = mEpdMap[0][positionId][tileId];
 
       int ADC = trg->fmsADC(5, epdMap.qt_board_address, epdMap.qt_channel_ADC, 0);
       int TDC = trg->fmsTDC(5, epdMap.qt_board_address, epdMap.qt_channel_ADC, 0);
@@ -43,9 +43,9 @@ void StPicoEpdFiller::fill(const StMuDst& muDst)
       int TAC = hasTAC ? trg->fmsADC(5, epdMap.qt_board_address, epdMap.qt_channel_TAC, 0) : 0;
 
       DetectorSide EW = DetectorSide::East; // always East for 2017
-      //      cout << "Maker making a PicoTile with PP/TT/ID= " << PP << "/" << TT << "/" <<  ID
+      //      cout << "Maker making a PicoTile with positionId/tileId/ID= " << positionId << "/" << tileId << "/" <<  ID
       //      	   << "ADC=" << ADC << " TDC=" << TDC << " TAC=" << TAC << endl;
-      new((*mTileCollection)[nTiles++]) StPicoEpdTile(PP, TT, EW, ADC, TAC, TDC, hasTAC);
+      new((*mTileCollection)[nTiles++]) StPicoEpdTile(positionId, tileId, EW, ADC, TAC, TDC, hasTAC);
     }
   }
 }
@@ -54,7 +54,7 @@ void StPicoEpdFiller::fill(const StMuDst& muDst)
 void StPicoEpdFiller::setDefaultMapping_30may2017()
 {
   // until we get the Database integrated _OR_ a standard set of access functions for EPD data in the StTriggerData object,
-  // we need a map array relating PP/TT with QT/channel.  Prashanth had been using map.txt files, but this will not work
+  // we need a map array relating position/tile with QT/channel.  Prashanth had been using map.txt files, but this will not work
   // on rcf nodes.  Therefore, I (Mike) am hard-coding the map that we will use starting on 30 May 2017, through the remainder
   // of the 2017 run.  (I.e. AuAu53GeV and onward.)
   mEpdMap[0][0][0].qt_board_address = -999;  mEpdMap[0][0][0].qt_channel_ADC = -1000;  mEpdMap[0][0][0].qt_channel_TAC = -1000;

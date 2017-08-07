@@ -25,7 +25,7 @@ class StPicoEpdTile : public TObject
 public:
 
   StPicoEpdTile();
-  StPicoEpdTile(int PP, int TT, DetectorSide EW, int ADC, int TAC, int TDC, bool hasTAC);
+  StPicoEpdTile(int positionId, int tileId, DetectorSide EW, int ADC, int TAC, int TDC, bool hasTAC);
 
   virtual void Print(const Char_t *option = "") const;
 
@@ -41,9 +41,9 @@ public:
 
 protected:
 
-  /// Packed channel Id: 100*PP + TT
+  /// Packed channel Id: 100*positionId + tileId
   /// sign: +/- = West/East
-  /// PP and TT are phototube indices start at 1 [1, 12] and [1, 31] respectively
+  /// positionId and tileId are phototube indices start at 1, [1, 12] and [1, 31] respectively
   Short_t mId;
 
   /// Packed channel data: bits  0-11 are ADC; bits 12-23 are TAC;
