@@ -92,6 +92,7 @@ void makePicoDst(const Char_t *inputFile, int nEvents = 100000)
   MuDstMaker->SetStatus("BTof*", 1);
   MuDstMaker->SetStatus("Emc*", 1);
   MuDstMaker->SetStatus("MTD*", 1);
+  MuDstMaker->SetStatus("Fms*", 1);
 
   St_db_Maker* dbMk = new St_db_Maker("db", "MySQL:StarDb", "$STAR/StarDb", "StarDb");
 
