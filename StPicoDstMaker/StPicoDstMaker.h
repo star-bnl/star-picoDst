@@ -15,6 +15,7 @@ class TFile;
 class TTree;
 class StMuDst;
 class StMuTrack;
+class StMuPrimaryVertex;
 class StEmcCollection;
 class StEmcPosition;
 class StEmcGeom;
@@ -28,7 +29,21 @@ class StPicoDstMaker : public StMaker
 {
 public:
   enum PicoIoMode {IoWrite=1, IoRead=2};
-  enum PicoVtxMode {NotSet=0, Default=1, Vpd=2, VpdOrDefault=3};
+
+  /// Various selection criteria for picking a vertex from the list of available
+  /// vertices in muDst. If requested vertex not found the event is skipped
+  enum PicoVtxMode
+  {
+    /// Default "unspecified" mode to force user pick one of the modes below
+    NotSet = 0,
+    /// Select the first vertex in the muDst vertex collection
+    Default = 1,
+    /// Select first available vertex within a window around the VPD one
+    Vpd = 2,
+    /// If a vertex matching the VPD one is not found pick the first one from
+    /// the muDst collection
+    VpdOrDefault = 3
+  };
 
   StPicoDstMaker(char const* name = "PicoDst");
   StPicoDstMaker(PicoIoMode ioMode, char const* fileName = "", char const* name = "PicoDst");
@@ -127,6 +142,10 @@ protected:
 
   /// A pointer to the main input/outpur picoDst structure containing all `TObjArray`s
   StPicoDst*  mPicoDst;
+
+  /// Finds a primary vertex in the list of muDst vertices that matches the VPD
+  /// vertex
+  StMuPrimaryVertex* findVpdVertex(const StMuDst& muDst) const;
 
   StEmcCollection* mEmcCollection;
   StEmcPosition*   mEmcPosition;

@@ -204,13 +204,10 @@ Int_t StPicoDstMaker::Init()
   {
     case PicoIoMode::IoWrite:
 
-      if (mVtxMode == PicoVtxMode::NotSet)
+      if (mVtxMode == PicoVtxMode::NotSet && setVtxModeAttr() != kStOK)
       {
-        if (setVtxModeAttr() != kStOK)
-        {
-          LOG_ERROR << "Pico Vertex Mode is not set ... " << endm;
-          return kStErr;
-        }
+        LOG_ERROR << "Pico Vertex Mode is not set ... " << endm;
+        return kStErr;
       }
 
       if (mInputFileName.Length() == 0) {
@@ -677,7 +674,7 @@ void StPicoDstMaker::fillTracks()
     }
 
     int counter = mPicoArrays[StPicoArrays::Track]->GetEntries();
-    new((*(mPicoArrays[StPicoArrays::Track]))[counter]) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex()->position(), *dcaG);
+    new((*(mPicoArrays[StPicoArrays::Track]))[counter]) StPicoTrack(gTrk, pTrk, mBField, mMuDst->primaryVertex(), *dcaG);
 
     StPicoTrack* picoTrk = (StPicoTrack*)mPicoArrays[StPicoArrays::Track]->At(counter);
 
@@ -1145,44 +1142,54 @@ bool StPicoDstMaker::selectVertex()
 {
   StMuPrimaryVertex* selectedVertex = nullptr;
 
-  if (mVtxMode == PicoVtxMode::Default)
+  switch (mVtxMode)
   {
+  case PicoVtxMode::Default:
     // choose the default vertex, i.e. the first vertex
-    mMuDst->setVertexIndex(0);
-    selectedVertex = mMuDst->primaryVertex();
-  }
-  else if (mVtxMode == PicoVtxMode::Vpd || mVtxMode == PicoVtxMode::VpdOrDefault)
-  {
-    if(mVtxMode == PicoVtxMode::VpdOrDefault)
-    {
-      mMuDst->setVertexIndex(0);
-    }
+    selectedVertex = StMuDst::setCurrentVertex(0);
+    break;
 
-    StBTofHeader const* mBTofHeader = mMuDst->btofHeader();
+  case PicoVtxMode::Vpd:
+    selectedVertex = findVpdVertex(*mMuDst);
+    StMuDst::setCurrentVertex(selectedVertex);
+    break;
 
-    if (mBTofHeader && fabs(mBTofHeader->vpdVz()) < 200)
-    {
-      float vzVpd = mBTofHeader->vpdVz();
+  case PicoVtxMode::VpdOrDefault:
+    selectedVertex = findVpdVertex(*mMuDst);
 
-      for (unsigned int iVtx = 0; iVtx < mMuDst->numberOfPrimaryVertices(); ++iVtx)
-      {
-        StMuPrimaryVertex* vtx = mMuDst->primaryVertex(iVtx);
-        if (!vtx) continue;
+    if (selectedVertex)
+      StMuDst::setCurrentVertex(selectedVertex);
+    else
+      selectedVertex = StMuDst::setCurrentVertex(0);
 
-        if (fabs(vzVpd - vtx->position().z()) < 3.)
-        {
-          mMuDst->setVertexIndex(iVtx);
-          selectedVertex = mMuDst->primaryVertex();
-          break;
-        }
-      }
-    }
-  }
-  else // default case
-  {
+    break;
+
+  default:
     LOG_ERROR << "Pico Vtx Mode not set!" << endm;
   }
 
   // Retrun false if selected vertex is not valid
   return selectedVertex ? true : false;
+}
+
+
+StMuPrimaryVertex* StPicoDstMaker::findVpdVertex(const StMuDst& muDst) const
+{
+  StBTofHeader const* mBTofHeader = muDst.btofHeader();
+
+  if (!mBTofHeader || fabs(mBTofHeader->vpdVz()) >= 200)
+    return nullptr;
+
+  float vzVpd = mBTofHeader->vpdVz();
+
+  for (unsigned int iVtx = 0; iVtx < muDst.numberOfPrimaryVertices(); ++iVtx)
+  {
+    StMuPrimaryVertex* vtx = muDst.primaryVertex(iVtx);
+
+    if (!vtx || fabs(vzVpd - vtx->position().z()) >= 3.) continue;
+
+    return vtx;
+  }
+
+  return nullptr;
 }

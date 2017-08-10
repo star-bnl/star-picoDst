@@ -9,6 +9,8 @@
 #include "StarClassLibrary/SystemOfUnits.h"
 
 
+class StDcaGeometry;
+class StMuPrimaryVertex;
 class StMuTrack;
 class StDcaGeometry;
 
@@ -21,7 +23,7 @@ public:
 
   /// ctor. Note: primary track should be associated with the StPicoEvent::mPrimaryVertex
   StPicoTrack(StMuTrack const* globalTrack, StMuTrack const* primaryTrack,
-     double magField, StThreeVectorD const& pVtx, StDcaGeometry const& dcaG);
+     double magField, const StMuPrimaryVertex* pVtx, StDcaGeometry const& dcaG);
 
   virtual ~StPicoTrack() {}
 

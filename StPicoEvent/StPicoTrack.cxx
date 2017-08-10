@@ -6,6 +6,7 @@
 #include "StPicoEvent/StPicoTrack.h"
 #include "St_base/StMessMgr.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
+#include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
 
 
 //----------------------------------------------------------------------------------
@@ -23,7 +24,7 @@ StPicoTrack::StPicoTrack() : TObject(),
 }
 
 //----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack(StMuTrack const* const gTrk, StMuTrack const* const pTrk, double const B, StThreeVectorD const& pVtx, StDcaGeometry const& dcaG)
+StPicoTrack::StPicoTrack(StMuTrack const* const gTrk, StMuTrack const* const pTrk, double const B, const StMuPrimaryVertex* pVtx, StDcaGeometry const& dcaG)
   : StPicoTrack()
 {
   if (!gTrk || gTrk->type() != global || (pTrk && (pTrk->type() != primary || pTrk->id() != gTrk->id())))
@@ -41,11 +42,15 @@ StPicoTrack::StPicoTrack(StMuTrack const* const gTrk, StMuTrack const* const pTr
     mPMomentum = pTrk->p();
   }
 
-  // Calculate global momentum and position at point of DCA to the pVtx
-  StPhysicalHelixD gHelix = dcaG.helix();
-  gHelix.moveOrigin(gHelix.pathLength(pVtx));
-  mGMomentum = gHelix.momentum(B * kilogauss);
-  mOrigin = gHelix.origin();
+  // Calculate global momentum and position at point of DCA to the pVtx if the
+  // vertex is valid
+  if (pVtx)
+  {
+    StPhysicalHelixD gHelix = dcaG.helix();
+    gHelix.moveOrigin(gHelix.pathLength( pVtx->position() ));
+    mGMomentum = gHelix.momentum(B * kilogauss);
+    mOrigin = gHelix.origin();
+  }
 
   mDedx      = gTrk->dEdx() * 1.e6;
   mDnDx      = gTrk->probPidTraits().dNdxFit();
