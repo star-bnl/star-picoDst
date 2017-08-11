@@ -4,13 +4,14 @@
 #include "St_base/StMessMgr.h"
 
 
-StPicoBbcTile::StPicoBbcTile() : mId(0), mQTdata(0)
+StPicoBbcTile::StPicoBbcTile() : StPicoBbcTile(0, 0, 0, 0, false)
 {
   /* no-op */
 }
 
 
 StPicoBbcTile::StPicoBbcTile(int ID, int ADC, int TAC, int TDC, bool hasTAC, bool statusIsGood) :
+  TObject(),
   mId(ID),
   mQTdata( (ADC & 0x0FFF) | (TAC & 0x0FFF) << 12 | (TDC & 0x001F) << 24 | hasTAC << 29 | statusIsGood << 30)
 {
