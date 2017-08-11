@@ -23,12 +23,12 @@ StPicoEpdTile::StPicoEpdTile(int positionId, int tileId, DetectorSide EW,
 void StPicoEpdTile::Print(const Char_t *option) const
 {
   LOG_INFO << " EPD tile -"
-	   << " position: " << position()
-	   << " tile: " << tile()
-	   << " ADC: " << adc()
-	   << " TAC: " << tac()
-	   << " TDC: " << tdc()
-	   << " - This tile " << (hasTac() ? "has TAC" : "does not have TAC")
-	   << " - Status is " << (isGood() ? "good" : "bad")
-	   << endm;
+           << " position: " << position()
+           << " tile: " << tile()
+           << " ADC: " << adc()
+           << " TAC: " << tac()
+           << " TDC: " << tdc()
+           << " - This tile " << (hasTac() ? "has TAC" : "does not have TAC")
+           << " - Status is " << (isGood() ? "good" : "bad")
+           << endm;
 }

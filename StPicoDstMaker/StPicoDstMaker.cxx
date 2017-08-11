@@ -170,7 +170,7 @@ void StPicoDstMaker::setBranchAddresses(TChain* chain)
   mTTree = mChain->GetTree();
 }
 //_____________________________________________________________________________
-void  StPicoDstMaker::streamerOff()
+void StPicoDstMaker::streamerOff()
 {
   // This is to to save space on the file. No need for TObject bits for this structure.
   // see: https://root.cern.ch/doc/master/classTClass.html#a606b0442d6fec4b1cd52f43bca73aa51
@@ -1088,6 +1088,7 @@ void StPicoDstMaker::fillMtdHits()
 
   vector<Int_t> triggerPos;
   vector<Int_t> hitIndex;
+
   for (unsigned int i = 0; i < nHits; ++i)
   {
     StPicoMtdHit* hit = mPicoDst->mtdHit(i);
@@ -1120,8 +1121,8 @@ void StPicoDstMaker::fillMtdHits()
 
     for (Int_t k = (Int_t)hits.size() - 1; k > -1; k--)
     {
-      StPicoMtdHit* hit = mPicoDst->mtdHit(hitIndex[hits[k]]);
-      hit->setTriggerFlag((Int_t)hits.size());
+      StPicoMtdHit* hit = mPicoDst->mtdHit( hitIndex[hits[k]] );
+      hit->setTriggerFlag( (Int_t)hits.size() );
       triggerPos.erase(triggerPos.begin() + hits[k]);
       hitIndex.erase(hitIndex.begin() + hits[k]);
     }

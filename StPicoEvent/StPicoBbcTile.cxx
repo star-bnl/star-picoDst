@@ -22,10 +22,10 @@ StPicoBbcTile::StPicoBbcTile(int ID, int ADC, int TAC, int TDC, bool hasTAC, boo
 void StPicoBbcTile::Print(const Char_t *option) const
 {
   LOG_INFO << " BBC tile - PMT#: " << mId
-	   << " ADC: " << adc()
-	   << " TAC: " << tac()
-	   << " TDC: " << tdc()
-	   << " - This tile " << (hasTac() ? "has TAC" : "does not have TAC")
-	   << " - Status is " << (isGood() ? "good" : "bad")
-	   << endm;
+           << " ADC: " << adc()
+           << " TAC: " << tac()
+           << " TDC: " << tdc()
+           << " - This tile " << (hasTac() ? "has TAC" : "does not have TAC")
+           << " - Status is " << (isGood() ? "good" : "bad")
+           << endm;
 }

@@ -11,17 +11,17 @@
 #include "StPicoDstMaker/StPicoDst.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 
-TClonesArray** StPicoDst::picoArrays       = 0;
+TClonesArray** StPicoDst::picoArrays = 0;
 
 //-----------------------------------------------------------------------
 void StPicoDst::unset()
 {
-  picoArrays   = 0;
+  picoArrays = 0;
 }
 //-----------------------------------------------------------------------
 void StPicoDst::set(TClonesArray** thePicoArrays)
 {
-  picoArrays    = thePicoArrays;
+  picoArrays = thePicoArrays;
 }
 //-----------------------------------------------------------------------
 void StPicoDst::print() const
