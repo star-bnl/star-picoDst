@@ -1,12 +1,11 @@
 /***************************************************************************
  *
- * $Id: StPicoFmsHit.h, v0.01 $
  * Author: Peifeng Liu, Stony Brook University, pliuphys@gmail.com
  *
  ***************************************************************************/
 
-#ifndef StPicoFmsHit_hh
-#define StPicoFmsHit_hh
+#ifndef StPicoFmsHit_h
+#define StPicoFmsHit_h
 
 #include "TObject.h"
 
