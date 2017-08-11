@@ -61,7 +61,6 @@ include_directories(
 root_generate_linkdef_and_dictionary(
 	StPicoDstMaker
 	HEADERS
-	StPicoDstMaker/StPicoDst.h
 	StPicoDstMaker/StPicoDstMaker.h
 )
 
