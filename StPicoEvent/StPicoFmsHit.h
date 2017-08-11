@@ -12,7 +12,6 @@
 
 #include "StarClassLibrary/StThreeVectorF.hh"
 
-class StFmsDbMaker;
 
 class StPicoFmsHit:public TObject{
  public:
@@ -54,18 +53,10 @@ class StPicoFmsHit:public TObject{
     return mAdc;
   }
 
-  //functions that use StFmsDbMaker to get physical values:
-  StThreeVectorF starXYZ() const;
-  Float_t energy() const;
-
  private:
   UShort_t mChannelDetectorId;//32*channel+detectorId. Allow channel 0-2047, detectorId 0-31.
   UShort_t mAdc;
 
-  //fmsDb pointer to be used for reading:
-  static StFmsDbMaker* fmsDbMaker;
-  static bool noFmsDbMaker;//tested and found no fmsDb
-  static void loadFmsDbMaker();
   ClassDef(StPicoFmsHit,1)
 };
 
