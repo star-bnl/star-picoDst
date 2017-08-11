@@ -10,7 +10,7 @@
 #include "StPicoEvent/StPicoBEmcPidTraits.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoEvent/StPicoMtdPidTraits.h"
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 
 TClonesArray** StPicoDst::picoArrays = 0;
 

@@ -69,7 +69,6 @@ add_library (
 	StPicoDstMaker
 	SHARED
 	StPicoDstMaker/StPicoArrays.cxx
-	StPicoDstMaker/StPicoDst.cxx
 	StPicoDstMaker/StPicoDstMaker.cxx
 	StPicoDstMaker/StPicoBbcFiller.cxx
 	StPicoDstMaker/StPicoEpdFiller.cxx
@@ -98,6 +97,7 @@ root_generate_linkdef_and_dictionary(
 add_library (
 	StPicoEvent
 	SHARED
+	StPicoEvent/StPicoDst.cxx
 	StPicoEvent/StPicoBTowHit.cxx
 	StPicoEvent/StPicoBTofHit.cxx
 	StPicoEvent/StPicoBTofPidTraits.cxx

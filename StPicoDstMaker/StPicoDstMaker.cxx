@@ -49,6 +49,7 @@
 #include "tables/St_mtdQTSlewingCorr_Table.h"
 #include "tables/St_mtdQTSlewingCorrPart2_Table.h"
 
+#include "StPicoEvent/StPicoDst.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEmcTrigger.h"
@@ -64,7 +65,6 @@
 #include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoDstMaker/StPicoArrays.h"
-#include "StPicoDstMaker/StPicoDst.h"
 
 
 //_________________

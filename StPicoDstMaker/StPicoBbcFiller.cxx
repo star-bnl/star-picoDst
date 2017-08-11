@@ -6,7 +6,7 @@
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 
 #include "StPicoDstMaker/StPicoBbcFiller.h"
-#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoEvent/StPicoDst.h"
 #include "StPicoEvent/StPicoBbcTile.h"
 #include "StPicoEvent/StPicoCommon.h"
 
