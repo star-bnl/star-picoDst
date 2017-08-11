@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "StPicoEvent/StPicoFmsHit.h"
 
 
@@ -19,8 +21,9 @@ StPicoFmsHit::StPicoFmsHit(int detectorId, int channelId, int adc) :
 
 void StPicoFmsHit::Print(const Char_t *option) const
 {
-  LOG_INFO << "DetectorId = " << detectorId()
-           << "Channel = "   << channel()
-           << "ADC = "       << adc()
-           << endm;
+  std::cout << " FMS hit -"
+            << " detectorId: " << detectorId()
+            << " channel: " << channel()
+            << " ADC: " << adc()
+            << "\n";
 }
