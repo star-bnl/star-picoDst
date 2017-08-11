@@ -12,43 +12,16 @@
 class StPicoFmsHit: public TObject
 {
 public:
-  StPicoFmsHit()
-  {
-    set(0, 0, 0);
-  }
 
-  StPicoFmsHit(UShort_t detectorId, UShort_t channel, UShort_t adc)
-  {
-    set(detectorId, channel, adc);
-  }
+  StPicoFmsHit();
 
-  virtual ~StPicoFmsHit() {}
+  StPicoFmsHit(int detectorId, int channelId, int adc);
 
-  void Print(const Char_t *option = "") const;
+  virtual void Print(const Char_t *option = "") const;
 
-  void set(UShort_t detectorId, UShort_t channel, UShort_t adc)
-  {
-    encodeDetectorIdChannel(detectorId, channel);
-    mAdc = adc;
-  }
-
-  void encodeDetectorIdChannel(UShort_t detectorId, UShort_t channel)
-  {
-    mChannelDetectorId = 32 * channel + detectorId;
-  }
-
-  UShort_t detectorId() const
-  {
-    return mChannelDetectorId % 32;
-  }
-  UShort_t channel() const
-  {
-    return mChannelDetectorId / 32;
-  }
-  UShort_t adc() const
-  {
-    return mAdc;
-  }
+  int detectorId() const;
+  int channel() const;
+  int adc() const;
 
 private:
 
@@ -59,5 +32,10 @@ private:
 
   ClassDef(StPicoFmsHit, 1)
 };
+
+
+inline int StPicoFmsHit::detectorId() const { return mChannelDetectorId % 32; }
+inline int StPicoFmsHit::channel() const { return mChannelDetectorId / 32; }
+inline int StPicoFmsHit::adc() const { return mAdc; }
 
 #endif
