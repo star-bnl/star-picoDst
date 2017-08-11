@@ -3,6 +3,7 @@
 
 #include "StChain/StMaker.h"
 #include "StPicoEvent/StPicoArrays.h"
+#include "StPicoEvent/StPicoDst.h"
 #include "StPicoDstMaker/StPicoBbcFiller.h"
 #include "StPicoDstMaker/StPicoEpdFiller.h"
 #include "StPicoDstMaker/StPicoFmsFiller.h"
@@ -17,7 +18,6 @@ class StEmcCollection;
 class StEmcPosition;
 class StEmcGeom;
 class StEmcRawHit;
-class StPicoDst;
 class StPicoEvent;
 
 
@@ -128,7 +128,7 @@ private:
   StMuDst*  mMuDst;
 
   /// A pointer to the main input/outpur picoDst structure containing all `TObjArray`s
-  StPicoDst*  mPicoDst;
+  StPicoDst  mPicoDst;
 
   StEmcCollection* mEmcCollection;
   StEmcPosition*   mEmcPosition;
@@ -172,7 +172,7 @@ private:
 };
 
 
-inline StPicoDst* StPicoDstMaker::picoDst() { return mPicoDst; }
+inline StPicoDst* StPicoDstMaker::picoDst() { return &mPicoDst; }
 inline TChain* StPicoDstMaker::chain() { return mChain; }
 inline TTree* StPicoDstMaker::tree() { return mTTree; }
 inline void StPicoDstMaker::setSplit(int split) { mSplit = split; }

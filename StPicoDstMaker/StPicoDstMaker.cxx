@@ -69,7 +69,7 @@
 
 //_________________
 StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
-  mMuDst(nullptr), mPicoDst(new StPicoDst()),
+  mMuDst(nullptr), mPicoDst(),
   mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
   mTpcVpdVzDiffCut(6.),
@@ -78,9 +78,9 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
   mModuleToQT{}, mModuleToQTPos{}, mQTtoModule{}, mQTSlewBinEdge{}, mQTSlewCorr{},
   mPicoArrays{}, mStatusArrays{},
-  mBbcFiller(*mPicoDst),
-  mEpdFiller(*mPicoDst),
-  mFmsFiller(*mPicoDst)
+  mBbcFiller(mPicoDst),
+  mEpdFiller(mPicoDst),
+  mFmsFiller(mPicoDst)
 {
   streamerOff();
   createArrays();
@@ -99,7 +99,6 @@ StPicoDstMaker::StPicoDstMaker(PicoIoMode ioMode, char const* fileName, char con
 StPicoDstMaker::~StPicoDstMaker()
 {
   delete mChain;
-  delete mPicoDst;
 }
 
 //_________________
@@ -195,7 +194,7 @@ void StPicoDstMaker::createArrays()
     mPicoArrays[i] = new TClonesArray(StPicoArrays::picoArrayTypes[i], StPicoArrays::picoArraySizes[i]);
   }
 
-  mPicoDst->set(mPicoArrays);
+  mPicoDst.set(mPicoArrays);
 }
 
 //_________________
@@ -471,7 +470,7 @@ Int_t StPicoDstMaker::openRead()
     setBranchAddresses(mChain);
     mChain->SetCacheSize(50e6);
     mChain->AddBranchToCache("*");
-    mPicoDst->set(mPicoArrays);
+    mPicoDst.set(mPicoArrays);
   }
 
   return kStOK;
@@ -669,7 +668,7 @@ Int_t StPicoDstMaker::MakeWrite()
 
   mFmsFiller.fill(*mMuDst);
 
-  if (Debug()) mPicoDst->printTracks();
+  if (Debug()) mPicoDst.printTracks();
 
   mTTree->Fill();
 
@@ -976,7 +975,7 @@ void StPicoDstMaker::fillEmcTrigger()
   int bht2 = trigSimu->bemc->barrelHighTowerTh(2);
   int bht3 = trigSimu->bemc->barrelHighTowerTh(3);
   LOG_DEBUG << " bht thresholds " << bht0 << " " << bht1 << " " << bht2 << " " << bht3 << endm;
-  for (int i = 0; i < 4; ++i) mPicoDst->event()->setHighTowerThreshold(i, trigSimu->bemc->barrelHighTowerTh(i));
+  for (int i = 0; i < 4; ++i) mPicoDst.event()->setHighTowerThreshold(i, trigSimu->bemc->barrelHighTowerTh(i));
 
   for (int towerId = 1; towerId <= 4800; ++towerId)
   {
@@ -1017,7 +1016,7 @@ void StPicoDstMaker::fillEmcTrigger()
   int const bjpth2 = trigSimu->bemc->barrelJetPatchTh(2);
 
   for (int i = 0; i < 3; ++i)
-    mPicoDst->event()->setJetPatchThreshold(i, trigSimu->bemc->barrelJetPatchTh(i));
+    mPicoDst.event()->setJetPatchThreshold(i, trigSimu->bemc->barrelJetPatchTh(i));
 
   for (int jp = 0; jp < 18; ++jp)
   {
@@ -1100,16 +1099,16 @@ void StPicoDstMaker::fillMtdHits()
     Int_t counter = mPicoArrays[StPicoArrays::MtdHit]->GetEntries();
     new((*(mPicoArrays[StPicoArrays::MtdHit]))[counter]) StPicoMtdHit(hit);
   }
-  unsigned int nHits = mPicoDst->numberOfMtdHits();
+  unsigned int nHits = mPicoDst.numberOfMtdHits();
 
   // associated MTD hits with PidTraits
-  unsigned int nMtdPidTraits = mPicoDst->numberOfMtdPidTraits();
+  unsigned int nMtdPidTraits = mPicoDst.numberOfMtdPidTraits();
   for (unsigned int i = 0; i < nMtdPidTraits; ++i)
   {
-    StPicoMtdPidTraits* pidTrait = mPicoDst->mtdPidTraits(i);
+    StPicoMtdPidTraits* pidTrait = mPicoDst.mtdPidTraits(i);
     for (unsigned int j = 0; j < nHits; ++j)
     {
-      StPicoMtdHit* hit = mPicoDst->mtdHit(j);
+      StPicoMtdHit* hit = mPicoDst.mtdHit(j);
       if (pidTrait->gChannel() == hit->gChannel())
       {
         pidTrait->setMtdHitIndex(j);
@@ -1120,13 +1119,13 @@ void StPicoDstMaker::fillMtdHits()
 
 
   // check the firing hits
-  if (mPicoDst->numberOfMtdTriggers() != 1)
+  if (mPicoDst.numberOfMtdTriggers() != 1)
   {
-    LOG_ERROR << "There are " << mPicoDst->numberOfMtdTriggers() << " MTD trigger. Check it!" << endm;
+    LOG_ERROR << "There are " << mPicoDst.numberOfMtdTriggers() << " MTD trigger. Check it!" << endm;
     return;
   }
 
-  StPicoMtdTrigger* trigger = mPicoDst->mtdTrigger(0);
+  StPicoMtdTrigger* trigger = mPicoDst.mtdTrigger(0);
   Int_t triggerQT[8][2];
   Bool_t triggerBit[8][8];
   Int_t pos1 = 0, pos2 = 0;
@@ -1154,7 +1153,7 @@ void StPicoDstMaker::fillMtdHits()
 
   for (unsigned int i = 0; i < nHits; ++i)
   {
-    StPicoMtdHit* hit = mPicoDst->mtdHit(i);
+    StPicoMtdHit* hit = mPicoDst.mtdHit(i);
     Int_t backleg = hit->backleg();
     Int_t module  = hit->module();
     Int_t qt = mModuleToQT[backleg - 1][module - 1];
@@ -1184,7 +1183,7 @@ void StPicoDstMaker::fillMtdHits()
 
     for (Int_t k = (Int_t)hits.size() - 1; k > -1; k--)
     {
-      StPicoMtdHit* hit = mPicoDst->mtdHit( hitIndex[hits[k]] );
+      StPicoMtdHit* hit = mPicoDst.mtdHit( hitIndex[hits[k]] );
       hit->setTriggerFlag( (Int_t)hits.size() );
       triggerPos.erase(triggerPos.begin() + hits[k]);
       hitIndex.erase(hitIndex.begin() + hits[k]);
