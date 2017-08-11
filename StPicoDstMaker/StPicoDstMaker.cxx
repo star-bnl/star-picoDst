@@ -43,6 +43,8 @@
 #include "StEmcRawMaker/defines.h"
 #include "StEmcRawMaker/StBemcTables.h"
 
+#include "StFmsDbMaker/StFmsDbMaker.h"
+
 #include "tables/St_mtdModuleToQTmap_Table.h"
 #include "tables/St_mtdQTSlewingCorr_Table.h"
 #include "tables/St_mtdQTSlewingCorrPart2_Table.h"
@@ -64,7 +66,6 @@
 #include "StPicoDstMaker/StPicoArrays.h"
 #include "StPicoDstMaker/StPicoDst.h"
 
-#include "StFmsDbMaker/StFmsDbMaker.h"
 
 //_____________________________________________________________________________
 StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
