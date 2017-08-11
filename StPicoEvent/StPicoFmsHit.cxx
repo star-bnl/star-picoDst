@@ -1,8 +1,8 @@
-/***************************************************************************
- *
- * Author: Peifeng Liu, Stony Brook University, pliuphys@gmail.com
- *
- ***************************************************************************/
+
+
+/**
+ * \author: Peifeng Liu, Stony Brook University, pliuphys@gmail.com
+ */
 
 #include "StPicoFmsHit.h"
 

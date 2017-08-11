@@ -1,9 +1,3 @@
-/***************************************************************************
- *
- * Author: Peifeng Liu, Stony Brook University, pliuphys@gmail.com
- *
- ***************************************************************************/
-
 #ifndef StPicoFmsHit_h
 #define StPicoFmsHit_h
 
@@ -12,6 +6,9 @@
 #include "StarClassLibrary/StThreeVectorF.hh"
 
 
+/**
+ * \author: Peifeng Liu, Stony Brook University, pliuphys@gmail.com
+ */
 class StPicoFmsHit: public TObject
 {
 public:
@@ -53,8 +50,11 @@ public:
     return mAdc;
   }
 
- private:
-  UShort_t mChannelDetectorId;//32*channel+detectorId. Allow channel 0-2047, detectorId 0-31.
+private:
+
+  /// 32*channel + detectorId. Allow channel 0-2047, detectorId 0-31.
+  UShort_t mChannelDetectorId;
+
   UShort_t mAdc;
 
   ClassDef(StPicoFmsHit, 1)
