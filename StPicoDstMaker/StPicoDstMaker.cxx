@@ -680,7 +680,7 @@ Int_t StPicoDstMaker::MakeWrite()
 //_________________
 void StPicoDstMaker::fillEventHeader() const
 {
-  StPicoEvent* event=StPicoDst::event();
+  const StPicoEvent* event = mPicoDst.event();
   if(!event)
     return;
 

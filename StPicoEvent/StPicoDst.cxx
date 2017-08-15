@@ -12,7 +12,12 @@
 #include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoEvent/StPicoDst.h"
 
-TClonesArray** StPicoDst::picoArrays = 0;
+
+
+StPicoDst::StPicoDst() : picoArrays(nullptr)
+{
+}
+
 
 //-----------------------------------------------------------------------
 void StPicoDst::unset()
