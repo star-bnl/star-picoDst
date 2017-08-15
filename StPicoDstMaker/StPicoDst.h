@@ -27,11 +27,6 @@ public:
   /// resets the pointers to the TClonesArrays to 0
   static void unset();
 
-protected:
-  /// array of TClonesArrays
-  static TClonesArray** picoArrays;
-
-public:
   /// returns pointer to the n-th TClonesArray
   static TClonesArray* picoArray(int type) { return picoArrays[type]; }
 
@@ -76,6 +71,12 @@ public:
   static void printBEmcPidTraits();
   static void printBTofPidTraits();
   static void printMtdPidTraits();
+
+private:
+
+  /// array of TClonesArrays
+  static TClonesArray** picoArrays;
+
 };
 
 #endif

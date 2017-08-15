@@ -58,7 +58,7 @@ public:
 
   void setVtxMode(const PicoVtxMode vtxMode);
 
-protected:
+private:
 
   void streamerOff();
 
