@@ -2,7 +2,7 @@
 #define StPicoDstMaker_h
 
 #include "StChain/StMaker.h"
-#include "StPicoDstMaker/StPicoArrays.h"
+#include "StPicoEvent/StPicoArrays.h"
 #include "StPicoDstMaker/StPicoBbcFiller.h"
 #include "StPicoDstMaker/StPicoEpdFiller.h"
 #include "StPicoDstMaker/StPicoFmsFiller.h"

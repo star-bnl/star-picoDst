@@ -1,4 +1,4 @@
-#include "StPicoDstMaker/StPicoArrays.h"
+#include "StPicoEvent/StPicoArrays.h"
 
 //              ARRAY NAMES
 //============================================================================================
