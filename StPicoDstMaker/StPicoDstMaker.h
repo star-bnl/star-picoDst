@@ -67,7 +67,6 @@ protected:
   void closeWrite();
   Int_t openRead();
   void  read();
-  void setBranchAddresses();
   void closeRead();
   void setBranchAddresses(TChain*);
 
