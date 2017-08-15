@@ -14,7 +14,7 @@
 
 
 
-StPicoDst::StPicoDst() : picoArrays(nullptr)
+StPicoDst::StPicoDst() : mPicoArrays(nullptr)
 {
 }
 
@@ -22,12 +22,12 @@ StPicoDst::StPicoDst() : picoArrays(nullptr)
 //-----------------------------------------------------------------------
 void StPicoDst::unset()
 {
-  picoArrays = 0;
+  mPicoArrays = 0;
 }
 //-----------------------------------------------------------------------
 void StPicoDst::set(TClonesArray** thePicoArrays)
 {
-  picoArrays = thePicoArrays;
+  mPicoArrays = thePicoArrays;
 }
 //-----------------------------------------------------------------------
 void StPicoDst::print() const

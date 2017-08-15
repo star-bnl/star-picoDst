@@ -31,48 +31,48 @@ public:
   void unset();
 
   /// returns pointer to the n-th TClonesArray
-  TClonesArray* picoArray(int type) { return picoArrays[type]; }
+  TClonesArray* picoArray(int type) { return mPicoArrays[type]; }
 
   /// returns pointer to current StPicoEvent (class holding the event wise information)
-  StPicoEvent* event() { return (StPicoEvent*)picoArrays[StPicoArrays::Event]->UncheckedAt(0); }
-  const StPicoEvent* event() const { return (const StPicoEvent*)picoArrays[StPicoArrays::Event]->UncheckedAt(0); }
+  StPicoEvent* event() { return (StPicoEvent*)mPicoArrays[StPicoArrays::Event]->UncheckedAt(0); }
+  const StPicoEvent* event() const { return (const StPicoEvent*)mPicoArrays[StPicoArrays::Event]->UncheckedAt(0); }
 
   /// return pointer to i-th track
-  StPicoTrack* track(int i) { return (StPicoTrack*)picoArrays[StPicoArrays::Track]->UncheckedAt(i); }
+  StPicoTrack* track(int i) { return (StPicoTrack*)mPicoArrays[StPicoArrays::Track]->UncheckedAt(i); }
   /// return pointer to i-th trigger data
-  StPicoEmcTrigger* emcTrigger(int i) { return (StPicoEmcTrigger*)picoArrays[StPicoArrays::EmcTrigger]->UncheckedAt(i); }
-  StPicoMtdTrigger* mtdTrigger(int i) { return (StPicoMtdTrigger*)picoArrays[StPicoArrays::MtdTrigger]->UncheckedAt(i); }
+  StPicoEmcTrigger* emcTrigger(int i) { return (StPicoEmcTrigger*)mPicoArrays[StPicoArrays::EmcTrigger]->UncheckedAt(i); }
+  StPicoMtdTrigger* mtdTrigger(int i) { return (StPicoMtdTrigger*)mPicoArrays[StPicoArrays::MtdTrigger]->UncheckedAt(i); }
 
   /// return pointer to i-th btow hit
-  StPicoBTowHit* btowHit(int i) { return (StPicoBTowHit*)picoArrays[StPicoArrays::BTowHit]->UncheckedAt(i); }
+  StPicoBTowHit* btowHit(int i) { return (StPicoBTowHit*)mPicoArrays[StPicoArrays::BTowHit]->UncheckedAt(i); }
   /// return pointer to i-th btof hit
-  StPicoBTofHit* btofHit(int i) { return (StPicoBTofHit*)picoArrays[StPicoArrays::BTofHit]->UncheckedAt(i); }
+  StPicoBTofHit* btofHit(int i) { return (StPicoBTofHit*)mPicoArrays[StPicoArrays::BTofHit]->UncheckedAt(i); }
   /// return pointer to i-th mtd hit
-  StPicoMtdHit*  mtdHit(int i) { return (StPicoMtdHit*)picoArrays[StPicoArrays::MtdHit]->UncheckedAt(i); }
+  StPicoMtdHit*  mtdHit(int i) { return (StPicoMtdHit*)mPicoArrays[StPicoArrays::MtdHit]->UncheckedAt(i); }
   /// return pointer to i-th bbc hit
-  StPicoBbcHit* bbcHit(int i) {return (StPicoBbcHit*)picoArrays[StPicoArrays::BbcHit]->UncheckedAt(i); }
+  StPicoBbcHit* bbcHit(int i) {return (StPicoBbcHit*)mPicoArrays[StPicoArrays::BbcHit]->UncheckedAt(i); }
   /// return pointer to i-th epd hit
-  StPicoEpdHit* epdHit(int i) {return (StPicoEpdHit*)picoArrays[StPicoArrays::EpdHit]->UncheckedAt(i); }
+  StPicoEpdHit* epdHit(int i) {return (StPicoEpdHit*)mPicoArrays[StPicoArrays::EpdHit]->UncheckedAt(i); }
   /// return pointer to i-th fms hit
-  StPicoFmsHit*  fmsHit(int i) { return (StPicoFmsHit*)picoArrays[StPicoArrays::FmsHit]->UncheckedAt(i); }
+  StPicoFmsHit*  fmsHit(int i) { return (StPicoFmsHit*)mPicoArrays[StPicoArrays::FmsHit]->UncheckedAt(i); }
 
   /// return pointer to i-th emc pidTraits
-  StPicoBEmcPidTraits* bemcPidTraits(int i) { return (StPicoBEmcPidTraits*)picoArrays[StPicoArrays::BEmcPidTraits]->UncheckedAt(i); }
+  StPicoBEmcPidTraits* bemcPidTraits(int i) { return (StPicoBEmcPidTraits*)mPicoArrays[StPicoArrays::BEmcPidTraits]->UncheckedAt(i); }
   /// return pointer to i-th btof pidTraits
-  StPicoBTofPidTraits* btofPidTraits(int i) { return (StPicoBTofPidTraits*)picoArrays[StPicoArrays::BTofPidTraits]->UncheckedAt(i); }
+  StPicoBTofPidTraits* btofPidTraits(int i) { return (StPicoBTofPidTraits*)mPicoArrays[StPicoArrays::BTofPidTraits]->UncheckedAt(i); }
   /// return pointer to i-th mtd pidTraits
-  StPicoMtdPidTraits* mtdPidTraits(int i) { return (StPicoMtdPidTraits*)picoArrays[StPicoArrays::MtdPidTraits]->UncheckedAt(i); }
+  StPicoMtdPidTraits* mtdPidTraits(int i) { return (StPicoMtdPidTraits*)mPicoArrays[StPicoArrays::MtdPidTraits]->UncheckedAt(i); }
 
-  unsigned int numberOfTracks() { return picoArrays[StPicoArrays::Track]->GetEntries(); }
-  unsigned int numberOfEmcTriggers() { return picoArrays[StPicoArrays::EmcTrigger]->GetEntries(); }
-  unsigned int numberOfMtdTriggers() { return picoArrays[StPicoArrays::MtdTrigger]->GetEntries(); }
-  unsigned int numberOfBTOWHits() { return picoArrays[StPicoArrays::BTowHit]->GetEntries(); }
-  unsigned int numberOfBTofHits() { return picoArrays[StPicoArrays::BTofHit]->GetEntries(); }
-  unsigned int numberOfMtdHits() { return picoArrays[StPicoArrays::MtdHit]->GetEntries(); }
-  unsigned int numberOfFmsHits() { return picoArrays[StPicoArrays::FmsHit]->GetEntries(); }
-  unsigned int numberOfBEmcPidTraits() { return picoArrays[StPicoArrays::BEmcPidTraits] ->GetEntries(); }
-  unsigned int numberOfBTofPidTraits() { return picoArrays[StPicoArrays::BTofPidTraits]->GetEntries(); }
-  unsigned int numberOfMtdPidTraits() { return picoArrays[StPicoArrays::MtdPidTraits] ->GetEntries(); }
+  unsigned int numberOfTracks() { return mPicoArrays[StPicoArrays::Track]->GetEntries(); }
+  unsigned int numberOfEmcTriggers() { return mPicoArrays[StPicoArrays::EmcTrigger]->GetEntries(); }
+  unsigned int numberOfMtdTriggers() { return mPicoArrays[StPicoArrays::MtdTrigger]->GetEntries(); }
+  unsigned int numberOfBTOWHits() { return mPicoArrays[StPicoArrays::BTowHit]->GetEntries(); }
+  unsigned int numberOfBTofHits() { return mPicoArrays[StPicoArrays::BTofHit]->GetEntries(); }
+  unsigned int numberOfMtdHits() { return mPicoArrays[StPicoArrays::MtdHit]->GetEntries(); }
+  unsigned int numberOfFmsHits() { return mPicoArrays[StPicoArrays::FmsHit]->GetEntries(); }
+  unsigned int numberOfBEmcPidTraits() { return mPicoArrays[StPicoArrays::BEmcPidTraits] ->GetEntries(); }
+  unsigned int numberOfBTofPidTraits() { return mPicoArrays[StPicoArrays::BTofPidTraits]->GetEntries(); }
+  unsigned int numberOfMtdPidTraits() { return mPicoArrays[StPicoArrays::MtdPidTraits] ->GetEntries(); }
 
   void print() const; ///< Print basic event info
   void printTracks();
@@ -88,7 +88,7 @@ public:
 private:
 
   /// array of TClonesArrays
-  TClonesArray** picoArrays;
+  TClonesArray** mPicoArrays;
 
 };
 
