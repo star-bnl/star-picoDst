@@ -118,23 +118,8 @@ void StPicoDstMaker::clearArrays()
  */
 void StPicoDstMaker::SetStatus(char const* branchNameRegex, int enable)
 {
-  static char const* specNames[] = {"EventAll", 0};
-  static int const specIndex[] = { 0, StPicoArrays::NAllPicoArrays, -1};
-
   if (strncmp(branchNameRegex, "St", 2) == 0)
     branchNameRegex += 2; //Ignore first "St"
-
-  for (int i = 0; specNames[i]; ++i)
-  {
-    if (strcmp(branchNameRegex, specNames[i])) continue;
-    char* sta = mStatusArrays + specIndex[i];
-    int   num = specIndex[i + 1] - specIndex[i];
-    std::fill_n(sta, num, enable);
-    LOG_INFO << "StPicoDstMaker::SetStatus " << enable << " to " << specNames[i] << endm;
-    if (StMaker::m_Mode == PicoIoMode::IoRead)
-      setBranchAddresses(mChain);
-    return;
-  }
 
   TRegexp re(branchNameRegex, 1);
   for (int i = 0; i < StPicoArrays::NAllPicoArrays; ++i)
