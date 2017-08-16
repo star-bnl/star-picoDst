@@ -1,8 +1,9 @@
 #ifndef StPicoDst_h
 #define StPicoDst_h
 
+#include "TClonesArray.h"
+#include "StPicoDstMaker/StPicoArrays.h"
 
-class StPicoDstMaker;
 class StPicoEvent;
 class StPicoTrack;
 class StPicoEmcTrigger;
@@ -14,8 +15,6 @@ class StPicoBEmcPidTraits;
 class StPicoBTofPidTraits;
 class StPicoMtdPidTraits;
 
-#include "TClonesArray.h"
-#include "StPicoDstMaker/StPicoArrays.h"
 
 class StPicoDst
 {

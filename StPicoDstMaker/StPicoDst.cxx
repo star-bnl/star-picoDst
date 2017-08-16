@@ -1,4 +1,5 @@
-#include <map>
+#include "St_base/StMessMgr.h"
+
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEmcTrigger.h"
@@ -9,7 +10,6 @@
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoDstMaker/StPicoDst.h"
-#include "StPicoDstMaker/StPicoDstMaker.h"
 
 TClonesArray** StPicoDst::picoArrays = 0;
 

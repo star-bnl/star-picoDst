@@ -1,8 +1,11 @@
 #include <algorithm>
 #include <unordered_map>
 #include <string>
+#include <vector>
+
 #include "TRegexp.h"
 #include "TChain.h"
+#include "TClonesArray.h"
 #include "TTree.h"
 #include "TBranch.h"
 #include "TObjectSet.h"
