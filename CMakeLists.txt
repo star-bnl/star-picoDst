@@ -36,6 +36,7 @@ add_library(
 	StPicoDstMaker/StPicoBbcFiller.cxx
 	StPicoDstMaker/StPicoEpdFiller.cxx
 	StPicoDstMaker/StPicoFmsFiller.cxx
+	StPicoDstMaker/StPicoUtilities.cxx
 )
 
 root_generate_dictionary(
