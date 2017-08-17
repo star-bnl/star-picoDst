@@ -1,7 +1,5 @@
 #include <limits>
 
-#include "StMuDSTMaker/COMMON/StMuMtdPidTraits.h"
-#include "StMuDSTMaker/COMMON/StMuMtdHit.h"
 #include "St_base/StMessMgr.h"
 
 #include "StPicoEvent/StPicoMtdPidTraits.h"
@@ -13,23 +11,6 @@ StPicoMtdPidTraits::StPicoMtdPidTraits() : TObject(),
   mDeltaY(-999.), mDeltaZ(-999.), mDeltaTimeOfFlight(-999.), mBeta(-999.), mMtdHitChan(-1)
 {
   // constructor
-}
-
-//----------------------------------------------------------------------------------
-StPicoMtdPidTraits::StPicoMtdPidTraits(const StMuMtdHit*  hit,
-                                       const StMuMtdPidTraits* trait,
-                                       const Int_t index):
-  mTrackIndex((Short_t)index),
-  mMtdHitIndex(-1),
-  mMatchFlag((Char_t) trait->matchFlag()),
-  mDeltaY(trait->deltaY()),
-  mDeltaZ(trait->deltaZ()),
-  mDeltaTimeOfFlight(trait->timeOfFlight() - trait->expTimeOfFlight()),
-  mBeta((trait->pathLength() / trait->expTimeOfFlight()) / 29.9792458 ), // c_light in cm/s
-  mMtdHitChan(-1)
-{
-  Int_t gchan = (hit->backleg() - 1) * 60 + (hit->module() - 1) * 12 + hit->cell();
-  mMtdHitChan = (gchan > std::numeric_limits<short>::max()) ? -1 : (Short_t) gchan;
 }
 
 //----------------------------------------------------------------------------------

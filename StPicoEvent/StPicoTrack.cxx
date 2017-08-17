@@ -2,9 +2,7 @@
 
 #include "TMath.h"
 
-#include "StEvent/StDcaGeometry.h"
 #include "St_base/StMessMgr.h"
-#include "StMuDSTMaker/COMMON/StMuTrack.h"
 
 #include "StPicoEvent/StPicoTrack.h"
 
@@ -24,63 +22,6 @@ StPicoTrack::StPicoTrack() : TObject(),
 {
 }
 
-//----------------------------------------------------------------------------------
-StPicoTrack::StPicoTrack(StMuTrack const* const gTrk, StMuTrack const* const pTrk, double const B, StThreeVectorD const& pVtx, StDcaGeometry const& dcaG)
-  : StPicoTrack()
-{
-  if (!gTrk || gTrk->type() != global || (pTrk && (pTrk->type() != primary || pTrk->id() != gTrk->id())))
-  {
-    LOG_WARN << "Invalid arguments passed to StPicoTrack constructor. Object is default initialized" << endm;
-
-    return;
-  }
-
-  mId   = (UShort_t)gTrk->id();
-  mChi2 = (gTrk->chi2() * 1000. > std::numeric_limits<unsigned short>::max()) ? std::numeric_limits<unsigned short>::max() : (UShort_t)(TMath::Nint(gTrk->chi2() * 1000.));
-
-  if (pTrk)
-  {
-    mPMomentum = pTrk->p();
-  }
-
-  /// Calculate global momentum and position at point of DCA to the pVtx
-  StPhysicalHelixD gHelix = dcaG.helix();
-  gHelix.moveOrigin(gHelix.pathLength(pVtx));
-  mGMomentum = gHelix.momentum(B * 1e-14);
-  mOrigin = gHelix.origin();
-
-  mDedx      = gTrk->dEdx() * 1.e6;
-  //mDnDx      = gTrk->probPidTraits().dNdxFit();
-  //mDnDxError = gTrk->probPidTraits().dNdxErrorFit();
-
-  int flag = gTrk->flag();
-  if (flag / 100 < 7) // TPC tracks
-  {
-    mNHitsFit  = (Char_t)(gTrk->nHitsFit(kTpcId) * gTrk->charge());
-    mNHitsMax  = (UChar_t)(gTrk->nHitsPoss(kTpcId));
-  }
-  else     // FTPC tracks
-  {
-    if (gTrk->helix().momentum(B * 1e-14).pseudoRapidity() > 0.)
-    {
-      mNHitsFit  = (Char_t)(gTrk->nHitsFit(kFtpcWestId) * gTrk->charge());
-      mNHitsMax  = (UChar_t)(gTrk->nHitsPoss(kFtpcWestId));
-    }
-    else
-    {
-      mNHitsFit  = (Char_t)(gTrk->nHitsFit(kFtpcEastId) * gTrk->charge());
-      mNHitsMax  = (UChar_t)(gTrk->nHitsPoss(kFtpcEastId));
-    }
-  }
-  mNHitsDedx = (UChar_t)(gTrk->nHitsDedx());
-  mNSigmaPion     = (fabs(gTrk->nSigmaPion() * 100.)     > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrk->nSigmaPion() * 100.));
-  mNSigmaKaon     = (fabs(gTrk->nSigmaKaon() * 100.)     > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrk->nSigmaKaon() * 100.));
-  mNSigmaProton   = (fabs(gTrk->nSigmaProton() * 100.)   > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrk->nSigmaProton() * 100.));
-  mNSigmaElectron = (fabs(gTrk->nSigmaElectron() * 100.) > std::numeric_limits<short>::max()) ? std::numeric_limits<short>::max() : (Short_t)(TMath::Nint(gTrk->nSigmaElectron() * 100.));
-
-  mTopologyMap[0] = (UInt_t)(gTrk->topologyMap().data(0));
-  mTopologyMap[1] = (UInt_t)(gTrk->topologyMap().data(1));
-}
 //----------------------------------------------------------------------------------
 void StPicoTrack::Print(Char_t const* option) const
 {
