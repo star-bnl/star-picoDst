@@ -2,7 +2,6 @@
 
 #include "StMuDSTMaker/COMMON/StMuMtdPidTraits.h"
 #include "StMuDSTMaker/COMMON/StMuMtdHit.h"
-#include "StarClassLibrary/PhysicalConstants.h"
 #include "St_base/StMessMgr.h"
 
 #include "StPicoEvent/StPicoMtdPidTraits.h"
@@ -26,7 +25,7 @@ StPicoMtdPidTraits::StPicoMtdPidTraits(const StMuMtdHit*  hit,
   mDeltaY(trait->deltaY()),
   mDeltaZ(trait->deltaZ()),
   mDeltaTimeOfFlight(trait->timeOfFlight() - trait->expTimeOfFlight()),
-  mBeta((trait->pathLength() / trait->expTimeOfFlight()) * 1e9 / c_light),
+  mBeta((trait->pathLength() / trait->expTimeOfFlight()) / 29.9792458 ), // c_light in cm/s
   mMtdHitChan(-1)
 {
   Int_t gchan = (hit->backleg() - 1) * 60 + (hit->module() - 1) * 12 + hit->cell();
