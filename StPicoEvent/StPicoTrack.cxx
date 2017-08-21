@@ -46,7 +46,7 @@ StPicoTrack::StPicoTrack(StMuTrack const* const gTrk, StMuTrack const* const pTr
   // Calculate global momentum and position at point of DCA to the pVtx
   StPhysicalHelixD gHelix = dcaG.helix();
   gHelix.moveOrigin(gHelix.pathLength(pVtx));
-  mGMomentum = gHelix.momentum(B * kilogauss);
+  mGMomentum = gHelix.momentum(B * 1e-14);
   mOrigin = gHelix.origin();
 
   mDedx      = gTrk->dEdx() * 1.e6;
@@ -61,7 +61,7 @@ StPicoTrack::StPicoTrack(StMuTrack const* const gTrk, StMuTrack const* const pTr
   }
   else     // FTPC tracks
   {
-    if (gTrk->helix().momentum(B * kilogauss).pseudoRapidity() > 0.)
+    if (gTrk->helix().momentum(B * 1e-14).pseudoRapidity() > 0.)
     {
       mNHitsFit  = (Char_t)(gTrk->nHitsFit(kFtpcWestId) * gTrk->charge());
       mNHitsMax  = (UChar_t)(gTrk->nHitsPoss(kFtpcWestId));

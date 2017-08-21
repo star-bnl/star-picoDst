@@ -6,7 +6,6 @@
 #include "TObject.h"
 #include "StarClassLibrary/StPhysicalHelixD.hh"
 #include "StarClassLibrary/StThreeVectorF.hh"
-#include "StarClassLibrary/SystemOfUnits.h"
 
 
 class StMuTrack;
@@ -157,12 +156,18 @@ inline bool StPicoTrack::isPrimary() const
 inline StThreeVectorF StPicoTrack::gMom(StThreeVectorF const& pVtx, float const B) const
 {
   StPhysicalHelixD gHelix = helix(B);
-  return gHelix.momentumAt(gHelix.pathLength(pVtx), B * kilogauss);
+  return gHelix.momentumAt(gHelix.pathLength(pVtx), B * 1e-14);
 }
 
+
+/**
+ * Expects magnetic field in kiloGauss'es
+ */
 inline StPhysicalHelixD StPicoTrack::helix(float const B) const
 {
-  return StPhysicalHelixD(mGMomentum, mOrigin, B * kilogauss, static_cast<float>(charge()));
+  // expects magnetic field in GeV*s/cm^2
+  // 1 kiloGauss = 10^-14 GeV*s/cm^2
+  return StPhysicalHelixD(mGMomentum, mOrigin, B * 1e-14, static_cast<float>(charge()));
 }
 
 #endif
