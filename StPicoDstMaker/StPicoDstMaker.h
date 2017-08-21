@@ -135,8 +135,6 @@ private:
   StEmcGeom*       mEmcGeom[4];
   StEmcRawHit*     mEmcIndex[4800];
 
-  Float_t    mBField;
-
   PicoVtxMode mVtxMode;
 
   TString   mInputFileName;        //! *.list - MuDst or picoDst
