@@ -17,8 +17,8 @@
  * Replace StHelixD, StLorentzVectorD,StLorentzVectorF,StMatrixD,StMatrixF,StPhysicalHelixD,StThreeVectorD,StThreeVectorF by templated version
  *
  ****************************************************************************/
-#ifndef ST_THREE_VECTOR_F_HH
-#define ST_THREE_VECTOR_F_HH
-#include "StThreeVector.hh"
+#ifndef StarLocal_ST_THREE_VECTOR_F_HH
+#define StarLocal_ST_THREE_VECTOR_F_HH
+#include "StarClassLibrary/StThreeVector.hh"
 typedef  StThreeVector<float> StThreeVectorF;
 #endif

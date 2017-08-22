@@ -7,8 +7,8 @@
  *
 
 ****************************************************************************/
-#ifndef ST_THREE_VECTOR_D_HH
-#define ST_THREE_VECTOR_D_HH
-#include "StThreeVector.hh"
+#ifndef StarLocal_ST_THREE_VECTOR_D_HH
+#define StarLocal_ST_THREE_VECTOR_D_HH
+#include "StarClassLibrary/StThreeVector.hh"
 typedef StThreeVector<double> StThreeVectorD;
 #endif
