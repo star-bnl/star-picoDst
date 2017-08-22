@@ -3,8 +3,12 @@
 #include <array>
 #include <string>
 #include <cmath>
+#include "StarClassLibrary/StThreeVectorF.hh"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h"
+
+class StPicoTrack;
+
 
 namespace StPicoUtilities
 {
@@ -75,6 +79,13 @@ namespace StPicoUtilities
     }
     return custom_refMult;
   }
+
+
+StThreeVectorF trackMomentumAt(const StPicoTrack& picoTrack, StThreeVectorF const& pVtx, float const B);
+
+/// helix at point of DCA to StPicoEvent::mPrimaryVertex
+StPhysicalHelixD makePhysicalHelix(const StPicoTrack& picoTrack, float const B);
+
 }
 
 #endif

@@ -4,7 +4,6 @@
 #include <cmath>
 
 #include "TObject.h"
-#include "StarClassLibrary/StPhysicalHelixD.hh"
 #include "StarClassLibrary/StThreeVectorD.hh"
 #include "StarClassLibrary/StThreeVectorF.hh"
 
@@ -61,8 +60,6 @@ public:
   /// track topology map, seet StEvent/StTrackTopologyMap.cxx
   UInt_t  topologyMap(unsigned int) const;
 
-  /// helix at point of DCA to StPicoEvent::mPrimaryVertex
-  StPhysicalHelixD helix(float B) const;
   bool hasPxl1Hit() const;
   bool hasPxl2Hit() const;
   bool hasIstHit() const;
@@ -152,24 +149,6 @@ inline bool    StPicoTrack::hasHft4Layers() const { return hasPxl1Hit() && hasPx
 inline bool StPicoTrack::isPrimary() const
 {
   return mPMomentum.magnitude() > 0;
-}
-
-/// Return the global momentum at the dca point to the pVtx (usually it is the primary vertex.   B - magnetic field from PicoEvent::bField()
-inline StThreeVectorF StPicoTrack::gMom(StThreeVectorF const& pVtx, float const B) const
-{
-  StPhysicalHelixD gHelix = helix(B);
-  return gHelix.momentumAt(gHelix.pathLength(pVtx), B * 1e-14);
-}
-
-
-/**
- * Expects magnetic field in kiloGauss'es
- */
-inline StPhysicalHelixD StPicoTrack::helix(float const B) const
-{
-  // expects magnetic field in GeV*s/cm^2
-  // 1 kiloGauss = 10^-14 GeV*s/cm^2
-  return StPhysicalHelixD(mGMomentum, mOrigin, B * 1e-14, static_cast<float>(charge()));
 }
 
 #endif

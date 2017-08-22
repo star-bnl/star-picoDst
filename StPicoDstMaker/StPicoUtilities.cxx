@@ -4,6 +4,7 @@
 #include "StPicoDstMaker/StPicoUtilities.h"
 
 #include "St_base/StMessMgr.h"
+#include "StarClassLibrary/StPhysicalHelixD.hh"
 #include "StarClassLibrary/StThreeVectorD.hh"
 #include "StarClassLibrary/StThreeVectorF.hh"
 #include "StEvent/StEventTypes.h"
@@ -26,6 +27,36 @@
 #include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoEvent/StPicoMtdTrigger.h"
 #include "StPicoEvent/StPicoTrack.h"
+
+
+
+namespace StPicoUtilities
+{
+
+/**
+ * Return the global momentum at the dca point to the pVtx (usually it is the
+ * primary vertex.
+ *
+ * param[in]   B   magnetic field from PicoEvent::bField()
+ */
+StThreeVectorF trackMomentumAt(const StPicoTrack& picoTrack, StThreeVectorF const& pVtx, float const B)
+{
+  StPhysicalHelixD helix = makePhysicalHelix(picoTrack, B);
+  return helix.momentumAt(helix.pathLength(pVtx), B * 1e-14);
+}
+
+
+/**
+ * Expects magnetic field in kiloGauss'es
+ */
+StPhysicalHelixD makePhysicalHelix(const StPicoTrack& picoTrack, float const B)
+{
+  // StPhysicalHelixD expects magnetic field in GeV*s/cm^2
+  // 1 kiloGauss = 10^-14 GeV*s/cm^2
+  return StPhysicalHelixD(picoTrack.gMom(), picoTrack.origin(), B * 1e-14, static_cast<float>(picoTrack.charge()));
+}
+
+}
 
 
 
