@@ -53,6 +53,7 @@ before_script:
   - git clone --depth=1 https://github.com/star-bnl/star-trigger.git ext/star-trigger
   - git clone --depth=1 https://github.com/star-bnl/star-daq.git     ext/star-daq
   - git clone --depth=1 https://github.com/star-bnl/star-pams.git    ext/star-pams
+  - git clone --depth=1 https://github.com/star-bnl/star-fms.git     ext/star-fms
 
 script:
     # Build libs with ROOT v5
@@ -60,7 +61,7 @@ script:
   - root-config --libs
   - root-config --cflags
   - mkdir build/ && cd build/ && pwd
-  - cmake -D STAR_BASE_DIR=ext/star-base -D STAR_STEVENT_DIR=ext/star-stevent -D STAR_MUDST_DIR=ext/star-muDst -D STAR_TABLES_DIR=ext/star-tables -D STAR_EMC_DIR=ext/star-emc -D STAR_TRIGGER_DIR=ext/star-trigger -D STAR_PAMS_DIR=ext/star-pams -D STAR_DAQ_DIR=ext/star-daq ../
+  - cmake -D STAR_BASE_DIR=ext/star-base -D STAR_STEVENT_DIR=ext/star-stevent -D STAR_MUDST_DIR=ext/star-muDst -D STAR_TABLES_DIR=ext/star-tables -D STAR_EMC_DIR=ext/star-emc -D STAR_TRIGGER_DIR=ext/star-trigger -D STAR_PAMS_DIR=ext/star-pams -D STAR_DAQ_DIR=ext/star-daq -D STAR_FMS_DIR=ext/star-fms ../
   - cmake -D CMAKE_INSTALL_PREFIX=./ -D CMAKE_BUILD_TYPE=Release ../
   - make -j4 && make install && make clean
   - pwd && ls -la ./ && ls -la lib/
@@ -73,7 +74,7 @@ script:
   - root-config --libs
   - root-config --cflags
   - mkdir build/ && cd build/ && pwd
-  - cmake -D STAR_BASE_DIR=ext/star-base -D STAR_STEVENT_DIR=ext/star-stevent -D STAR_MUDST_DIR=ext/star-muDst -D STAR_TABLES_DIR=ext/star-tables -D STAR_EMC_DIR=ext/star-emc -D STAR_TRIGGER_DIR=ext/star-trigger -D STAR_PAMS_DIR=ext/star-pams -D STAR_DAQ_DIR=ext/star-daq ../
+  - cmake -D STAR_BASE_DIR=ext/star-base -D STAR_STEVENT_DIR=ext/star-stevent -D STAR_MUDST_DIR=ext/star-muDst -D STAR_TABLES_DIR=ext/star-tables -D STAR_EMC_DIR=ext/star-emc -D STAR_TRIGGER_DIR=ext/star-trigger -D STAR_PAMS_DIR=ext/star-pams -D STAR_DAQ_DIR=ext/star-daq -D STAR_FMS_DIR=ext/star-fms  ../
   - cmake -D CMAKE_INSTALL_PREFIX=./ -D CMAKE_BUILD_TYPE=Release ../
   - make -j4 && make install && make clean
   - pwd && ls -la ./ && ls -la lib/
