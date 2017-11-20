@@ -575,15 +575,23 @@ Int_t StPicoDstMaker::MakeRead()
     LOG_WARN << " No input files ... ! EXIT" << endm;
     return kStWarn;
   }
+
   int bytes = mChain->GetEntry(mEventCounter++);
   
-  while ( bytes <= 0 ){
+  // Detect end of tree chain and return the appropriate code
+  while ( bytes <= 0 )
+  {
     if ( mEventCounter >= mChain->GetEntriesFast() )
       return kStEOF;
+
+    LOG_WARN << "Encountered invalid entry or I/O error while reading event "
+             << mEventCounter << " from \"" << mChain->GetName() << "\" input tree\n";
+
     bytes = mChain->GetEntry(mEventCounter++);
   }
 
   fillEventHeader();
+
   return kStOK;
 }
 //_____________________________________________________________________________
