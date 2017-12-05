@@ -416,7 +416,7 @@ Int_t StPicoDstMaker::openRead()
   if (!mChain) mChain = new TChain("PicoDst");
 
   string const dirFile = mInputFileName.Data();
-  if (dirFile.find(".list") != string::npos)
+  if (dirFile.find(".lis") != string::npos)
   {
     ifstream inputStream(dirFile.c_str());
 
