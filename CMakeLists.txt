@@ -1,73 +1,42 @@
-# Basic usage:
-#
-# cd <project_dir>
-# mkdir build && cd build
-# cmake ../
-# make
-#
-# Example cmake command with installation path and include directories
-# specified:
-#
-# cmake -D STAR_BASE_DIR=~/star-bnl/star-base \
-#       -D STAR_STEVENT_DIR=~/star-bnl/star-stevent \
-#       -D STAR_MUDST_DIR=~/star-bnl/star-muDst \
-#       -D STAR_TABLES_DIR=~/star-bnl/star-tables \
-#       -D STAR_EMC_DIR=~/star-bnl/star-emc \
-#       -D STAR_TRIGGER_DIR=~/star-bnl/star-trigger \
-#       -D STAR_PAMS_DIR=~/star-bnl/star-pams \
-#       -D STAR_DAQ_DIR=~/star-bnl/star-daq \
-#       -D CMAKE_INSTALL_PREFIX=./ ../
-#
-
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 project(star-picoDst)
 
 # Add to path in order to pick up the FindXXX.cmake files included in this project
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/star-cmake")
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+# By default build shared libraries but allow the user to change if desired
+OPTION(BUILD_SHARED_LIBS "Global flag to cause add_library to create shared libraries if on" ON)
 
 # This project depends on ROOT
 find_package(ROOT)
 
-if(NOT ROOT_FOUND)
-	message(FATAL_ERROR "FATAL: ROOT package not found")
+if( ${ROOT_CXX_FLAGS} MATCHES "-m32" )
+	message(STATUS "Found -m32 option in $ROOT_CXX_FLAGS (root-config). Will add it to $CMAKE_CXX_FLAGS")
+	set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32" )
 endif()
 
-# Perform some setup standard to STAR experiment environment
-include(StarCommon)
+find_package(STAR)
 
+set(CMAKE_CXX_STANDARD 11)
 add_definitions(-D__ROOT__)
 
 
 include_directories(
 	${ROOT_INCLUDE_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}
-	${STAR_BASE_DIR}
-	${STAR_STEVENT_DIR}
-	${STAR_MUDST_DIR}
-	${STAR_TABLES_DIR}
-	${STAR_EMC_DIR}
-	${STAR_FMS_DIR}
-	${STAR_TRIGGER_DIR}
-	${STAR_PAMS_DIR}/global/inc
-	${STAR_DAQ_DIR}
-	# In case the include paths were not provided we try to search for headers
-	# in standard STAR locations
-	$ENV{STAR}/.$ENV{STAR_HOST_SYS}/include
-	$ENV{STAR}/.$ENV{STAR_HOST_SYS}/include/tables
-	$ENV{STAR}/StRoot
+	${STAR_INCLUDE_DIRS}
 )
 
 
-root_generate_linkdef_and_dictionary(
-	StPicoDstMaker
-	HEADERS
+root_generate_dictionary(
+	StPicoDstMaker_dict
 	StPicoDstMaker/StPicoDstMaker.h
 )
 
-add_library (
+add_library(
 	StPicoDstMaker
-	SHARED
 	StPicoDstMaker/StPicoDstMaker.cxx
 	StPicoDstMaker/StPicoBbcFiller.cxx
 	StPicoDstMaker/StPicoEpdFiller.cxx
@@ -75,9 +44,8 @@ add_library (
 	StPicoDstMaker_dict.cxx
 )
 
-root_generate_linkdef_and_dictionary(
-	StPicoEvent
-	HEADERS
+root_generate_dictionary(
+	StPicoEvent_dict
 	StPicoEvent/StPicoBTowHit.h
 	StPicoEvent/StPicoBTofHit.h
 	StPicoEvent/StPicoBTofPidTraits.h
@@ -93,9 +61,8 @@ root_generate_linkdef_and_dictionary(
 	StPicoEvent/StPicoTrack.h
 )
 
-add_library (
+add_library(
 	StPicoEvent
-	SHARED
 	StPicoEvent/StPicoArrays.cxx
 	StPicoEvent/StPicoDst.cxx
 	StPicoEvent/StPicoBTowHit.cxx
@@ -116,4 +83,6 @@ add_library (
 )
 
 
-install(TARGETS StPicoDstMaker StPicoEvent DESTINATION "${STAR_ADDITIONAL_INSTALL_PREFIX}/lib")
+install(TARGETS StPicoDstMaker StPicoEvent
+	LIBRARY DESTINATION "${STAR_ADDITIONAL_INSTALL_PREFIX}/lib" OPTIONAL
+	ARCHIVE DESTINATION "${STAR_ADDITIONAL_INSTALL_PREFIX}/lib" OPTIONAL)
