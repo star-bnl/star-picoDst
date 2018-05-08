@@ -30,18 +30,12 @@ include_directories(
 )
 
 
-root_generate_dictionary(
-	StPicoDstMaker_dict
-	StPicoDstMaker/StPicoDstMaker.h
-)
-
 add_library(
 	StPicoDstMaker
 	StPicoDstMaker/StPicoDstMaker.cxx
 	StPicoDstMaker/StPicoBbcFiller.cxx
 	StPicoDstMaker/StPicoEpdFiller.cxx
 	StPicoDstMaker/StPicoFmsFiller.cxx
-	StPicoDstMaker_dict.cxx
 )
 
 root_generate_dictionary(
