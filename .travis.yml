@@ -44,8 +44,7 @@ before_script:
 
     # Install dependencies
   - git clone --branch=travis-data https://github.com/star-bnl/star-picoDst.git /tmp/star-cvs-headers
-  - cd /tmp/star-cvs-headers
-  - tar -xzf star-cvs-headers-e68fb8a1.tar.gz
+  - tar -xzf /tmp/star-cvs-headers/star-cvs-headers-e68fb8a1.tar.gz -C /tmp/star-cvs-headers/
 
 script:
     # Build libs with ROOT v5
