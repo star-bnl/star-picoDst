@@ -62,6 +62,8 @@ root_generate_dictionary(
 	StPicoEvent/StPicoBbcHit.h
 	StPicoEvent/StPicoEpdHit.h
 	StPicoEvent/StPicoTrack.h
+	StarClassLibrary/StThreeVector.hh
+	LINKDEF StPicoEvent/LinkDef.h
 )
 
 add_library(
