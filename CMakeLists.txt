@@ -8,6 +8,13 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 # By default build shared libraries but allow the user to change if desired
 OPTION(BUILD_SHARED_LIBS "Global flag to cause add_library to create shared libraries if on" ON)
 
+# Special treatment of linker options for MacOS X to get a linux-like behavior for gcc
+if(APPLE)
+	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -undefined dynamic_lookup")
+endif()
+
+
 # This project depends on ROOT
 find_package(ROOT)
 
