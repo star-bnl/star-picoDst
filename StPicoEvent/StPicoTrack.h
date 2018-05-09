@@ -5,6 +5,7 @@
 
 #include "TObject.h"
 #include "StarClassLibrary/StPhysicalHelixD.hh"
+#include "StarClassLibrary/StThreeVectorD.hh"
 #include "StarClassLibrary/StThreeVectorF.hh"
 
 
