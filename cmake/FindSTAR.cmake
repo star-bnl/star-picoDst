@@ -8,10 +8,11 @@
 
 
 set(STAR_ROOT "$ENV{STAR}" CACHE STRING "Path to directory with STAR soft installed")
+set(STAR_SRC  "$ENV{STAR}" CACHE STRING "Path to directory with STAR soft source")
 
 if( NOT STAR_ROOT )
-	message(FATAL_ERROR "STAR_ROOT must be set, i.e. \"cmake -D STAR_ROOT=<path to STAR dir>\" "
-	                    "Alternatively, one can specify environment variable \"STAR\"")
+	message(WARNING "STAR_ROOT must be set, i.e. \"cmake -D STAR_ROOT=<path to STAR dir>\" "
+	                "Alternatively, one can specify environment variable \"STAR\"")
 endif()
 
 # Make use of the $STAR_HOST_SYS evironment variable. If it is set use it as the
@@ -29,10 +30,14 @@ set(STAR_INCLUDE_DIRS
 	"${STAR_ROOT}/include/StRoot"
 	"${STAR_ROOT}/include/StarVMC"
 	"${STAR_ROOT}/include_all"
-)
+	# The following is just a workaround for the STAR code design
+	# disrespecting the file hierarchy
+	"${STAR_SRC}/StRoot"
+	"${STAR_SRC}/StarVMC")
 
-set(STAR_LIBRARY_DIRS "${CMAKE_CURRENT_BINARY_DIR}/${STAR_ADDITIONAL_INSTALL_PREFIX}/lib"
-                      "${STAR_ROOT}/lib")
+set(STAR_LIBRARY_DIRS
+	"${CMAKE_CURRENT_BINARY_DIR}/${STAR_ADDITIONAL_INSTALL_PREFIX}/lib"
+	"${STAR_ROOT}/lib")
 
 set( star_core_libs
 	StarClassLibrary
