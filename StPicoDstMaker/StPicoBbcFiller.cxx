@@ -7,46 +7,37 @@
 
 #include "StPicoDstMaker/StPicoBbcFiller.h"
 #include "StPicoEvent/StPicoDst.h"
-#include "StPicoEvent/StPicoBbcTile.h"
+#include "StPicoEvent/StPicoBbcHit.h"
 #include "StPicoEvent/StPicoCommon.h"
 
 using namespace StarPicoDst;
 
 
-StBeamDirection eastwestdir(DetectorSide ew)
+StBeamDirection beam_direction(DetectorSide ew)
 {
   return ew == DetectorSide::East ? StBeamDirection::east : StBeamDirection::west;
 }
 
 
-StPicoBbcFiller::StPicoBbcFiller(StPicoDst& picoDst, int year) :
-  mPicoDst(picoDst)
-{
-}
-
-
 void StPicoBbcFiller::fill(const StMuDst& muDst)
 {
-  TClonesArray *mTileCollection = mPicoDst.picoArray(StPicoArrays::BbcTile);
+  TClonesArray *hitCollection = mPicoDst.picoArray(StPicoArrays::BbcHit);
 
   StMuEvent *event = muDst.event();
   StTriggerData *trg = const_cast<StTriggerData *>(event->triggerData());
 
-  int nTiles = 0;
-
   // Loop over BBC tiles
   for (DetectorSide ew : detectorSides)
   {
-    for (int pmtId = 1; pmtId <= 24; pmtId++)
+    for (int pmtId = 1; pmtId <= 17; pmtId++)
     {
-      int ADC = trg->bbcADC(eastwestdir(ew), pmtId, 0);
-      int TAC = trg->bbcTDC(eastwestdir(ew), pmtId, 0); // yes I know the method says "TDC" but it's the TAC
-      int TDC = trg->bbcTDC5bit(eastwestdir(ew), pmtId);
-      int ID  = ew * pmtId;
-      bool hasTAC = kTRUE;
+      int ADC = trg->bbcADC(beam_direction(ew), pmtId);
+      if (ADC <= 0) continue;
+      int TDC = trg->bbcTDC5bit(beam_direction(ew), pmtId);
+      int TAC = trg->bbcTDC(beam_direction(ew), pmtId); // yes I know the method says "TDC" but it's the TAC
 
-      new((*mTileCollection)[nTiles++]) StPicoBbcTile(ID, ADC, TAC, TDC, hasTAC);
+      int counter = hitCollection->GetEntries();
+      new((*hitCollection)[counter]) StPicoBbcHit(pmtId, ew, ADC, TAC, TDC, true, true);
     }
   }
-
 }

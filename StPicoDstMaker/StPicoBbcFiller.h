@@ -6,15 +6,14 @@ class StPicoDst;
 
 
 /**
- * This class fills a TClonesArray of StPicoBbcTile objects that make up the BBC
- * detector. The tile objects for the BBC and EPD detectors are the same, hence
- * the name.
+ * This class fills a TClonesArray of StPicoBbcHit objects that make up the BBC
+ * detector
  */
 class StPicoBbcFiller
 {
 public:
 
-  StPicoBbcFiller(StPicoDst& picoDst, int year = 2017);
+  StPicoBbcFiller(StPicoDst& picoDst) : mPicoDst(picoDst) {}
 
   void fill(const StMuDst& muDst);
 
