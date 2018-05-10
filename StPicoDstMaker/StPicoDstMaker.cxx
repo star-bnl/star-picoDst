@@ -55,8 +55,8 @@
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoEmcTrigger.h"
 #include "StPicoEvent/StPicoMtdTrigger.h"
-#include "StPicoEvent/StPicoBbcTile.h"
-#include "StPicoEvent/StPicoEpdTile.h"
+#include "StPicoEvent/StPicoBbcHit.h"
+#include "StPicoEvent/StPicoEpdHit.h"
 #include "StPicoEvent/StPicoBTowHit.h"
 #include "StPicoEvent/StPicoBTofHit.h"
 #include "StPicoEvent/StPicoMtdHit.h"
@@ -177,8 +177,8 @@ void StPicoDstMaker::streamerOff()
   StPicoBTofHit::Class()->IgnoreTObjectStreamer();
   StPicoBTowHit::Class()->IgnoreTObjectStreamer();
   StPicoMtdHit::Class()->IgnoreTObjectStreamer();
-  StPicoBbcTile::Class()->IgnoreTObjectStreamer();
-  StPicoEpdTile::Class()->IgnoreTObjectStreamer();
+  StPicoBbcHit::Class()->IgnoreTObjectStreamer();
+  StPicoEpdHit::Class()->IgnoreTObjectStreamer();
   StPicoFmsHit::Class()->IgnoreTObjectStreamer();
   StPicoEmcTrigger::Class()->IgnoreTObjectStreamer();
   StPicoMtdTrigger::Class()->IgnoreTObjectStreamer();

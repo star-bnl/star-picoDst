@@ -4,7 +4,7 @@
 //============================================================================================
 const char* StPicoArrays::picoArrayNames [NAllPicoArrays] = {"Event", "Track", "EmcTrigger", "MtdTrigger",
                                                              "BTOWHit", "BTofHit", "MtdHit",
-                                                             "BbcTile", "EpdTile", "FmsHit",
+                                                             "BbcHit", "EpdHit", "FmsHit",
                                                              "EmcPidTraits", "BTofPidTraits", "MtdPidTraits"
                                                             };
 
@@ -12,7 +12,7 @@ const char* StPicoArrays::picoArrayNames [NAllPicoArrays] = {"Event", "Track", "
 //============================================================================================
 const char* StPicoArrays::picoArrayTypes [NAllPicoArrays] = {"StPicoEvent", "StPicoTrack", "StPicoEmcTrigger", "StPicoMtdTrigger",
                                                              "StPicoBTowHit", "StPicoBTofHit", "StPicoMtdHit",
-                                                             "StPicoBbcTile", "StPicoEpdTile", "StPicoFmsHit",
+                                                             "StPicoBbcHit", "StPicoEpdHit", "StPicoFmsHit",
                                                              "StPicoBEmcPidTraits", "StPicoBTofPidTraits", "StPicoMtdPidTraits"
                                                             };
 
