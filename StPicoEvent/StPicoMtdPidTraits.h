@@ -71,6 +71,7 @@ private:
 
   ClassDef(StPicoMtdPidTraits, 1)
 };
+
 inline Int_t    StPicoMtdPidTraits::trackIndex()        const { return mTrackIndex; }
 inline Int_t    StPicoMtdPidTraits::mtdHitIndex()       const { return mMtdHitIndex; }
 inline Int_t    StPicoMtdPidTraits::gChannel()          const { return mMtdHitChan; }

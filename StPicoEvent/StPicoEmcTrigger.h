@@ -33,6 +33,7 @@ protected:
 
   ClassDef(StPicoEmcTrigger, 1)
 };
+
 inline UInt_t StPicoEmcTrigger::flag() const { return (UInt_t)mFlag; }
 inline Int_t StPicoEmcTrigger::id() const { return (Int_t)mId; }
 inline Int_t StPicoEmcTrigger::adc() const { return (Int_t)mAdc; }

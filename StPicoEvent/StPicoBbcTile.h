@@ -51,11 +51,8 @@ protected:
   ClassDef(StPicoBbcTile, 1)
 };
 
-
 inline DetectorSide StPicoBbcTile::side() const { return mId < 0 ? DetectorSide::East : DetectorSide::West;}
-
 inline int  StPicoBbcTile::pmt() const { return std::abs( (int)mId ); }
-
 inline int  StPicoBbcTile::adc() const { return mQTdata & 0x0FFF; }
 inline int  StPicoBbcTile::tac() const { return (mQTdata >> 12) & 0x0FFF; }
 inline int  StPicoBbcTile::tdc() const { return (mQTdata >> 24) & 0x001F; }

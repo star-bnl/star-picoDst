@@ -109,6 +109,7 @@ private:
 
   ClassDef(StPicoMtdTrigger, 1);
 };
+
 inline UShort_t StPicoMtdTrigger::getVpdTacSum() { return mVpdTacSum; }
 inline UInt_t   StPicoMtdTrigger::getTHUBtime(const Int_t thub) { return mTHUBtime[thub - 1]; }
 inline UShort_t StPicoMtdTrigger::getQTtacSum(const Int_t qt, const Int_t pos) { return mQTtacSum[qt - 1][pos - 1]; }

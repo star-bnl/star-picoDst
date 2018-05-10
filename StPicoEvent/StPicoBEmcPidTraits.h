@@ -72,6 +72,7 @@ private:
 
   ClassDef(StPicoBEmcPidTraits, 1);
 };
+
 inline Int_t   StPicoBEmcPidTraits::trackIndex() const { return (Int_t)mTrackIndex; }
 inline Int_t   StPicoBEmcPidTraits::bemcId() const { return (Int_t)mBemcId; }
 inline Int_t   StPicoBEmcPidTraits::bemcAdc0() const { return (Int_t)mBemcAdc0; }
