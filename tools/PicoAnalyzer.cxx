@@ -1,14 +1,13 @@
-#include "PicoAnalyzer.h"
-#include "StPicoEpdHit.h"
-#include "StPicoBbcHit.h"
-#include "StEpdGeom.h"
-#include "StBbcGeom.h"
-//#include "StPicoEvent.h"
+#include "tools/PicoAnalyzer.h"
+#include "StPicoEvent/StPicoEpdHit.h"
+#include "StPicoEvent/StPicoBbcHit.h"
+#include "StPicoEvent/StPicoEvent.h"
+#include "StEpdUtil/StEpdGeom.h"
+#include "StEpdUtil/StBbcGeom.h"
 
-#include "StEpdGeom.h"
-#include "StBbcGeom.h"
 #include "TTree.h"
 #include "TLeaf.h"
+#include "TMath.h"
 #include "TClonesArray.h"
 #include "TH1D.h"
 #include "TH2D.h"
@@ -21,7 +20,6 @@
 #include <iostream>
 using namespace std;
 
-ClassImp(PicoAnalyzer)
 
 double PicoAnalyzer::GetBbcPmtPhi(short PmtId){
   unsigned short nBbcTiles;        // how many (1 or 2) tiles are associated with a given BBC phototube

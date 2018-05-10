@@ -47,7 +47,7 @@ void AnalyzePico(int nRootFilesToProcess=1, std::string FileListName = "DataFile
 
 int main()
 {
-  AnalyzePico();
+  AnalyzePico(1, "DataFile.list");
 
   return EXIT_SUCCESS;
 }

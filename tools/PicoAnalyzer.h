@@ -123,7 +123,6 @@ class PicoAnalyzer : public TObject {
 //  StPicoEvent* mPicoEvent;  // too bad, can't read this due to bloody StThreeVectorF
 
 
-  ClassDef(PicoAnalyzer, 0)
 
 
 };

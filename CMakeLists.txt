@@ -64,6 +64,7 @@ root_generate_dictionary(
 	StPicoEvent/StPicoTrack.h
 	StarClassLibrary/StThreeVector.hh
 	LINKDEF StPicoEvent/LinkDef.h
+	OPTIONS -p;-D__ROOT__
 )
 
 add_library(
@@ -86,6 +87,21 @@ add_library(
 	StPicoEvent/StPicoTrack.cxx
 	StPicoEvent_dict.cxx
 )
+
+
+add_library(
+	PicoAnalyzer
+	tools/PicoAnalyzer.cxx
+	star-local/StEpdUtil/StBbcGeom.cxx
+	star-local/StEpdUtil/StEpdGeom.cxx
+)
+
+
+add_executable(AnalyzePico tools/AnalyzePico.cxx)
+target_link_libraries(AnalyzePico StPicoEvent PicoAnalyzer ${ROOT_LIBRARIES})
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+	set_target_properties(AnalyzePico PROPERTIES LINK_FLAGS "-Wl,--warn-unresolved-symbols")
+endif()
 
 
 install(TARGETS StPicoDstMaker StPicoEvent
