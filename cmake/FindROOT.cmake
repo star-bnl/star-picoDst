@@ -95,8 +95,7 @@ find_package_handle_standard_args(ROOT DEFAULT_MSG ROOT_CONFIG_EXECUTABLE
 mark_as_advanced(ROOT_CONFIG_EXECUTABLE)
 
 include(CMakeParseArguments)
-find_program(ROOTCINT_EXECUTABLE rootcint HINTS $ENV{ROOTSYS}/bin)
-find_program(ROOTCLING_EXECUTABLE rootcling HINTS $ENV{ROOTSYS}/bin)
+find_program(ROOTCLING_EXECUTABLE NAMES rootcling rootcint HINTS $ENV{ROOTSYS}/bin)
 find_program(GENREFLEX_EXECUTABLE genreflex HINTS $ENV{ROOTSYS}/bin)
 find_package(GCCXML)
 
@@ -138,7 +137,7 @@ function(ROOT_GENERATE_DICTIONARY dictionary)
   endforeach()
   #---call rootcling------------------------------------------
   add_custom_command(OUTPUT ${dictionary}.cxx
-                     COMMAND ${ROOTCINT_EXECUTABLE} -f ${dictionary}.cxx
+                     COMMAND ${ROOTCLING_EXECUTABLE} -f ${dictionary}.cxx
                                           -c ${ARG_OPTIONS} ${includedirs} ${headerfiles} ${linkdefs}
                      DEPENDS ${headerfiles} ${linkdefs} VERBATIM)
 endfunction()
