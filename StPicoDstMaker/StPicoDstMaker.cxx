@@ -72,7 +72,7 @@ StPicoDstMaker::StPicoDstMaker(char const* name) : StMaker(name),
   mMuDst(nullptr), mPicoDst(new StPicoDst()),
   mEmcCollection(nullptr), mEmcPosition(nullptr),
   mEmcGeom{}, mEmcIndex{},
-  mTpcVpdVzDiffCut(3),
+  mTpcVpdVzDiffCut(6.),
   mVtxMode(PicoVtxMode::NotSet), // This should always be ::NotSet, do not change it, see ::Init()
   mInputFileName(), mOutputFileName(), mOutputFile(nullptr),
   mChain(nullptr), mTTree(nullptr), mEventCounter(0), mSplit(99), mCompression(9), mBufferSize(65536 * 4),
@@ -918,12 +918,17 @@ bool StPicoDstMaker::getBEMC(const StMuTrack* t, int* id, int* adc, float* ene, 
         mEmcGeom[0]->getEta(nextTowerId, etaTemp);
         mEmcGeom[0]->getPhi(nextTowerId, phiTemp);
         distTemp = sqrt((etaTemp - position.pseudoRapidity()) * (etaTemp - position.pseudoRapidity()) + (phiTemp - position.phi()) * (phiTemp - position.phi()));
-        if (distTemp < dist1)
-        {
+
+	//In case the new tower is closer to the matched tower
+	//than the other closest one we swap them.
+	//I.e. previously closest tower will become the second
+	//closest tower
+        if (distTemp < dist1) {
           dist2 = dist1;
           dist1 = distTemp;
           energy2 = energy1;
           energy1 = energyTemp;
+          localId2 = localId1;
           localId1 = localTowerId;
         }
         else if (distTemp < dist2)
@@ -936,9 +941,9 @@ bool StPicoDstMaker::getBEMC(const StMuTrack* t, int* id, int* adc, float* ene, 
     }
   }
   towid[0] = towerId;
-  ene[3] = energy1;//closest tower
+  ene[3] = energy1;  // closest tower
   towid[1] = localId1;
-  ene[4] = energy2;//2nd closest tower
+  ene[4] = energy2;  // 2nd closest tower
   towid[2] = localId2;
 
   LOG_DEBUG << " ====== BEMC results ====== " << "\n"
@@ -1052,10 +1057,11 @@ void StPicoDstMaker::fillMtdTrigger()
 //_________________
 void StPicoDstMaker::fillBTowHits()
 {
+  // Loop over 120 modules each consisting of 40 towers
   for (int i = 0; i < 4800; ++i)
   {
     StEmcRawHit* aHit = mEmcIndex[i];
-    if (!aHit) continue;
+    if (!aHit) continue; // Will work only with the towers (==hits) that do exist
     if (aHit->energy() < 0.2) continue; // remove noise towers
 
     int   softId = aHit->softId(1);
