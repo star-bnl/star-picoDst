@@ -1,8 +1,8 @@
 #ifndef StPicoEpdHit_h
 #define StPicoEpdHit_h
 
+#include <cstdlib>
 #include "TObject.h"
-//#include <cstdlib>
 
 //
 // \class StPicoEpdHit
