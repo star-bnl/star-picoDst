@@ -43,7 +43,7 @@ StPicoTrack::StPicoTrack(StMuTrack const* const gTrk, StMuTrack const* const pTr
     mPMomentum = pTrk->p();
   }
 
-  // Calculate global momentum and position at point of DCA to the pVtx
+  /// Calculate global momentum and position at point of DCA to the pVtx
   StPhysicalHelixD gHelix = dcaG.helix();
   gHelix.moveOrigin(gHelix.pathLength(pVtx));
   mGMomentum = gHelix.momentum(B * 1e-14);

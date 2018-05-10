@@ -24,7 +24,8 @@ public:
 
   virtual ~StPicoTrack() {}
 
-  virtual void Print(Char_t const* option = "") const;  ///< Print track info
+  /// Print track parameters
+  virtual void Print(Char_t const* option = "") const;
 
   /// track id, copied from StMuTrack, StTrack
   Int_t   id() const;
@@ -69,10 +70,10 @@ public:
   bool isHFTTrack() const;
   bool hasHft4Layers() const;
 
-  /** Checks whether this track is associated with a primary vertex. */
+  /// Checks whether this track is associated with a primary vertex
   bool isPrimary() const;
 
-  // MTD pid traits
+  /// MTD pid traits
   void setBEmcPidTraitsIndex(Int_t index);
   void setBTofPidTraitsIndex(Int_t index);
   void setMtdPidTraitsIndex(Int_t index);
@@ -99,7 +100,7 @@ protected:
   Short_t  mNSigmaElectron;   // nsigmaE * 100
   UInt_t   mTopologyMap[2];   // Toplogy Map data0 and data1. See StEvent/StTrackTopologyMap.cxx
 
-  // pidTraits
+  /// pidTraits
   Short_t  mBEmcPidTraitsIndex;  // index of the EMC  pidTratis in the event
   Short_t  mBTofPidTraitsIndex; // index of the BTOF pidTratis in the event
   Short_t  mMtdPidTraitsIndex;  // index of the MTD  pidTratis in the event
