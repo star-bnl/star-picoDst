@@ -36,8 +36,6 @@ public:
   StThreeVectorF const& gMom() const;
   Float_t gPt() const;
   Float_t gPtot() const;
-  /// global momentum at point of DCA to pVtx, B should be in kilogauss
-  StThreeVectorF gMom(StThreeVectorF const& pVtx, float B) const;
   /// origin at DCA to StPicoEvent::mPrimaryVertex
   StThreeVectorF const& origin() const;
   /// dca point to StPicoEvent::mPrimaryVertex in global coordinates .
