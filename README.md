@@ -1,63 +1,66 @@
 [![Build Status](https://travis-ci.org/star-bnl/star-picoDst.svg?branch=master)](https://travis-ci.org/star-bnl/star-picoDst)
 
 
-How to build and install the library
-======================================
+`star-picoDst` provides C++ libraries to support IO of compact data structures
+used in analysis of physics data collected by the STAR experiment. The code is
+organized in two libraries:
 
-Prerequisites
--------------
+- `StPicoDstMaker` library is used to convert STAR data written in `muDst`
+format to `picoDst`
 
-- C++ compiler with C++11 support (e.g. g++ >= 4.8.2)
-- ROOT (>= 5.34.30), http://root.cern.ch
-- cmake (>= 3.2)
-- StPicoDstMaker depends on the following STAR libraries/modules (likely
-  incomplete list):
-
-    StarClassLibrary
-    StarRoot
-    St_base
-    StChain
-    StEmcRawMaker
-    StEmcUtil
-    StEvent
-    StMuDSTMaker
-    StTriggerUtilities
-    tables
+- `StPicoEvent` library supplies the data structures to write to or read from
+individual branches in ROOT trees. An effort is made to make this library
+independent of any external code to allow standalone analysis in diverse user
+environments.
 
 
-Build with cmake
-----------------
+# How to build and install the libraries
 
-Checkout the code using the following command:
+## Prerequisites
 
-    git clone --recursive https://github.com/star-bnl/star-picoDst.git
+Checkout the code from the `star-picoDst`
+[repository](https://github.com/star-bnl/star-picoDst), e.g.:
 
-Compile and build the libraries:
+    git clone https://github.com/star-bnl/star-picoDst.git
 
-    cd star-picoDst/
-    mkdir build && cd build
-    cmake ../
-    make install
+Several external tools listed below along with their minimal version numbers are
+required to build the STAR libraries:
 
-Watch out for dependencies on other STAR libraries when compiling on a system
-where the STAR soft is not installed.
+- cmake 3.2 (GNU make is usually used by default on Linux and Mac OS)
+- C++ compiler with C++11 support (e.g. g++ 4.8.5)
+- ROOT 5.34.30, http://root.cern.ch
+- `StPicoDstMaker` depends on the following libraries/modules from the STAR
+software library [star-cvs](https://github.com/star-bnl/star-cvs):
+
+  `StarClassLibrary, StarRoot, St_base, StChain, StEmcRawMaker, StEmcUtil,
+   StEvent, StMuDSTMaker, StTriggerUtilities, tables`
 
 
-Standalone build of StPicoEvent library
----------------------------------------
+## Build `picoDst` libraries
 
 The `StPicoEvent` library does not depend on any external code from the STAR
-software repository. One can build just that library by running `make` with the
-appropriate target:
+software repository. After cloning `star-picoDst` one can build just that
+library by running `make` with the appropriate target:
 
     cd star-picoDst/
     mkdir build && cd build
     cmake ../
     make StPicoEvent
 
+It is also possible to compile all targets including the `StPicoDstMaker` but
+you need to help cmake to find the STAR soft on your system by specifying the
+`STAR_ROOT` parameter. Assuming the STAR soft is installed in
+`/some/path/to/star/packages/` and contains `lib` and `include` subdirectories
+with compiled libraries and .h header files respectively run `cmake` as:
 
-Continuous itegration
-=====================
+    cmake -D STAR_ROOT=/some/path/to/star/packages/ ../
+
+Alternatively, one can set environment variables `STAR` and `STAR_HOST_SYS` to
+the appropriate values. The `STAR_ROOT` path in this case will be set internally
+to `$STAR/.$STAR_HOST_SYS` just like on the interactive STAR RACF nodes.
+
+
+# Continuous integration
 
 We use travis-ci.org to build the `picoDst` libraries on every push to the
 star-bnl/star-picoDst repository. See the `.travis.yml` directive file for the
