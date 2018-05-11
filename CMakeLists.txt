@@ -92,6 +92,7 @@ add_library(
 add_library(
 	PicoAnalyzer
 	tools/PicoAnalyzer.cxx
+	tools/StPicoUtilities.cxx
 	star-local/StEpdUtil/StBbcGeom.cxx
 	star-local/StEpdUtil/StEpdGeom.cxx
 )
